@@ -65,6 +65,8 @@ def validate_model_and_update(
     max_initial_kl=0.02,
 ):
     """Run the same checks on the real GPU model and small local test models."""
+    report.data.setdefault("optimizer_steps", 0)
+    report.data.setdefault("backward_calls", 0)
     expected_trainable = {
         f"{target['name']}.{factor}"
         for target in manifest["target_modules"]
@@ -106,8 +108,14 @@ def validate_model_and_update(
     # Check the initialized checkpoint separately from the checkpoint after training.
     initial_state = export_adapter_state(model)
     save_file(initial_state, str(output_directory / "initial_adapter.safetensors"))
+    initial_manifest_path = output_directory / "initial_manifest.json"
+    initial_manifest = dict(manifest, optimizer_steps=0)
+    initial_manifest_path.write_text(json.dumps(initial_manifest, indent=2) + "\n")
+    disk_initial_manifest = json.loads(initial_manifest_path.read_text())
+    report.require("initial_manifest_exact_after_file_roundtrip",
+                   disk_initial_manifest == initial_manifest)
     disk_initial_state = load_file(str(output_directory / "initial_adapter.safetensors"))
-    initial_reloaded = restored_model(base_model_factory, disk_initial_state, manifest, device, frozen_dtype)
+    initial_reloaded = restored_model(base_model_factory, disk_initial_state, disk_initial_manifest, device, frozen_dtype)
     initial_reloaded_logits = checked_forward(
         initial_reloaded, inputs, device, frozen_dtype, report, "initial_reloaded_forward_finite"
     )
@@ -127,7 +135,11 @@ def validate_model_and_update(
     optimizer.zero_grad(set_to_none=True)
     loss = causal_loss(model, inputs, labels, device, frozen_dtype)
     report.require("finite_training_loss", torch.isfinite(loss).item(), loss_before=loss.item())
+    report.data["backward_attempted"] = True
+    report.write()
     loss.backward()
+    report.data["backward_calls"] = 1
+    report.write()
 
     gradient_measurements = []
     for name, parameter in actual_trainable.items():
@@ -146,6 +158,9 @@ def validate_model_and_update(
         list(actual_trainable.values()), max_norm=1.0, error_if_nonfinite=True
     )
     optimizer.step()
+    # Persist immediately: later reload failures must not conceal a completed step.
+    report.data.update(optimizer_steps=1, update_loss="short_answer_cross_entropy_mechanical_check")
+    report.write()
 
     change_measurements = []
     for name, parameter in actual_trainable.items():

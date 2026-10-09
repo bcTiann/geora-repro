@@ -45,6 +45,11 @@ def _validate_ratio(sparsity_ratio: float) -> None:
         raise ValueError("sparsity_ratio must be finite and between 0 and 1")
 
 
+def _validate_forward_mode(forward_mode: str) -> None:
+    if forward_mode not in ("residual", "difference"):
+        raise ValueError("forward_mode must be 'residual' or 'difference'")
+
+
 @torch.no_grad()
 def initialize_geo_factors(
     weight: torch.Tensor,
@@ -117,11 +122,18 @@ def initialize_geo_factors(
 
 
 class GeoRALinear(nn.Module):
-    """Frozen F and trainable A, B, with forward F x + (alpha/r) B A x.
+    """Frozen base projection and trainable low-rank factors.
 
-    base_layer.weight starts as W_pre. Its replacement is computed once:
-    F = W_pre - scaling * B0 @ A0. The initial factors are retained for
-    reconstructing this residual from the same original checkpoint later.
+    For x [..., input], A/A0 [rank, input], and B/B0 [output, rank],
+    the default residual mode stores F = W_pre - scaling * B0 @ A0
+    in base_layer.weight and computes F x + scaling * B(Ax).
+
+    Difference mode keeps W_pre in base_layer.weight and computes the native
+    base output plus scaling * (B(Ax) - B0(A0x)). The two low-rank branches
+    and their difference use FP32 with autocast disabled; the correction is
+    cast to the base output dtype before addition. A0/B0 are frozen FP32
+    buffers, but their branch remains differentiable with respect to x.
+    Both modes retain FP32 A/B parameters and use the same compact factors.
     """
 
     def __init__(
@@ -130,10 +142,13 @@ class GeoRALinear(nn.Module):
         A0: torch.Tensor,
         B0: torch.Tensor,
         scaling: float,
+        *,
+        forward_mode: str = "residual",
     ) -> None:
         super().__init__()
         if not isinstance(base_layer, nn.Linear):
             raise TypeError("base_layer must be torch.nn.Linear")
+        _validate_forward_mode(forward_mode)
         if not math.isfinite(scaling) or scaling <= 0:
             raise ValueError("scaling must be finite and positive")
         if A0.ndim != 2 or B0.ndim != 2:
@@ -159,6 +174,7 @@ class GeoRALinear(nn.Module):
         self.base_layer = base_layer.to(dtype=torch.float32)
         self.base_layer.requires_grad_(False)
         self.scaling = float(scaling)
+        self.forward_mode = forward_mode
         factor_device = self.base_layer.weight.device
         self.register_buffer(
             "A0", A0.detach().to(device=factor_device, dtype=torch.float32).clone()
@@ -168,14 +184,25 @@ class GeoRALinear(nn.Module):
         )
         self.A = nn.Parameter(self.A0.clone())
         self.B = nn.Parameter(self.B0.clone())
-        with torch.no_grad():
-            initial_adapter_weight = self.B0 @ self.A0
-            residual_weight = self.base_layer.weight - self.scaling * initial_adapter_weight
-            self.base_layer.weight.copy_(residual_weight)
+        if self.forward_mode == "residual":
+            with torch.no_grad():
+                initial_adapter_weight = self.B0 @ self.A0
+                residual_weight = self.base_layer.weight - self.scaling * initial_adapter_weight
+                self.base_layer.weight.copy_(residual_weight)
         self.train(base_layer.training)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         frozen_output = self.base_layer(x)
+        if self.forward_mode == "difference":
+            with torch.autocast(device_type=x.device.type, enabled=False):
+                input_fp32 = x.to(dtype=torch.float32)
+                compressed_input = functional.linear(input_fp32, self.A)
+                adapter_output = functional.linear(compressed_input, self.B)
+                initial_compressed_input = functional.linear(input_fp32, self.A0)
+                initial_adapter_output = functional.linear(initial_compressed_input, self.B0)
+                correction_fp32 = self.scaling * (adapter_output - initial_adapter_output)
+            correction = correction_fp32.to(dtype=frozen_output.dtype)
+            return frozen_output + correction
         compressed_input = functional.linear(x, self.A)
         adapter_output = functional.linear(compressed_input, self.B)
         return frozen_output + self.scaling * adapter_output
@@ -251,6 +278,7 @@ def install_geora(
         "rho": rho,
         "scaling": alpha / rank,
         "precision_policy": dict(PRECISION_POLICY),
+        "forward_mode": "residual",
         "target_modules": target_metadata,
         "checkpoint_contents": "initial A0/B0 and current A/B; rebuild F from the original model",
     }
@@ -276,16 +304,33 @@ def load_geora_state(
     model: nn.Module,
     state: Mapping[str, torch.Tensor],
     metadata: Mapping,
+    *,
+    forward_mode: str | None = None,
 ) -> None:
     """Restore adapters onto a fresh copy of the same FP32 original model.
 
-    Rebuild F from W_pre and saved A0/B0, then restore the trained A/B.
-    Calling this on a model that already contains GeoRA would subtract twice.
+    Residual mode rebuilds F from W_pre and saved A0/B0. Difference mode
+    retains W_pre and restores the same initial/current factors. All modes
+    require a fresh original model, without existing GeoRA layers.
+
+    The manifest's forward_mode is authoritative when present. Untagged old
+    checkpoints default to residual mode; an explicit forward_mode may select
+    difference mode for those checkpoints. A conflicting explicit mode on a
+    tagged checkpoint is rejected before any model modification.
     Module names, shapes, factor dtypes, and finite values are validated before
     changing the model. The caller must also pin the original model revision.
     """
     if metadata.get("geora_checkpoint_format") != 1:
         raise ValueError("Unsupported GeoRA checkpoint format")
+    if "forward_mode" in metadata:
+        recorded_forward_mode = metadata["forward_mode"]
+        _validate_forward_mode(recorded_forward_mode)
+        if forward_mode is not None and forward_mode != recorded_forward_mode:
+            raise ValueError("Requested forward mode conflicts with the checkpoint manifest")
+        resolved_forward_mode = recorded_forward_mode
+    else:
+        resolved_forward_mode = "residual" if forward_mode is None else forward_mode
+    _validate_forward_mode(resolved_forward_mode)
     if any(isinstance(module, GeoRALinear) for module in model.modules()):
         raise ValueError("Load onto a fresh original model, without GeoRA layers")
     rank = metadata["rank"]
@@ -356,6 +401,7 @@ def load_geora_state(
             state[f"{name}.A0"],
             state[f"{name}.B0"],
             scaling=metadata["scaling"],
+            forward_mode=resolved_forward_mode,
         )
         geo_layer.A.copy_(state[f"{name}.A"])
         geo_layer.B.copy_(state[f"{name}.B"])
