@@ -1,6 +1,6 @@
 # GeoRA 復現：精度與驗證約定
 
-更新：2026-10-08。這份文件記錄本次復現採用的設定；後續 notebook 與訓練程式依此執行。
+更新：2026-10-09。這份文件記錄本次復現採用的設定；後續 notebook 與訓練程式依此執行。
 
 ## 1. 採用的精度
 
@@ -109,7 +109,7 @@ mlp.down_proj
 | 完整模型 logits 最大絕對差 | 0.002244 |
 | 保存／重新載入後 logits 最大絕對差 | 0 |
 
-logits 比較使用固定的 42-token 輸入，不代表任務評估。全模型檢查只確認 requires_grad 清單中只有 A/B；本次沒有 optimizer step。GPU BF16、全模型更新後重載、reference 行為與 GRPO 仍待驗證。
+logits 比較使用固定的 42-token 輸入，不代表任務評估。全模型檢查只確認 requires_grad 清單中只有 A/B；本次沒有 optimizer step。GeoRA GPU BF16、全模型更新後重載及 GRPO 框架的 reference 行為仍待驗證。原始模型 GPU BF16 forward 已由使用者回傳成功輸出，詳見 `CHECKS.md`。
 
 ## 6. 下一步清單
 
@@ -153,4 +153,4 @@ GRPO 的 reference 必須代表指定的原始策略。**直接停用 GeoRA adap
 
 ROCm 版 PyTorch 沿用 `torch.cuda` 與 `device='cuda'` 的 API 名稱；這些名稱在 Setonix 上指向 AMD GPU。需使用對應 ROCm 的安裝或容器，不能直接複製 Mac 的 `.venv`。[PyTorch HIP 說明](https://docs.pytorch.org/docs/2.14/notes/hip.html)
 
-GPU 環境實際版本及 BF16 支援需在計算節點驗證後記錄。A100 保留為具體框架相容問題的備選；本機繼續用於 notebook 與矩陣分析。
+使用者已回傳 MI250X 的 BF16 矩陣乘法和原始模型 forward 成功結果；實際 PyTorch 為 `2.7.1a0+gite2d141d`、HIP 為 `6.3.42134-a9a80e791`。GeoRA 的混合精度、梯度及更新後重載由 `CHECKS.md` 的作業驗證。A100 保留為具體框架相容問題的備選；本機繼續用於 notebook 與矩陣分析。

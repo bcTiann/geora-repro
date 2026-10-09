@@ -1,6 +1,6 @@
 # GeoRA 獨立復現
 
-這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先確認初始化、更新與 checkpoint 載入，再接 GRPO，最後比較 LoRA 與 GeoRA。現階段完成的是本機 CPU 初始化檢查；GPU 與訓練結果仍待取得。
+這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先確認初始化、更新與 checkpoint 載入，再接 GRPO，最後比較 LoRA 與 GeoRA。現階段已有本機 CPU 初始化檢查，以及使用者回傳的 Setonix 原始模型 GPU BF16 forward 結果；GeoRA GPU 更新與 GRPO 仍待取得結果。
 
 ## 從哪裡開始
 
@@ -11,6 +11,7 @@
 | [geora_model_check.ipynb](geora_model_check.ipynb) | 只替換一個 Q 層，檢查完整模型 forward 與儲存／載入 |
 | [geora_full_model_check.ipynb](geora_full_model_check.ipynb) | 全部 196 個目標層的 CPU FP32 初始化與載入檢查 |
 | [PRECISION.md](PRECISION.md) | 精度、目標層、殘差重建與 reference 策略約定 |
+| [CHECKS.md](CHECKS.md) | 一次提交 CPU 初始化與 GPU 完整檢查；包含結果解讀及失敗門檻 |
 | [SETONIX_GUIDE.md](SETONIX_GUIDE.md) | Setonix 容器、儲存路徑與下一階段操作記錄 |
 | [configs/base_model.json](configs/base_model.json) | 固定模型版本、rank、alpha、rho 與目標模組設定 |
 | [reports/cpu_initialization/](reports/cpu_initialization/) | 原有 CPU 初始化的測量與 manifest，隨程式碼保存 |
@@ -66,7 +67,7 @@ uv run python scripts/download_base_model.py
 | 保存／重新載入 logits 最大絕對差 | 0 |
 | 全模型 optimizer step | 0 |
 
-這次確認了只有 A/B 可訓練、初始化輸出誤差與初始化 checkpoint 載入一致性。它使用固定的 42-token 輸入；尚未取得 GPU BF16、全模型參數更新、更新後載入或任務評估結果。新倉庫的 notebook 輸出已清空；上述報告是保留的先前測量，並非新環境重跑的結果。
+這次確認了只有 A/B 可訓練、初始化輸出誤差與初始化 checkpoint 載入一致性。它使用固定的 42-token 輸入；尚未取得 GeoRA GPU BF16、全模型參數更新、更新後載入或任務評估結果。新倉庫的 notebook 輸出已清空；上述報告是保留的先前測量，並非新環境重跑的結果。
 
 ## 本機倉庫建立檢查
 
@@ -94,3 +95,17 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 4. 接入短 GRPO，驗證原始策略 reference、生成與答案檢查器，再準備 LoRA／GeoRA 比較。
 
 F 只在初始化時計算一次。停用 GeoRA adapter 得到 F；GRPO 的 reference 需使用原始模型或明確重建原始權重的路徑。這些約定詳見 `PRECISION.md`；完整訓練配置要在上述檢查通過後再確定。
+
+## 自動執行下一階段檢查
+
+在 Setonix 登入節點更新並提交：
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+/bin/bash jobs/submit_checks.sh
+```
+
+CPU `work` 作業先做 196 層 FP32 初始化，成功後才啟動 `gpu-dev` 的一個邏輯 GPU，檢查混合精度、一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。兩個作業都自動結束；依賴未滿足時不佔 GPU。CPU account 的提交權限尚待 Setonix 確認。
+
+完整內容、初始誤差門檻、log 與報告路徑見 [CHECKS.md](CHECKS.md)。更新測試使用短問答 cross-entropy；GRPO 與任務分數比較是後續階段。

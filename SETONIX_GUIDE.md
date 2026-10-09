@@ -23,7 +23,7 @@
 - 主機端 ROCm 有多個版本，預設 `rocm/6.4.1`。
 - Singularity 有多個版本，預設 `singularity/4.1.0-slurm`。
 
-使用者已回傳容器 venv、依賴匯入、模型檔案及 GPU BF16 矩陣乘法的成功輸出。下列遠端結果均為使用者提供的輸出；完整模型 GPU forward、GeoRA 更新及 GRPO 尚待執行。
+使用者已回傳容器 venv、依賴匯入、模型檔案及 GPU BF16 矩陣乘法的成功輸出。下列遠端結果均為使用者提供的輸出；原始模型 GPU BF16 forward 亦已由使用者回傳成功結果；GeoRA 更新及 GRPO 尚待執行。
 
 ## 已收到的第 1 步結果
 
@@ -49,7 +49,7 @@
 
 `/software` 的 75.5% 是整個專案的使用率；`/scratch` 與 `/software` 的檔案數比例則是個人的。這次輸出支持沿用程式／環境放 software、權重與執行資料放 scratch 的安排。
 
-Compute 表只列出 `pawsey0807` 的 Allocation 1、Usage 0。這份表沒有顯示 GPU account 的實際額度；使用者已確認 GPU 節點可用，GPU 作業的 account 會在後續步驟核對。
+Compute 表只列出 `pawsey0807` 的 Allocation 1、Usage 0。這份表沒有顯示 GPU account 的實際額度；使用者已確認 GPU 節點可用，實際 GPU 作業已確認使用 `pawsey0807-gpu`，見第 5 步。
 
 ## 先認識三種工作位置
 
@@ -236,7 +236,7 @@ source "$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/activat
 
 使用者成功申請 `gpu-dev`、account `pawsey0807-gpu`、一個邏輯 GPU、`--time=00:02:00`；job ID 為 `50574180`。實際看到一個 AMD Instinct MI250X，顯存 63.98 GiB。512×512 的 BF16 GPU 矩陣乘法完成，輸出全為有限值。
 
-這確認兩分鐘申請在此次被接受，以及容器的 GPU 基本運算可用。尚未檢查完整模型 forward、backward 或 GeoRA 更新。
+這確認兩分鐘申請在此次被接受，以及容器的 GPU 基本運算可用。這一步只檢查基本矩陣乘法；後續原始模型 forward 的結果見第 6.2 步，GeoRA backward／更新尚待執行。
 
 GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--cpus-per-task` 放在後續的 `srun` 執行步驟。[官方 GPU 作業指南](https://pawsey.atlassian.net/wiki/spaces/US/pages/51929056/Example+Slurm+Batch+Scripts+for+Setonix+on+GPU+Compute+Nodes)
 
@@ -248,7 +248,7 @@ GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--
 
 完成這一步後，GPU 上從原始 checkpoint 與 A0/B0 重建 F，依 [PRECISION.md](PRECISION.md) 將凍結部分轉 BF16、保留 A/B FP32。確認檔案完整後才執行模型檢查。
 
-## 第 6.1 步：自動執行完整模型 BF16 forward（待執行）
+## 第 6.1 步：自動執行完整模型 BF16 forward（已完成，命令供重跑）
 
 先退出任何仍存續的互動 GPU allocation，回到登入節點。在倉庫更新程式並提交五分鐘上限的短作業：
 
@@ -272,7 +272,27 @@ cat "$MYSCRATCH/geora/runs/logs/base-model-<jobid>.log"
 
 結果位於 `$MYSCRATCH/geora/runs/base-model-<jobid>/base_model_forward.json`。通過時 log 顯示 `Base-model GPU BF16 forward passed.`。作業完成或報錯即釋放資源，五分鐘是上限；若超時，先看 log 再決定是否增加時間。
 
-## 第 7 步：GeoRA 單步檢查，再接短 GRPO
+## 第 6.2 步：已收到的原始模型 GPU forward 結果
+
+使用者回傳作業 `50574324` 的成功 log：MI250X、BF16 參數與 logits、形狀 `[1, 40, 151936]`、logits 全部有限。PyTorch 峰值張量顯存 2.962 GiB，脚本內耗時 13.296 秒，optimizer steps 為 0。Slurm 顯示的整個作業時間另含啟動與清理，不能把它與脚本耗時混為一談。
+
+## 第 7 步：自動執行 GeoRA 初始化與單步檢查
+
+詳見 [CHECKS.md](CHECKS.md)。在登入節點一次提交：
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+/bin/bash jobs/submit_checks.sh
+```
+
+CPU `work` 作業做完整 FP32 SVD 初始化（8 核、20 GiB、30 分鐘上限），成功後 GPU 作業才啟動（1 個邏輯 GPU、5 分鐘上限）。兩個作業以實際耗時使用資源，完成自動退出。CPU account/partition 首次提交尚待確認；被拒絕時回傳錯誤，不在登入節點做 SVD。
+
+GPU 檢查：凍結參數 BF16、A/B FP32、初始化與原始模型的 logits 差異、每個 A/B 的梯度與更新、凍結參數及 A0/B0 不變、AdamW FP32 狀態，以及初始化／訓練後的 checkpoint 重載。獨立原始 reference 的 logits 在更新後必須不變。結果逐項寫入 JSON，失敗會停止。
+
+新流程已在本機小型 Qwen 的 CPU FP32/BF16 兩种模式通過 27 項檢查，並拒絕錯誤的 A/B BF16 dtype；尚未在 Setonix 的完整 1.5B 模型執行。
+
+## 第 8 步：接短 GRPO
 
 依序量測同精度初始化 logits、A/B 梯度與更新、凍結權重不變，以及更新後保存／載入的一致性。
 
@@ -288,5 +308,6 @@ cat "$MYSCRATCH/geora/runs/logs/base-model-<jobid>.log"
 | 容器 Python 與追加依賴 | 使用者輸出確認成功；ROCm PyTorch 沿用容器版本 |
 | GPU 基本運算 | 使用者輸出確認一個 MI250X，BF16 矩陣乘法成功 |
 | 模型檔案與路徑 | 下載版本記錄及檔案標頭檢查通過；尚待完整載入 |
-| 完整模型 GPU forward | 腳本已準備，遠端尚未執行 |
-| GeoRA GPU 單步／GRPO | 尚未執行 |
+| 原始模型 GPU forward | 使用者回傳 job 50574324，BF16 forward 通過 |
+| GeoRA 全模型 GPU 檢查 | 腳本與相依作業已準備，Setonix 尚待執行 |
+| GRPO | 尚未接入 |
