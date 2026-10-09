@@ -301,7 +301,7 @@ git pull --ff-only
   "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
 ```
 
-提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；GPU 完整檢查結果仍待回傳。
+提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；提交後自動顯示 GPU 日誌，Ctrl+C 只停止觀看。使用者隨後回傳 job `50578622` 在 logits 相對誤差檢查失敗（17.15%，原門檻 2%），尚未更新參數；下一步用 `--diagnose` 執行精度診斷，見 [CHECKS.md](CHECKS.md)。
 
 ## 第 8 步：接短 GRPO
 
@@ -321,5 +321,5 @@ git pull --ff-only
 | 模型檔案與路徑 | 版本及檔案標頭通過；原始模型已完成 GPU 載入 |
 | 原始模型 GPU forward | 使用者回傳 job 50574324，BF16 forward 通過 |
 | GeoRA CPU 初始化 | 使用者回傳 196 層及五項檢查通過，初始化已保存 |
-| GeoRA 全模型 GPU 檢查 | job 50578377 在 shell 傳參檢查停止；已修正傳參，待重跑 |
+| GeoRA 全模型 GPU 檢查 | 傳參已修復；job 50578622 在 BF16 初始化 logits 誤差門檻停止，尚未更新 A/B |
 | GRPO | 尚未接入 |

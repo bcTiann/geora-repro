@@ -72,13 +72,19 @@ BF16 舍入和兩分支運算會造成差異，初始化 logits 不要求逐 bit
 
 ## 查看作業與結果
 
-腳本先印出初始化目錄與 CPU log，初始化完成後才印出 GPU JOBID。CPU 階段不會出現在 `squeue`；查詢已提交的 GPU 作業：
+腳本先印出初始化目錄與 CPU log，初始化完成後才印出 GPU JOBID，並自動在目前終端顯示 GPU 日誌，直到作業離開 queue。Python 使用 `-u` 輸出；每項檢查的短測量值會同時寫入日誌及 JSON。CPU 階段不會出現在 `squeue`；查詢已提交的 GPU 作業：
 
 ```bash
 squeue -u "$USER"
 ```
 
-CPU 日誌路徑直接使用腳本印出的那一條；以下 `GPU_JOBID` 請替換成印出的 GPU 作業數字：
+Ctrl+C 只停止觀看 GPU 日誌，不取消 GPU 作業；取消仍用 `scancel JOBID`。只想提交、不在終端等待，可用 `jobs/submit_gpu_check.sh INIT_DIR --no-follow`。重新接上已有作業的日誌：
+
+```bash
+/bin/bash jobs/watch_gpu_check.sh JOBID "$MYSCRATCH/geora/runs/logs/geora-check-JOBID.log"
+```
+
+作業離開 queue 不等於通過，仍以 log／JSON 判定；日誌觀看不消耗 GPU 計算。CPU 日誌路徑直接使用腳本印出的那一條；以下 `GPU_JOBID` 請替換成印出的 GPU 作業數字：
 
 ```bash
 cat "$MYSCRATCH/geora/runs/logs/geora-check-GPU_JOBID.log"
@@ -141,3 +147,18 @@ CPU 初始化期間可用 Ctrl+C 中止。GPU 提交後則用 `scancel GPU_JOBID
 GPU job `50578377` 在 shell 階段因 `GEORA_INIT_DIR` 未設定而停止，未啟動 Python 模型檢查。日誌不能確定環境變數在哪個環節丟失。修正後透過明確的腳本參數傳遞目錄，可直接復用上述初始化；不重新執行 CPU SVD。
 
 提交路徑已以本機模擬驗證：環境中不含 `GEORA_INIT_DIR` 時，GPU batch script 仍會把收到的目錄傳給 Python；缺少參數或初始化檔案會停止。這項驗證沒有執行真實 Slurm 或 GPU 計算。
+
+### 2026-10-09：BF16 初始化 logits 檢查失敗
+
+使用者回傳 GPU job `50578622`：目錄傳遞、392 個 FP32 A/B tensors、凍結 BF16 參數、原始 reference 及有限 forward 通過。初始化 logits 相對 L2 誤差 `0.17153804`，最大絕對差 `7.7265625`，超過原有 2% 門檻；最後位置 KL 為 `6.194578e-8` nats。只檢查最後位置不能證明所有位置的分布接近，尤其該輸入末尾包含 EOS。此作業沒有 optimizer step；不放寬門檻。
+
+只做精度診斷、復用已保存初始化：
+
+```bash
+/bin/bash jobs/submit_gpu_check.sh \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659" --diagnose
+```
+
+診斷使用同一個短輸入，記錄所有 token 位置的 KL／total variation、去除每個位置共同偏移後的 logits 相對誤差、答案預測位置的正確 token 機率。每層另量測：相同 reference 輸入下的 local output 誤差、正常傳播的 output 誤差、BF16 F 加回 FP32 BA 後的有效權重誤差。最後从原始 checkpoint 和 A0/B0 **重新重建 FP32 F**，執行 FP32 全模型比較；不重新 SVD，也不更新參數。
+
+輸出 `precision_diagnostics.json` 及 `gpu_checks.json`。診斷完成表示測量完成，**不表示原有初始化／更新門檻通過**。BF16 的兩分支運算及 F 舍入目前是待檢驗的原因，不能由此次失敗直接確定。診斷會額外載入一個 FP32 模型，資源配置仍是同一個邏輯 GPU。

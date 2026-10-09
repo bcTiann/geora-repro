@@ -80,16 +80,33 @@ def inference_logits(model, inputs, device, frozen_dtype) -> torch.Tensor:
 def logits_difference(reference: torch.Tensor, actual: torch.Tensor) -> dict:
     difference = actual - reference
     denominator = torch.linalg.vector_norm(reference).clamp_min(1e-12)
-    # Measure the last position's distribution in addition to the raw logits.
-    reference_logp = reference[:, -1].log_softmax(dim=-1)
-    actual_logp = actual[:, -1].log_softmax(dim=-1)
+    # Compute distribution metrics at every position. The final EOS position alone
+    # can be almost deterministic and hide differences earlier in the sequence.
+    reference_logp = reference.double().log_softmax(dim=-1)
+    actual_logp = actual.double().log_softmax(dim=-1)
     reference_p = reference_logp.exp()
-    kl = (reference_p * (reference_logp - actual_logp)).sum(dim=-1).mean()
+    actual_p = actual_logp.exp()
+    kl = (reference_p * (reference_logp - actual_logp)).sum(dim=-1)
+    tv = (reference_p - actual_p).abs().sum(dim=-1) / 2
+    centered_reference = reference - reference.mean(dim=-1, keepdim=True)
+    centered_actual = actual - actual.mean(dim=-1, keepdim=True)
+    centered_denominator = torch.linalg.vector_norm(centered_reference).clamp_min(1e-12)
     return {
         "relative_l2_error": (torch.linalg.vector_norm(difference) / denominator).item(),
         "max_absolute_error": difference.abs().max().item(),
-        "last_token_reference_to_actual_kl_nats": kl.item(),
+        "centered_relative_l2_error": (
+            torch.linalg.vector_norm(centered_actual - centered_reference) / centered_denominator
+        ).item(),
+        "last_token_reference_to_actual_kl_nats": kl[:, -1].mean().item(),
+        "all_positions_mean_kl_nats": kl.mean().item(),
+        "all_positions_max_kl_nats": kl.max().item(),
+        "all_positions_mean_total_variation": tv.mean().item(),
+        "all_positions_max_total_variation": tv.max().item(),
+        "top1_agreement_fraction": (
+            reference.argmax(dim=-1) == actual.argmax(dim=-1)
+        ).double().mean().item(),
     }
+
 
 
 class CheckReport:
@@ -109,6 +126,15 @@ class CheckReport:
             self.data["status"] = "failed"
         self.write()
         print(f"{'PASS' if condition else 'FAIL'}: {name}", flush=True)
+        # Keep long per-parameter arrays in JSON, but print small measurements live.
+        printable = {
+            key: value for key, value in measurements.items()
+            if isinstance(value, (str, int, float, bool)) or value is None
+            or (isinstance(value, list) and len(value) <= 8
+                and all(isinstance(item, (str, int, float, bool)) for item in value))
+        }
+        if printable:
+            print(json.dumps(printable, ensure_ascii=False), flush=True)
         if not condition:
             raise RuntimeError(f"Check failed: {name}; see {self.path}")
 

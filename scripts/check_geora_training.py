@@ -277,18 +277,29 @@ def run(arguments, report):
         prompt_token_count=len(prompt_ids),
         supervised_answer_token_count=len(answer_ids),
     )
-    validate_model_and_update(
-        model, reference, manifest, base_model_factory, inputs, labels,
-        arguments.output_dir, report, device, frozen_dtype,
-        arguments.max_initial_relative_error, arguments.max_initial_kl,
-    )
+    if arguments.diagnose_only:
+        from diagnose_geora_precision import diagnose_initialization
+        report.data["stage"] = "geora_initialization_precision_diagnostic"
+        diagnose_initialization(
+            model, reference, manifest, base_model_factory, inputs, labels,
+            arguments.output_dir, report, device,
+        )
+    else:
+        validate_model_and_update(
+            model, reference, manifest, base_model_factory, inputs, labels,
+            arguments.output_dir, report, device, frozen_dtype,
+            arguments.max_initial_relative_error, arguments.max_initial_kl,
+        )
     torch.cuda.synchronize()
     report.data.update(
         elapsed_seconds=time.perf_counter() - started,
         peak_allocated_memory_gib=torch.cuda.max_memory_allocated() / 2**30,
     )
     report.finish()
-    print("All GeoRA GPU pre-GRPO checks passed.", flush=True)
+    if arguments.diagnose_only:
+        print("GeoRA precision diagnostic completed; optimizer steps: 0.", flush=True)
+    else:
+        print("All GeoRA GPU pre-GRPO checks passed.", flush=True)
     print("Report:", report.path, flush=True)
 
 
@@ -296,6 +307,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--init-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--diagnose-only", action="store_true",
+                        help="Measure initialization precision without updating parameters.")
     parser.add_argument("--max-initial-relative-error", type=float, default=0.02)
     parser.add_argument("--max-initial-kl", type=float, default=0.02)
     arguments = parser.parse_args()
