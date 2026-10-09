@@ -1,11 +1,14 @@
 # GeoRA 獨立復現
 
-這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先確認初始化、更新與 checkpoint 載入，再接 GRPO，最後比較 LoRA 與 GeoRA。現階段已有本機 CPU 初始化檢查，以及使用者回傳的 Setonix 全層 CPU 初始化和原始模型 GPU BF16 forward 結果；GeoRA GPU 更新與 GRPO 仍待取得結果。
+這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。**先讀 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)**：它集中說明做過哪些實驗，以及來源、初始化、運算、保存和更新各自使用的精度。
+
+目前 FP32 全模型初始化與重載通過；預設 BF16 全模型初始化 logits 檢查未通過，局部 attention 診斷已完成。1.5B 參數更新、GRPO 與任務對照尚未執行。
 
 ## 從哪裡開始
 
 | 檔案 | 用途 |
 |---|---|
+| [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) | 統一的實驗目的、流程、精度、結果、作業用量與目前進度 |
 | [geora_layers.py](geora_layers.py) | GeoRA 線性層、mask 與 SVD 初始化、全層替換、adapter 儲存／載入 |
 | [geora_initialization.ipynb](geora_initialization.ipynb) | 第 0 層 Q 矩陣的 FP64 參照初始化與單步更新 |
 | [geora_model_check.ipynb](geora_model_check.ipynb) | 只替換一個 Q 層，檢查完整模型 forward 與儲存／載入 |
@@ -17,7 +20,7 @@
 | [configs/base_model.json](configs/base_model.json) | 固定模型版本、rank、alpha、rho 與目標模組設定 |
 | [reports/cpu_initialization/](reports/cpu_initialization/) | 原有 CPU 初始化的測量與 manifest，隨程式碼保存 |
 
-建議先讀 `PRECISION.md`，再按三份 notebook 的順序執行。Notebook 從倉庫根目錄開始，各自從上到下執行。
+建議先讀 `EXPERIMENT_RECORD.md` 建立整體脈絡，再讀 `PRECISION.md` 和所需的 notebook。Notebook 從倉庫根目錄開始，各自從上到下執行。
 
 ## 本機環境與模型
 
@@ -55,20 +58,9 @@ uv run python scripts/download_base_model.py
 
 `checkpoints/`、`outputs/`、資料集、cache 與 Python 環境由 Git 忽略。複製或 clone 程式碼後，需要另外準備模型與執行產物。重新執行全模型 notebook 會重新做 SVD 並寫入該輸出目錄；重要結果需另存。
 
-## 已完成的檢查
+## 實驗結果
 
-保存在 [checks.json](reports/cpu_initialization/checks.json) 與 [manifest.json](reports/cpu_initialization/manifest.json) 的測量，來自原有工作目錄的 CPU FP32、固定輸入、`eval()` 全模型初始化與重新載入：
-
-| 測量 | 結果 |
-|---|---:|
-| 目標線性層 | 196 |
-| 可訓練 A/B 參數 | 18,464,768 |
-| 初始化 logits 相對誤差 | 2.61e-5 |
-| 初始化 logits 最大絕對差 | 0.002244 |
-| 保存／重新載入 logits 最大絕對差 | 0 |
-| 全模型 optimizer step | 0 |
-
-這次確認了只有 A/B 可訓練、初始化輸出誤差與初始化 checkpoint 載入一致性。它使用固定的 42-token 輸入；尚未取得 GeoRA GPU BF16、全模型參數更新、更新後載入或任務評估結果。新倉庫的 notebook 輸出已清空；上述報告是保留的先前測量，並非新環境重跑的結果。
+全部已執行結果集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，包括早期 FP64 單 Q、全模型 FP32、Setonix BF16 失敗、FP32 對照、attention 五種精度路徑，以及各自的保存格式。`reports/` 保留小型原始報告；本倉庫 notebook 的輸出已清空，歷史測量來自原有專案與 Setonix。
 
 ## 本機倉庫建立檢查
 
@@ -90,10 +82,10 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 
 下一階段依序完成：
 
-1. 在一個邏輯 GPU 上確認 ROCm、BF16 forward／backward 與實際 dtype。
-2. 從保存的 A0/B0 重建 F；凍結部分使用 BF16，A/B 保留 FP32，重新量測初始化 logits。
-3. 做一次 A/B 更新，核對梯度、optimizer 狀態、凍結權重不變與更新後載入一致性。
-4. 接入短 GRPO，驗證原始策略 reference、生成與答案檢查器，再準備 LoRA／GeoRA 比較。
+1. 在完整 1.5B 模型上驗證候選精度修正，通過初始化輸出門檻。
+2. 做一次 A/B 更新，核對梯度、optimizer 狀態、凍結權重不變與更新後載入一致性。
+3. 接入短 GRPO，驗證原始策略 reference、生成與答案檢查器。
+4. 固定訓練與評估預算，比較 LoRA／GeoRA。
 
 F 只在初始化時計算一次。停用 GeoRA adapter 得到 F；GRPO 的 reference 需使用原始模型或明確重建原始權重的路徑。這些約定詳見 `PRECISION.md`；完整訓練配置要在上述檢查通過後再確定。
 
@@ -107,6 +99,6 @@ git pull --ff-only
 /bin/bash jobs/submit_checks.sh
 ```
 
-依使用者確認的登入節點使用方式，先在登入節點的容器 Python 做 196 層 FP32 初始化，預設 2 個 CPU 執行緒。成功後才提交 `gpu-dev` 的一個邏輯 GPU，檢查混合精度、一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。初始化期間不申請 Slurm 資源，GPU 作業完成自動釋放；日誌和逐項檢查結果保存到 scratch。
+依使用者確認的登入節點使用方式，先在登入節點的容器 Python 做 196 層 FP32 初始化，預設 2 個 CPU 執行緒。成功後才提交 `gpu-dev` 的一個邏輯 GPU，先檢查混合精度初始化輸出；通過後才檢查一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。初始化期間不申請 Slurm 資源，GPU 作業完成自動釋放；日誌和逐項檢查結果保存到 scratch。
 
 完整內容、初始誤差門檻、log 與報告路徑見 [CHECKS.md](CHECKS.md)。更新測試使用短問答 cross-entropy；GRPO 與任務分數比較是後續階段。

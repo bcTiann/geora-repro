@@ -1,10 +1,12 @@
 # GeoRA 復現：精度與驗證約定
 
-更新：2026-10-09。這份文件記錄本次復現採用的設定；後續 notebook 與訓練程式依此執行。
+更新：2026-10-10。這份文件說明目前實作的精度約定；實際執行結果集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+
+**下表是目前 GPU 檢查的預設配置，尚未通過 1.5B 初始化 logits 門檻，不能當作已驗證的訓練方案。** FP32 投影是局部診斷中的候選配置，尚未自動取代預設。
 
 ## 1. 採用的精度
 
-| 部分 | 本機 CPU 正確性檢查 | GPU 訓練 |
+| 部分 | 本機 CPU 正確性檢查 | 目前 GPU 檢查預設 |
 |---|---|---|
 | 讀入的原始 checkpoint | BF16 權重轉 FP32 | 保留固定版本作為來源 |
 | mask、兩次 SVD、初始 A/B、殘差計算 | FP32 | 初始化計算仍用 FP32 |
@@ -54,7 +56,7 @@ PiSSA 官方倉庫 `GraphPKU/PiSSA` 現在重定向到 [MuLabPKU/PiSSA](https://
    F32 = W_pre32 - c * (B0 @ A0)
    ```
 
-7. 凍結 F；讓 A/B 從 A0/B0 開始訓練。本機保存 FP32 F；GPU 訓練前將 F 轉 BF16，A/B 仍保留 FP32。
+7. 凍結 F；讓 A/B 從 A0/B0 開始。本機運行內存中 F 為 FP32；目前 GPU 檢查將 F 轉 BF16，A/B 仍保留 FP32。緊湊 checkpoint 不保存 F，而保存重建它所需的 A0/B0，見第 7 節。
 
 該層的 forward 為：
 
@@ -92,32 +94,11 @@ mlp.down_proj
 
 合計 **196 個線性層**，排除 `lm_head`；原有 bias 凍結。程式需實際列出並斷言目標名稱與數量。
 
-目前已完成：
+實際通過／失敗狀態及每項精度見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。目標名稱、數量和 dtype 應由執行時斷言核對；預期配置不能代替實際結果。
 
-- 第 0 層 Q 的 FP64 參照初始化與單步更新檢查。
-- 單層替換的完整模型 forward / 儲存載入檢查。
-- **全部 196 層的 CPU FP32 初始化、固定輸入的完整模型 logits 比較，以及初始化因子 checkpoint 的儲存／重新載入。**
+## 6. 驗證順序
 
-全層實測記錄於 [geora_full_model_check.ipynb](geora_full_model_check.ipynb)，原始測量保存於 [checks.json](reports/cpu_initialization/checks.json)：
-
-| 測量 | 本機結果 |
-|---|---:|
-| 可訓練 A/B 參數數量 | 18,464,768 |
-| 196 層初始化耗時 | 130.0 秒 |
-| 各層有效權重的最大相對誤差 | 1.19e-8 |
-| 完整模型 logits 相對誤差 | 2.61e-5 |
-| 完整模型 logits 最大絕對差 | 0.002244 |
-| 保存／重新載入後 logits 最大絕對差 | 0 |
-
-logits 比較使用固定的 42-token 輸入，不代表任務評估。全模型檢查只確認 requires_grad 清單中只有 A/B；本次沒有 optimizer step。GeoRA GPU BF16、全模型更新後重載及 GRPO 框架的 reference 行為仍待驗證。原始模型 GPU BF16 forward 已由使用者回傳成功輸出，詳見 `CHECKS.md`。
-
-## 6. 下一步清單
-
-1. 在 GPU 上重建已保存的初始化，僅將凍結部分轉 BF16；A/B 保留 FP32。
-2. 用相同 BF16 forward 設定比較原始模型與初始化模型，重新量測誤差。
-3. 做一次 A/B 更新，檢查梯度、AdamW 狀態 dtype、A/B 的實際變化，以及凍結權重與 bias 不變；再確認更新後 checkpoint 重載一致。
-4. 接入 GRPO 訓練框架，驗證 reference 確實代表原始模型，跑 GSM8K 短程測試。
-5. 固定同一組訓練及評估設定，再比較 LoRA 與 GeoRA。
+完整模型初始化輸出 → A/B 單步更新與重載 → GRPO reference 與訓練 → LoRA／GeoRA 任務對照。初始化門檻失敗時，在 backward 前停止，先用完整模型驗證精度修正。
 
 ## 7. 儲存、載入與 reference 模型
 
@@ -145,12 +126,10 @@ delta_W = c * (B @ A - B0 @ A0)
 
 GRPO 的 reference 必須代表指定的原始策略。**直接停用 GeoRA adapter 得到的是 F，而非 W_pre**，因此不能把 `disable_adapter()` 默認當成正確 reference。接入訓練框架時，需使用原始模型或明確重建原始權重的 reference 路徑，並驗證其輸出。
 
-## 8. 下一階段的執行環境
+## 8. 執行環境與混合精度邊界
 
-2026-10-08：使用者確認 Setonix GPU 節點可直接使用。下一階段選擇 **Setonix GPU**，使用 ROCm 版 PyTorch。
+本機使用獨立 uv 環境，Setonix 使用 ROCm PyTorch 容器與容器內 venv；具體版本、路徑和已用資源見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，操作方法見 [SETONIX_GUIDE.md](SETONIX_GUIDE.md)。
 
-先用一個邏輯 GPU（MI250X 的一個 GCD，64 GB 顯存）完成小批量、短輸入的 BF16 forward 與 FP32 A/B 單步更新檢查，再接短 GRPO。這是起步檢查的資源配置，不代表論文完整 batch 或多卡訓練配置。[Pawsey 官方規格](https://pawsey.atlassian.net/wiki/spaces/US/pages/51929028/Setonix+General+Information)
+BF16 forward 是混合精度路徑，不代表每一步都是 BF16。RMSNorm 的統計、RoPE 頻率與三角函數、eager attention 的 softmax 可在 FP32 計算；但先前的 BF16 QK 分數精度不會因 FP32 softmax 恢復。運算精度與參數／checkpoint 保存精度應分別驗證。
 
-ROCm 版 PyTorch 沿用 `torch.cuda` 與 `device='cuda'` 的 API 名稱；這些名稱在 Setonix 上指向 AMD GPU。需使用對應 ROCm 的安裝或容器，不能直接複製 Mac 的 `.venv`。[PyTorch HIP 說明](https://docs.pytorch.org/docs/2.14/notes/hip.html)
-
-使用者已回傳 MI250X 的 BF16 矩陣乘法和原始模型 forward 成功結果；實際 PyTorch 為 `2.7.1a0+gite2d141d`、HIP 為 `6.3.42134-a9a80e791`。GeoRA 的混合精度、梯度及更新後重載由 `CHECKS.md` 的作業驗證。A100 保留為具體框架相容問題的備選；本機繼續用於 notebook 與矩陣分析。
+誤差統計也獨立於模型精度：GPU logits 可先轉 FP32 做範數，再用 CPU FP64 算 KL/TV。這不會改變產生 logits 時的模型計算精度。

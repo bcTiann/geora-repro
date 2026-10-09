@@ -1,0 +1,122 @@
+{
+  "collection_date": "2026-10-09",
+  "scope": "Preserved notebook code and text outputs; not a fresh execution.",
+  "notebooks": [
+    {
+      "source_notebook": "/Users/tianbaochen/RLVR/geora_initialization.ipynb",
+      "source_sha256": "c875e7f3cd7d89dcfc25ca37fe522aac7ca3e59c7a2dca1a2866e5ae0d073ce2",
+      "cells": [
+        {
+          "cell_index": 2,
+          "execution_count": 11,
+          "source": "from pathlib import Path\n\nimport torch\nfrom safetensors import safe_open\n\ntorch.set_num_threads(4)\n\ncheckpoint_path = Path(\n    \"/Users/tianbaochen/RLVR/checkpoints/geora_base/model.safetensors\"\n)\ntensor_name = \"model.layers.0.self_attn.q_proj.weight\"\nbias_name = \"model.layers.0.self_attn.q_proj.bias\"\n\nwith safe_open(checkpoint_path, framework=\"pt\", device=\"cpu\") as checkpoint:\n    stored_weight = checkpoint.get_tensor(tensor_name)\n    bias = checkpoint.get_tensor(bias_name).double()\n\nprint(\"Stored weight:\", stored_weight.shape, stored_weight.dtype)\n\nW_pre = stored_weight.double()\n\nr = 16\nalpha = 32\nrho = 0.2\nc = alpha / r\n\nassert W_pre.shape == (1536, 1536)\nassert bias.shape == (1536,)\nassert torch.isfinite(W_pre).all()\n\nprint(\"Working weight:\", W_pre.shape, W_pre.dtype, W_pre.device)\nprint(\"Bias:\", bias.shape)\nprint(f\"r={r}, alpha={alpha}, rho={rho}, c={c}\")\n",
+          "text_outputs": [
+            "Stored weight: torch.Size([1536, 1536]) torch.bfloat16\nWorking weight: torch.Size([1536, 1536]) torch.float64 cpu\nBias: torch.Size([1536])\nr=16, alpha=32, rho=0.2, c=2.0\n"
+          ]
+        },
+        {
+          "cell_index": 4,
+          "execution_count": 12,
+          "source": "U_pre, singular_values_pre, Vh_pre = torch.linalg.svd(\n    W_pre,\n    full_matrices=False,\n)\n\nSigma_pre_r = torch.diag(singular_values_pre[:r])\nW_pre_rank_r = U_pre[:, :r] @ Sigma_pre_r @ Vh_pre[:r, :]\n\nspec_magnitudes = W_pre_rank_r.abs()\nthreshold_spec = torch.quantile(\n    spec_magnitudes.reshape(-1),\n    rho,\n    interpolation=\"linear\",\n)\nM_spec = spec_magnitudes <= threshold_spec\n\nprint(\"U_pre[:, :r]:\", U_pre[:, :r].shape)\nprint(\"singular_values_pre = \", singular_values_pre)\nprint(\"Sigma_pre_r:\", Sigma_pre_r.shape)\n\nprint(\"Vh_pre[:r, :]:\", Vh_pre[:r, :].shape)\nprint(\"Spectral threshold:\", threshold_spec.item())\nprint(f\"Spectral mask selected: {M_spec.double().mean().item():.4%}\")\nprint(f\"M_spec = {M_spec}\")\n\n\n",
+          "text_outputs": [
+            "U_pre[:, :r]: torch.Size([1536, 16])\nsingular_values_pre =  tensor([2.7392e+01, 1.5036e+01, 1.1046e+01,  ..., 1.2298e-03, 6.0991e-04,\n        4.9420e-05], dtype=torch.float64)\nSigma_pre_r: torch.Size([16, 16])\nVh_pre[:r, :]: torch.Size([16, 1536])\nSpectral threshold: 0.001758847552320062\nSpectral mask selected: 20.0000%\nM_spec = tensor([[False, False,  True,  ...,  True,  True, False],\n        [False, False,  True,  ..., False, False, False],\n        [False, False, False,  ...,  True,  True,  True],\n        ...,\n        [ True,  True,  True,  ...,  True,  True,  True],\n        [ True,  True,  True,  ...,  True,  True,  True],\n        [False,  True,  True,  ...,  True,  True,  True]])\n"
+          ]
+        },
+        {
+          "cell_index": 6,
+          "execution_count": 13,
+          "source": "euc_magnitudes = W_pre.abs()\nthreshold_euc = torch.quantile(\n    euc_magnitudes.reshape(-1),\n    rho,\n    interpolation=\"linear\",\n)\nM_euc = euc_magnitudes <= threshold_euc\n\nM_geo = M_spec | M_euc\nW_geo = W_pre * M_geo\n\nassert M_geo.dtype == torch.bool\nassert torch.equal(W_geo[M_geo], W_pre[M_geo])\nassert torch.count_nonzero(W_geo[~M_geo]).item() == 0\n\nprint(\"Euclidean threshold:\", threshold_euc.item())\nprint(f\"Spectral mask selected: {M_spec.double().mean().item():.4%}\")\nprint(f\"Euclidean mask selected: {M_euc.double().mean().item():.4%}\")\nprint(f\"Union mask selected: {M_geo.double().mean().item():.4%}\")\nprint(\"W_geo:\", W_geo.shape)\n",
+          "text_outputs": [
+            "Euclidean threshold: 0.00762939453125\nSpectral mask selected: 20.0000%\nEuclidean mask selected: 20.0680%\nUnion mask selected: 34.6968%\nW_geo: torch.Size([1536, 1536])\n"
+          ]
+        },
+        {
+          "cell_index": 8,
+          "execution_count": 14,
+          "source": "U_geo, singular_values_geo, Vh_geo = torch.linalg.svd(\n    W_geo,\n    full_matrices=False,\n)\n\nSigma_geo_r_sqrt = torch.diag(torch.sqrt(singular_values_geo[:r]))\nB0 = U_geo[:, :r] @ Sigma_geo_r_sqrt\nA0 = Sigma_geo_r_sqrt @ Vh_geo[:r, :]\nW_geo_rank_r = B0 @ A0\n\napproximation_error = torch.linalg.matrix_norm(\n    W_geo - W_geo_rank_r,\n)\ndiscarded_singular_value_norm = torch.linalg.vector_norm(\n    singular_values_geo[r:],\n)\nretained_energy = (\n    singular_values_geo[:r].square().sum()\n    / singular_values_geo.square().sum()\n)\n\nassert B0.shape == (W_pre.shape[0], r)\nassert A0.shape == (r, W_pre.shape[1])\ntorch.testing.assert_close(\n    approximation_error,\n    discarded_singular_value_norm,\n    rtol=1e-12,\n    atol=1e-12,\n)\n\nprint(\"B0:\", B0.shape)\nprint(\"A0:\", A0.shape)\nprint(f\"Rank-{r} retained energy of W_geo: {retained_energy.item():.4%}\")\nprint(\"Approximation error:\", approximation_error.item())\nprint(\"Discarded singular-value norm:\", discarded_singular_value_norm.item())\n",
+          "text_outputs": [
+            "B0: torch.Size([1536, 16])\nA0: torch.Size([16, 1536])\nRank-16 retained energy of W_geo: 6.7742%\nApproximation error: 22.367188352832898\nDiscarded singular-value norm: 22.367188352833033\n"
+          ]
+        },
+        {
+          "cell_index": 10,
+          "execution_count": 15,
+          "source": "A = torch.nn.Parameter(A0.clone())\nB = torch.nn.Parameter(B0.clone())\nF = (W_pre - c * W_geo_rank_r).detach()\n\nwith torch.no_grad():\n    W_eff_0 = F + c * (B @ A)\n    weight_difference = W_eff_0 - W_pre\n    relative_weight_error = (\n        torch.linalg.matrix_norm(weight_difference)\n        / torch.linalg.matrix_norm(W_pre)\n    )\n    maximum_weight_error = weight_difference.abs().max()\n\nassert not F.requires_grad\nassert A.requires_grad and B.requires_grad\nassert relative_weight_error.item() < 1e-12\n\nprint(\"F:\", F.shape, \"requires_grad =\", F.requires_grad)\nprint(\"A:\", A.shape, \"requires_grad =\", A.requires_grad)\nprint(\"B:\", B.shape, \"requires_grad =\", B.requires_grad)\nprint(f\"Relative weight error: {relative_weight_error.item():.8e}\")\nprint(f\"Maximum absolute weight error: {maximum_weight_error.item():.8e}\")\n",
+          "text_outputs": [
+            "F: torch.Size([1536, 1536]) requires_grad = False\nA: torch.Size([16, 1536]) requires_grad = True\nB: torch.Size([1536, 16]) requires_grad = True\nRelative weight error: 1.40528991e-17\nMaximum absolute weight error: 2.77555756e-17\n"
+          ]
+        },
+        {
+          "cell_index": 12,
+          "execution_count": 16,
+          "source": "random_generator = torch.Generator(device=\"cpu\")\nrandom_generator.manual_seed(42)\nx = torch.randn(\n    4,\n    W_pre.shape[1],\n    generator=random_generator,\n    dtype=torch.float64,\n)\n\nwith torch.no_grad():\n    output_pre = x @ W_pre.T + bias\n    frozen_output = x @ F.T\n    compressed_input = x @ A.T\n    adapter_output = compressed_input @ B.T\n    output_geo = frozen_output + c * adapter_output + bias\n\n    output_difference = output_geo - output_pre\n    relative_output_error = (\n        torch.linalg.vector_norm(output_difference)\n        / torch.linalg.vector_norm(output_pre)\n    )\n    maximum_output_error = output_difference.abs().max()\n\nassert relative_output_error.item() < 1e-12\n\nprint(\"Input batch:\", x.shape)\nprint(\"Compressed input:\", compressed_input.shape)\nprint(\"Output:\", output_geo.shape)\nprint(f\"Relative output error: {relative_output_error.item():.8e}\")\nprint(f\"Maximum absolute output error: {maximum_output_error.item():.8e}\")\nprint(\"Single-layer FP64 initialization checks passed.\")\n",
+          "text_outputs": [
+            "Input batch: torch.Size([4, 1536])\nCompressed input: torch.Size([4, 16])\nOutput: torch.Size([4, 1536])\nRelative output error: 1.07582425e-15\nMaximum absolute output error: 4.26325641e-14\nSingle-layer FP64 initialization checks passed.\n"
+          ]
+        },
+        {
+          "cell_index": 15,
+          "execution_count": 17,
+          "source": "# Reset only the trainable factors; keep the original frozen residual.\nA = torch.nn.Parameter(A0.clone())\nB = torch.nn.Parameter(B0.clone())\n\ntarget_generator = torch.Generator(device=\"cpu\")\ntarget_generator.manual_seed(43)\ntarget_offset = 0.1 * torch.randn(\n    output_pre.shape,\n    generator=target_generator,\n    dtype=torch.float64,\n)\ntarget_output = (output_pre + target_offset).detach()\n\n# Save the values before the update for an exact comparison afterward.\nF_before_step = F.clone()\nA_before_step = A.detach().clone()\nB_before_step = B.detach().clone()\nwith torch.no_grad():\n    W_eff_before_step = F + c * (B @ A)\n\n# SGD is used only for this diagnostic, not as the paper's optimizer.\nlearning_rate = 0.1\noptimizer = torch.optim.SGD([A, B], lr=learning_rate)\n\nassert not F.requires_grad\nassert not target_output.requires_grad\nprint(\"Fixed target shape:\", target_output.shape)\nprint(\"Trainable parameters: A and B\")\nprint(\"Diagnostic learning rate:\", learning_rate)",
+          "text_outputs": [
+            "Fixed target shape: torch.Size([4, 1536])\nTrainable parameters: A and B\nDiagnostic learning rate: 0.1\n"
+          ]
+        },
+        {
+          "cell_index": 17,
+          "execution_count": 18,
+          "source": "optimizer.zero_grad()\npredicted_output = x @ F.T + c * ((x @ A.T) @ B.T) + bias\nloss_before = (predicted_output - target_output).square().mean()\nloss_before.backward()\n\nA_gradient_norm = torch.linalg.vector_norm(A.grad)\nB_gradient_norm = torch.linalg.vector_norm(B.grad)\n\nassert F.grad is None\nassert torch.isfinite(A.grad).all()\nassert torch.isfinite(B.grad).all()\nassert A_gradient_norm.item() > 0\nassert B_gradient_norm.item() > 0\nassert torch.equal(A.detach(), A_before_step)\nassert torch.equal(B.detach(), B_before_step)\n\nprint(f\"Loss before step: {loss_before.item():.10f}\")\nprint(f\"A gradient norm: {A_gradient_norm.item():.10f}\")\nprint(f\"B gradient norm: {B_gradient_norm.item():.10f}\")\nprint(\"F.grad:\", F.grad)\nprint(\"Backward finished; parameter values have not changed yet.\")",
+          "text_outputs": [
+            "Loss before step: 0.0098736633\nA gradient norm: 0.0284448067\nB gradient norm: 0.0260114576\nF.grad: None\nBackward finished; parameter values have not changed yet.\n"
+          ]
+        },
+        {
+          "cell_index": 19,
+          "execution_count": 19,
+          "source": "optimizer.step()\n\nwith torch.no_grad():\n    output_after_step = x @ F.T + c * ((x @ A.T) @ B.T) + bias\n    loss_after = (output_after_step - target_output).square().mean()\n\n    F_change = torch.linalg.vector_norm(F - F_before_step)\n    A_change = torch.linalg.vector_norm(A - A_before_step)\n    B_change = torch.linalg.vector_norm(B - B_before_step)\n\n    W_eff_after_step = F + c * (B @ A)\n    delta_W_step = W_eff_after_step - W_eff_before_step\n    delta_W_from_factors = c * (B @ A - B0 @ A0)\n    weight_change_norm = torch.linalg.matrix_norm(delta_W_step)\n\nassert torch.equal(F, F_before_step)\nassert A_change.item() > 0\nassert B_change.item() > 0\nassert weight_change_norm.item() > 0\ntorch.testing.assert_close(\n    delta_W_step,\n    delta_W_from_factors,\n    rtol=1e-12,\n    atol=1e-14,\n)\n# This decrease is checked for this fixed target and step size only.\nassert loss_after.item() < loss_before.item()\n\nprint(f\"F change norm: {F_change.item():.10f}\")\nprint(f\"A change norm: {A_change.item():.10f}\")\nprint(f\"B change norm: {B_change.item():.10f}\")\nprint(f\"Effective weight change norm: {weight_change_norm.item():.10f}\")\nprint(f\"Loss: {loss_before.item():.10f} -> {loss_after.item():.10f}\")\nprint(\"Single-step FP64 adapter training checks passed.\")",
+          "text_outputs": [
+            "F change norm: 0.0000000000\nA change norm: 0.0028444807\nB change norm: 0.0026011458\nEffective weight change norm: 0.0095346775\nLoss: 0.0098736633 -> 0.0097375650\nSingle-step FP64 adapter training checks passed.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "source_notebook": "/Users/tianbaochen/RLVR/geora_model_check.ipynb",
+      "source_sha256": "f97b83d2e2ac56bff5fe281f41c9dc67f9c27124e2bc3e3a526293b52428063c",
+      "cells": [
+        {
+          "cell_index": 2,
+          "execution_count": 1,
+          "source": "from pathlib import Path\nfrom importlib.metadata import version\nimport gc\nimport json\nimport time\nimport torch\nfrom torch import nn\nfrom torch.nn import functional as functional\nfrom safetensors.torch import save_file, load_file\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\n\ntorch.set_num_threads(4)\nproject_path = Path(\"/Users/tianbaochen/RLVR\")\ncheckpoint_path = project_path / \"checkpoints\" / \"geora_base\"\nbase_revision = \"989aa7980e4cf806f80c7fef2b1adb7bc71aa306\"\nmodel_dtype = torch.float32\nr = 16\nalpha = 32\nrho = 0.2\nc = alpha / r\n\ntokenizer = AutoTokenizer.from_pretrained(\n    checkpoint_path,\n    local_files_only=True,\n)\nmodel = AutoModelForCausalLM.from_pretrained(\n    checkpoint_path,\n    dtype=model_dtype,\n    attn_implementation=\"eager\",\n    local_files_only=True,\n)\nmodel.eval()\nmodel.requires_grad_(False)\n\nprojection_names = {\n    \"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n    \"gate_proj\", \"up_proj\", \"down_proj\",\n}\ntarget_names = [\n    name for name, module in model.named_modules()\n    if isinstance(module, nn.Linear)\n    and name.rsplit(\".\", 1)[-1] in projection_names\n]\nassert len(target_names) == 28 * 7\nassert \"lm_head\" not in target_names\nprint(\"Versions:\", {\n    package: version(package)\n    for package in [\"torch\", \"transformers\", \"huggingface-hub\", \"tokenizers\"]\n})\nprint(\"Model dtype:\", model.dtype)\nprint(\"All projection targets:\", len(target_names))\nprint(\"First layer targets:\", target_names[:7])",
+          "text_outputs": [
+            "Versions: {'torch': '2.14.1', 'transformers': '5.19.0', 'huggingface-hub': '1.33.0', 'tokenizers': '0.23.2'}\nModel dtype: torch.float32\nAll projection targets: 196\nFirst layer targets: ['model.layers.0.self_attn.q_proj', 'model.layers.0.self_attn.k_proj', 'model.layers.0.self_attn.v_proj', 'model.layers.0.self_attn.o_proj', 'model.layers.0.mlp.gate_proj', 'model.layers.0.mlp.up_proj', 'model.layers.0.mlp.down_proj']\n"
+          ]
+        },
+        {
+          "cell_index": 4,
+          "execution_count": 2,
+          "source": "messages = [{\n    \"role\": \"user\",\n    \"content\": \"What is 2 + 3? Give a short answer.\",\n}]\ninputs = tokenizer.apply_chat_template(\n    messages,\n    tokenize=True,\n    add_generation_prompt=True,\n    return_tensors=\"pt\",\n    return_dict=True,\n)\nwith torch.inference_mode():\n    logits_before = model(**inputs, use_cache=False).logits.clone()\n\nassert torch.isfinite(logits_before).all()\nprint(\"Input IDs shape:\", inputs[\"input_ids\"].shape)\nprint(\"Logits shape:\", logits_before.shape)",
+          "text_outputs": [
+            "Input IDs shape: torch.Size([1, 42])\nLogits shape: torch.Size([1, 42, 151936])\n"
+          ]
+        },
+        {
+          "cell_index": 8,
+          "execution_count": 4,
+          "source": "q_name = \"model.layers.0.self_attn.q_proj\"\noriginal_q = model.get_submodule(q_name)\nW_pre_q = original_q.weight.detach().clone()\nstarted = time.perf_counter()\nA0_q, B0_q = initialize_geo_factors(\n    original_q.weight,\n    rank=r,\n    sparsity_ratio=rho,\n)\ngeo_q = GeoRALinear(original_q, A0_q, B0_q, scaling=c)\nmodel.model.layers[0].self_attn.q_proj = geo_q\nmodel.eval()\n\nwith torch.no_grad():\n    W_eff_q = geo_q.base_layer.weight + c * (geo_q.B @ geo_q.A)\n    weight_relative_error = (\n        torch.linalg.vector_norm((W_eff_q - W_pre_q).double())\n        / torch.linalg.vector_norm(W_pre_q.double())\n    )\nwith torch.inference_mode():\n    logits_after = model(**inputs, use_cache=False).logits.clone()\n    logits_difference = (logits_after - logits_before).double()\n    logits_relative_error = (\n        torch.linalg.vector_norm(logits_difference)\n        / torch.linalg.vector_norm(logits_before.double())\n    )\n    logits_maximum_error = logits_difference.abs().max()\n    last_token_before = logits_before[0, -1].argmax().item()\n    last_token_after = logits_after[0, -1].argmax().item()\n\nassert torch.isfinite(logits_after).all()\nassert weight_relative_error.item() < 1e-6\nprint(f\"Q effective weight relative error: {weight_relative_error.item():.8e}\")\nprint(f\"Full-model logits relative error: {logits_relative_error.item():.8e}\")\nprint(f\"Full-model logits maximum absolute error: {logits_maximum_error.item():.8e}\")\nprint(\"Last-position top token IDs:\", last_token_before, last_token_after)\nprint(f\"Initialization + forward seconds: {time.perf_counter() - started:.2f}\")\n\ntrainable_names = [name for name, p in model.named_parameters() if p.requires_grad]\nexpected_trainable_names = [q_name + \".A\", q_name + \".B\"]\nassert trainable_names == expected_trainable_names\nprint(\"Trainable parameters:\", trainable_names)\nprint(\"Single-Q weight and parameter checks passed; logits error reported above.\")",
+          "text_outputs": [
+            "Q effective weight relative error: 7.59148851e-09\nFull-model logits relative error: 1.19141309e-05\nFull-model logits maximum absolute error: 4.97043133e-04\nLast-position top token IDs: 17 17\nInitialization + forward seconds: 0.75\nTrainable parameters: ['model.layers.0.self_attn.q_proj.A', 'model.layers.0.self_attn.q_proj.B']\nSingle-Q weight and parameter checks passed; logits error reported above.\n"
+          ]
+        },
+        {
+          "cell_index": 10,
+          "execution_count": 5,
+          "source": "artifact_directory = project_path / \"outputs\" / \"geora_single_q_check\"\nartifact_directory.mkdir(parents=True, exist_ok=True)\nstate_path = artifact_directory / \"q_module.safetensors\"\nmetadata_path = artifact_directory / \"metadata.json\"\n\nq_state = {\n    name: tensor.detach().cpu().contiguous()\n    for name, tensor in geo_q.state_dict().items()\n}\nsave_file(q_state, state_path)\nmetadata = {\n    \"model_id\": \"Qwen/Qwen2.5-1.5B-Instruct\",\n    \"base_revision\": base_revision,\n    \"module_name\": q_name,\n    \"rank\": r,\n    \"alpha\": alpha,\n    \"rho\": rho,\n    \"model_dtype\": \"float32\",\n    \"svd_dtype\": \"float64\",\n    \"attention_implementation\": \"eager\",\n    \"scope\": \"single_q_module_in_full_model\",\n    \"weight_relative_error\": weight_relative_error.item(),\n    \"logits_relative_error\": logits_relative_error.item(),\n    \"logits_maximum_absolute_error\": logits_maximum_error.item(),\n}\nmetadata_path.write_text(json.dumps(metadata, indent=2) + \"\\n\")\n\nloaded_state = load_file(state_path)\nloaded_metadata = json.loads(metadata_path.read_text())\nassert loaded_metadata[\"base_revision\"] == base_revision\nassert loaded_metadata[\"module_name\"] == q_name\nreload_base = nn.Linear(\n    original_q.in_features,\n    original_q.out_features,\n    bias=original_q.bias is not None,\n    dtype=model_dtype,\n)\nreloaded_q = GeoRALinear(\n    reload_base,\n    loaded_state[\"A\"],\n    loaded_state[\"B\"],\n    scaling=loaded_metadata[\"alpha\"] / loaded_metadata[\"rank\"],\n)\nreloaded_q.load_state_dict(loaded_state, strict=True)\nmodel.model.layers[0].self_attn.q_proj = reloaded_q\nmodel.eval()\n\nwith torch.inference_mode():\n    logits_reloaded = model(**inputs, use_cache=False).logits\nreload_maximum_error = (logits_reloaded - logits_after).abs().max().item()\ntorch.testing.assert_close(logits_reloaded, logits_after, rtol=0, atol=0)\nprint(\"Saved Q module:\", state_path)\nprint(\"Reload logits maximum absolute error:\", reload_maximum_error)\nprint(\"Single-Q save/reload checks passed.\")",
+          "text_outputs": [
+            "Saved Q module: /Users/tianbaochen/RLVR/outputs/geora_single_q_check/q_module.safetensors\nReload logits maximum absolute error: 0.0\nSingle-Q save/reload checks passed.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # GeoRA：Setonix 逐步操作教程
 
-更新：2026-10-09。這份文件隨實際輸出逐步補齊；有「待確認」的步驟，先回傳輸出再繼續。
+更新：2026-10-10。本文件保留環境、儲存與提交作業的操作步驟。完整實驗流程、精度、結果與資源用量集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 本次目標：在 Setonix 的一個邏輯 GPU 上，完成 BF16 forward、FP32 A/B 單步更新及保存／載入檢查，之後接短 GRPO。
 
@@ -23,7 +23,7 @@
 - 主機端 ROCm 有多個版本，預設 `rocm/6.4.1`。
 - Singularity 有多個版本，預設 `singularity/4.1.0-slurm`。
 
-使用者已回傳容器 venv、依賴匯入、模型檔案及 GPU BF16 矩陣乘法的成功輸出。下列遠端結果均為使用者提供的輸出；原始模型 GPU BF16 forward 亦已由使用者回傳成功結果；GeoRA 更新及 GRPO 尚待執行。
+容器 venv、依賴、模型及原始模型 GPU forward 已確認。使用者提供了早期執行輸出；後續也透過 SSH 直接核對報告並執行局部探針。GeoRA BF16 全模型初始化門檻未通過，1.5B 更新與 GRPO 尚未執行；當前結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 ## 已收到的第 1 步結果
 
@@ -272,9 +272,9 @@ cat "$MYSCRATCH/geora/runs/logs/base-model-<jobid>.log"
 
 結果位於 `$MYSCRATCH/geora/runs/base-model-<jobid>/base_model_forward.json`。通過時 log 顯示 `Base-model GPU BF16 forward passed.`。作業完成或報錯即釋放資源，五分鐘是上限；若超時，先看 log 再決定是否增加時間。
 
-## 第 6.2 步：已收到的原始模型 GPU forward 結果
+## 第 6.2 步：原始模型 GPU forward 結果
 
-使用者回傳作業 `50574324` 的成功 log：MI250X、BF16 參數與 logits、形狀 `[1, 40, 151936]`、logits 全部有限。PyTorch 峰值張量顯存 2.962 GiB，脚本內耗時 13.296 秒，optimizer steps 為 0。Slurm 顯示的整個作業時間另含啟動與清理，不能把它與脚本耗時混為一談。
+作業 `50574324` 的原始模型 BF16 forward 已通過有限值檢查。精度、形狀、時間與原始 JSON 統一見 [EXPERIMENT_RECORD.md 的 S1](EXPERIMENT_RECORD.md)。
 
 ## 第 7 步：自動執行 GeoRA 初始化與單步檢查
 
@@ -290,7 +290,7 @@ git pull --ff-only
 
 GPU 檢查：凍結參數 BF16、A/B FP32、初始化與原始模型的 logits 差異、每個 A/B 的梯度與更新、凍結參數及 A0/B0 不變、AdamW FP32 狀態，以及初始化／訓練後的 checkpoint 重載。獨立原始 reference 的 logits 在更新後必須不變。結果逐項寫入 JSON，失敗會停止。
 
-新流程已在本機小型 Qwen 的 CPU FP32/BF16 兩种模式通過 27 項檢查，並拒絕錯誤的 A/B BF16 dtype；Setonix 的完整 1.5B 模型已完成 CPU 初始化，最後一層累計耗時 914.9 秒，五項檢查通過。GPU job `50578377` 因初始化目錄的環境變數未到達 batch script 而在 Python 啟動前停止。
+小模型回歸測試與 Setonix 196 層 CPU 初始化已通過；早期 GPU 傳參失敗已修復，後續預設 BF16 路徑在初始化 logits 門檻停止。歷史作業、實際精度與結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 已保存的初始化可直接復用。在登入節點更新程式後，只重跑 GPU：
 
@@ -301,7 +301,7 @@ git pull --ff-only
   "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
 ```
 
-提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；提交後自動顯示 GPU 日誌，Ctrl+C 只停止觀看。使用者隨後回傳 job `50578622` 在 logits 相對誤差檢查失敗（17.15%，原門檻 2%），尚未更新參數；下一步用 `--diagnose` 執行精度診斷，見 [CHECKS.md](CHECKS.md)。
+提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；提交後自動顯示 GPU 日誌，Ctrl+C 只停止觀看。job `50578622` 在初始化 logits 門檻停止，尚未更新參數。全模型精度診斷與局部 attention 探針後續已完成，結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)；重跑診斷命令見 [CHECKS.md](CHECKS.md)。
 
 ## 第 8 步：接短 GRPO
 
@@ -309,18 +309,6 @@ git pull --ff-only
 
 這些通過後，接 GSM8K 的短 GRPO，驗證生成、答案檢查器、reward、reference 及訓練更新。短程流程跑通後再設定 LoRA／GeoRA 的比較實驗。
 
-## 狀態記錄
+## 當前進度
 
-| 項目 | 狀態 |
-|---|---|
-| Setonix GPU 使用權限 | 使用者已確認 |
-| PyTorch module 與容器入口 | 已載入，包裝命令來源已確認 |
-| 個人路徑與配額 | 使用者已提供，見第 1 步結果 |
-| 容器 Python 與追加依賴 | 使用者輸出確認成功；ROCm PyTorch 沿用容器版本 |
-| GPU 基本運算 | 使用者輸出確認一個 MI250X，BF16 矩陣乘法成功 |
-| 模型檔案與路徑 | 版本及檔案標頭通過；原始模型已完成 GPU 載入 |
-| 原始模型 GPU forward | 使用者回傳 job 50574324，BF16 forward 通過 |
-| GeoRA CPU 初始化 | 使用者回傳 196 層及五項檢查通過，初始化已保存 |
-| GeoRA 全模型 GPU 檢查 | 傳參已修復；job 50578622 在 BF16 初始化 logits 誤差門檻停止，尚未更新 A/B |
-| 第 0 層 attention 精度定位 | 直接執行 job 50579802，1 個邏輯 GPU，22 秒完成；大 QK 分數的 BF16 舍入放大投影差異，詳見 CHECKS.md |
-| GRPO | 尚未接入 |
+環境與原始模型 forward 已通過；CPU GeoRA 初始化通過；預設 BF16 全模型初始化門檻失敗，精度診斷完成。下一步是完整模型驗證候選修正，通過後才更新 A/B。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。

@@ -1,0 +1,15 @@
+{
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "base_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "module_name": "model.layers.0.self_attn.q_proj",
+  "rank": 16,
+  "alpha": 32,
+  "rho": 0.2,
+  "model_dtype": "float32",
+  "svd_dtype": "float64",
+  "attention_implementation": "eager",
+  "scope": "single_q_module_in_full_model",
+  "weight_relative_error": 7.591488510489024e-09,
+  "logits_relative_error": 1.1914130868173501e-05,
+  "logits_maximum_absolute_error": 0.0004970431327819824
+}

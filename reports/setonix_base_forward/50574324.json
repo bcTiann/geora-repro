@@ -1,0 +1,21 @@
+{
+  "stage": "base_model_bf16_forward_only",
+  "status": "passed",
+  "slurm_job_id": "50574324",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "parameter_dtype": "torch.bfloat16",
+  "logits_shape": [
+    1,
+    40,
+    151936
+  ],
+  "logits_dtype": "torch.bfloat16",
+  "logits_all_finite": true,
+  "peak_allocated_memory_gib": 2.9619016647338867,
+  "elapsed_seconds": 13.296235872985562,
+  "optimizer_steps": 0
+}

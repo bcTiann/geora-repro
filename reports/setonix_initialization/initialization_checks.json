@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "all_196_expected_targets",
+      "passed": true,
+      "target_count": 196
+    },
+    {
+      "name": "trainable_parameter_count",
+      "passed": true,
+      "count": 18464768
+    },
+    {
+      "name": "fp32_initial_effective_weights",
+      "passed": true,
+      "max_relative_error": 1.1725169956440873e-08
+    },
+    {
+      "name": "fp32_finite_factors",
+      "passed": true,
+      "tensor_count": 784
+    },
+    {
+      "name": "current_factors_equal_initial_factors",
+      "passed": true
+    }
+  ],
+  "stage": "cpu_geora_initialization",
+  "hostname": "setonix-05",
+  "cpu_threads": 2,
+  "optimizer_steps": 0,
+  "elapsed_seconds": 915.2920138869958
+}

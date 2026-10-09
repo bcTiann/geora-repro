@@ -1,0 +1,66 @@
+{
+  "status": "failed",
+  "checks": [
+    {
+      "name": "checkpoint_is_untrained_initialization",
+      "passed": true
+    },
+    {
+      "name": "only_expected_A_B_trainable",
+      "passed": true,
+      "tensor_count": 392,
+      "parameter_count": 18464768
+    },
+    {
+      "name": "parameter_precision",
+      "passed": true,
+      "frozen_dtype": "torch.bfloat16",
+      "adapter_dtype": "torch.float32"
+    },
+    {
+      "name": "initial_factor_buffers_fp32",
+      "passed": true
+    },
+    {
+      "name": "reference_is_original_frozen_model",
+      "passed": true
+    },
+    {
+      "name": "reference_forward_finite",
+      "passed": true,
+      "shape": [
+        1,
+        42,
+        151936
+      ]
+    },
+    {
+      "name": "initialized_forward_finite",
+      "passed": true,
+      "shape": [
+        1,
+        42,
+        151936
+      ]
+    },
+    {
+      "name": "initialized_logits_close_to_original",
+      "passed": false,
+      "relative_l2_error": 0.17153804004192352,
+      "max_absolute_error": 7.7265625,
+      "last_token_reference_to_actual_kl_nats": 6.194578361373715e-08,
+      "relative_error_limit": 0.02,
+      "kl_limit_nats": 0.02
+    }
+  ],
+  "stage": "geora_gpu_pre_grpo_checks",
+  "slurm_job_id": "50578622",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "prompt_token_count": 40,
+  "supervised_answer_token_count": 2,
+  "error": "Check failed: initialized_logits_close_to_original; see /scratch/pawsey0807/btian/geora/runs/geora-check-50578622/gpu_checks.json"
+}

@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "checkpoint_is_untrained_initialization",
+      "passed": true
+    },
+    {
+      "name": "diagnostic_bf16_reference_finite",
+      "passed": true
+    },
+    {
+      "name": "diagnostic_bf16_initialized_finite",
+      "passed": true
+    },
+    {
+      "name": "diagnostic_fp32_reference_finite",
+      "passed": true
+    },
+    {
+      "name": "diagnostic_fp32_initialized_finite",
+      "passed": true
+    }
+  ],
+  "stage": "geora_initialization_precision_diagnostic",
+  "slurm_job_id": "50579441",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "prompt_token_count": 40,
+  "supervised_answer_token_count": 2,
+  "optimizer_steps": 0,
+  "diagnostic_path": "/scratch/pawsey0807/btian/geora/runs/geora-check-50579441/precision_diagnostics.json",
+  "elapsed_seconds": 67.02237973798765,
+  "peak_allocated_memory_gib": 14.760962009429932
+}

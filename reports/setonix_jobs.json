@@ -1,0 +1,86 @@
+{
+  "query_date": "2026-10-09",
+  "query": "sacct -X -j 50574180,50574324,50578377,50578622,50579441,50579802 --format=JobID,State,Elapsed,Timelimit,AllocTRES%110 -P",
+  "source": "Direct SSH read-only query on Setonix.",
+  "jobs": [
+    {
+      "job_id": "50574180",
+      "state": "TIMEOUT",
+      "allocation_seconds": 127,
+      "time_limit_seconds": 120,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    },
+    {
+      "job_id": "50574324",
+      "state": "COMPLETED",
+      "allocation_seconds": 40,
+      "time_limit_seconds": 300,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    },
+    {
+      "job_id": "50578377",
+      "state": "FAILED",
+      "allocation_seconds": 8,
+      "time_limit_seconds": 300,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    },
+    {
+      "job_id": "50578622",
+      "state": "FAILED",
+      "allocation_seconds": 65,
+      "time_limit_seconds": 300,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    },
+    {
+      "job_id": "50579441",
+      "state": "COMPLETED",
+      "allocation_seconds": 87,
+      "time_limit_seconds": 300,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    },
+    {
+      "job_id": "50579802",
+      "state": "COMPLETED",
+      "allocation_seconds": 22,
+      "time_limit_seconds": 60,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      }
+    }
+  ],
+  "sum_allocation_seconds": 349
+}

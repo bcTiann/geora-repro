@@ -1,0 +1,62 @@
+{
+  "verified_on": "2026-10-09",
+  "method": "Read safetensors JSON headers; no model execution.",
+  "files": [
+    {
+      "label": "sft_base",
+      "source_path": "/Users/tianbaochen/RLVR/checkpoints/sft_base/model.safetensors",
+      "size_bytes": 3087467144,
+      "tensor_dtypes": {
+        "BF16": 338
+      }
+    },
+    {
+      "label": "before",
+      "source_path": "/Users/tianbaochen/RLVR/checkpoints/before/model.safetensors",
+      "size_bytes": 3554214621,
+      "tensor_dtypes": {
+        "BF16": 339
+      }
+    },
+    {
+      "label": "after",
+      "source_path": "/Users/tianbaochen/RLVR/checkpoints/after/model-00001-of-00002.safetensors",
+      "size_bytes": 4996670464,
+      "tensor_dtypes": {
+        "F32": 262
+      }
+    },
+    {
+      "label": "after",
+      "source_path": "/Users/tianbaochen/RLVR/checkpoints/after/model-00002-of-00002.safetensors",
+      "size_bytes": 2111719976,
+      "tensor_dtypes": {
+        "F32": 77
+      }
+    },
+    {
+      "label": "geora_base",
+      "source_path": "/Users/tianbaochen/RLVR/checkpoints/geora_base/model.safetensors",
+      "size_bytes": 3087467144,
+      "tensor_dtypes": {
+        "BF16": 338
+      }
+    },
+    {
+      "label": "single_q",
+      "source_path": "/Users/tianbaochen/RLVR/outputs/geora_single_q_check/q_module.safetensors",
+      "size_bytes": 9640248,
+      "tensor_dtypes": {
+        "F32": 4
+      }
+    },
+    {
+      "label": "local_all196",
+      "source_path": "/Users/tianbaochen/RLVR/outputs/geora_full_model_check/adapter.safetensors",
+      "size_bytes": 147800440,
+      "tensor_dtypes": {
+        "F32": 784
+      }
+    }
+  ]
+}
