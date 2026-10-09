@@ -322,4 +322,5 @@ git pull --ff-only
 | 原始模型 GPU forward | 使用者回傳 job 50574324，BF16 forward 通過 |
 | GeoRA CPU 初始化 | 使用者回傳 196 層及五項檢查通過，初始化已保存 |
 | GeoRA 全模型 GPU 檢查 | 傳參已修復；job 50578622 在 BF16 初始化 logits 誤差門檻停止，尚未更新 A/B |
+| 第 0 層 attention 精度定位 | 直接執行 job 50579802，1 個邏輯 GPU，22 秒完成；大 QK 分數的 BF16 舍入放大投影差異，詳見 CHECKS.md |
 | GRPO | 尚未接入 |

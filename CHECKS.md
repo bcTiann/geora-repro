@@ -162,3 +162,30 @@ GPU job `50578377` 在 shell 階段因 `GEORA_INIT_DIR` 未設定而停止，未
 診斷使用同一個短輸入，記錄所有 token 位置的 KL／total variation、去除每個位置共同偏移後的 logits 相對誤差、答案預測位置的正確 token 機率。每層另量測：相同 reference 輸入下的 local output 誤差、正常傳播的 output 誤差、BF16 F 加回 FP32 BA 後的有效權重誤差。最後从原始 checkpoint 和 A0/B0 **重新重建 FP32 F**，執行 FP32 全模型比較；不重新 SVD，也不更新參數。
 
 輸出 `precision_diagnostics.json` 及 `gpu_checks.json`。診斷完成表示測量完成，**不表示原有初始化／更新門檻通過**。BF16 的兩分支運算及 F 舍入目前是待檢驗的原因，不能由此次失敗直接確定。診斷會額外載入一個 FP32 模型，資源配置仍是同一個邏輯 GPU。
+
+### 2026-10-09：直接執行第 0 層 attention 小檢查
+
+Codex 透過既有 SSH 連線直接核對 Setonix；CPU preflight 通過後，提交 `gpu-dev`、`gres/gpu=1`、1 分鐘上限的 job `50579802`。Slurm 回報 `COMPLETED`，實際 allocation 為 22 秒；Python 腳本內 7.202 秒，其中五組對照核心計算 1.298 秒，PyTorch peak allocated memory 為 0.130 GiB。Slurm AllocTRES 同時記錄 `cpu=16`、`mem=29440M`、`gres/gpu=1`；只使用一個邏輯 GPU，配套 CPU 數以此實際記錄為準。GPU 作業已離開 queue。
+
+程式只讀取 42 個 token 的 embedding 行、第 0 層 input norm、Q/K/V/O 權重及初始因子，沒有建立完整 1.5B 模型、重新 SVD 或 optimizer step。手動重建的 native attention 與安裝的 Transformers eager implementation，在 reference 與 GeoRA 兩邊的輸出誤差都為 0；原始程式來源保存於 report。
+
+| 第 0 層對照：原始模型／GeoRA 採相同設定 | O 投影輸出相對誤差 |
+|---|---:|
+| 原有 BF16 autocast 路徑 | 12.3341% |
+| 只把 QK 分數／縮放／mask 計算改 FP32 | 3.5347% |
+| QK、softmax 與 value 加權和用 FP32，輸出轉 BF16 | 3.5336% |
+| F 保留 FP32、線性投影用 FP32，輸出轉 BF16；attention 仍用原路徑 | 0.0234853% |
+| 此 attention 與輸入 norm／RoPE 全部 FP32 | 0.000636743% |
+
+原有路徑的 attention 分數絕對值最大 22528；用完全相同的量化 Q/K 改在 FP32 重算，原生 BF16 分數的最大誤差為 104.5879。原始模型與 GeoRA 的最大分數差為 128。具體 head 1、query position 34：原始模型有多個相同的 17536 分數，attention 權重各約 1/21；GeoRA 一項變成 17664 後，權重集中到該項（1.0）。這支持「大數值 QK 分數的 BF16 舍入，會放大少量投影差異」的原因；softmax 轉 FP32 無法恢复前一步丟失的分數精度。
+
+**範圍限制：**這是第 0 層、單一固定輸入的定位結果。0.0235% 是 matched-precision 對照，不是完整模型 logits 門檻結果；改變投影精度也同時保留了 FP32 F，尚未單獨拆分兩者的效果。既有訓練精度及 2%／KL 門檻未改。後續需用完整模型 forward 確認修正方案，才進入更新檢查。
+
+原始測量：[reports/attention_probe/50579802.json](reports/attention_probe/50579802.json)。重跑時只申請一個邏輯 GPU，初始化目錄透過參數傳遞：
+
+```bash
+sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
+  --output="$MYSCRATCH/geora/runs/logs/attention-probe-%j.log" \
+  jobs/first_attention_probe.sbatch \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
+```
