@@ -1,11 +1,13 @@
 """Initialize all 196 GeoRA targets on CPU and save their FP32 factors.
 
-Run this on a CPU compute node; it performs two SVDs per target layer.
+Run this with bounded CPU threads; it performs two SVDs per target layer.
+On this project, initialization is permitted on the Setonix login node.
 """
 
 import argparse
 import json
 import os
+import socket
 from pathlib import Path
 import time
 
@@ -34,7 +36,9 @@ def run(output_directory, report) -> None:
     configuration, checkpoint_directory = pinned_configuration()
     if (output_directory / "adapter.safetensors").exists():
         raise FileExistsError("Use a new output directory to preserve the existing initialization.")
-    torch.set_num_threads(int(os.environ.get("OMP_NUM_THREADS", "8")))
+    torch.set_num_threads(int(os.environ.get("OMP_NUM_THREADS", "2")))
+    print("CPU initialization host:", socket.gethostname(), flush=True)
+    print("CPU threads:", torch.get_num_threads(), flush=True)
     torch.manual_seed(0)
     model = fresh_fp32_model(checkpoint_directory)
 
@@ -52,6 +56,8 @@ def run(output_directory, report) -> None:
         torch_version=torch.__version__,
         optimizer_steps=0,
         initialization_slurm_job_id=os.environ.get("SLURM_JOB_ID"),
+        initialization_host=socket.gethostname(),
+        initialization_cpu_threads=torch.get_num_threads(),
     )
     validate_manifest(manifest, configuration)
     report.require("all_196_expected_targets", True, target_count=len(manifest["target_modules"]))
@@ -79,6 +85,8 @@ def run(output_directory, report) -> None:
     (output_directory / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     report.data.update(
         stage="cpu_geora_initialization",
+        hostname=socket.gethostname(),
+        cpu_threads=torch.get_num_threads(),
         optimizer_steps=0,
         elapsed_seconds=time.perf_counter() - started,
     )

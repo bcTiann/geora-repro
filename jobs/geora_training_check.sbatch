@@ -12,6 +12,8 @@ mkdir -p "$TMPDIR"
 export HF_HOME="$MYSCRATCH/geora/cache/huggingface"
 export HF_HUB_OFFLINE=1
 export OMP_NUM_THREADS=8
+export MKL_NUM_THREADS=8
+export OPENBLAS_NUM_THREADS=8
 
 cd "$MYSOFTWARE/geora/code"
 geora_python="$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/python"

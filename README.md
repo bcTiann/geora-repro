@@ -11,7 +11,7 @@
 | [geora_model_check.ipynb](geora_model_check.ipynb) | 只替換一個 Q 層，檢查完整模型 forward 與儲存／載入 |
 | [geora_full_model_check.ipynb](geora_full_model_check.ipynb) | 全部 196 個目標層的 CPU FP32 初始化與載入檢查 |
 | [PRECISION.md](PRECISION.md) | 精度、目標層、殘差重建與 reference 策略約定 |
-| [CHECKS.md](CHECKS.md) | 一次提交 CPU 初始化與 GPU 完整檢查；包含結果解讀及失敗門檻 |
+| [CHECKS.md](CHECKS.md) | 登入節點初始化後自動提交 GPU 完整檢查；包含結果解讀及失敗門檻 |
 | [SETONIX_GUIDE.md](SETONIX_GUIDE.md) | Setonix 容器、儲存路徑與下一階段操作記錄 |
 | [configs/base_model.json](configs/base_model.json) | 固定模型版本、rank、alpha、rho 與目標模組設定 |
 | [reports/cpu_initialization/](reports/cpu_initialization/) | 原有 CPU 初始化的測量與 manifest，隨程式碼保存 |
@@ -106,6 +106,6 @@ git pull --ff-only
 /bin/bash jobs/submit_checks.sh
 ```
 
-CPU `work` 作業先做 196 層 FP32 初始化，成功後才啟動 `gpu-dev` 的一個邏輯 GPU，檢查混合精度、一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。兩個作業都自動結束；依賴未滿足時不佔 GPU。CPU account 的提交權限尚待 Setonix 確認。
+依使用者確認的登入節點使用方式，先在登入節點的容器 Python 做 196 層 FP32 初始化，預設 2 個 CPU 執行緒。成功後才提交 `gpu-dev` 的一個邏輯 GPU，檢查混合精度、一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。初始化期間不申請 Slurm 資源，GPU 作業完成自動釋放；日誌和逐項檢查結果保存到 scratch。
 
 完整內容、初始誤差門檻、log 與報告路徑見 [CHECKS.md](CHECKS.md)。更新測試使用短問答 cross-entropy；GRPO 與任務分數比較是後續階段。

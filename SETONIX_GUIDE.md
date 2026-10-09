@@ -55,7 +55,7 @@ Compute 表只列出 `pawsey0807` 的 Allocation 1、Usage 0。這份表沒有�
 
 | 名稱 | 功能 | 我們的操作 |
 |---|---|---|
-| 登入節點 | 登入、查詢、編輯腳本、提交作業 | 先查路徑、配額、module |
+| 登入節點 | 登入、查詢、編輯、提交 GPU 作業，以及本專案已確認允許的 CPU 初始化 | 預設 2 threads 執行 SVD 初始化 |
 | GPU 計算節點 | 由 Slurm 分配的 GPU 執行環境 | 執行模型 forward、backward 與訓練 |
 | 你的儲存目錄 | 程式與資料所在的共享檔案系統 | 計算節點與容器讀取這些檔案 |
 
@@ -286,7 +286,7 @@ git pull --ff-only
 /bin/bash jobs/submit_checks.sh
 ```
 
-CPU `work` 作業做完整 FP32 SVD 初始化（8 核、20 GiB、30 分鐘上限），成功後 GPU 作業才啟動（1 個邏輯 GPU、5 分鐘上限）。兩個作業以實際耗時使用資源，完成自動退出。CPU account/partition 首次提交尚待確認；被拒絕時回傳錯誤，不在登入節點做 SVD。
+原本 CPU `work` 作業的提交被 Slurm 拒絕，未啟動計算或提交 GPU。使用者隨後確認這個專案可以在登入節點跑 CPU 初始化，流程改為直接在登入節點的容器 Python 做完整 FP32 SVD，預設 2 threads。初始化成功後才提交 GPU 作業（1 個邏輯 GPU、5 分鐘上限），完成自動釋放。CPU 階段前景執行，進度同時印到終端與 scratch 日誌；它不會出現在 Slurm 作業列表。
 
 GPU 檢查：凍結參數 BF16、A/B FP32、初始化與原始模型的 logits 差異、每個 A/B 的梯度與更新、凍結參數及 A0/B0 不變、AdamW FP32 狀態，以及初始化／訓練後的 checkpoint 重載。獨立原始 reference 的 logits 在更新後必須不變。結果逐項寫入 JSON，失敗會停止。
 

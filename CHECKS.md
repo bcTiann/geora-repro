@@ -2,7 +2,7 @@
 
 本流程涵蓋接入 GRPO 前的初始化、混合精度、一次參數更新、reference 和儲存載入檢查。不是 GRPO 實驗，也不測試 GSM8K 分數。
 
-## 一次提交，兩個作業
+## 一次執行：登入節點初始化，再提交 GPU 作業
 
 在 Setonix **登入節點的系統 shell** 中執行；不必手動進容器：
 
@@ -14,18 +14,21 @@ git pull --ff-only
 
 刻意使用 `/bin/bash`：載入 PyTorch module 後，裸寫 `bash` 會進入容器，而這一步要在主機提交 Slurm 作業。
 
-腳本依 `$PAWSEY_PROJECT` 選擇 CPU account 和帶 `-gpu` 的 GPU account。本專案分別為 `pawsey0807` 和 `pawsey0807-gpu`；CPU `work` account/partition 配對尚待第一次提交確認。若 CPU 提交被拒絕，流程會停止，不提交 GPU。若 GPU 提交被拒絕，先前印出的 CPU job 可能仍在執行，請保留其 ID。
+依使用者確認，這個專案允許在登入節點執行這類 CPU 初始化。流程改為：
 
-需要改 account 時可在提交前設定 `GEORA_CPU_ACCOUNT` 或 `GEORA_GPU_ACCOUNT`。
+1. 登入節點：透過 PyTorch 容器直接執行 CPU FP32 SVD，預設 2 個計算執行緒，畫面和檔案同時保留進度。
+2. 初始化命令成功退出後：提交 `gpu-dev` 的 1 個邏輯 GPU 作業，進行完整模型檢查。
 
-| 作業 | 工作 | 申請資源 | 時間上限 |
+不提交 CPU Slurm 作業，不使用 CPU account，也不在初始化期間申請 GPU。CPU 初始化失敗時，腳本停止，GPU 作業不會提交。GPU 作業使用 `${PAWSEY_PROJECT}-gpu`，本專案已確認為 `pawsey0807-gpu`；需要改時可設定 `GEORA_GPU_ACCOUNT`。
+
+| 階段 | 工作 | 執行位置 | 時間安排 |
 |---|---|---|---|
-| `prepare_initialization.sbatch` | CPU FP32 SVD、196 層初始化與因子儲存 | `work`，8 CPU 核、20 GiB RAM，無 GPU | 30 分鐘 |
-| `geora_training_check.sbatch` | BF16 forward、FP32 A/B backward／AdamW、儲存載入 | `gpu-dev`，1 個邏輯 GPU 及配套 CPU/RAM | 5 分鐘 |
+| `prepare_geora_initialization.py` | CPU FP32 SVD、196 層初始化與因子儲存 | 登入節點的容器 Python，預設 2 threads | 同步執行至完成 |
+| `geora_training_check.sbatch` | BF16 forward、FP32 A/B backward／AdamW、儲存載入 | `gpu-dev`，1 個邏輯 GPU 及配套 CPU/RAM | 5 分鐘上限，完成自動釋放 |
 
-GPU 作業使用 `afterok` 依賴：CPU 初始化成功後才有資格啟動，等待時不佔 GPU。CPU 作業失敗時，依賴無法滿足的 GPU 作業自動取消。上限不是固定消耗時間，作業完成或報錯便退出。[Slurm 作業依賴說明](https://slurm.schedmd.com/sbatch.html)
+腳本會自行載入 module 並呼叫 venv Python，不需手動啟動或激活容器。CPU 初始化在目前終端前景執行，保持連線，直到出現成功標記和 GPU JOBID。若有需要中止登入節點的初始化，按 Ctrl+C；此時 GPU 尚未提交。
 
-第一次完整 SVD 在 Setonix 的耗時尚未測量，30 分鐘只是 CPU 作業的初始上限。
+每次初始化使用 `login-UTC時間-程序ID` 的新目錄，避免覆蓋先前結果。它不是 Slurm JOBID。初始化檔案保存後可以直接重跑 GPU，不必重新 SVD。
 
 ## 檢查哪些事情
 
@@ -69,16 +72,15 @@ BF16 舍入和兩分支運算會造成差異，初始化 logits 不要求逐 bit
 
 ## 查看作業與結果
 
-提交腳本會印出 CPU 和 GPU 的 JOBID、log 及報告路徑。查詢自己的作業：
+腳本先印出初始化目錄與 CPU log，初始化完成後才印出 GPU JOBID。CPU 階段不會出現在 `squeue`；查詢已提交的 GPU 作業：
 
 ```bash
 squeue -u "$USER"
 ```
 
-以下的 `CPU_JOBID`、`GPU_JOBID` 請替換成印出的數字：
+CPU 日誌路徑直接使用腳本印出的那一條；以下 `GPU_JOBID` 請替換成印出的 GPU 作業數字：
 
 ```bash
-cat "$MYSCRATCH/geora/runs/logs/initialization-CPU_JOBID.log"
 cat "$MYSCRATCH/geora/runs/logs/geora-check-GPU_JOBID.log"
 cat "$MYSCRATCH/geora/runs/geora-check-GPU_JOBID/gpu_checks.json"
 ```
@@ -92,7 +94,7 @@ GPU 報告每完成一項就更新；檢查不通過會報錯、以非零狀態�
 資料位置：
 
 ```text
-$MYSCRATCH/geora/initializations/CPU_JOBID/
+$MYSCRATCH/geora/initializations/login-UTC時間-程序ID/
   adapter.safetensors          初始 FP32 A0/B0/A/B
   manifest.json
   initialization_checks.json
@@ -109,10 +111,10 @@ $MYSCRATCH/geora/runs/geora-check-GPU_JOBID/
 
 GPU 峰值記憶體包含 reference、凍結參數快照和重載副本，是檢查流程的峰值，不能直接作為正式訓練顯存需求。
 
-提前取消這組流程時，取消兩個 ID：`scancel CPU_JOBID GPU_JOBID`。若 CPU 已完成、只想重新跑 GPU，可在登入節點執行：
+CPU 初始化期間可用 Ctrl+C 中止。GPU 提交後則用 `scancel GPU_JOBID` 提前釋放。若初始化已完成、只想重新跑 GPU，將下面初始化路徑換成先前印出的實際目錄，在登入節點執行：
 
 ```bash
-export GEORA_INIT_DIR="$MYSCRATCH/geora/initializations/CPU_JOBID"
+export GEORA_INIT_DIR="$MYSCRATCH/geora/initializations/login-UTC時間-程序ID"
 sbatch --account="${PAWSEY_PROJECT}-gpu" \
   --output="$MYSCRATCH/geora/runs/logs/geora-check-%j.log" \
   jobs/geora_training_check.sbatch
@@ -122,8 +124,10 @@ sbatch --account="${PAWSEY_PROJECT}-gpu" \
 
 ## 已驗證與待驗證
 
+2026-10-09：原本的 CPU `work` 提交被 Slurm 拒絕，沒有開始 CPU 計算或提交 GPU。使用者確認可在登入節點執行 CPU 初始化後，採用上述登入節點 → GPU 的流程。
+
 2026-10-09：使用者回傳 Setonix job `50574324` 的原始模型 GPU BF16 forward 成功輸出：logits `[1, 40, 151936]`、全部有限、PyTorch 峰值張量顯存 2.962 GiB、腳本內耗時 13.296 秒、optimizer steps 為 0。
 
-新的檢查流程已在本機小型 Qwen 模型的 CPU FP32 與 CPU BF16 模式各通過 27 項檢查；故意把 A/B 錯轉 BF16 時會被拒絕。可用 `uv run python tests/check_validation_workflow.py` 重跑小型流程。這些驗證不等於 1.5B 全模型在 Setonix 的 GeoRA GPU 結果；後者尚待提交作業。
+新的檢查流程已在本機小型 Qwen 模型的 CPU FP32 與 CPU BF16 模式各通過 27 項檢查；故意把 A/B 錯轉 BF16 時會被拒絕。可用 `uv run python tests/check_validation_workflow.py` 重跑小型流程。這些驗證不等於 1.5B 全模型在 Setonix 的 GeoRA GPU 結果；後者尚待執行登入節點初始化及提交 GPU 作業。
 
 通過後才接下一階段：短 GRPO 的生成、答案檢查器、組內優勢、reference、更新及 trainer checkpoint 檢查，然後固定預算比較 LoRA／GeoRA。
