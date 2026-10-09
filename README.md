@@ -80,25 +80,32 @@ Git 只傳程式、配置、教程與小型報告。模型權重、初始化 che
 
 Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器內的 `venv --system-site-packages`，沿用容器已提供的 ROCm PyTorch，再補裝需要的套件。本機 `uv sync` 的 PyTorch 依賴配置不適用於這個容器環境。實際 Python、追加依賴與 GPU 可見性依 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 逐步確認。
 
-下一階段依序完成：
+本輪 [GOAL.md](GOAL.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
 
-1. 完整模型 FP32 候選已降低誤差但仍未通過；先驗證可保留原始 BF16 分支的等價重排，再通過初始化輸出門檻。詳見 [實驗記錄 S6](EXPERIMENT_RECORD.md)。
-2. 做一次 A/B 更新，核對梯度、optimizer 狀態、凍結權重不變與更新後載入一致性。
-3. 接入短 GRPO，驗證原始策略 reference、生成與答案檢查器。
-4. 固定訓練與評估預算，比較 LoRA／GeoRA。
+下一階段依序驗證：
 
-F 只在初始化時計算一次。停用 GeoRA adapter 得到 F；GRPO 的 reference 需使用原始模型或明確重建原始權重的路徑。這些約定詳見 `PRECISION.md`；完整訓練配置要在上述檢查通過後再確定。
+1. 更新幅度／步長敏感性，以及生成／KV cache 和 padding batch。
+2. 短 GRPO 的 reference、答案檢查器、reward、advantage、ratio、KL 與訓練更新。
+3. 固定訓練與評估預算，比較 LoRA／GeoRA。
 
-## 自動執行下一階段檢查
+## 重跑已完成的 difference 檢查
 
-在 Setonix 登入節點更新並提交：
+本機小模型：
+
+```bash
+uv run python tests/check_difference_forward.py
+```
+
+Setonix 使用已有初始化，不重新 SVD：
 
 ```bash
 cd "$MYSOFTWARE/geora/code"
 git pull --ff-only
-/bin/bash jobs/submit_checks.sh
+mkdir -p "$MYSCRATCH/geora/runs/logs"
+sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
+  --output="$MYSCRATCH/geora/runs/logs/difference-check-%j.log" \
+  jobs/difference_training_check.sbatch \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
 ```
 
-依使用者確認的登入節點使用方式，先在登入節點的容器 Python 做 196 層 FP32 初始化，預設 2 個 CPU 執行緒。成功後才提交 `gpu-dev` 的一個邏輯 GPU，先檢查混合精度初始化輸出；通過後才檢查一次 A/B 更新、凍結參數、原始 reference、模型及 optimizer 儲存載入。初始化期間不申請 Slurm 資源，GPU 作業完成自動釋放；日誌和逐項檢查結果保存到 scratch。
-
-完整內容、初始誤差門檻、log 與報告路徑見 [CHECKS.md](CHECKS.md)。更新測試使用短問答 cross-entropy；GRPO 與任務分數比較是後續階段。
+一個邏輯 GPU，三分鐘上限；log 和 JSON 保存到 scratch。此腳本先檢查三個初始化輸入，再做一次短 CE 更新／重載。`jobs/submit_checks.sh` 仍是原 residual 初始化與 GPU 檢查入口，供建立因子及舊路徑對照。操作與日誌查看見 [CHECKS.md](CHECKS.md)。

@@ -2,7 +2,7 @@
 
 本流程涵蓋接入 GRPO 前的初始化、混合精度、一次參數更新、reference 和儲存載入檢查。不是 GRPO 實驗，也不測試 GSM8K 分數。實際結果、精度對照與資源記錄集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
-目前 1.5B 的 BF16 初始化 logits 門檻未通過；下列更新／重載步驟是在前置檢查通過後才執行的流程。
+原 residual 的 1.5B BF16 初始化門檻未通過；difference 已通過初始化、單步更新與重載。下列先保留 residual 操作，difference 入口另見文末。
 
 ## 一次執行：登入節點初始化，再提交 GPU 作業
 
@@ -109,13 +109,14 @@ $MYSCRATCH/geora/initializations/login-UTC時間-程序ID/
 
 $MYSCRATCH/geora/runs/geora-check-GPU_JOBID/
   initial_adapter.safetensors  初始化儲存／載入檢查用副本
+  initial_manifest.json        初始 mode／精度與 optimizer_steps=0
   trained_adapter.safetensors 一次更新後的 FP32 因子
   manifest.json
   optimizer.pt                一次更新後的 AdamW state
   gpu_checks.json
 ```
 
-全流程通過時，模型因子與 optimizer state 分別保存；尚未包含真實 GRPO trainer 的 scheduler、資料進度或 RNG 等完整恢復狀態。目前 1.5B 作業未執行 optimizer step，因此沒有訓練後 checkpoint。
+全流程通過時，模型因子與 optimizer state 分別保存；尚未包含真實 GRPO trainer 的 scheduler、資料進度或 RNG 等完整恢復狀態。原 residual 的 1.5B 作業未執行 optimizer step；difference 的初始／單步後 checkpoint 和 optimizer 已實際產生，見文末及實驗記錄 S7。
 
 GPU 峰值記憶體包含 reference、凍結參數快照和重載副本，是檢查流程的峰值，不能直接作為正式訓練顯存需求。
 
@@ -180,3 +181,24 @@ echo "Log: $MYSCRATCH/geora/runs/logs/full-forward-$geora_job_id.log"
 ```
 
 腳本一個邏輯 GPU、三分鐘上限；報告為 `$MYSCRATCH/geora/runs/full-forward-JOB_ID/full_forward_precision.json`。日誌檔建立後用 `tail -f` 可持續顯示；Ctrl-C 只停止追蹤，取消作業需 `scancel JOB_ID`。診斷報告的 `completed` 不表示所有模式通過；判斷應看各模式與各輸入的 gate 和逐位置分布指標。結果、精度及剩餘實驗集中在 [EXPERIMENT_RECORD.md 第 5 節](EXPERIMENT_RECORD.md)。
+
+
+## Difference 等價重排檢查（已完成）
+
+本機：`uv run python tests/check_difference_forward.py`；可用 `--output PATH` 保存小模型 JSON。Setonix 容器 Python 可執行同一個 CPU 預檢，通過後才提交完整模型。
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+mkdir -p "$MYSCRATCH/geora/runs/logs"
+sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
+  --output="$MYSCRATCH/geora/runs/logs/difference-check-%j.log" \
+  jobs/difference_training_check.sbatch \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
+```
+
+原始／GeoRA 都使用原有 BF16 主幹及 native attention；只有 GeoRA 的兩條低秩校正分支是 FP32。腳本要求三個初始化 logits 精確一致，仍保留原 2%／KL 門檻，然後驗證一次 AdamW、凍結參數、有效更新和初始／更新後模型及 optimizer 重載。
+
+報告 `$MYSCRATCH/geora/runs/difference-check-JOB_ID/difference_checks.json`；日誌 `$MYSCRATCH/geora/runs/logs/difference-check-JOB_ID.log`。用既有 `jobs/watch_gpu_check.sh JOB_ID LOG_PATH` 可在終端持續顯示並等到作業結束；Ctrl-C 只停止觀看，取消用 `scancel JOB_ID`。
+
+更新檔案明確記錄 `forward_mode=difference`／`runtime_precision`，不要按普通 LoRA merge。此輪完成的是機械驗證；單步策略改變較大，後續步長、生成、padding 及 GRPO 整合仍需測量。詳見 [GOAL.md](GOAL.md) 與 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。

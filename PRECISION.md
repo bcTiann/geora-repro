@@ -2,7 +2,7 @@
 
 更新：2026-10-10。這份文件說明目前實作的精度約定；實際執行結果集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
-**下表是目前 GPU 檢查的預設配置，尚未通過 1.5B 初始化 logits 門檻，不能當作已驗證的訓練方案。** FP32 投影與 FP32 投影＋attention 分數已做完整模型診斷，仍未通過 2% logits 門檻，尚未取代預設。詳見實驗記錄 S6。
+**下表是目前 GPU 檢查的預設配置，尚未通過 1.5B 初始化 logits 門檻，不能當作已驗證的訓練方案。** FP32 投影與 FP32 投影＋attention 分數已做完整模型診斷，仍未通過 2% logits 門檻，尚未取代預設。詳見實驗記錄 S6。`difference` 模式已通過初始化／單步更新／重載，精度另見第 9 節；這不把其多步訓練視為已驗證。
 
 ## 1. 採用的精度
 
@@ -108,7 +108,7 @@ mlp.down_proj
 - 初始化／運行 dtype、r、alpha、rho、目標模組名稱，以及必要的軟體版本。
 - 每層 FP32 初始 A0/B0，以及當前 FP32 A/B。
 
-載入時，先從固定版本的原始權重重建 FP32 殘差：
+`residual` 模式載入時，先從固定版本的原始權重重建 FP32 殘差：
 
 ```text
 F32 = W_pre32 - c * (B0 @ A0)
@@ -124,7 +124,7 @@ F32 = W_pre32 - c * (B0 @ A0)
 delta_W = c * (B @ A - B0 @ A0)
 ```
 
-GRPO 的 reference 必須代表指定的原始策略。**直接停用 GeoRA adapter 得到的是 F，而非 W_pre**，因此不能把 `disable_adapter()` 默認當成正確 reference。接入訓練框架時，需使用原始模型或明確重建原始權重的 reference 路徑，並驗證其輸出。
+GRPO 的 reference 必須代表指定的原始策略。**residual 模式直接停用 GeoRA adapter 得到的是 F，而非 W_pre**，因此不能把 `disable_adapter()` 默認當成正確 reference。接入訓練框架時，需使用原始模型或明確重建原始權重的 reference 路徑，並驗證其輸出。
 
 ## 8. 執行環境與混合精度邊界
 
@@ -133,3 +133,12 @@ GRPO 的 reference 必須代表指定的原始策略。**直接停用 GeoRA adap
 BF16 forward 是混合精度路徑，不代表每一步都是 BF16。RMSNorm 的統計、RoPE 頻率與三角函數、eager attention 的 softmax 可在 FP32 計算；但先前的 BF16 QK 分數精度不會因 FP32 softmax 恢復。運算精度與參數／checkpoint 保存精度應分別驗證。
 
 誤差統計也獨立於模型精度：GPU logits 可先轉 FP32 做範數，再用 CPU FP64 算 KL/TV。這不會改變產生 logits 時的模型計算精度。
+
+
+## 9. 已驗證的 difference 模式
+
+`GeoRALinear`／`load_geora_state` 支援明確的 `forward_mode=difference`，計算 `W_pre x+c[B(Ax)-B0(A0x)]`。預設 residual 未改。原始 frozen W_pre 和 native attention 保留 BF16；A/B/A0/B0 存 FP32；兩條低秩分支與相減禁用 autocast、計算 FP32，校正轉回原始輸出的 BF16 後相加。
+
+初始分支對 x 保留梯度。FP32 A/B gradients 和 AdamW moments 已在 1.5B 單步實際檢查。公式／梯度、三個初始化輸入、凍結參數及初始／更新後保存重載結果見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。更新後的大策略變化仍待處理，不能從這輪推論 GRPO 穩定性。
+
+載入 difference 模式時保留原始 W_pre，不重建 F；manifest 記錄 `forward_mode` 與 `runtime_precision`，`precision_policy` 保留初始化來源的約定。舊無 mode checkpoint 預設 residual；有標記的 checkpoint 不允許衝突覆蓋。merge 仍為 `W_pre+c(BA-B0A0)`，不是普通 LoRA merge。外部 trainer／rollout engine 的接入尚未驗證。

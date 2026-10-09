@@ -1,8 +1,8 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-更新：2026-10-10；新增完整模型候選精度實驗，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-10；新增完整模型等價重排、單步更新與重載驗證，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
-**目前的結論：FP32 的 GeoRA 全模型初始化與初始化 checkpoint 重載已通過；目前預設 BF16 路徑的全模型初始化輸出檢查未通過。** 第 0 層 attention 的對照實驗已定位到精度敏感環節；完整模型的兩個候選方案把 logits 相對誤差降至約 3.5%～3.8%，仍未通過既有 2% 門檻。1.5B 模型的參數更新、GRPO、GSM8K 分數及 LoRA／GeoRA 對照尚未執行。
+**目前的結論：`difference` 等價重排已在完整 1.5B 模型通過初始化、一次 A/B 更新及模型／optimizer 重載，三個初始化輸入的 logits 誤差均為 0。** 原有 `residual` BF16 路徑仍保留作對照，先前失敗紀錄不變。單步更新後 logits 改變 46.7574%，因此這輪確認更新與恢復機制，不代表步長合適或多步訓練穩定。GRPO、GSM8K 分數及 LoRA／GeoRA 任務對照尚未執行。
 
 本文件集中記錄「做過什麼、使用什麼精度、得到什麼結果」。[PRECISION.md](PRECISION.md) 說明目前程式的精度約定；[CHECKS.md](CHECKS.md) 與 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 保留操作方法。
 
@@ -24,8 +24,9 @@
 | L6/S5 | 第 0 層 attention 精度定位 | Mac CPU / Setonix CPU、GPU | 五種運算路徑的局部對照 | FP32 投影方案顯著降低局部誤差 | 無 |
 | L7 | 候選 helper 預檢與 MPS 能力探針 | Mac CPU / MPS；Setonix CPU | 小 Qwen 14 投影；MPS 16×16 BF16 乘法 | dtype、恢復、梯度通路通過；MPS 小乘法有限 | 無 optimizer；單投影 backward |
 | S6 | 完整模型候選精度比較 | Setonix MI250X | 三種模式 × 三個短輸入，196 投影 | 候選改善誤差，但均未通過 2% 門檻 | 無 |
+| L8/S7 | 等價重排、更新與保存重載 | Mac CPU；Setonix CPU／MI250X | 本機小模型＋完整 1.5B | 完整模型 43 項通過；初始化與重載誤差 0 | 各一次短 CE AdamW；不是 GRPO |
 
-本機 L1～L6 及 L7 的小模型預檢使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
+本機 L1～L6、L7 的小模型預檢及 L8 使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
 ## 2. 精度必須分成幾件事
 
@@ -35,8 +36,8 @@ FP64、FP32、BF16 分別是 64、32、16 bit 浮點格式。BF16 保留較大�
 |---|---|---|
 | 來源保存精度 | 下載的 safetensors 裡，數字以什麼格式存放 | Qwen2.5-1.5B-Instruct 原始權重為 BF16 |
 | 初始化計算精度 | 建 mask、做 SVD、算 A0/B0/F 的格式 | 正式全層初始化用 CPU FP32 |
-| 運行時參數保存精度 | 模型在 RAM/VRAM 裡的參數 dtype | 目前 GPU 檢查的 F 為 BF16，A/B 為 FP32 |
-| forward 計算精度 | 矩陣乘法、attention 等實際走的路徑 | BF16 autocast 可臨時降低 FP32 A/B 的乘法精度 |
+| 運行時參數保存精度 | 模型在 RAM/VRAM 裡的參數 dtype | 預設 residual 的 F 為 BF16；S7 difference 的 W_pre 為 BF16；A/B 均 FP32 |
+| forward 計算精度 | 矩陣乘法、attention 等實際走的路徑 | residual autocast 可降低 A/B 乘法精度；difference 的兩條低秩分支禁用 autocast，算 FP32 |
 | 檔案保存精度 | 我們寫出的 checkpoint 裡保存什麼、用什麼格式 | 緊湊 adapter 保存 FP32 A0/B0/A/B |
 | 誤差統計精度 | forward 之後，計算範數、KL 等的格式 | logits 範數 FP32；診斷 KL/TV 在 CPU FP64 |
 | 更新精度 | 梯度、可訓練參數及 optimizer 狀態的格式 | 設計為 FP32 A/B、梯度與 AdamW moments |
@@ -371,6 +372,78 @@ position 39 預測答案 token `5`，各模式的 reference 也隨精度改變�
 
 來源：[完整原始報告 50584822.json](reports/full_forward/50584822.json)、[三分鐘作業腳本](jobs/full_forward_precision.sbatch)。程式 commit 為 `340b403891ec588c491dc76517437bc5beea5e19`。本次沒有改變預設訓練精度。
 
+### L8/S7：等價重排保留原始 BF16 分支，完成機械更新與重載
+
+本輪目標與驗收條件記錄於 [GOAL.md](GOAL.md)。新模式為：
+
+```text
+y = W_pre x + c [B(Ax) - B0(A0x)]，c = alpha/r
+```
+
+它與 `F x+c B(Ax)`、`F=W_pre-cB0A0` 在實數代數上等價，但浮點求值方式不同。實作 `forward_mode=difference` 直接在 fresh 原始模型上保留 W_pre，不先計算 F 再嘗試加回去。原始權重、bias、embedding、norm、lm_head 存 BF16；native attention 設定未變，仍是原有混合精度路徑。
+
+兩條低秩分支共享同一份 FP32 輸入，A/B 和 A0/B0 均為 FP32，在 autocast 關閉的區域計算及相減。校正轉回原分支輸出 dtype 後相加。A0/B0 本身固定，**其分支仍保留對輸入的梯度**，不能用 `no_grad` 把前層梯度切掉。初始 A=A0、B=B0 時，兩條低秩輸出相同，校正直接為零。
+
+**本機預檢：** 更新後的兩層線性網路，輸出與獨立的 FP64 有效權重公式相比，最大絕對誤差 1.073e-7；輸入及 A/B 梯度最大絕對誤差不超過 1.193e-7。兩層測試能檢查傳回前層的梯度，並非只看 A/B 是否有數字。小型 Qwen 的 FP32/BF16 模式各通過 29 項檢查，每種模式各做一次 AdamW。Setonix 容器 CPU 同樣通過這些檢查；舊 residual 模式的 FP32/BF16 小模型回歸各 28 項通過，誤轉 BF16 A/B 的負例仍被拒絕。
+
+**完整模型：** GPU job `50585414` 復用 S2 保存因子，沒有完整模型 SVD。在與 S6 相同的三個固定短輸入上先檢查精確一致，通過後才做一次短答案 CE 更新和保存重載。
+
+| 完整模型檢查 | 實際結果 |
+|---|---|
+| 196 個目標的凍結原始權重及 bias | 與獨立原始模型精確相同 |
+| 算術＋答案、算術純 prompt、物理純 prompt | 初始化 logits 相對誤差／最大差均 0；KL／TV 均 0 |
+| 原有 2% logits／0.02 nats 最後位置 KL 門檻 | 保留且通過；另加精確一致門檻 |
+| 可訓練範圍 | 392 個 FP32 A/B tensors、18,464,768 個參數 |
+| backward | 392 個梯度均 FP32、有限、非零；norm 範圍 0.49908～40.0952 |
+| AdamW 後 A/B | 全部更新且有限；因子變化 norm 範圍 0.00638311～0.0378458 |
+| 凍結原始參數／A0/B0／reference | 338 個凍結參數精確不變；初始因子不變；reference logits 不變 |
+| 初始及更新後的模型重載 | logits 最大差／相對誤差均 0 |
+| adapter、manifest、optimizer 重載 | 因子精確恢復；FP32 AdamW moments／step 精確恢復；mode 亦保存 |
+| 有效矩陣更新 | 全 196 層有限、非零；Frobenius norm 範圍 0.0206274～0.120496 |
+
+有效更新仍為 `c(BA-B0A0)`。統計透過 FP64 小 Gram 矩陣計算其 Frobenius norm，先寫成 `B(A-A0)+(B-B0)A0`，避免相近大矩陣能量相減，也不配置完整稠密 ΔW。小矩陣對照確認這個統計與直接形成 ΔW 的 FP64 範數一致。
+
+全部 **43/43 項檢查通過**。這是本次復現的數值實作候選，不能因此聲稱作者的 BF16 實作也用了相同順序，或新模式與 residual 的浮點訓練軌跡完全相同。
+
+#### 這次「更新正常」的具體邊界
+
+`lr=1e-4`、`weight_decay=0`、gradient clipping norm 上限 1、AdamW 一步；對算術 prompt 後的 `5` 與 EOS 做 cross-entropy，沒有 rollout 或 GRPO。裁剪前梯度 norm 為 157.7638。
+
+| 更新前後同一模型，同一輸入 | 測量 |
+|---|---:|
+| CE loss | 0.5805116 → 0.000190763 |
+| logits 相對變化 | **46.7574%** |
+| 最大 logits 絕對差 | 20.09375 |
+| 所有位置平均／最大 KL，nats | **1.25955 / 11.7139** |
+| 平均／最大 TV | 0.260667 / 0.974427 |
+| top-1 token 一致比例 | 76.1905% |
+
+這個大的輸出變化發生在**更新之後**，不同於之前初始化即產生偏差的問題。它證明 FP32 A/B 的更新可以影響 BF16 模型；不證明步長合適、策略改動受控、多步穩定或任務能力提高。單個已知答案的 loss 大幅下降不能當成評估分數。
+
+梯度裁剪也不是 AdamW 參數／策略移動幅度的直接上限；第一次 Adam 的逐元素 moments 正規化會抵消大部分一致的梯度縮放。此處沒有 GRPO 的 ratio clipping 或 KL 項，因此不能把這次 CE 更新當成受信賴域約束的 RL 更新。
+
+#### 保存內容與執行用量
+
+Setonix scratch 實際產生：
+
+```text
+$MYSCRATCH/geora/runs/difference-check-50585414/
+  initial_adapter.safetensors  FP32 A0/B0/A/B，約 141 MiB
+  initial_manifest.json        optimizer_steps=0、forward_mode=difference
+  trained_adapter.safetensors FP32 A0/B0/A/B，約 141 MiB
+  manifest.json                optimizer_steps=1、forward_mode=difference
+  optimizer.pt                 step／FP32 moments，約 142 MiB
+  difference_checks.json
+```
+
+所有原始／更新後權重及 optimizer 檔案留在 scratch，Git 只保存報告與 manifest。兩份 manifest 同時記錄實際 `runtime_precision`；舊未標 mode 的因子仍預設使用 residual。載入有 mode 標記的 checkpoint 時，衝突的明確 mode 要在改動模型前拒絕。
+
+一個邏輯 GPU、3 分鐘上限；Slurm `COMPLETED`、退出碼 `0:0`，實際 allocation **42 秒**，完成後 queue 為空。Python 腳本 22.744 秒，PyTorch peak allocated memory **12.3458 GiB**，包含 reference、快照和重載副本。`optimizer_steps=1`、`backward_calls=1`、`svd_calls=0`。完成的 optimizer step 立即寫入報告，避免後續重載失敗掩蓋已更新的事實。
+
+來源：[Mac CPU](reports/difference/local_cpu.json)、[Setonix CPU](reports/difference/setonix_cpu.json)、[完整模型 50585414](reports/difference/50585414.json)、[初始 manifest](reports/difference/initial_manifest.json)、[單步後 manifest](reports/difference/trained_manifest.json)。執行程式 commit 為 `75037a65833bdd1cb1fb11e0b0453d92f45bc4e1`。
+
+這輪目標的初始化／單步更新／序列化驗收已完成。之後仍需檢查步長與多步策略變化、autoregressive generation／KV cache、padding batch，以及 GRPO／外部 trainer 的整合。merge 必須用 `W_pre+c(BA-B0A0)`；不能按普通 LoRA 把 `cBA` 直接加回 W_pre。
+
 ## 6. 保存、重載與更新精度總表
 
 | 實驗 | 初始化／殘差計算 | 運行參數 | forward | 我們保存的權重檔 | 實際更新 |
@@ -385,10 +458,11 @@ position 39 預測答案 token `5`，各模式的 reference 也隨精度改變�
 | S4 FP32 診斷 | CPU FP32 重建 F | 全 FP32 | FP32 | JSON；不另存權重 | 無 |
 | L6/S5 局部探針 | 用保存因子重建 FP32 F，無 SVD | 投影 F/A/B FP32；其他依模式 | 五種路徑見上表 | JSON；不另存權重 | 無 |
 | S6 完整候選 | 用 S2 因子重建 FP32 F，無 SVD | 候選投影 FP32；其餘 BF16；native 最後轉換 | 三種路徑見上表 | JSON；不另存權重 | 無 |
+| L8/S7 difference | 復用 S2 初始因子，保留原 W_pre，無 SVD | 原始權重 BF16；A/B、A0/B0 FP32 | 原始 BF16 分支＋FP32 低秩差，輸出 BF16 | FP32 初始／更新因子，mode/runtime metadata，optimizer | FP32 AdamW 一步 |
 
-AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**這在小模型測過，在 Setonix 1.5B 上因前置門檻失敗而未執行。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
+AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**S3 residual 的 1.5B 前置門檻失敗，當時未執行；S7 difference 的 1.5B 已完成一次並通過重載。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
 
-全層緊湊 checkpoint 保留初始 A0/B0，是為了重建凍結 F；當前 A/B 是要恢復的可訓練狀態。直接把當前 BA 加到原始 W_pre 會重複加入初始部分。不能把停用 adapter 得到的 F 當成原始 reference；本次 GPU 檢查使用獨立的原始模型。
+全層緊湊 checkpoint 保留初始 A0/B0，是為了在 residual 模式重建凍結 F、或在 difference 模式計算初始校正；當前 A/B 是要恢復的可訓練狀態。直接把當前 BA 加到原始 W_pre 會重複加入初始部分。residual 模式不能把停用 adapter 得到的 F 當成原始 reference；本次 GPU 檢查使用獨立的原始模型。
 
 ## 7. 所有「誤差」到底比較什麼
 
@@ -414,7 +488,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -425,20 +499,14 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50579441 | 全模型精度診斷 | 5 分鐘 | 1 分 27 秒 | COMPLETED |
 | 50579802 | 第 0 層 attention 探針 | 1 分鐘 | 22 秒 | COMPLETED |
 | 50584822 | 完整模型候選精度比較 | 3 分鐘 | 1 分 27 秒 | COMPLETED |
+| 50585414 | difference 初始化、單步更新與重載 | 3 分鐘 | 42 秒 | COMPLETED |
 
-這七個作業的 allocation 時間合計 **7 分 16 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這八個作業的 allocation 時間合計 **7 分 58 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-完整模型的 FP32 投影候選已測量，尚未通過。下一步建議先測試數值上等價的重排：
-
-```text
-原始：F x + c B(Ax)，F = W_pre - c B0A0
-候選：W_pre x + c [B(Ax) - B0(A0x)]
-```
-
-實數代數上兩者相同；在初始 A=A0、B=B0 時，候選的低秩校正可直接相減為零，保留原始 BF16 分支。校正轉回原始分支 dtype 後再相加，以免意外改變後續 activation 精度。這是待驗證候選，尚未實作／執行，不能宣稱已通過。先在本機驗證初始化、A/B 梯度及保存重載，再用同一初始化與短輸入在 Setonix 完整驗收。初始化通過後才做 1.5B 的 A/B 單步更新與更新後重載、短 GRPO、固定預算的 LoRA／GeoRA 任務對照。
+等價重排已完成本輪 [GOAL.md](GOAL.md) 的驗收。下一階段從更新幅度／步長敏感性及生成／KV cache、padding batch 開始，再接短 GRPO 的 reward、advantage、ratio、KL 與 reference 整合。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
 
 ### 原始記錄的使用約定
 
-初次整理只讀取已有檔案／遠端報告；2026-10-10 後續新增 L7／S6，實際申請了一次短 GPU 作業，預設訓練精度未改變。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續新增 L7／S6，先後實際申請了 S6／S7 兩次短 GPU 作業，預設訓練精度未改變。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

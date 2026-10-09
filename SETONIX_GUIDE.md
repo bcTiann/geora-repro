@@ -311,4 +311,4 @@ git pull --ff-only
 
 ## 當前進度
 
-環境與原始模型 forward 已通過；CPU GeoRA 初始化通過；預設 BF16 全模型初始化門檻失敗，精度診斷完成。完整模型 FP32 投影候選已測試，仍未通過；下一步驗證等價重排，通過初始化後才更新 A/B。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+環境、CPU 初始化已通過；原 residual BF16 路徑的失敗紀錄保留。difference 等價重排已通過完整 1.5B 初始化、一次 A/B 更新和模型／optimizer 重載；本輪 [GOAL.md](GOAL.md) 完成。下一階段先測更新幅度、生成／cache 和 padding，再接 GRPO。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，重跑入口見 [CHECKS.md 文末](CHECKS.md)。
