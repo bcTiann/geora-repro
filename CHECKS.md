@@ -114,13 +114,11 @@ GPU 峰值記憶體包含 reference、凍結參數快照和重載副本，是檢
 CPU 初始化期間可用 Ctrl+C 中止。GPU 提交後則用 `scancel GPU_JOBID` 提前釋放。若初始化已完成、只想重新跑 GPU，將下面初始化路徑換成先前印出的實際目錄，在登入節點執行：
 
 ```bash
-export GEORA_INIT_DIR="$MYSCRATCH/geora/initializations/login-UTC時間-程序ID"
-sbatch --account="${PAWSEY_PROJECT}-gpu" \
-  --output="$MYSCRATCH/geora/runs/logs/geora-check-%j.log" \
-  jobs/geora_training_check.sbatch
+/bin/bash jobs/submit_gpu_check.sh \
+  "$MYSCRATCH/geora/initializations/login-UTC時間-程序ID"
 ```
 
-這會讀取已保存的初始化，不重做 SVD。
+這會先確認三個初始化檔案存在，再將目錄作為明確的 batch script 參數傳入 GPU 作業，不重做 SVD。GPU 腳本也會將收到的目錄印入 log；不再依賴 `GEORA_INIT_DIR` 環境變數。
 
 ## 已驗證與待驗證
 
@@ -128,6 +126,18 @@ sbatch --account="${PAWSEY_PROJECT}-gpu" \
 
 2026-10-09：使用者回傳 Setonix job `50574324` 的原始模型 GPU BF16 forward 成功輸出：logits `[1, 40, 151936]`、全部有限、PyTorch 峰值張量顯存 2.962 GiB、腳本內耗時 13.296 秒、optimizer steps 為 0。
 
-新的檢查流程已在本機小型 Qwen 模型的 CPU FP32 與 CPU BF16 模式各通過 27 項檢查；故意把 A/B 錯轉 BF16 時會被拒絕。可用 `uv run python tests/check_validation_workflow.py` 重跑小型流程。這些驗證不等於 1.5B 全模型在 Setonix 的 GeoRA GPU 結果；後者尚待執行登入節點初始化及提交 GPU 作業。
+新的檢查流程已在本機小型 Qwen 模型的 CPU FP32 與 CPU BF16 模式各通過 27 項檢查；故意把 A/B 錯轉 BF16 時會被拒絕。可用 `uv run python tests/check_validation_workflow.py` 重跑小型流程。這些驗證不等於 1.5B 全模型在 Setonix 的 GeoRA GPU 結果；後者的 CPU 初始化已完成，GPU 檢查尚待成功執行。
 
 通過後才接下一階段：短 GRPO 的生成、答案檢查器、組內優勢、reference、更新及 trainer checkpoint 檢查，然後固定預算比較 LoRA／GeoRA。
+
+### 2026-10-09：登入節點初始化成功，GPU 傳參待重跑
+
+使用者回傳 196/196 層初始化及五項 CPU 檢查通過；最後一層的累計耗時為 914.9 秒。保存目錄為：
+
+```text
+/scratch/pawsey0807/btian/geora/initializations/login-20261009T115357Z-2781659
+```
+
+GPU job `50578377` 在 shell 階段因 `GEORA_INIT_DIR` 未設定而停止，未啟動 Python 模型檢查。日誌不能確定環境變數在哪個環節丟失。修正後透過明確的腳本參數傳遞目錄，可直接復用上述初始化；不重新執行 CPU SVD。
+
+提交路徑已以本機模擬驗證：環境中不含 `GEORA_INIT_DIR` 時，GPU batch script 仍會把收到的目錄傳給 Python；缺少參數或初始化檔案會停止。這項驗證沒有執行真實 Slurm 或 GPU 計算。

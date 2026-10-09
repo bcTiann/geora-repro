@@ -6,6 +6,14 @@
 #SBATCH --time=00:05:00
 
 set -euo pipefail
+if [[ $# -ne 1 ]]; then
+  echo "Submit with jobs/submit_gpu_check.sh INITIALIZATION_DIRECTORY." >&2
+  exit 2
+fi
+# Capture the argument before loading modules or entering the container.
+geora_initialization="$1"
+echo "Initialization directory: $geora_initialization"
+export SLURM_EXPORT_ENV=ALL
 module load pytorch/2.7.1-rocm6.3.3
 export TMPDIR="/tmp/${USER}-${SLURM_JOB_ID}"
 mkdir -p "$TMPDIR"
@@ -22,5 +30,5 @@ geora_output="$MYSCRATCH/geora/runs/geora-check-${SLURM_JOB_ID}"
 srun --nodes=1 --ntasks=1 --cpus-per-task=8 \
   --gres=gpu:1 --gpus-per-task=1 --gpu-bind=closest \
   pytorch-exec "$geora_python" scripts/check_geora_training.py \
-  --init-dir "${GEORA_INIT_DIR:?Submit with jobs/submit_checks.sh or export GEORA_INIT_DIR.}" \
+  --init-dir "$geora_initialization" \
   --output-dir "$geora_output"

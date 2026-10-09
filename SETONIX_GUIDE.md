@@ -240,9 +240,9 @@ source "$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/activat
 
 GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--cpus-per-task` 放在後續的 `srun` 執行步驟。[官方 GPU 作業指南](https://pawsey.atlassian.net/wiki/spaces/US/pages/51929056/Example+Slurm+Batch+Scripts+for+Setonix+on+GPU+Compute+Nodes)
 
-## 第 6 步：模型檔案（已完成）；初始化 adapter 尚待生成
+## 第 6 步：模型檔案與 CPU 初始化（已完成）
 
-下載腳本已回報固定版本下載完成。模型存於 `$MYSCRATCH/geora/checkpoints/geora_base`，倉庫的 `checkpoints/geora_base` 以符號連結指向該位置。`check_local_setup.py` 已通過版本記錄及權重檔案標頭檢查：338 個 tensors。Setonix 尚無初始化 adapter。
+下載腳本已回報固定版本下載完成。模型存於 `$MYSCRATCH/geora/checkpoints/geora_base`，倉庫的 `checkpoints/geora_base` 以符號連結指向該位置。`check_local_setup.py` 已通過版本記錄及權重檔案標頭檢查：338 個 tensors。196 層 CPU 初始化已由使用者回傳成功，保存位置見第 7 步。
 
 原始模型固定為 `Qwen/Qwen2.5-1.5B-Instruct`，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`。
 
@@ -290,7 +290,18 @@ git pull --ff-only
 
 GPU 檢查：凍結參數 BF16、A/B FP32、初始化與原始模型的 logits 差異、每個 A/B 的梯度與更新、凍結參數及 A0/B0 不變、AdamW FP32 狀態，以及初始化／訓練後的 checkpoint 重載。獨立原始 reference 的 logits 在更新後必須不變。結果逐項寫入 JSON，失敗會停止。
 
-新流程已在本機小型 Qwen 的 CPU FP32/BF16 兩种模式通過 27 項檢查，並拒絕錯誤的 A/B BF16 dtype；尚未在 Setonix 的完整 1.5B 模型執行。
+新流程已在本機小型 Qwen 的 CPU FP32/BF16 兩种模式通過 27 項檢查，並拒絕錯誤的 A/B BF16 dtype；Setonix 的完整 1.5B 模型已完成 CPU 初始化，最後一層累計耗時 914.9 秒，五項檢查通過。GPU job `50578377` 因初始化目錄的環境變數未到達 batch script 而在 Python 啟動前停止。
+
+已保存的初始化可直接復用。在登入節點更新程式後，只重跑 GPU：
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+/bin/bash jobs/submit_gpu_check.sh \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
+```
+
+提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；GPU 完整檢查結果仍待回傳。
 
 ## 第 8 步：接短 GRPO
 
@@ -307,7 +318,8 @@ GPU 檢查：凍結參數 BF16、A/B FP32、初始化與原始模型的 logits �
 | 個人路徑與配額 | 使用者已提供，見第 1 步結果 |
 | 容器 Python 與追加依賴 | 使用者輸出確認成功；ROCm PyTorch 沿用容器版本 |
 | GPU 基本運算 | 使用者輸出確認一個 MI250X，BF16 矩陣乘法成功 |
-| 模型檔案與路徑 | 下載版本記錄及檔案標頭檢查通過；尚待完整載入 |
+| 模型檔案與路徑 | 版本及檔案標頭通過；原始模型已完成 GPU 載入 |
 | 原始模型 GPU forward | 使用者回傳 job 50574324，BF16 forward 通過 |
-| GeoRA 全模型 GPU 檢查 | 腳本與相依作業已準備，Setonix 尚待執行 |
+| GeoRA CPU 初始化 | 使用者回傳 196 層及五項檢查通過，初始化已保存 |
+| GeoRA 全模型 GPU 檢查 | job 50578377 在 shell 傳參檢查停止；已修正傳參，待重跑 |
 | GRPO | 尚未接入 |

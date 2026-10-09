@@ -15,7 +15,7 @@ fi
 
 geora_run_id="login-$(date -u +%Y%m%dT%H%M%SZ)-$$"
 geora_cpu_log="$geora_logs/initialization-${geora_run_id}.log"
-export GEORA_INIT_DIR="$MYSCRATCH/geora/initializations/$geora_run_id"
+geora_init_dir="$MYSCRATCH/geora/initializations/$geora_run_id"
 export TMPDIR="$MYSCRATCH/geora/tmp/$geora_run_id"
 mkdir -p "$TMPDIR"
 
@@ -28,18 +28,12 @@ export OPENBLAS_NUM_THREADS="$geora_init_threads"
 geora_python="$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/python"
 
 echo "CPU initialization: login node, $geora_init_threads threads (no Slurm allocation)"
-echo "Initialization directory: $GEORA_INIT_DIR"
+echo "Initialization directory: $geora_init_dir"
 echo "CPU log: $geora_cpu_log"
 
 # pipefail preserves Python's failure status even when tee successfully saves the log.
 pytorch-exec "$geora_python" -u scripts/prepare_geora_initialization.py \
-  --output-dir "$GEORA_INIT_DIR" 2>&1 | tee "$geora_cpu_log"
+  --output-dir "$geora_init_dir" 2>&1 | tee "$geora_cpu_log"
 
 # Submit only after the synchronous initialization command has succeeded.
-geora_gpu_account="${GEORA_GPU_ACCOUNT:-${PAWSEY_PROJECT:?}-gpu}"
-geora_gpu_id=$(sbatch --parsable --account="$geora_gpu_account" \
-  --output="$geora_logs/geora-check-%j.log" jobs/geora_training_check.sbatch)
-geora_gpu_id="${geora_gpu_id%%;*}"
-echo "GPU validation job: $geora_gpu_id"
-echo "GPU log: $geora_logs/geora-check-$geora_gpu_id.log"
-echo "GPU report: $MYSCRATCH/geora/runs/geora-check-$geora_gpu_id/gpu_checks.json"
+/bin/bash jobs/submit_gpu_check.sh "$geora_init_dir"

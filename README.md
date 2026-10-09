@@ -1,6 +1,6 @@
 # GeoRA 獨立復現
 
-這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先確認初始化、更新與 checkpoint 載入，再接 GRPO，最後比較 LoRA 與 GeoRA。現階段已有本機 CPU 初始化檢查，以及使用者回傳的 Setonix 原始模型 GPU BF16 forward 結果；GeoRA GPU 更新與 GRPO 仍待取得結果。
+這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先確認初始化、更新與 checkpoint 載入，再接 GRPO，最後比較 LoRA 與 GeoRA。現階段已有本機 CPU 初始化檢查，以及使用者回傳的 Setonix 全層 CPU 初始化和原始模型 GPU BF16 forward 結果；GeoRA GPU 更新與 GRPO 仍待取得結果。
 
 ## 從哪裡開始
 
@@ -11,6 +11,7 @@
 | [geora_model_check.ipynb](geora_model_check.ipynb) | 只替換一個 Q 層，檢查完整模型 forward 與儲存／載入 |
 | [geora_full_model_check.ipynb](geora_full_model_check.ipynb) | 全部 196 個目標層的 CPU FP32 初始化與載入檢查 |
 | [PRECISION.md](PRECISION.md) | 精度、目標層、殘差重建與 reference 策略約定 |
+| [jobs/submit_gpu_check.sh](jobs/submit_gpu_check.sh) | 復用已保存的初始化，只提交 GPU 檢查 |
 | [CHECKS.md](CHECKS.md) | 登入節點初始化後自動提交 GPU 完整檢查；包含結果解讀及失敗門檻 |
 | [SETONIX_GUIDE.md](SETONIX_GUIDE.md) | Setonix 容器、儲存路徑與下一階段操作記錄 |
 | [configs/base_model.json](configs/base_model.json) | 固定模型版本、rank、alpha、rho 與目標模組設定 |
