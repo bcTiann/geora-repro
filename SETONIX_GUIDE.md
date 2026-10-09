@@ -13,7 +13,7 @@
 - Setonix 環境：使用 PyTorch 容器內的 Python 建立獨立 venv，放在 `$MYSOFTWARE/manual/software/geora-environments`。
 - 模型、資料與執行產物：另外存放在 `$MYSCRATCH/geora`，由程式目錄的相應連結指向它們。
 
-本機的 `pyproject.toml` 與 `uv.lock` 記錄已使用的 Mac 依賴配置。Setonix 的追加依賴尚待實際版本確認；不將本機 `.venv` 傳到 Setonix，也不在 Setonix 直接執行本機的 `uv sync`。
+本機的 `pyproject.toml` 與 `uv.lock` 記錄已使用的 Mac 依賴配置。Setonix 的追加依賴已確認，版本見下方狀態表；不將本機 `.venv` 傳到 Setonix，也不在 Setonix 直接執行本機的 `uv sync`。
 
 ## 目前已知與待確認
 
@@ -23,7 +23,7 @@
 - 主機端 ROCm 有多個版本，預設 `rocm/6.4.1`。
 - Singularity 有多個版本，預設 `singularity/4.1.0-slurm`。
 
-已收到第 1 步的實際路徑與配額，以及第 2 步的 module／包裝命令輸出。PyTorch module 已載入；接著確認容器內 Python、PyTorch 與已有套件。GPU 可見性及 GeoRA 訓練尚未實測。
+使用者已回傳容器 venv、依賴匯入、模型檔案及 GPU BF16 矩陣乘法的成功輸出。下列遠端結果均為使用者提供的輸出；完整模型 GPU forward、GeoRA 更新及 GRPO 尚待執行。
 
 ## 已收到的第 1 步結果
 
@@ -104,7 +104,7 @@ pawseyAccountBalance -s
 
 `PAWSEY_PROJECT` 用於預設儲存專案。GPU 作業的 Slurm account 通常加 `-gpu`；這不表示要把儲存目錄的專案名也改成帶 `-gpu`。[GPU 作業手冊](https://pawsey.atlassian.net/wiki/pages/viewpage.action?pageId=1202094082)
 
-## 第 2 步：確認 PyTorch 容器環境（現在執行）
+## 第 2 步：確認 PyTorch 容器環境（已完成）
 
 `module` 用於載入系統提供的軟體設定。這個 PyTorch module 是容器化安裝：它提供 `python3` 等包裝命令，替我們呼叫容器裡的程式，並載入所需 Singularity 依賴。
 
@@ -170,13 +170,13 @@ for package in ("transformers", "safetensors", "huggingface-hub"):
 
 `HIP` 是 PyTorch 對應的 AMD ROCm/HIP 建置版本；不是 `None` 才符合這次的環境方向。
 
-**module 與包裝命令已確認；回傳這次 Python 查詢結果後再建立環境。** 實際 Python 版本與 PyTorch 能否匯入，以執行結果為準。套件顯示 `not installed` 只表示該套件尚未安裝，之後在 venv 補齊。
+**module、包裝命令及容器 Python 已由使用者輸出確認。** 實際 Python 版本與 PyTorch 能否匯入，以執行結果為準。套件顯示 `not installed` 只表示該套件尚未安裝，之後在 venv 補齊。
 
 登入節點上 GPU 不可見可以是正常結果；GPU 檢查會在第 5 步的計算節點進行。
 
-## 第 3 步：建立程式與資料目錄（路徑與配額已確認，待建立）
+## 第 3 步：建立程式與資料目錄（程式及模型目錄已建立）
 
-預計採用以下結構，之後再給建立命令：
+採用以下目錄安排，datasets 與後續訓練產物尚待建立：
 
 ```text
 $MYSOFTWARE/geora/
@@ -193,7 +193,7 @@ $MYSCRATCH/geora/
   runs/                  log、測量、訓練輸出
 ```
 
-這些是我們選的專案子目錄，不是系統已經建立好的路徑。建立後會確認目錄與 group，再放檔案。
+這些是本專案選定的子目錄；程式、venv、模型及快取已建立，訓練所需的其他目錄之後再補。
 
 ### 3.1 從 GitHub 取得這份程式
 
@@ -218,32 +218,59 @@ git log -1 --oneline
 
 `--ff-only` 只接受直接向前更新；如果 Setonix 有自己的提交導致分歧，先回傳訊息再處理。
 
-## 第 4 步：只補裝需要的 Python 套件（待容器版本確認）
+## 第 4 步：容器 Python 與 venv（已完成）
 
-Pawsey 建議在容器內使用其 Python 建立 `venv --system-site-packages`，把環境保存在 `/software` 下。這樣環境能沿用容器既有的 PyTorch，再補裝缺少的套件。[官方 Python 環境安裝說明](https://pawsey.atlassian.net/wiki/spaces/US/pages/51931230/PyTorch)
+環境位於 `$MYSOFTWARE/manual/software/geora-environments/py312-rocm633`，使用容器 Python 的 `venv --system-site-packages`。本次容器內 uv 安裝遇到 TLS 憑證驗證失敗，因此採用 Python 自帶的 venv。
 
-目前本機 `pyproject.toml` 固定 `torch==2.14.1`；Setonix 則使用 Pawsey 的 ROCm／Cray PyTorch。GPU 環境需要獨立的依賴配置，直接沿用本機 `uv sync` 可能替換掉它。等實際版本確認後，再決定追加依賴的安裝指令；本機仍維持 `uv run`。
+已確認：Python 3.12.3、PyTorch `2.7.1a0+gite2d141d`、HIP `6.3.42134-a9a80e791`，PyTorch 來源仍為容器的 `/usr/local/lib/python3.12/dist-packages/torch`。追加套件為 Transformers 5.19.0、Safetensors 0.8.0、Hugging Face Hub 1.33.0；安裝時用環境中的 `torch-constraint.txt` 約束保留既有 PyTorch。
 
-本步要核對：Python 與 PyTorch 來源、Transformers／Safetensors 等套件是否已有，以及補装前後 PyTorch 沒有被替換。
+每次手動进入容器後激活：
 
-## 第 5 步：取得一個 GPU，先跑環境檢查（待專案確認）
+```bash
+source "$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/activate"
+```
 
-Slurm 是分配計算資源的系統。我們先用一個邏輯 GPU，以小腳本確認：
+本機仍使用 uv；Setonix 不直接同步包含 Mac PyTorch 版本的根目錄 lockfile。[Pawsey 容器 venv 指南](https://pawsey.atlassian.net/wiki/spaces/US/pages/51931230/PyTorch)
 
-- `torch.version.hip` 有值，使用 ROCm build。
-- GPU 型號、數量與顯存。
-- BF16 的矩陣乘法和 backward 能執行。
-- A/B 為 FP32，AdamW 更新正常。
+## 第 5 步：短 GPU 環境檢查（已完成）
 
-資源設定與 `srun` 執行設定會依 [Pawsey GPU 作業手冊](https://pawsey.atlassian.net/wiki/pages/viewpage.action?pageId=1202094082) 填寫。account 使用確認後的實際專案，不猜專案代碼。
+使用者成功申請 `gpu-dev`、account `pawsey0807-gpu`、一個邏輯 GPU、`--time=00:02:00`；job ID 為 `50574180`。實際看到一個 AMD Instinct MI250X，顯存 63.98 GiB。512×512 的 BF16 GPU 矩陣乘法完成，輸出全為有限值。
 
-## 第 6 步：放入模型與已保存的初始化
+這確認兩分鐘申請在此次被接受，以及容器的 GPU 基本運算可用。尚未檢查完整模型 forward、backward 或 GeoRA 更新。
 
-傳輸或下載原始模型到 scratch，並核對固定 revision、檔案大小及完整性；再放入已保存的初始因子與共用程式。
+GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--cpus-per-task` 放在後續的 `srun` 執行步驟。[官方 GPU 作業指南](https://pawsey.atlassian.net/wiki/spaces/US/pages/51929056/Example+Slurm+Batch+Scripts+for+Setonix+on+GPU+Compute+Nodes)
+
+## 第 6 步：模型檔案（已完成）；初始化 adapter 尚待生成
+
+下載腳本已回報固定版本下載完成。模型存於 `$MYSCRATCH/geora/checkpoints/geora_base`，倉庫的 `checkpoints/geora_base` 以符號連結指向該位置。`check_local_setup.py` 已通過版本記錄及權重檔案標頭檢查：338 個 tensors。Setonix 尚無初始化 adapter。
 
 原始模型固定為 `Qwen/Qwen2.5-1.5B-Instruct`，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`。
 
 完成這一步後，GPU 上從原始 checkpoint 與 A0/B0 重建 F，依 [PRECISION.md](PRECISION.md) 將凍結部分轉 BF16、保留 A/B FP32。確認檔案完整後才執行模型檢查。
+
+## 第 6.1 步：自動執行完整模型 BF16 forward（待執行）
+
+先退出任何仍存續的互動 GPU allocation，回到登入節點。在倉庫更新程式並提交五分鐘上限的短作業：
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+mkdir -p "$MYSCRATCH/geora/runs/logs"
+sbatch --account=pawsey0807-gpu \
+  --output="$MYSCRATCH/geora/runs/logs/base-model-%j.log" \
+  jobs/base_model_forward.sbatch
+```
+
+記下 `Submitted batch job` 後的 ID。以該 ID 取代 `<jobid>` 查詢與讀取輸出：
+
+```bash
+squeue -j <jobid>
+cat "$MYSCRATCH/geora/runs/logs/base-model-<jobid>.log"
+```
+
+作業中 `pytorch-exec` 使用已建立的 venv Python，無須手動進容器或激活。腳本只從本地 checkpoint 載入 BF16 原始模型，使用短問題做一次前向計算，檢查 logits 是否有限，記錄形狀、精度、PyTorch 配置、GPU 峰值張量記憶體及執行時間。沒有安裝 GeoRA 或更新參數，也不以這次 forward 判定回答能力。
+
+結果位於 `$MYSCRATCH/geora/runs/base-model-<jobid>/base_model_forward.json`。通過時 log 顯示 `Base-model GPU BF16 forward passed.`。作業完成或報錯即釋放資源，五分鐘是上限；若超時，先看 log 再決定是否增加時間。
 
 ## 第 7 步：GeoRA 單步檢查，再接短 GRPO
 
@@ -258,7 +285,8 @@ Slurm 是分配計算資源的系統。我們先用一個邏輯 GPU，以小腳�
 | Setonix GPU 使用權限 | 使用者已確認 |
 | PyTorch module 與容器入口 | 已載入，包裝命令來源已確認 |
 | 個人路徑與配額 | 使用者已提供，見第 1 步結果 |
-| 容器 Python 與追加依賴 | 待確認 |
-| GPU 環境實测 | 尚未執行 |
-| 模型檔案在 Setonix 的完整性 | 尚未確認 |
+| 容器 Python 與追加依賴 | 使用者輸出確認成功；ROCm PyTorch 沿用容器版本 |
+| GPU 基本運算 | 使用者輸出確認一個 MI250X，BF16 矩陣乘法成功 |
+| 模型檔案與路徑 | 下載版本記錄及檔案標頭檢查通過；尚待完整載入 |
+| 完整模型 GPU forward | 腳本已準備，遠端尚未執行 |
 | GeoRA GPU 單步／GRPO | 尚未執行 |
