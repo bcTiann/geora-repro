@@ -1,0 +1,20 @@
+[project]
+name = "geora-repro"
+version = "0.1.0"
+description = "Independent GeoRA initialization and RLVR reproduction."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.14.1",
+    "safetensors==0.8.0",
+    "huggingface-hub==1.33.0",
+    "matplotlib==3.11.2",
+    "socksio==1.0.0",
+    "transformers==5.19.0",
+]
+
+[tool.uv]
+package = false
+default-groups = ["notebooks"]
+
+[dependency-groups]
+notebooks = ["ipykernel==7.4.0"]

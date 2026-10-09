@@ -1,0 +1,20 @@
+{
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "checkpoint_directory": "checkpoints/geora_base",
+  "initialization": {
+    "rank": 16,
+    "alpha": 32,
+    "rho": 0.2
+  },
+  "target_projections": [
+    "self_attn.q_proj",
+    "self_attn.k_proj",
+    "self_attn.v_proj",
+    "self_attn.o_proj",
+    "mlp.gate_proj",
+    "mlp.up_proj",
+    "mlp.down_proj"
+  ],
+  "scope": "initialization_correctness_checks; not a GRPO training configuration"
+}

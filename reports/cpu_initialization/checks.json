@@ -1,0 +1,19 @@
+{
+  "scope": "all_196_projection_initialization_and_reload_without_training",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "target_module_count": 196,
+  "trainable_parameter_count": 18464768,
+  "all_model_parameters_dtype": "float32",
+  "initialization_seconds": 130.02051145800215,
+  "largest_effective_weight_relative_error": 1.1858726838209762e-08,
+  "logits_relative_error": 2.606534690130502e-05,
+  "logits_maximum_absolute_difference": 0.0022439956665039062,
+  "last_position_argmax_before": 17,
+  "last_position_argmax_initialized": 17,
+  "reload_logits_maximum_absolute_difference": 0.0,
+  "only_AB_trainable": true,
+  "all_logits_finite": true,
+  "reload_logits_exactly_equal": true,
+  "optimizer_steps": 0
+}

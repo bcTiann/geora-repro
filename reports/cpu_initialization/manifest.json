@@ -1,0 +1,4932 @@
+{
+  "geora_checkpoint_format": 1,
+  "rank": 16,
+  "alpha": 32,
+  "rho": 0.2,
+  "scaling": 2.0,
+  "precision_policy": {
+    "initialization_device": "cpu",
+    "mask_dtype": "float32",
+    "svd_dtype": "float32",
+    "initial_factor_dtype": "float32",
+    "residual_calculation_dtype": "float32",
+    "local_frozen_model_dtype": "float32",
+    "training_frozen_model_dtype": "bfloat16",
+    "trainable_adapter_dtype": "float32",
+    "optimizer_state_dtype": "float32",
+    "training_forward": "bfloat16_autocast"
+  },
+  "target_modules": [
+    {
+      "name": "model.layers.0.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017588501796126366,
+        "euclidean_threshold": 0.00762939453125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20067977905273438,
+        "union_keep_fraction": 0.34696832299232483,
+        "w_geo_retained_energy": 0.06773935546490703,
+        "w_geo_relative_approximation_error": 0.9650948147540058,
+        "initial_effective_weight_relative_error": 7.55355031484537e-09
+      }
+    },
+    {
+      "name": "model.layers.0.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0038010713178664446,
+        "euclidean_threshold": 0.01202392578125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20087940990924835,
+        "union_keep_fraction": 0.3500518798828125,
+        "w_geo_retained_energy": 0.1502448091802564,
+        "w_geo_relative_approximation_error": 0.92178881561534,
+        "initial_effective_weight_relative_error": 1.0654558013252568e-08
+      }
+    },
+    {
+      "name": "model.layers.0.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013006513472646475,
+        "euclidean_threshold": 0.004302978515625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2003987580537796,
+        "union_keep_fraction": 0.3532969057559967,
+        "w_geo_retained_energy": 0.1345776344922773,
+        "w_geo_relative_approximation_error": 0.930253387340462,
+        "initial_effective_weight_relative_error": 1.1858726838209762e-08
+      }
+    },
+    {
+      "name": "model.layers.0.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006398428231477737,
+        "euclidean_threshold": 0.004913330078125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2001427561044693,
+        "union_keep_fraction": 0.35937246680259705,
+        "w_geo_retained_energy": 0.05188545999889263,
+        "w_geo_relative_approximation_error": 0.9732298749260817,
+        "initial_effective_weight_relative_error": 9.166599349740832e-09
+      }
+    },
+    {
+      "name": "model.layers.0.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012183462968096137,
+        "euclidean_threshold": 0.007232666015625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20038241147994995,
+        "union_keep_fraction": 0.3528345823287964,
+        "w_geo_retained_energy": 0.031080164421064402,
+        "w_geo_relative_approximation_error": 0.9822474981496778,
+        "initial_effective_weight_relative_error": 6.855299508145898e-09
+      }
+    },
+    {
+      "name": "model.layers.0.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009324827697128057,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20094074308872223,
+        "union_keep_fraction": 0.35428714752197266,
+        "w_geo_retained_energy": 0.026182252465339066,
+        "w_geo_relative_approximation_error": 0.9841980212170484,
+        "initial_effective_weight_relative_error": 7.965593884979458e-09
+      }
+    },
+    {
+      "name": "model.layers.0.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009059709263965487,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20038750767707825,
+        "union_keep_fraction": 0.3600490689277649,
+        "w_geo_retained_energy": 0.025312685667960442,
+        "w_geo_relative_approximation_error": 0.9848038661212423,
+        "initial_effective_weight_relative_error": 8.096196218132972e-09
+      }
+    },
+    {
+      "name": "model.layers.1.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.002120161196216941,
+        "euclidean_threshold": 0.006988525390625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20083194971084595,
+        "union_keep_fraction": 0.35009765625,
+        "w_geo_retained_energy": 0.053344914174213366,
+        "w_geo_relative_approximation_error": 0.9725064492297001,
+        "initial_effective_weight_relative_error": 8.978301383794911e-09
+      }
+    },
+    {
+      "name": "model.layers.1.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0029518119990825653,
+        "euclidean_threshold": 0.00885009765625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20000457763671875,
+        "union_keep_fraction": 0.342803955078125,
+        "w_geo_retained_energy": 0.1495842621071019,
+        "w_geo_relative_approximation_error": 0.9221459256264415,
+        "initial_effective_weight_relative_error": 9.854019051822488e-09
+      }
+    },
+    {
+      "name": "model.layers.1.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012872873339802027,
+        "euclidean_threshold": 0.004669189453125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20056407153606415,
+        "union_keep_fraction": 0.35051727294921875,
+        "w_geo_retained_energy": 0.13687635603982698,
+        "w_geo_relative_approximation_error": 0.929012565694311,
+        "initial_effective_weight_relative_error": 1.1249784419842174e-08
+      }
+    },
+    {
+      "name": "model.layers.1.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00106329214759171,
+        "euclidean_threshold": 0.00543212890625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20038264989852905,
+        "union_keep_fraction": 0.3569585978984833,
+        "w_geo_retained_energy": 0.06201278760141434,
+        "w_geo_relative_approximation_error": 0.9680201168135033,
+        "initial_effective_weight_relative_error": 9.306417780801834e-09
+      }
+    },
+    {
+      "name": "model.layers.1.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001469008973799646,
+        "euclidean_threshold": 0.0079345703125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20031963288784027,
+        "union_keep_fraction": 0.3578658401966095,
+        "w_geo_retained_energy": 0.024570744729657753,
+        "w_geo_relative_approximation_error": 0.9848616020269352,
+        "initial_effective_weight_relative_error": 8.129157857126132e-09
+      }
+    },
+    {
+      "name": "model.layers.1.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008203108445741236,
+        "euclidean_threshold": 0.006744384765625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20072515308856964,
+        "union_keep_fraction": 0.3582369089126587,
+        "w_geo_retained_energy": 0.024879699884977333,
+        "w_geo_relative_approximation_error": 0.9849406226928504,
+        "initial_effective_weight_relative_error": 7.822712756979055e-09
+      }
+    },
+    {
+      "name": "model.layers.1.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009978999150916934,
+        "euclidean_threshold": 0.006622314453125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2001955360174179,
+        "union_keep_fraction": 0.3584703803062439,
+        "w_geo_retained_energy": 0.027236117730760994,
+        "w_geo_relative_approximation_error": 0.9840065805575643,
+        "initial_effective_weight_relative_error": 7.530286470138873e-09
+      }
+    },
+    {
+      "name": "model.layers.2.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014260661555454135,
+        "euclidean_threshold": 0.00616455078125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2000189870595932,
+        "union_keep_fraction": 0.3493279218673706,
+        "w_geo_retained_energy": 0.05303435561770197,
+        "w_geo_relative_approximation_error": 0.9727129013475884,
+        "initial_effective_weight_relative_error": 8.872539003223448e-09
+      }
+    },
+    {
+      "name": "model.layers.2.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012100731255486608,
+        "euclidean_threshold": 0.007781982421875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2006072998046875,
+        "union_keep_fraction": 0.35467275977134705,
+        "w_geo_retained_energy": 0.1681806575090195,
+        "w_geo_relative_approximation_error": 0.9120187253495096,
+        "initial_effective_weight_relative_error": 9.756789947579725e-09
+      }
+    },
+    {
+      "name": "model.layers.2.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010871768463402987,
+        "euclidean_threshold": 0.00537109375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20035044848918915,
+        "union_keep_fraction": 0.3523813784122467,
+        "w_geo_retained_energy": 0.16476732466486338,
+        "w_geo_relative_approximation_error": 0.913890714474644,
+        "initial_effective_weight_relative_error": 1.0400852747075252e-08
+      }
+    },
+    {
+      "name": "model.layers.2.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010880352929234505,
+        "euclidean_threshold": 0.005859375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2008599191904068,
+        "union_keep_fraction": 0.357890248298645,
+        "w_geo_retained_energy": 0.07366389450045725,
+        "w_geo_relative_approximation_error": 0.9620283465993938,
+        "initial_effective_weight_relative_error": 8.038673990404899e-09
+      }
+    },
+    {
+      "name": "model.layers.2.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015026562614366412,
+        "euclidean_threshold": 0.0081787109375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20066027343273163,
+        "union_keep_fraction": 0.3571668267250061,
+        "w_geo_retained_energy": 0.026128252724749737,
+        "w_geo_relative_approximation_error": 0.9841449514464248,
+        "initial_effective_weight_relative_error": 8.03190233767882e-09
+      }
+    },
+    {
+      "name": "model.layers.2.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007727252668701112,
+        "euclidean_threshold": 0.006317138671875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2006535828113556,
+        "union_keep_fraction": 0.35770249366760254,
+        "w_geo_retained_energy": 0.02582732564561759,
+        "w_geo_relative_approximation_error": 0.9845741858817304,
+        "initial_effective_weight_relative_error": 7.58618459840184e-09
+      }
+    },
+    {
+      "name": "model.layers.2.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008841026574373245,
+        "euclidean_threshold": 0.00634765625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2004983127117157,
+        "union_keep_fraction": 0.3592655658721924,
+        "w_geo_retained_energy": 0.025174868119964052,
+        "w_geo_relative_approximation_error": 0.9847589891540623,
+        "initial_effective_weight_relative_error": 8.129799488340551e-09
+      }
+    },
+    {
+      "name": "model.layers.3.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001718884683214128,
+        "euclidean_threshold": 0.00677490234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20063993334770203,
+        "union_keep_fraction": 0.35332024097442627,
+        "w_geo_retained_energy": 0.06363594284045683,
+        "w_geo_relative_approximation_error": 0.9670437038596469,
+        "initial_effective_weight_relative_error": 8.808002962376217e-09
+      }
+    },
+    {
+      "name": "model.layers.3.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00270509603433311,
+        "euclidean_threshold": 0.00787353515625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2008870393037796,
+        "union_keep_fraction": 0.3537496030330658,
+        "w_geo_retained_energy": 0.1685308946171903,
+        "w_geo_relative_approximation_error": 0.91181017605061,
+        "initial_effective_weight_relative_error": 1.054806044825387e-08
+      }
+    },
+    {
+      "name": "model.layers.3.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012957825092598796,
+        "euclidean_threshold": 0.0059814453125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20003509521484375,
+        "union_keep_fraction": 0.35356903076171875,
+        "w_geo_retained_energy": 0.14783718317526034,
+        "w_geo_relative_approximation_error": 0.9230797092032369,
+        "initial_effective_weight_relative_error": 1.1080030169738736e-08
+      }
+    },
+    {
+      "name": "model.layers.3.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010777042480185628,
+        "euclidean_threshold": 0.00592041015625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20073869824409485,
+        "union_keep_fraction": 0.357585072517395,
+        "w_geo_retained_energy": 0.06055227826755683,
+        "w_geo_relative_approximation_error": 0.9687647077220478,
+        "initial_effective_weight_relative_error": 8.860937456889327e-09
+      }
+    },
+    {
+      "name": "model.layers.3.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001287768129259348,
+        "euclidean_threshold": 0.00830078125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20087622106075287,
+        "union_keep_fraction": 0.3557654917240143,
+        "w_geo_retained_energy": 0.026676557050432006,
+        "w_geo_relative_approximation_error": 0.9839124678361784,
+        "initial_effective_weight_relative_error": 7.79115875725502e-09
+      }
+    },
+    {
+      "name": "model.layers.3.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00082374457269907,
+        "euclidean_threshold": 0.006195068359375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20046117901802063,
+        "union_keep_fraction": 0.35740095376968384,
+        "w_geo_retained_energy": 0.023856315695183213,
+        "w_geo_relative_approximation_error": 0.9851952322644613,
+        "initial_effective_weight_relative_error": 8.137599952838156e-09
+      }
+    },
+    {
+      "name": "model.layers.3.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009105243370868266,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20069493353366852,
+        "union_keep_fraction": 0.3598228693008423,
+        "w_geo_retained_energy": 0.025258578071372145,
+        "w_geo_relative_approximation_error": 0.9846704142213573,
+        "initial_effective_weight_relative_error": 8.098954058193895e-09
+      }
+    },
+    {
+      "name": "model.layers.4.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016653012717142701,
+        "euclidean_threshold": 0.00640869140625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20091205835342407,
+        "union_keep_fraction": 0.3519405722618103,
+        "w_geo_retained_energy": 0.055309282309453256,
+        "w_geo_relative_approximation_error": 0.9715054013668545,
+        "initial_effective_weight_relative_error": 9.145613685725474e-09
+      }
+    },
+    {
+      "name": "model.layers.4.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0024095175322145224,
+        "euclidean_threshold": 0.0074462890625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2002512663602829,
+        "union_keep_fraction": 0.35238900780677795,
+        "w_geo_retained_energy": 0.14060734527690266,
+        "w_geo_relative_approximation_error": 0.9270103630517522,
+        "initial_effective_weight_relative_error": 1.0874395959088377e-08
+      }
+    },
+    {
+      "name": "model.layers.4.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016648905584588647,
+        "euclidean_threshold": 0.00640869140625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20031993091106415,
+        "union_keep_fraction": 0.3528086245059967,
+        "w_geo_retained_energy": 0.13656437036649957,
+        "w_geo_relative_approximation_error": 0.9291816697593387,
+        "initial_effective_weight_relative_error": 1.158651034285776e-08
+      }
+    },
+    {
+      "name": "model.layers.4.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009791364427655935,
+        "euclidean_threshold": 0.005950927734375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2001817524433136,
+        "union_keep_fraction": 0.35572686791419983,
+        "w_geo_retained_energy": 0.05723988677590383,
+        "w_geo_relative_approximation_error": 0.970493828674516,
+        "initial_effective_weight_relative_error": 9.394945668309713e-09
+      }
+    },
+    {
+      "name": "model.layers.4.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012300822418183088,
+        "euclidean_threshold": 0.007781982421875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20056945085525513,
+        "union_keep_fraction": 0.35666903853416443,
+        "w_geo_retained_energy": 0.024793750092532093,
+        "w_geo_relative_approximation_error": 0.9847719652062326,
+        "initial_effective_weight_relative_error": 7.968449980371706e-09
+      }
+    },
+    {
+      "name": "model.layers.4.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008220853051170707,
+        "euclidean_threshold": 0.00628662109375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20024457573890686,
+        "union_keep_fraction": 0.3577423095703125,
+        "w_geo_retained_energy": 0.023755674013347213,
+        "w_geo_relative_approximation_error": 0.9852982060581583,
+        "initial_effective_weight_relative_error": 8.182739678687451e-09
+      }
+    },
+    {
+      "name": "model.layers.4.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008110162452794611,
+        "euclidean_threshold": 0.006195068359375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2008305937051773,
+        "union_keep_fraction": 0.3592965304851532,
+        "w_geo_retained_energy": 0.027537243578319614,
+        "w_geo_relative_approximation_error": 0.9838187758381168,
+        "initial_effective_weight_relative_error": 7.686886898237844e-09
+      }
+    },
+    {
+      "name": "model.layers.5.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015070128720253706,
+        "euclidean_threshold": 0.005706787109375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.200958251953125,
+        "union_keep_fraction": 0.3504965007305145,
+        "w_geo_retained_energy": 0.06345153902360674,
+        "w_geo_relative_approximation_error": 0.9673244973412392,
+        "initial_effective_weight_relative_error": 8.78262456792326e-09
+      }
+    },
+    {
+      "name": "model.layers.5.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016443016938865185,
+        "euclidean_threshold": 0.0059814453125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2008311003446579,
+        "union_keep_fraction": 0.3501180112361908,
+        "w_geo_retained_energy": 0.15632530628255834,
+        "w_geo_relative_approximation_error": 0.9184834578056706,
+        "initial_effective_weight_relative_error": 9.337318598471782e-09
+      }
+    },
+    {
+      "name": "model.layers.5.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006829514750279486,
+        "euclidean_threshold": 0.00616455078125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2000935822725296,
+        "union_keep_fraction": 0.34695181250572205,
+        "w_geo_retained_energy": 0.16801552521153837,
+        "w_geo_relative_approximation_error": 0.9121176901484388,
+        "initial_effective_weight_relative_error": 9.293760231781763e-09
+      }
+    },
+    {
+      "name": "model.layers.5.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006603022920899093,
+        "euclidean_threshold": 0.00567626953125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20069926977157593,
+        "union_keep_fraction": 0.3526878356933594,
+        "w_geo_retained_energy": 0.06042080863574114,
+        "w_geo_relative_approximation_error": 0.9688776119851067,
+        "initial_effective_weight_relative_error": 8.393745944731491e-09
+      }
+    },
+    {
+      "name": "model.layers.5.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001477559213526547,
+        "euclidean_threshold": 0.00799560546875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20077484846115112,
+        "union_keep_fraction": 0.3559485971927643,
+        "w_geo_retained_energy": 0.02694688259409025,
+        "w_geo_relative_approximation_error": 0.9839767389500738,
+        "initial_effective_weight_relative_error": 7.671264827981389e-09
+      }
+    },
+    {
+      "name": "model.layers.5.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008574712555855513,
+        "euclidean_threshold": 0.00634765625,
+        "spectral_keep_fraction": 0.20000015199184418,
+        "euclidean_keep_fraction": 0.20047883689403534,
+        "union_keep_fraction": 0.35783886909484863,
+        "w_geo_retained_energy": 0.023817677479002326,
+        "w_geo_relative_approximation_error": 0.9852657513280523,
+        "initial_effective_weight_relative_error": 8.132588962168675e-09
+      }
+    },
+    {
+      "name": "model.layers.5.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008314945735037327,
+        "euclidean_threshold": 0.00604248046875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2009676992893219,
+        "union_keep_fraction": 0.3568650782108307,
+        "w_geo_retained_energy": 0.025613568305720674,
+        "w_geo_relative_approximation_error": 0.9844871345898165,
+        "initial_effective_weight_relative_error": 7.891392809414816e-09
+      }
+    },
+    {
+      "name": "model.layers.6.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012221441138535738,
+        "euclidean_threshold": 0.005126953125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20061366260051727,
+        "union_keep_fraction": 0.3424839377403259,
+        "w_geo_retained_energy": 0.05941776246776424,
+        "w_geo_relative_approximation_error": 0.9693954596638307,
+        "initial_effective_weight_relative_error": 8.240114814768147e-09
+      }
+    },
+    {
+      "name": "model.layers.6.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0022441046312451363,
+        "euclidean_threshold": 0.006988525390625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20006053149700165,
+        "union_keep_fraction": 0.35178375244140625,
+        "w_geo_retained_energy": 0.17059620597933048,
+        "w_geo_relative_approximation_error": 0.9106714671635443,
+        "initial_effective_weight_relative_error": 9.547285239922444e-09
+      }
+    },
+    {
+      "name": "model.layers.6.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015750372549518943,
+        "euclidean_threshold": 0.005401611328125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20036570727825165,
+        "union_keep_fraction": 0.3430277407169342,
+        "w_geo_retained_energy": 0.14206607815943742,
+        "w_geo_relative_approximation_error": 0.9262229506500658,
+        "initial_effective_weight_relative_error": 1.053403837461788e-08
+      }
+    },
+    {
+      "name": "model.layers.6.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010911580175161362,
+        "euclidean_threshold": 0.005279541015625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20098410546779633,
+        "union_keep_fraction": 0.3551334738731384,
+        "w_geo_retained_energy": 0.05486876929292985,
+        "w_geo_relative_approximation_error": 0.97169426934603,
+        "initial_effective_weight_relative_error": 9.107475768356543e-09
+      }
+    },
+    {
+      "name": "model.layers.6.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012600193731486797,
+        "euclidean_threshold": 0.007354736328125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20047469437122345,
+        "union_keep_fraction": 0.3571315109729767,
+        "w_geo_retained_energy": 0.029374185249368155,
+        "w_geo_relative_approximation_error": 0.9829417750812076,
+        "initial_effective_weight_relative_error": 7.501521057785222e-09
+      }
+    },
+    {
+      "name": "model.layers.6.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009387048194184899,
+        "euclidean_threshold": 0.006744384765625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2002687007188797,
+        "union_keep_fraction": 0.35864853858947754,
+        "w_geo_retained_energy": 0.023925188964766784,
+        "w_geo_relative_approximation_error": 0.9853586050688669,
+        "initial_effective_weight_relative_error": 8.280043903112104e-09
+      }
+    },
+    {
+      "name": "model.layers.6.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009795748628675938,
+        "euclidean_threshold": 0.006561279296875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2007686048746109,
+        "union_keep_fraction": 0.35927966237068176,
+        "w_geo_retained_energy": 0.026437252588702023,
+        "w_geo_relative_approximation_error": 0.9842430153355102,
+        "initial_effective_weight_relative_error": 7.87761649677532e-09
+      }
+    },
+    {
+      "name": "model.layers.7.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014349203556776047,
+        "euclidean_threshold": 0.0057373046875,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20044708251953125,
+        "union_keep_fraction": 0.3472980856895447,
+        "w_geo_retained_energy": 0.06726896352334899,
+        "w_geo_relative_approximation_error": 0.9653345130362672,
+        "initial_effective_weight_relative_error": 8.56265105351823e-09
+      }
+    },
+    {
+      "name": "model.layers.7.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0022327268961817026,
+        "euclidean_threshold": 0.00689697265625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2005666047334671,
+        "union_keep_fraction": 0.35174813866615295,
+        "w_geo_retained_energy": 0.15259519564212004,
+        "w_geo_relative_approximation_error": 0.9205184719451178,
+        "initial_effective_weight_relative_error": 1.0335723425068562e-08
+      }
+    },
+    {
+      "name": "model.layers.7.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016379355220124125,
+        "euclidean_threshold": 0.006256103515625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2004547119140625,
+        "union_keep_fraction": 0.35373687744140625,
+        "w_geo_retained_energy": 0.13678424250580293,
+        "w_geo_relative_approximation_error": 0.9290709851598488,
+        "initial_effective_weight_relative_error": 1.0674137852697861e-08
+      }
+    },
+    {
+      "name": "model.layers.7.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009983042255043983,
+        "euclidean_threshold": 0.00567626953125,
+        "spectral_keep_fraction": 0.20000076293945312,
+        "euclidean_keep_fraction": 0.20088788866996765,
+        "union_keep_fraction": 0.3547571003437042,
+        "w_geo_retained_energy": 0.06458318883534737,
+        "w_geo_relative_approximation_error": 0.9667372339579193,
+        "initial_effective_weight_relative_error": 8.87629385242046e-09
+      }
+    },
+    {
+      "name": "model.layers.7.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001208171946927905,
+        "euclidean_threshold": 0.007080078125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20073053240776062,
+        "union_keep_fraction": 0.35697340965270996,
+        "w_geo_retained_energy": 0.027661352896470322,
+        "w_geo_relative_approximation_error": 0.9837782425397378,
+        "initial_effective_weight_relative_error": 7.67608425626795e-09
+      }
+    },
+    {
+      "name": "model.layers.7.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009292291360907257,
+        "euclidean_threshold": 0.0068359375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20071911811828613,
+        "union_keep_fraction": 0.35941219329833984,
+        "w_geo_retained_energy": 0.024572078119730112,
+        "w_geo_relative_approximation_error": 0.9850035050637783,
+        "initial_effective_weight_relative_error": 8.2570603099865e-09
+      }
+    },
+    {
+      "name": "model.layers.7.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009880909929051995,
+        "euclidean_threshold": 0.006561279296875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20001918077468872,
+        "union_keep_fraction": 0.35794228315353394,
+        "w_geo_retained_energy": 0.02854608099958806,
+        "w_geo_relative_approximation_error": 0.983819800790587,
+        "initial_effective_weight_relative_error": 6.989053894299192e-09
+      }
+    },
+    {
+      "name": "model.layers.8.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001245842082425952,
+        "euclidean_threshold": 0.005615234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20040935277938843,
+        "union_keep_fraction": 0.3515285849571228,
+        "w_geo_retained_energy": 0.05615110945520156,
+        "w_geo_relative_approximation_error": 0.9711530207901878,
+        "initial_effective_weight_relative_error": 8.666144936689382e-09
+      }
+    },
+    {
+      "name": "model.layers.8.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013153395848348737,
+        "euclidean_threshold": 0.006561279296875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2004750519990921,
+        "union_keep_fraction": 0.3525848388671875,
+        "w_geo_retained_energy": 0.19887922404428046,
+        "w_geo_relative_approximation_error": 0.8950233953229271,
+        "initial_effective_weight_relative_error": 9.132063557505395e-09
+      }
+    },
+    {
+      "name": "model.layers.8.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016289817867800593,
+        "euclidean_threshold": 0.00592041015625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20089466869831085,
+        "union_keep_fraction": 0.3498179018497467,
+        "w_geo_retained_energy": 0.13943686325219212,
+        "w_geo_relative_approximation_error": 0.9276327404721291,
+        "initial_effective_weight_relative_error": 1.0863768688889885e-08
+      }
+    },
+    {
+      "name": "model.layers.8.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010964329121634364,
+        "euclidean_threshold": 0.005615234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2007175087928772,
+        "union_keep_fraction": 0.35347747802734375,
+        "w_geo_retained_energy": 0.05663535715493987,
+        "w_geo_relative_approximation_error": 0.9707911468159557,
+        "initial_effective_weight_relative_error": 8.96260470380182e-09
+      }
+    },
+    {
+      "name": "model.layers.8.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012078259605914354,
+        "euclidean_threshold": 0.007110595703125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2006913721561432,
+        "union_keep_fraction": 0.3580416738986969,
+        "w_geo_retained_energy": 0.025450578109990456,
+        "w_geo_relative_approximation_error": 0.9846290062421198,
+        "initial_effective_weight_relative_error": 8.084895891903782e-09
+      }
+    },
+    {
+      "name": "model.layers.8.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009084802004508674,
+        "euclidean_threshold": 0.006805419921875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2008240520954132,
+        "union_keep_fraction": 0.3596930503845215,
+        "w_geo_retained_energy": 0.025090512511671072,
+        "w_geo_relative_approximation_error": 0.9848153233849645,
+        "initial_effective_weight_relative_error": 8.300317372881984e-09
+      }
+    },
+    {
+      "name": "model.layers.8.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009741620160639286,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20083588361740112,
+        "union_keep_fraction": 0.35900282859802246,
+        "w_geo_retained_energy": 0.02511524043573552,
+        "w_geo_relative_approximation_error": 0.9847552592370394,
+        "initial_effective_weight_relative_error": 8.098667678987202e-09
+      }
+    },
+    {
+      "name": "model.layers.9.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015236841281875968,
+        "euclidean_threshold": 0.005950927734375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20005205273628235,
+        "union_keep_fraction": 0.34568023681640625,
+        "w_geo_retained_energy": 0.05452306048163858,
+        "w_geo_relative_approximation_error": 0.9718447909745209,
+        "initial_effective_weight_relative_error": 8.87058708344632e-09
+      }
+    },
+    {
+      "name": "model.layers.9.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0022710366174578667,
+        "euclidean_threshold": 0.006683349609375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20017750561237335,
+        "union_keep_fraction": 0.349945068359375,
+        "w_geo_retained_energy": 0.16238955666841892,
+        "w_geo_relative_approximation_error": 0.9151719957228428,
+        "initial_effective_weight_relative_error": 1.024286699232552e-08
+      }
+    },
+    {
+      "name": "model.layers.9.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015570144169032574,
+        "euclidean_threshold": 0.0059814453125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.200469970703125,
+        "union_keep_fraction": 0.3524220883846283,
+        "w_geo_retained_energy": 0.16122558243716362,
+        "w_geo_relative_approximation_error": 0.9157918640191817,
+        "initial_effective_weight_relative_error": 1.1162983257229708e-08
+      }
+    },
+    {
+      "name": "model.layers.9.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008295546867884696,
+        "euclidean_threshold": 0.0054931640625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20043690502643585,
+        "union_keep_fraction": 0.3537678122520447,
+        "w_geo_retained_energy": 0.0631363558863186,
+        "w_geo_relative_approximation_error": 0.9674535910680623,
+        "initial_effective_weight_relative_error": 8.969703262160707e-09
+      }
+    },
+    {
+      "name": "model.layers.9.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00120630266610533,
+        "euclidean_threshold": 0.006927490234375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2005418986082077,
+        "union_keep_fraction": 0.35833993554115295,
+        "w_geo_retained_energy": 0.025965232967468062,
+        "w_geo_relative_approximation_error": 0.9844208052634692,
+        "initial_effective_weight_relative_error": 7.998290696182533e-09
+      }
+    },
+    {
+      "name": "model.layers.9.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009304696577601135,
+        "euclidean_threshold": 0.006805419921875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20067037642002106,
+        "union_keep_fraction": 0.3597414195537567,
+        "w_geo_retained_energy": 0.0257762136559149,
+        "w_geo_relative_approximation_error": 0.9845456858796235,
+        "initial_effective_weight_relative_error": 8.280633694486564e-09
+      }
+    },
+    {
+      "name": "model.layers.9.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000999507843516767,
+        "euclidean_threshold": 0.006439208984375,
+        "spectral_keep_fraction": 0.20000015199184418,
+        "euclidean_keep_fraction": 0.20027364790439606,
+        "union_keep_fraction": 0.3575260639190674,
+        "w_geo_retained_energy": 0.026437785805736302,
+        "w_geo_relative_approximation_error": 0.9843228679295096,
+        "initial_effective_weight_relative_error": 7.674356340798615e-09
+      }
+    },
+    {
+      "name": "model.layers.10.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016442207852378488,
+        "euclidean_threshold": 0.006072998046875,
+        "spectral_keep_fraction": 0.20000076293945312,
+        "euclidean_keep_fraction": 0.20020760595798492,
+        "union_keep_fraction": 0.35211479663848877,
+        "w_geo_retained_energy": 0.059537845348368056,
+        "w_geo_relative_approximation_error": 0.9693224221774872,
+        "initial_effective_weight_relative_error": 8.766175296157017e-09
+      }
+    },
+    {
+      "name": "model.layers.10.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0021468016784638166,
+        "euclidean_threshold": 0.005950927734375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2004343718290329,
+        "union_keep_fraction": 0.3482920229434967,
+        "w_geo_retained_energy": 0.1488420489311481,
+        "w_geo_relative_approximation_error": 0.9225554014767667,
+        "initial_effective_weight_relative_error": 9.942018593576354e-09
+      }
+    },
+    {
+      "name": "model.layers.10.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013899466721341014,
+        "euclidean_threshold": 0.00604248046875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20013172924518585,
+        "union_keep_fraction": 0.35353851318359375,
+        "w_geo_retained_energy": 0.14877636176530493,
+        "w_geo_relative_approximation_error": 0.9225886519857281,
+        "initial_effective_weight_relative_error": 1.0814554490801538e-08
+      }
+    },
+    {
+      "name": "model.layers.10.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011209908407181501,
+        "euclidean_threshold": 0.005645751953125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20068317651748657,
+        "union_keep_fraction": 0.35023796558380127,
+        "w_geo_retained_energy": 0.05070997959941783,
+        "w_geo_relative_approximation_error": 0.9738671174372769,
+        "initial_effective_weight_relative_error": 9.100360954330804e-09
+      }
+    },
+    {
+      "name": "model.layers.10.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012381143169477582,
+        "euclidean_threshold": 0.00689697265625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2007560431957245,
+        "union_keep_fraction": 0.35819491744041443,
+        "w_geo_retained_energy": 0.027387891699977962,
+        "w_geo_relative_approximation_error": 0.9838351846094119,
+        "initial_effective_weight_relative_error": 7.768133809386718e-09
+      }
+    },
+    {
+      "name": "model.layers.10.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000950390996877104,
+        "euclidean_threshold": 0.006744384765625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20030467212200165,
+        "union_keep_fraction": 0.35973191261291504,
+        "w_geo_retained_energy": 0.02596896096835476,
+        "w_geo_relative_approximation_error": 0.9844377638165442,
+        "initial_effective_weight_relative_error": 8.21432576514006e-09
+      }
+    },
+    {
+      "name": "model.layers.10.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010129115544259548,
+        "euclidean_threshold": 0.00628662109375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20056907832622528,
+        "union_keep_fraction": 0.357774943113327,
+        "w_geo_retained_energy": 0.025414501623103693,
+        "w_geo_relative_approximation_error": 0.9845221001219135,
+        "initial_effective_weight_relative_error": 8.220038639582737e-09
+      }
+    },
+    {
+      "name": "model.layers.11.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001464672153815627,
+        "euclidean_threshold": 0.005645751953125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20046700537204742,
+        "union_keep_fraction": 0.34874427318573,
+        "w_geo_retained_energy": 0.07349112818878477,
+        "w_geo_relative_approximation_error": 0.9620538047275299,
+        "initial_effective_weight_relative_error": 8.233139253826424e-09
+      }
+    },
+    {
+      "name": "model.layers.11.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.002462666481733322,
+        "euclidean_threshold": 0.006561279296875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20076243579387665,
+        "union_keep_fraction": 0.3505757749080658,
+        "w_geo_retained_energy": 0.196646036203519,
+        "w_geo_relative_approximation_error": 0.8962470592359403,
+        "initial_effective_weight_relative_error": 9.582830964473191e-09
+      }
+    },
+    {
+      "name": "model.layers.11.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015165240038186312,
+        "euclidean_threshold": 0.00592041015625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20073699951171875,
+        "union_keep_fraction": 0.35599517822265625,
+        "w_geo_retained_energy": 0.1412116332140902,
+        "w_geo_relative_approximation_error": 0.9266800088540115,
+        "initial_effective_weight_relative_error": 1.1360366628959764e-08
+      }
+    },
+    {
+      "name": "model.layers.11.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006787917227484286,
+        "euclidean_threshold": 0.005401611328125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2001732736825943,
+        "union_keep_fraction": 0.3510704040527344,
+        "w_geo_retained_energy": 0.060353004112051516,
+        "w_geo_relative_approximation_error": 0.9689008062107591,
+        "initial_effective_weight_relative_error": 8.797236597924177e-09
+      }
+    },
+    {
+      "name": "model.layers.11.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001272445311769843,
+        "euclidean_threshold": 0.0068359375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20011313259601593,
+        "union_keep_fraction": 0.3569939136505127,
+        "w_geo_retained_energy": 0.027353055762169804,
+        "w_geo_relative_approximation_error": 0.9838033649319793,
+        "initial_effective_weight_relative_error": 7.76383989091661e-09
+      }
+    },
+    {
+      "name": "model.layers.11.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009672985761426389,
+        "euclidean_threshold": 0.00665283203125,
+        "spectral_keep_fraction": 0.20000015199184418,
+        "euclidean_keep_fraction": 0.20050238072872162,
+        "union_keep_fraction": 0.35992997884750366,
+        "w_geo_retained_energy": 0.026326235535177107,
+        "w_geo_relative_approximation_error": 0.9842932588283558,
+        "initial_effective_weight_relative_error": 8.203960684213414e-09
+      }
+    },
+    {
+      "name": "model.layers.11.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009382948628626764,
+        "euclidean_threshold": 0.00616455078125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2004276067018509,
+        "union_keep_fraction": 0.3566715717315674,
+        "w_geo_retained_energy": 0.025685175863482464,
+        "w_geo_relative_approximation_error": 0.9844004497221873,
+        "initial_effective_weight_relative_error": 8.084114448920973e-09
+      }
+    },
+    {
+      "name": "model.layers.12.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001583422301337123,
+        "euclidean_threshold": 0.005767822265625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20097436010837555,
+        "union_keep_fraction": 0.3524682819843292,
+        "w_geo_retained_energy": 0.05574786296641285,
+        "w_geo_relative_approximation_error": 0.9713027653256746,
+        "initial_effective_weight_relative_error": 9.176069849041856e-09
+      }
+    },
+    {
+      "name": "model.layers.12.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013255691155791283,
+        "euclidean_threshold": 0.0054931640625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2008768767118454,
+        "union_keep_fraction": 0.34764862060546875,
+        "w_geo_retained_energy": 0.17041691694869635,
+        "w_geo_relative_approximation_error": 0.9107905374734465,
+        "initial_effective_weight_relative_error": 9.341263471052977e-09
+      }
+    },
+    {
+      "name": "model.layers.12.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016110767610371113,
+        "euclidean_threshold": 0.005584716796875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20030467212200165,
+        "union_keep_fraction": 0.3515065610408783,
+        "w_geo_retained_energy": 0.13768835013373693,
+        "w_geo_relative_approximation_error": 0.9285878519722239,
+        "initial_effective_weight_relative_error": 1.1037476108229004e-08
+      }
+    },
+    {
+      "name": "model.layers.12.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007492404547519982,
+        "euclidean_threshold": 0.0052490234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20058144629001617,
+        "union_keep_fraction": 0.3506317138671875,
+        "w_geo_retained_energy": 0.0545684931385578,
+        "w_geo_relative_approximation_error": 0.9718404340047188,
+        "initial_effective_weight_relative_error": 8.679892527081903e-09
+      }
+    },
+    {
+      "name": "model.layers.12.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001295656431466341,
+        "euclidean_threshold": 0.00665283203125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2000705599784851,
+        "union_keep_fraction": 0.35768577456474304,
+        "w_geo_retained_energy": 0.026560488598334646,
+        "w_geo_relative_approximation_error": 0.9841889017010627,
+        "initial_effective_weight_relative_error": 7.913594801635298e-09
+      }
+    },
+    {
+      "name": "model.layers.12.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009994234424084425,
+        "euclidean_threshold": 0.006622314453125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20067450404167175,
+        "union_keep_fraction": 0.3597530424594879,
+        "w_geo_retained_energy": 0.02571008180743139,
+        "w_geo_relative_approximation_error": 0.9845682467163928,
+        "initial_effective_weight_relative_error": 8.253916950197926e-09
+      }
+    },
+    {
+      "name": "model.layers.12.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001017572358250618,
+        "euclidean_threshold": 0.006134033203125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20063811540603638,
+        "union_keep_fraction": 0.3570283353328705,
+        "w_geo_retained_energy": 0.028876506376164884,
+        "w_geo_relative_approximation_error": 0.9830484378599419,
+        "initial_effective_weight_relative_error": 7.539426590952782e-09
+      }
+    },
+    {
+      "name": "model.layers.13.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001779139623977244,
+        "euclidean_threshold": 0.00634765625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20081795752048492,
+        "union_keep_fraction": 0.35028076171875,
+        "w_geo_retained_energy": 0.05889090634210452,
+        "w_geo_relative_approximation_error": 0.96958817066201,
+        "initial_effective_weight_relative_error": 8.85673974629626e-09
+      }
+    },
+    {
+      "name": "model.layers.13.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0027002249844372272,
+        "euclidean_threshold": 0.007110595703125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2006581574678421,
+        "union_keep_fraction": 0.3498026430606842,
+        "w_geo_retained_energy": 0.14918797648933552,
+        "w_geo_relative_approximation_error": 0.9223604465551765,
+        "initial_effective_weight_relative_error": 1.0044661570880218e-08
+      }
+    },
+    {
+      "name": "model.layers.13.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014116141246631742,
+        "euclidean_threshold": 0.00579833984375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2004597932100296,
+        "union_keep_fraction": 0.35370635986328125,
+        "w_geo_retained_energy": 0.160236920180073,
+        "w_geo_relative_approximation_error": 0.9163530119912597,
+        "initial_effective_weight_relative_error": 1.0881831234491198e-08
+      }
+    },
+    {
+      "name": "model.layers.13.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000842326320707798,
+        "euclidean_threshold": 0.00531005859375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2008141428232193,
+        "union_keep_fraction": 0.3503354489803314,
+        "w_geo_retained_energy": 0.05554146683609335,
+        "w_geo_relative_approximation_error": 0.9713626821726247,
+        "initial_effective_weight_relative_error": 8.809827979896696e-09
+      }
+    },
+    {
+      "name": "model.layers.13.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011845617555081844,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20050346851348877,
+        "union_keep_fraction": 0.3581896126270294,
+        "w_geo_retained_energy": 0.026612050699679597,
+        "w_geo_relative_approximation_error": 0.9841379732903676,
+        "initial_effective_weight_relative_error": 7.84254560652275e-09
+      }
+    },
+    {
+      "name": "model.layers.13.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010062960209324956,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.200621098279953,
+        "union_keep_fraction": 0.35969892144203186,
+        "w_geo_retained_energy": 0.02634929639544565,
+        "w_geo_relative_approximation_error": 0.9843086985215657,
+        "initial_effective_weight_relative_error": 8.176549091846664e-09
+      }
+    },
+    {
+      "name": "model.layers.13.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009611143032088876,
+        "euclidean_threshold": 0.006134033203125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20002587139606476,
+        "union_keep_fraction": 0.35565468668937683,
+        "w_geo_retained_energy": 0.02686404609167282,
+        "w_geo_relative_approximation_error": 0.9839004647255761,
+        "initial_effective_weight_relative_error": 7.760876505001752e-09
+      }
+    },
+    {
+      "name": "model.layers.14.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013366523198783398,
+        "euclidean_threshold": 0.00482177734375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2009039968252182,
+        "union_keep_fraction": 0.3478084206581116,
+        "w_geo_retained_energy": 0.06424357867152092,
+        "w_geo_relative_approximation_error": 0.9669799142595038,
+        "initial_effective_weight_relative_error": 8.329902560507077e-09
+      }
+    },
+    {
+      "name": "model.layers.14.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0005480487598106265,
+        "euclidean_threshold": 0.004608154296875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2000376433134079,
+        "union_keep_fraction": 0.3459879457950592,
+        "w_geo_retained_energy": 0.17707791794802197,
+        "w_geo_relative_approximation_error": 0.9071241230260875,
+        "initial_effective_weight_relative_error": 7.905204920724158e-09
+      }
+    },
+    {
+      "name": "model.layers.14.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016674828948453069,
+        "euclidean_threshold": 0.00518798828125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20108795166015625,
+        "union_keep_fraction": 0.34956613183021545,
+        "w_geo_retained_energy": 0.14167534493964878,
+        "w_geo_relative_approximation_error": 0.9264340556065058,
+        "initial_effective_weight_relative_error": 1.114803344536853e-08
+      }
+    },
+    {
+      "name": "model.layers.14.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009827229660004377,
+        "euclidean_threshold": 0.00494384765625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20020082592964172,
+        "union_keep_fraction": 0.34955766797065735,
+        "w_geo_retained_energy": 0.050673542246582486,
+        "w_geo_relative_approximation_error": 0.9738414654131624,
+        "initial_effective_weight_relative_error": 8.841661695294388e-09
+      }
+    },
+    {
+      "name": "model.layers.14.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011816427577286959,
+        "euclidean_threshold": 0.00628662109375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2002485692501068,
+        "union_keep_fraction": 0.3584093451499939,
+        "w_geo_retained_energy": 0.027331558251885144,
+        "w_geo_relative_approximation_error": 0.9838122812194592,
+        "initial_effective_weight_relative_error": 7.747754819914954e-09
+      }
+    },
+    {
+      "name": "model.layers.14.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010056117316707969,
+        "euclidean_threshold": 0.006439208984375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.200516477227211,
+        "union_keep_fraction": 0.3594173491001129,
+        "w_geo_retained_energy": 0.026728482736076555,
+        "w_geo_relative_approximation_error": 0.9840907887688569,
+        "initial_effective_weight_relative_error": 8.117828443558008e-09
+      }
+    },
+    {
+      "name": "model.layers.14.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009516547434031963,
+        "euclidean_threshold": 0.00604248046875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20059646666049957,
+        "union_keep_fraction": 0.35643354058265686,
+        "w_geo_retained_energy": 0.028104856737633792,
+        "w_geo_relative_approximation_error": 0.9833405501930634,
+        "initial_effective_weight_relative_error": 7.68913511649466e-09
+      }
+    },
+    {
+      "name": "model.layers.15.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017356076277792454,
+        "euclidean_threshold": 0.005950927734375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20060688257217407,
+        "union_keep_fraction": 0.35062238574028015,
+        "w_geo_retained_energy": 0.055487983046239246,
+        "w_geo_relative_approximation_error": 0.971421433709502,
+        "initial_effective_weight_relative_error": 8.486952686949624e-09
+      }
+    },
+    {
+      "name": "model.layers.15.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.002644549123942852,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2008056640625,
+        "union_keep_fraction": 0.34879812598228455,
+        "w_geo_retained_energy": 0.15102173727940726,
+        "w_geo_relative_approximation_error": 0.921377648208842,
+        "initial_effective_weight_relative_error": 9.897292207189635e-09
+      }
+    },
+    {
+      "name": "model.layers.15.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001275948015972972,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20051829516887665,
+        "union_keep_fraction": 0.35207876563072205,
+        "w_geo_retained_energy": 0.15173085102375347,
+        "w_geo_relative_approximation_error": 0.9209900965016387,
+        "initial_effective_weight_relative_error": 1.084785429144342e-08
+      }
+    },
+    {
+      "name": "model.layers.15.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009728671284392476,
+        "euclidean_threshold": 0.005462646484375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20068825781345367,
+        "union_keep_fraction": 0.34951910376548767,
+        "w_geo_retained_energy": 0.056480952013044705,
+        "w_geo_relative_approximation_error": 0.9708743796235851,
+        "initial_effective_weight_relative_error": 8.708266042268315e-09
+      }
+    },
+    {
+      "name": "model.layers.15.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001191785093396902,
+        "euclidean_threshold": 0.00640869140625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2003556787967682,
+        "union_keep_fraction": 0.3576671779155731,
+        "w_geo_retained_energy": 0.027624203390772064,
+        "w_geo_relative_approximation_error": 0.983608457874729,
+        "initial_effective_weight_relative_error": 7.803353603549883e-09
+      }
+    },
+    {
+      "name": "model.layers.15.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010486827231943607,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20062407851219177,
+        "union_keep_fraction": 0.3594239056110382,
+        "w_geo_retained_energy": 0.02595796707821124,
+        "w_geo_relative_approximation_error": 0.9844698625340842,
+        "initial_effective_weight_relative_error": 8.088807347694377e-09
+      }
+    },
+    {
+      "name": "model.layers.15.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000932733528316021,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20076534152030945,
+        "union_keep_fraction": 0.35739681124687195,
+        "w_geo_retained_energy": 0.026616987081186354,
+        "w_geo_relative_approximation_error": 0.9841257492762135,
+        "initial_effective_weight_relative_error": 7.815678442524868e-09
+      }
+    },
+    {
+      "name": "model.layers.16.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0016978902276605368,
+        "euclidean_threshold": 0.005645751953125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2001461386680603,
+        "union_keep_fraction": 0.35057365894317627,
+        "w_geo_retained_energy": 0.06534719772029864,
+        "w_geo_relative_approximation_error": 0.9663994506475747,
+        "initial_effective_weight_relative_error": 8.690849127278405e-09
+      }
+    },
+    {
+      "name": "model.layers.16.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014973630895838141,
+        "euclidean_threshold": 0.00482177734375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20112355053424835,
+        "union_keep_fraction": 0.3426717221736908,
+        "w_geo_retained_energy": 0.17933633717750874,
+        "w_geo_relative_approximation_error": 0.9058747092157459,
+        "initial_effective_weight_relative_error": 8.609817906453366e-09
+      }
+    },
+    {
+      "name": "model.layers.16.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001782243954949081,
+        "euclidean_threshold": 0.005828857421875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2002716064453125,
+        "union_keep_fraction": 0.3520253598690033,
+        "w_geo_retained_energy": 0.13279106563161866,
+        "w_geo_relative_approximation_error": 0.9312087727609855,
+        "initial_effective_weight_relative_error": 1.1347388176278027e-08
+      }
+    },
+    {
+      "name": "model.layers.16.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009747919975779951,
+        "euclidean_threshold": 0.005279541015625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20093324780464172,
+        "union_keep_fraction": 0.3513929545879364,
+        "w_geo_retained_energy": 0.07310216579153367,
+        "w_geo_relative_approximation_error": 0.9622509255858459,
+        "initial_effective_weight_relative_error": 7.990555388085028e-09
+      }
+    },
+    {
+      "name": "model.layers.16.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001185841392725706,
+        "euclidean_threshold": 0.00628662109375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2001369595527649,
+        "union_keep_fraction": 0.3577593266963959,
+        "w_geo_retained_energy": 0.0269187767390168,
+        "w_geo_relative_approximation_error": 0.9839097491757155,
+        "initial_effective_weight_relative_error": 7.789297727274587e-09
+      }
+    },
+    {
+      "name": "model.layers.16.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001028431230224669,
+        "euclidean_threshold": 0.00640869140625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20000101625919342,
+        "union_keep_fraction": 0.358755499124527,
+        "w_geo_retained_energy": 0.025668088257379106,
+        "w_geo_relative_approximation_error": 0.9845316706708922,
+        "initial_effective_weight_relative_error": 8.222296718174904e-09
+      }
+    },
+    {
+      "name": "model.layers.16.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009238772909156978,
+        "euclidean_threshold": 0.00604248046875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20046909153461456,
+        "union_keep_fraction": 0.35693278908729553,
+        "w_geo_retained_energy": 0.026141526107127503,
+        "w_geo_relative_approximation_error": 0.9841984250500676,
+        "initial_effective_weight_relative_error": 8.056851039374991e-09
+      }
+    },
+    {
+      "name": "model.layers.17.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012243051314726472,
+        "euclidean_threshold": 0.0050048828125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20104598999023438,
+        "union_keep_fraction": 0.34967124462127686,
+        "w_geo_retained_energy": 0.0619522138376216,
+        "w_geo_relative_approximation_error": 0.9679161021624064,
+        "initial_effective_weight_relative_error": 8.590482240920656e-09
+      }
+    },
+    {
+      "name": "model.layers.17.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001576157403178513,
+        "euclidean_threshold": 0.0045166015625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.200897216796875,
+        "union_keep_fraction": 0.34844207763671875,
+        "w_geo_retained_energy": 0.17576836291521242,
+        "w_geo_relative_approximation_error": 0.90783072000465,
+        "initial_effective_weight_relative_error": 9.14901898573777e-09
+      }
+    },
+    {
+      "name": "model.layers.17.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006664981483481824,
+        "euclidean_threshold": 0.006134033203125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2005666047334671,
+        "union_keep_fraction": 0.34912109375,
+        "w_geo_retained_energy": 0.17857307391680197,
+        "w_geo_relative_approximation_error": 0.9062344860585287,
+        "initial_effective_weight_relative_error": 9.229729445664127e-09
+      }
+    },
+    {
+      "name": "model.layers.17.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006873283418826759,
+        "euclidean_threshold": 0.005706787109375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20073996484279633,
+        "union_keep_fraction": 0.35372796654701233,
+        "w_geo_retained_energy": 0.06635546657367992,
+        "w_geo_relative_approximation_error": 0.9658265030961389,
+        "initial_effective_weight_relative_error": 8.481933961454943e-09
+      }
+    },
+    {
+      "name": "model.layers.17.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011435331543907523,
+        "euclidean_threshold": 0.006317138671875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20055818557739258,
+        "union_keep_fraction": 0.35867083072662354,
+        "w_geo_retained_energy": 0.026599908038555387,
+        "w_geo_relative_approximation_error": 0.9840544638659611,
+        "initial_effective_weight_relative_error": 7.97920606257377e-09
+      }
+    },
+    {
+      "name": "model.layers.17.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010552171152085066,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20052984356880188,
+        "union_keep_fraction": 0.3591550588607788,
+        "w_geo_retained_energy": 0.025761606017142263,
+        "w_geo_relative_approximation_error": 0.9845435851962991,
+        "initial_effective_weight_relative_error": 8.10963397058531e-09
+      }
+    },
+    {
+      "name": "model.layers.17.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009616405004635453,
+        "euclidean_threshold": 0.0062255859375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2001240998506546,
+        "union_keep_fraction": 0.35645613074302673,
+        "w_geo_retained_energy": 0.02719365889673567,
+        "w_geo_relative_approximation_error": 0.9836994520118193,
+        "initial_effective_weight_relative_error": 8.038158687821724e-09
+      }
+    },
+    {
+      "name": "model.layers.18.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013421119656413794,
+        "euclidean_threshold": 0.005218505859375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2004191130399704,
+        "union_keep_fraction": 0.34595954418182373,
+        "w_geo_retained_energy": 0.054766657092327344,
+        "w_geo_relative_approximation_error": 0.9717989273158534,
+        "initial_effective_weight_relative_error": 8.428983151719776e-09
+      }
+    },
+    {
+      "name": "model.layers.18.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0020635740365833044,
+        "euclidean_threshold": 0.00579833984375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20011647045612335,
+        "union_keep_fraction": 0.34774526953697205,
+        "w_geo_retained_energy": 0.14857476233876174,
+        "w_geo_relative_approximation_error": 0.9227054677879427,
+        "initial_effective_weight_relative_error": 9.931543663945435e-09
+      }
+    },
+    {
+      "name": "model.layers.18.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001852457644417882,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20067088305950165,
+        "union_keep_fraction": 0.3543701171875,
+        "w_geo_retained_energy": 0.13315403084618838,
+        "w_geo_relative_approximation_error": 0.9310192187567764,
+        "initial_effective_weight_relative_error": 1.1384539829603492e-08
+      }
+    },
+    {
+      "name": "model.layers.18.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007661575800739229,
+        "euclidean_threshold": 0.005523681640625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20011860132217407,
+        "union_keep_fraction": 0.3498556315898895,
+        "w_geo_retained_energy": 0.07852347522319714,
+        "w_geo_relative_approximation_error": 0.9594351888721885,
+        "initial_effective_weight_relative_error": 7.94554105472961e-09
+      }
+    },
+    {
+      "name": "model.layers.18.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010800560703501105,
+        "euclidean_threshold": 0.006256103515625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2004164159297943,
+        "union_keep_fraction": 0.3583254814147949,
+        "w_geo_retained_energy": 0.026062040355449033,
+        "w_geo_relative_approximation_error": 0.9842384804076478,
+        "initial_effective_weight_relative_error": 8.080450539418758e-09
+      }
+    },
+    {
+      "name": "model.layers.18.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010766085470095277,
+        "euclidean_threshold": 0.006561279296875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2002038210630417,
+        "union_keep_fraction": 0.35879212617874146,
+        "w_geo_retained_energy": 0.025125891939696172,
+        "w_geo_relative_approximation_error": 0.9847719507528664,
+        "initial_effective_weight_relative_error": 8.275060946256351e-09
+      }
+    },
+    {
+      "name": "model.layers.18.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008482320699840784,
+        "euclidean_threshold": 0.0062255859375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20016232132911682,
+        "union_keep_fraction": 0.35686376690864563,
+        "w_geo_retained_energy": 0.027168128613805024,
+        "w_geo_relative_approximation_error": 0.9838591268269449,
+        "initial_effective_weight_relative_error": 7.97583642823072e-09
+      }
+    },
+    {
+      "name": "model.layers.19.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011842700187116861,
+        "euclidean_threshold": 0.0052490234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20084847509860992,
+        "union_keep_fraction": 0.3507321774959564,
+        "w_geo_retained_energy": 0.058977982215735504,
+        "w_geo_relative_approximation_error": 0.9697340886440302,
+        "initial_effective_weight_relative_error": 8.490546630682524e-09
+      }
+    },
+    {
+      "name": "model.layers.19.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008671240066178143,
+        "euclidean_threshold": 0.00433349609375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20013427734375,
+        "union_keep_fraction": 0.35095468163490295,
+        "w_geo_retained_energy": 0.19100792922532522,
+        "w_geo_relative_approximation_error": 0.8994217901058998,
+        "initial_effective_weight_relative_error": 8.481482799487469e-09
+      }
+    },
+    {
+      "name": "model.layers.19.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014363506343215704,
+        "euclidean_threshold": 0.005706787109375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2006428986787796,
+        "union_keep_fraction": 0.3541463315486908,
+        "w_geo_retained_energy": 0.16249511313096904,
+        "w_geo_relative_approximation_error": 0.9151291793372719,
+        "initial_effective_weight_relative_error": 1.0177970111050943e-08
+      }
+    },
+    {
+      "name": "model.layers.19.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011279009049758315,
+        "euclidean_threshold": 0.0057373046875,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20025719702243805,
+        "union_keep_fraction": 0.3546562194824219,
+        "w_geo_retained_energy": 0.053247971746958986,
+        "w_geo_relative_approximation_error": 0.9725812935559509,
+        "initial_effective_weight_relative_error": 9.168225107517977e-09
+      }
+    },
+    {
+      "name": "model.layers.19.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001094823470339179,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2005014270544052,
+        "union_keep_fraction": 0.35714560747146606,
+        "w_geo_retained_energy": 0.027683691225807317,
+        "w_geo_relative_approximation_error": 0.9838087127064191,
+        "initial_effective_weight_relative_error": 7.48585651674823e-09
+      }
+    },
+    {
+      "name": "model.layers.19.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010335735278204083,
+        "euclidean_threshold": 0.00665283203125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20029711723327637,
+        "union_keep_fraction": 0.3575298488140106,
+        "w_geo_retained_energy": 0.02885415949701031,
+        "w_geo_relative_approximation_error": 0.9835443718856308,
+        "initial_effective_weight_relative_error": 7.012052573314902e-09
+      }
+    },
+    {
+      "name": "model.layers.19.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007741798763163388,
+        "euclidean_threshold": 0.00634765625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20083633065223694,
+        "union_keep_fraction": 0.3583506941795349,
+        "w_geo_retained_energy": 0.03296741189211458,
+        "w_geo_relative_approximation_error": 0.9819654617441305,
+        "initial_effective_weight_relative_error": 6.226184332658698e-09
+      }
+    },
+    {
+      "name": "model.layers.20.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015586132649332285,
+        "euclidean_threshold": 0.005401611328125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20066706836223602,
+        "union_keep_fraction": 0.34903082251548767,
+        "w_geo_retained_energy": 0.05715119506867587,
+        "w_geo_relative_approximation_error": 0.9704903496570623,
+        "initial_effective_weight_relative_error": 8.663000084957692e-09
+      }
+    },
+    {
+      "name": "model.layers.20.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017371022840961814,
+        "euclidean_threshold": 0.004852294921875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20050811767578125,
+        "union_keep_fraction": 0.34704843163490295,
+        "w_geo_retained_energy": 0.15458819698831616,
+        "w_geo_relative_approximation_error": 0.9194361731344125,
+        "initial_effective_weight_relative_error": 9.121815625008063e-09
+      }
+    },
+    {
+      "name": "model.layers.20.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00184932304546237,
+        "euclidean_threshold": 0.00701904296875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20058441162109375,
+        "union_keep_fraction": 0.3503875732421875,
+        "w_geo_retained_energy": 0.1426987642606226,
+        "w_geo_relative_approximation_error": 0.9258852989058087,
+        "initial_effective_weight_relative_error": 1.1041994395224139e-08
+      }
+    },
+    {
+      "name": "model.layers.20.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008582837763242424,
+        "euclidean_threshold": 0.0059814453125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20068444311618805,
+        "union_keep_fraction": 0.35261070728302,
+        "w_geo_retained_energy": 0.05187137869783188,
+        "w_geo_relative_approximation_error": 0.9732841505120166,
+        "initial_effective_weight_relative_error": 8.87799068969011e-09
+      }
+    },
+    {
+      "name": "model.layers.20.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011035142233595252,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20000725984573364,
+        "union_keep_fraction": 0.3584764897823334,
+        "w_geo_retained_energy": 0.026704436183738935,
+        "w_geo_relative_approximation_error": 0.9841201248780789,
+        "initial_effective_weight_relative_error": 7.858480120596998e-09
+      }
+    },
+    {
+      "name": "model.layers.20.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00109303486533463,
+        "euclidean_threshold": 0.006988525390625,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20011931657791138,
+        "union_keep_fraction": 0.35907360911369324,
+        "w_geo_retained_energy": 0.024751857088163326,
+        "w_geo_relative_approximation_error": 0.9848405503837068,
+        "initial_effective_weight_relative_error": 8.377656815534328e-09
+      }
+    },
+    {
+      "name": "model.layers.20.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008637442369945347,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20032958686351776,
+        "union_keep_fraction": 0.35740798711776733,
+        "w_geo_retained_energy": 0.02786837070615589,
+        "w_geo_relative_approximation_error": 0.9837774282485071,
+        "initial_effective_weight_relative_error": 7.4743780623381e-09
+      }
+    },
+    {
+      "name": "model.layers.21.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0015890987124294043,
+        "euclidean_threshold": 0.005279541015625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20013682544231415,
+        "union_keep_fraction": 0.34953773021698,
+        "w_geo_retained_energy": 0.05687445480924707,
+        "w_geo_relative_approximation_error": 0.9706721183261562,
+        "initial_effective_weight_relative_error": 8.91151152466171e-09
+      }
+    },
+    {
+      "name": "model.layers.21.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017166854813694954,
+        "euclidean_threshold": 0.004638671875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2011820524930954,
+        "union_keep_fraction": 0.34698739647865295,
+        "w_geo_retained_energy": 0.15073932182018,
+        "w_geo_relative_approximation_error": 0.9215300847162591,
+        "initial_effective_weight_relative_error": 9.694882193324552e-09
+      }
+    },
+    {
+      "name": "model.layers.21.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00138759333640337,
+        "euclidean_threshold": 0.00732421875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2000579833984375,
+        "union_keep_fraction": 0.35022225975990295,
+        "w_geo_retained_energy": 0.1721081397619679,
+        "w_geo_relative_approximation_error": 0.9098250065290453,
+        "initial_effective_weight_relative_error": 9.985512886900067e-09
+      }
+    },
+    {
+      "name": "model.layers.21.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0006317804218269885,
+        "euclidean_threshold": 0.006103515625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20043182373046875,
+        "union_keep_fraction": 0.3549647927284241,
+        "w_geo_retained_energy": 0.08057590754565297,
+        "w_geo_relative_approximation_error": 0.9584702427196339,
+        "initial_effective_weight_relative_error": 8.620472138892413e-09
+      }
+    },
+    {
+      "name": "model.layers.21.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011050396133214235,
+        "euclidean_threshold": 0.0064697265625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2006848305463791,
+        "union_keep_fraction": 0.3584612309932709,
+        "w_geo_retained_energy": 0.027102090222958713,
+        "w_geo_relative_approximation_error": 0.9839728909982723,
+        "initial_effective_weight_relative_error": 7.666304294581603e-09
+      }
+    },
+    {
+      "name": "model.layers.21.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010307562770321965,
+        "euclidean_threshold": 0.0069580078125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20030967891216278,
+        "union_keep_fraction": 0.35916587710380554,
+        "w_geo_retained_energy": 0.02496062805727147,
+        "w_geo_relative_approximation_error": 0.9847520713220818,
+        "initial_effective_weight_relative_error": 8.21516348249046e-09
+      }
+    },
+    {
+      "name": "model.layers.21.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007733164238743484,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20017394423484802,
+        "union_keep_fraction": 0.35647234320640564,
+        "w_geo_retained_energy": 0.026545314696402818,
+        "w_geo_relative_approximation_error": 0.984293704937838,
+        "initial_effective_weight_relative_error": 7.714286456349486e-09
+      }
+    },
+    {
+      "name": "model.layers.22.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014625084586441517,
+        "euclidean_threshold": 0.005615234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2004072368144989,
+        "union_keep_fraction": 0.34583112597465515,
+        "w_geo_retained_energy": 0.05350955085432849,
+        "w_geo_relative_approximation_error": 0.9723984883043132,
+        "initial_effective_weight_relative_error": 8.705281345671781e-09
+      }
+    },
+    {
+      "name": "model.layers.22.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017704827478155494,
+        "euclidean_threshold": 0.005615234375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20078785717487335,
+        "union_keep_fraction": 0.3488108217716217,
+        "w_geo_retained_energy": 0.16688371614346878,
+        "w_geo_relative_approximation_error": 0.9127111309729931,
+        "initial_effective_weight_relative_error": 9.542952808055938e-09
+      }
+    },
+    {
+      "name": "model.layers.22.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010706802131608129,
+        "euclidean_threshold": 0.0057373046875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20002491772174835,
+        "union_keep_fraction": 0.3491363525390625,
+        "w_geo_retained_energy": 0.23648419258982759,
+        "w_geo_relative_approximation_error": 0.873768848000113,
+        "initial_effective_weight_relative_error": 1.0373389015563601e-08
+      }
+    },
+    {
+      "name": "model.layers.22.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010371621465310454,
+        "euclidean_threshold": 0.00616455078125,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2004937082529068,
+        "union_keep_fraction": 0.3566195070743561,
+        "w_geo_retained_energy": 0.055659156123817596,
+        "w_geo_relative_approximation_error": 0.971289088845731,
+        "initial_effective_weight_relative_error": 9.21818808059021e-09
+      }
+    },
+    {
+      "name": "model.layers.22.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010746476473286748,
+        "euclidean_threshold": 0.006591796875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2004111111164093,
+        "union_keep_fraction": 0.35821837186813354,
+        "w_geo_retained_energy": 0.02663287655908101,
+        "w_geo_relative_approximation_error": 0.9841627411095222,
+        "initial_effective_weight_relative_error": 7.805520205416721e-09
+      }
+    },
+    {
+      "name": "model.layers.22.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010642483830451965,
+        "euclidean_threshold": 0.006927490234375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2000330537557602,
+        "union_keep_fraction": 0.3588595390319824,
+        "w_geo_retained_energy": 0.02554838175950709,
+        "w_geo_relative_approximation_error": 0.984540579427994,
+        "initial_effective_weight_relative_error": 7.99671828441992e-09
+      }
+    },
+    {
+      "name": "model.layers.22.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0007530335569754243,
+        "euclidean_threshold": 0.00653076171875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2006467580795288,
+        "union_keep_fraction": 0.3570977449417114,
+        "w_geo_retained_energy": 0.026169358662808485,
+        "w_geo_relative_approximation_error": 0.9844110748649512,
+        "initial_effective_weight_relative_error": 7.83506909520458e-09
+      }
+    },
+    {
+      "name": "model.layers.23.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012108860537409782,
+        "euclidean_threshold": 0.0047607421875,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20055855810642242,
+        "union_keep_fraction": 0.33704715967178345,
+        "w_geo_retained_energy": 0.05894152301781256,
+        "w_geo_relative_approximation_error": 0.9697111065089445,
+        "initial_effective_weight_relative_error": 8.253342698980126e-09
+      }
+    },
+    {
+      "name": "model.layers.23.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012217804323881865,
+        "euclidean_threshold": 0.00421142578125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20054881274700165,
+        "union_keep_fraction": 0.34674325585365295,
+        "w_geo_retained_energy": 0.18668792296163042,
+        "w_geo_relative_approximation_error": 0.9018181556458095,
+        "initial_effective_weight_relative_error": 8.403632201668182e-09
+      }
+    },
+    {
+      "name": "model.layers.23.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009343835990875959,
+        "euclidean_threshold": 0.0052490234375,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2001749724149704,
+        "union_keep_fraction": 0.34577178955078125,
+        "w_geo_retained_energy": 0.2630321341223242,
+        "w_geo_relative_approximation_error": 0.858416010381259,
+        "initial_effective_weight_relative_error": 1.1390688245521317e-08
+      }
+    },
+    {
+      "name": "model.layers.23.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010426187654957175,
+        "euclidean_threshold": 0.0062255859375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20016056299209595,
+        "union_keep_fraction": 0.35539498925209045,
+        "w_geo_retained_energy": 0.06130250548459904,
+        "w_geo_relative_approximation_error": 0.9683909572104541,
+        "initial_effective_weight_relative_error": 9.19090123418193e-09
+      }
+    },
+    {
+      "name": "model.layers.23.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001070321537554264,
+        "euclidean_threshold": 0.006866455078125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20075799524784088,
+        "union_keep_fraction": 0.3587610125541687,
+        "w_geo_retained_energy": 0.027330907215594773,
+        "w_geo_relative_approximation_error": 0.9839148970818502,
+        "initial_effective_weight_relative_error": 7.686766164388169e-09
+      }
+    },
+    {
+      "name": "model.layers.23.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010421688202768564,
+        "euclidean_threshold": 0.0072021484375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20079556107521057,
+        "union_keep_fraction": 0.35947540402412415,
+        "w_geo_retained_energy": 0.025884192356561735,
+        "w_geo_relative_approximation_error": 0.9845390272709517,
+        "initial_effective_weight_relative_error": 7.848815083423041e-09
+      }
+    },
+    {
+      "name": "model.layers.23.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000831860932521522,
+        "euclidean_threshold": 0.006683349609375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20013071596622467,
+        "union_keep_fraction": 0.3547804355621338,
+        "w_geo_retained_energy": 0.026131199656687486,
+        "w_geo_relative_approximation_error": 0.9846764561822189,
+        "initial_effective_weight_relative_error": 7.188143767394874e-09
+      }
+    },
+    {
+      "name": "model.layers.24.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001587027101777494,
+        "euclidean_threshold": 0.004974365234375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2006378173828125,
+        "union_keep_fraction": 0.3403778076171875,
+        "w_geo_retained_energy": 0.05760248019039607,
+        "w_geo_relative_approximation_error": 0.9702637357429253,
+        "initial_effective_weight_relative_error": 8.57102110310423e-09
+      }
+    },
+    {
+      "name": "model.layers.24.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001753099961206317,
+        "euclidean_threshold": 0.004669189453125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20093536376953125,
+        "union_keep_fraction": 0.3460744321346283,
+        "w_geo_retained_energy": 0.18113410872740585,
+        "w_geo_relative_approximation_error": 0.904869996188809,
+        "initial_effective_weight_relative_error": 8.716637493742693e-09
+      }
+    },
+    {
+      "name": "model.layers.24.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.002223096089437604,
+        "euclidean_threshold": 0.0064697265625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20007069408893585,
+        "union_keep_fraction": 0.3481394350528717,
+        "w_geo_retained_energy": 0.16272104603082296,
+        "w_geo_relative_approximation_error": 0.9149930187174611,
+        "initial_effective_weight_relative_error": 1.0999954061759903e-08
+      }
+    },
+    {
+      "name": "model.layers.24.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0012247245758771896,
+        "euclidean_threshold": 0.00689697265625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20085525512695312,
+        "union_keep_fraction": 0.3545451760292053,
+        "w_geo_retained_energy": 0.050988477105775,
+        "w_geo_relative_approximation_error": 0.9736767760745786,
+        "initial_effective_weight_relative_error": 9.508104852538943e-09
+      }
+    },
+    {
+      "name": "model.layers.24.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010422609047964215,
+        "euclidean_threshold": 0.0069580078125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20051531493663788,
+        "union_keep_fraction": 0.3588224947452545,
+        "w_geo_retained_energy": 0.026638738810542222,
+        "w_geo_relative_approximation_error": 0.9842218152472078,
+        "initial_effective_weight_relative_error": 7.806873284226052e-09
+      }
+    },
+    {
+      "name": "model.layers.24.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010801752796396613,
+        "euclidean_threshold": 0.007354736328125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20012351870536804,
+        "union_keep_fraction": 0.3589582145214081,
+        "w_geo_retained_energy": 0.02478138486226758,
+        "w_geo_relative_approximation_error": 0.9848382359876545,
+        "initial_effective_weight_relative_error": 8.156108040905732e-09
+      }
+    },
+    {
+      "name": "model.layers.24.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.000866185815539211,
+        "euclidean_threshold": 0.0068359375,
+        "spectral_keep_fraction": 0.20000015199184418,
+        "euclidean_keep_fraction": 0.20040065050125122,
+        "union_keep_fraction": 0.35453367233276367,
+        "w_geo_retained_energy": 0.023853301264474235,
+        "w_geo_relative_approximation_error": 0.9853084390595689,
+        "initial_effective_weight_relative_error": 8.00280141306009e-09
+      }
+    },
+    {
+      "name": "model.layers.25.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013150520389899611,
+        "euclidean_threshold": 0.00494384765625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.2010871022939682,
+        "union_keep_fraction": 0.336567759513855,
+        "w_geo_retained_energy": 0.08115310395755998,
+        "w_geo_relative_approximation_error": 0.9579491874161017,
+        "initial_effective_weight_relative_error": 7.927169597619521e-09
+      }
+    },
+    {
+      "name": "model.layers.25.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0017060935497283936,
+        "euclidean_threshold": 0.00408935546875,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20068359375,
+        "union_keep_fraction": 0.3479868471622467,
+        "w_geo_retained_energy": 0.16893099063891684,
+        "w_geo_relative_approximation_error": 0.9115872830585593,
+        "initial_effective_weight_relative_error": 9.003293266177728e-09
+      }
+    },
+    {
+      "name": "model.layers.25.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0023254300467669964,
+        "euclidean_threshold": 0.00640869140625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.200836181640625,
+        "union_keep_fraction": 0.350982666015625,
+        "w_geo_retained_energy": 0.17052609149051795,
+        "w_geo_relative_approximation_error": 0.9107280303082604,
+        "initial_effective_weight_relative_error": 1.0995171578087377e-08
+      }
+    },
+    {
+      "name": "model.layers.25.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008755484595894814,
+        "euclidean_threshold": 0.0057373046875,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20016564428806305,
+        "union_keep_fraction": 0.3526420593261719,
+        "w_geo_retained_energy": 0.11467832261610152,
+        "w_geo_relative_approximation_error": 0.940659666043091,
+        "initial_effective_weight_relative_error": 7.802332734345538e-09
+      }
+    },
+    {
+      "name": "model.layers.25.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010247243335470557,
+        "euclidean_threshold": 0.0068359375,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20016631484031677,
+        "union_keep_fraction": 0.3590528964996338,
+        "w_geo_retained_energy": 0.026213205707837015,
+        "w_geo_relative_approximation_error": 0.9843964979972165,
+        "initial_effective_weight_relative_error": 7.96633450912139e-09
+      }
+    },
+    {
+      "name": "model.layers.25.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010849246755242348,
+        "euclidean_threshold": 0.007476806640625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20066876709461212,
+        "union_keep_fraction": 0.359515517950058,
+        "w_geo_retained_energy": 0.026697430941706072,
+        "w_geo_relative_approximation_error": 0.9841198264725487,
+        "initial_effective_weight_relative_error": 7.769831172763904e-09
+      }
+    },
+    {
+      "name": "model.layers.25.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009032301022671163,
+        "euclidean_threshold": 0.0069580078125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20002536475658417,
+        "union_keep_fraction": 0.353451669216156,
+        "w_geo_retained_energy": 0.025238598824387996,
+        "w_geo_relative_approximation_error": 0.9847196606100473,
+        "initial_effective_weight_relative_error": 7.834653969614085e-09
+      }
+    },
+    {
+      "name": "model.layers.26.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.001277415081858635,
+        "euclidean_threshold": 0.004241943359375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20002704858779907,
+        "union_keep_fraction": 0.3387230634689331,
+        "w_geo_retained_energy": 0.07800963820235042,
+        "w_geo_relative_approximation_error": 0.9597303660212312,
+        "initial_effective_weight_relative_error": 8.296816198240652e-09
+      }
+    },
+    {
+      "name": "model.layers.26.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013046208769083023,
+        "euclidean_threshold": 0.004058837890625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.2011820524930954,
+        "union_keep_fraction": 0.3460794985294342,
+        "w_geo_retained_energy": 0.2571746978660116,
+        "w_geo_relative_approximation_error": 0.8618319048464559,
+        "initial_effective_weight_relative_error": 7.2448071191447555e-09
+      }
+    },
+    {
+      "name": "model.layers.26.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0037472927942872047,
+        "euclidean_threshold": 0.0098876953125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20074462890625,
+        "union_keep_fraction": 0.3461812436580658,
+        "w_geo_retained_energy": 0.15230314571676493,
+        "w_geo_relative_approximation_error": 0.920677918333327,
+        "initial_effective_weight_relative_error": 1.1413139704774827e-08
+      }
+    },
+    {
+      "name": "model.layers.26.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0014222241006791592,
+        "euclidean_threshold": 0.007720947265625,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20020505785942078,
+        "union_keep_fraction": 0.3550758361816406,
+        "w_geo_retained_energy": 0.04694498729622996,
+        "w_geo_relative_approximation_error": 0.9757895060375318,
+        "initial_effective_weight_relative_error": 9.693392678243802e-09
+      }
+    },
+    {
+      "name": "model.layers.26.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010584457777440548,
+        "euclidean_threshold": 0.006683349609375,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20015491545200348,
+        "union_keep_fraction": 0.35900071263313293,
+        "w_geo_retained_energy": 0.026542167810153422,
+        "w_geo_relative_approximation_error": 0.9842160004010481,
+        "initial_effective_weight_relative_error": 7.814926034212745e-09
+      }
+    },
+    {
+      "name": "model.layers.26.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010733386734500527,
+        "euclidean_threshold": 0.007476806640625,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.20076438784599304,
+        "union_keep_fraction": 0.35979992151260376,
+        "w_geo_retained_energy": 0.02549164940797746,
+        "w_geo_relative_approximation_error": 0.9845539589476435,
+        "initial_effective_weight_relative_error": 8.042320257728313e-09
+      }
+    },
+    {
+      "name": "model.layers.26.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0008809810387901962,
+        "euclidean_threshold": 0.007049560546875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20014910399913788,
+        "union_keep_fraction": 0.35673806071281433,
+        "w_geo_retained_energy": 0.024535077709363737,
+        "w_geo_relative_approximation_error": 0.9850528538593774,
+        "initial_effective_weight_relative_error": 7.872993336140689e-09
+      }
+    },
+    {
+      "name": "model.layers.27.self_attn.q_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013658474199473858,
+        "euclidean_threshold": 0.0042724609375,
+        "spectral_keep_fraction": 0.2000003457069397,
+        "euclidean_keep_fraction": 0.20023049414157867,
+        "union_keep_fraction": 0.339518666267395,
+        "w_geo_retained_energy": 0.08281078670552214,
+        "w_geo_relative_approximation_error": 0.9572895750015241,
+        "initial_effective_weight_relative_error": 8.34522814634381e-09
+      }
+    },
+    {
+      "name": "model.layers.27.self_attn.k_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0011419561924412847,
+        "euclidean_threshold": 0.003204345703125,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20066578686237335,
+        "union_keep_fraction": 0.3420867919921875,
+        "w_geo_retained_energy": 0.18801528784692192,
+        "w_geo_relative_approximation_error": 0.9010665547577287,
+        "initial_effective_weight_relative_error": 8.172940915250308e-09
+      }
+    },
+    {
+      "name": "model.layers.27.self_attn.v_proj",
+      "weight_shape": [
+        256,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        256,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.003551869885995984,
+        "euclidean_threshold": 0.0093994140625,
+        "spectral_keep_fraction": 0.2000020295381546,
+        "euclidean_keep_fraction": 0.20078785717487335,
+        "union_keep_fraction": 0.35027313232421875,
+        "w_geo_retained_energy": 0.1508212707503639,
+        "w_geo_relative_approximation_error": 0.921478970418576,
+        "initial_effective_weight_relative_error": 1.1364834376368177e-08
+      }
+    },
+    {
+      "name": "model.layers.27.self_attn.o_proj",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0009703201940283179,
+        "euclidean_threshold": 0.006500244140625,
+        "spectral_keep_fraction": 0.20000076293945312,
+        "euclidean_keep_fraction": 0.20020802319049835,
+        "union_keep_fraction": 0.3574222922325134,
+        "w_geo_retained_energy": 0.05244291712176701,
+        "w_geo_relative_approximation_error": 0.9729094498244121,
+        "initial_effective_weight_relative_error": 8.494223997166817e-09
+      }
+    },
+    {
+      "name": "model.layers.27.mlp.gate_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0013817670987918973,
+        "euclidean_threshold": 0.00665283203125,
+        "spectral_keep_fraction": 0.20000000298023224,
+        "euclidean_keep_fraction": 0.2004813849925995,
+        "union_keep_fraction": 0.3577566146850586,
+        "w_geo_retained_energy": 0.02935236517641899,
+        "w_geo_relative_approximation_error": 0.9830728413497123,
+        "initial_effective_weight_relative_error": 7.316641870330342e-09
+      }
+    },
+    {
+      "name": "model.layers.27.mlp.up_proj",
+      "weight_shape": [
+        8960,
+        1536
+      ],
+      "A_shape": [
+        16,
+        1536
+      ],
+      "B_shape": [
+        8960,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.0010250635677948594,
+        "euclidean_threshold": 0.006866455078125,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.2005709707736969,
+        "union_keep_fraction": 0.35993826389312744,
+        "w_geo_retained_energy": 0.026480653399066943,
+        "w_geo_relative_approximation_error": 0.9841345351881788,
+        "initial_effective_weight_relative_error": 8.217384153352332e-09
+      }
+    },
+    {
+      "name": "model.layers.27.mlp.down_proj",
+      "weight_shape": [
+        1536,
+        8960
+      ],
+      "A_shape": [
+        16,
+        8960
+      ],
+      "B_shape": [
+        1536,
+        16
+      ],
+      "statistics": {
+        "spectral_threshold": 0.00041468007839284837,
+        "euclidean_threshold": 0.005828857421875,
+        "spectral_keep_fraction": 0.2000000774860382,
+        "euclidean_keep_fraction": 0.20078524947166443,
+        "union_keep_fraction": 0.35852500796318054,
+        "w_geo_retained_energy": 0.0249254691117791,
+        "w_geo_relative_approximation_error": 0.984762953760968,
+        "initial_effective_weight_relative_error": 7.841070064240524e-09
+      }
+    }
+  ],
+  "checkpoint_contents": "initial A0/B0 and current A/B; rebuild F from the original model",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "original_weight_dtype": "bfloat16",
+  "runtime_device": "cpu",
+  "runtime_dtype": "float32",
+  "torch_threads": 4,
+  "torch_version": "2.14.1",
+  "transformers_version": "5.19.0",
+  "attention_implementation": "eager",
+  "scope": "all_196_projection_initialization_and_reload_without_training"
+}
