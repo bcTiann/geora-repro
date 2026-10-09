@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-10",
+  "source": "Observed command output during this session; this is a summary, not an accuracy measurement.",
+  "script": "tests/check_forward_precision.py",
+  "mac_cpu": {
+    "torch_version": "2.14.1",
+    "status": "passed"
+  },
+  "setonix_container_cpu": {
+    "torch_version": "2.7.1a0+gite2d141d",
+    "hip_version": "6.3.42134-a9a80e791",
+    "status": "passed"
+  },
+  "checks_observed": [
+    "reference and GeoRA: all 14 target projections compute FP32 and emit BF16",
+    "exception restores projection forwards",
+    "previously rounded projections rejected",
+    "matched Qwen eager forwards use FP32 QK/mask scores and native BF16 PV",
+    "normal and exceptional exit restore global eager attention",
+    "wrapper retains finite FP32 A/B gradients; no optimizer step"
+  ],
+  "mps_capability_probe": {
+    "torch_version": "2.14.1",
+    "mps_built": true,
+    "mps_available": true,
+    "matrix_shape": [
+      16,
+      16
+    ],
+    "input_dtype": "torch.float32",
+    "autocast_dtype": "torch.bfloat16",
+    "output_dtype": "torch.bfloat16",
+    "all_values_finite": true,
+    "scope": "One random matrix multiplication only; no full-model or backend accuracy comparison."
+  },
+  "optimizer_steps": 0,
+  "full_model_backward": false
+}

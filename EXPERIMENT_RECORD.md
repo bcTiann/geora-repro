@@ -1,8 +1,8 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-整理完成：2026-10-10；既有實驗與遠端報告核對至 2026-10-09。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-10；新增完整模型候選精度實驗，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
-**目前的結論：FP32 的 GeoRA 全模型初始化與初始化 checkpoint 重載已通過；目前預設 BF16 路徑的全模型初始化輸出檢查未通過。** 第 0 層 attention 的對照實驗已定位到精度敏感環節，但候選修正還沒有通過完整模型檢查。1.5B 模型的參數更新、GRPO、GSM8K 分數及 LoRA／GeoRA 對照尚未執行。
+**目前的結論：FP32 的 GeoRA 全模型初始化與初始化 checkpoint 重載已通過；目前預設 BF16 路徑的全模型初始化輸出檢查未通過。** 第 0 層 attention 的對照實驗已定位到精度敏感環節；完整模型的兩個候選方案把 logits 相對誤差降至約 3.5%～3.8%，仍未通過既有 2% 門檻。1.5B 模型的參數更新、GRPO、GSM8K 分數及 LoRA／GeoRA 對照尚未執行。
 
 本文件集中記錄「做過什麼、使用什麼精度、得到什麼結果」。[PRECISION.md](PRECISION.md) 說明目前程式的精度約定；[CHECKS.md](CHECKS.md) 與 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 保留操作方法。
 
@@ -22,8 +22,10 @@
 | S3 | 預設混合精度全模型檢查 | Setonix MI250X | 原始模型 vs 初始化 GeoRA | 初始化 logits 誤差 17.1538%，未通過 | 在 backward 前停止 |
 | S4 | 全模型 FP32/BF16 精度診斷 | Setonix MI250X | 同一初始化、同一輸入的對照 | FP32 誤差很小；BF16 分布已有變化 | 無 |
 | L6/S5 | 第 0 層 attention 精度定位 | Mac CPU / Setonix CPU、GPU | 五種運算路徑的局部對照 | FP32 投影方案顯著降低局部誤差 | 無 |
+| L7 | 候選 helper 預檢與 MPS 能力探針 | Mac CPU / MPS；Setonix CPU | 小 Qwen 14 投影；MPS 16×16 BF16 乘法 | dtype、恢復、梯度通路通過；MPS 小乘法有限 | 無 optimizer；單投影 backward |
+| S6 | 完整模型候選精度比較 | Setonix MI250X | 三種模式 × 三個短輸入，196 投影 | 候選改善誤差，但均未通過 2% 門檻 | 無 |
 
-以下的「本機」實驗實際使用 **CPU**。Mac 雖然可以提供 MPS，這些已記錄的結果沒有使用 MPS。
+本機 L1～L6 及 L7 的小模型預檢使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
 ## 2. 精度必須分成幾件事
 
@@ -307,9 +309,67 @@ Setonix native 的 QK 分數絕對值最大 22528。使用完全相同的量化 
 
 這支持「大數值 QK 分數的 BF16 舍入，能放大少量投影差異」的解釋。softmax 使用 FP32 不能恢復 QK 乘法已丟失的數字。只提高分數精度仍有約 3.5% 局部誤差；保留 FP32 F 並提高投影精度，局部誤差更小。
 
-**相對 S3 的預設完整模型路徑，`fp32_projections` 既保留 FP32 F，又採用 FP32 投影計算，尚未單獨拆分兩者效果。** 在本節探針內，native 和其他模式本來都保留 FP32 F，模式差異主要是運算路徑。 此處的低誤差尚未驗證能延伸到完整模型；它也沒有自動取代目前預設精度設定。
+**相對 S3 的預設完整模型路徑，`fp32_projections` 既保留 FP32 F，又採用 FP32 投影計算，尚未單獨拆分兩者效果。** 在本節探針內，native 和其他模式本來都保留 FP32 F，模式差異主要是運算路徑。 截至 S5，這個局部低誤差尚未驗證能延伸到完整模型；後續 S6 測量了完整模型，候選均未達到門檻。預設精度設定沒有被自動取代。
 
 來源：[Mac CPU](reports/attention_probe/local_cpu.json)、[Setonix CPU preflight](reports/attention_probe/setonix_cpu_preflight.json)、[Setonix GPU 50579802](reports/attention_probe/50579802.json)。GPU 核心計算 1.298 秒，腳本 7.202 秒，allocation 22 秒；PyTorch peak allocated memory 0.130 GiB。
+
+### L7：先在本機及 Setonix CPU 驗證候選 helper
+
+`tests/check_forward_precision.py` 使用兩層、14 個投影的小型 Qwen。Mac CPU 與 Setonix 容器 CPU 都實際通過以下檢查：原始／GeoRA 投影的內部線性計算 FP32、輸出 BF16；候選 context 正常退出或拋出例外後恢復原 forward；拒絕已舍入的 BF16 F；FP32 QK／mask 與 BF16 P×V 確實執行；A/B 的 FP32 梯度通路保留。最後一項只做單投影 backward，沒有 optimizer step。這不是完整模型的更新測試。
+
+本機另做 16×16 MPS 隨機矩陣乘法，BF16 autocast 的輸出為 BF16，所有數值有限；PyTorch 2.14.1 的 MPS built／available 都為 true。這只確認小乘法能力，沒有測量完整模型誤差或跨後端一致性。
+
+浮點格式相同不代表算子、autocast、加總順序或舍入結果相同。[PyTorch 數值精度說明](https://docs.pytorch.org/docs/2.7/notes/numerical_accuracy.html) 明確指出跨 CPU／GPU／版本不保證 bitwise 一致；[MPS 文件](https://docs.pytorch.org/docs/2.14/notes/mps.html) 說明其使用 Metal 的執行路徑。現有 CPU 與 AMD 局部探針都出現誤差放大，支持問題並非只在 AMD 上發生；因兩邊因子並不完全相同，還不能量化硬體的獨立影響。完整驗收應在之後實際訓練的 Setonix AMD 路徑完成。
+
+來源：[預檢執行摘要](reports/forward_precision_preflight.json)、[可重跑的小模型檢查](tests/check_forward_precision.py)。
+
+### S6：完整 1.5B 模型的三種 forward 路徑
+
+Job `50584822` 使用 `scripts/check_full_forward_precision.py`。復用 S2 的保存因子，從原始 CPU FP32 權重重建 F，沒有新 SVD。先測兩個候選，最後才把凍結參數轉 BF16 測 native，避免把已舍入的 F 上轉冒充原 FP32 F。每一種模式都對**原始模型與 GeoRA 同時使用相同設定**。
+
+| 模式 | 196 個 Q/K/V/O/gate/up/down | attention 分數 | 其餘參數／激活 |
+|---|---|---|---|
+| `native` | 凍結 F／原始權重 BF16，A/B FP32；乘法 BF16 autocast | 原有 eager 路徑 | BF16 混合精度 |
+| `fp32_projections` | F／原始權重、A/B 保留 FP32；投影禁用 autocast、計算 FP32；輸出轉 BF16 | 同 native | embedding、norm、lm_head BF16；原有 BF16 激活路徑 |
+| `fp32_projections_scores` | 同上 | QK、縮放、mask FP32；softmax FP32→BF16；P×V 仍 BF16 | 同上 |
+
+三個輸入分別為原有短算術 prompt＋`5`＋EOS（42 tokens）、同一 prompt 不接答案（40 tokens），以及牛頓第二定律的純 prompt（42 tokens）。沒有生成答案；所有 logits 均是固定輸入的 forward 結果。
+
+| 原始 vs GeoRA logits 相對誤差 | 算術＋答案 | 算術純 prompt | 物理純 prompt |
+|---|---:|---:|---:|
+| `native` | 17.1538% | 17.5993% | 16.8106% |
+| `fp32_projections` | 3.7423% | 3.8353% | 3.7052% |
+| `fp32_projections_scores` | 3.4787% | 3.5755% | 3.5206% |
+
+**九次比較均未通過原有 2% logits 相對誤差門檻，沒有放寬門檻。** 候選能改善完整模型，但單層 attention 的極小誤差不能直接外推到 28 層的端到端輸出。報告同時保存所有位置的 KL／TV 和 top-1；最後位置 KL 小仍不足以代表其他位置。
+
+算術＋答案輸入的逐位置摘要：
+
+| 模式 | 平均 KL，nats | 最大位置 KL，nats | 平均 TV | top-1 一致 |
+|---|---:|---:|---:|---:|
+| `native` | 0.105074 | 0.879461 | 0.104253 | 92.8571% |
+| `fp32_projections` | 0.00505251 | 0.0442711 | 0.0246858 | 97.6190% |
+| `fp32_projections_scores` | 0.00352558 | 0.0379122 | 0.0192750 | 100% |
+
+position 39 預測答案 token `5`，各模式的 reference 也隨精度改變：
+
+| 模式 | 原始模型 p(5) | GeoRA p(5) | 此位置 KL，nats |
+|---|---:|---:|---:|
+| `native` | 0.316340 | 0.0696066 | 0.277201 |
+| `fp32_projections` | 0.428306 | 0.312465 | 0.0295903 |
+| `fp32_projections_scores` | 0.468086 | 0.471574 | 0.000450326 |
+
+不能把跨模式 p(5) 增大直接解讀為性能提高；這裡沒有評估任務分數。
+
+**原始模型自身的控制組：** 以 native 原始模型為 reference，FP32 投影原始模型的 logits 相對差為 3.5185%，平均 KL 0.00443560；FP32 投影＋分數原始模型的差為 29.3145%，平均 KL 0.319377、最大 KL 5.03716。因此，候選改善的是「相同新精度下的 GeoRA 初始化等價性」，尚未證明保留原 native BF16 模型的數值行為。
+
+另外，FP32 投影＋分數模式中，同一數學前綴在算術＋答案 position 39 與算術純 prompt 的最後位置，KL 分別為 0.000450326 和 0.0165406。運算形狀／序列長度會影響浮點執行結果；本報告沒有單獨定位是哪一個算子導致，不能將這個差異歸因為某一硬體缺陷。
+
+保存因子前後逐元素相同，沒有參數梯度，`optimizer_steps=0`、`backward_calls=0`、`svd_calls=0`。候選的 PyTorch peak allocated memory 為 **10.8574 GiB**，包括同時保留原始模型和 GeoRA；native 為 6.0114 GiB，不能當作訓練顯存需求。整個 Python 腳本 62.358 秒，三種模式的比較段約 2.312／0.815／0.772 秒，其他時間包含載入與準備。
+
+申請一個邏輯 GPU、時限 3 分鐘，實際 allocation **87 秒**；Slurm `COMPLETED`、退出碼 `0:0`，完成後 queue 不再有此作業。診斷成功完成並不表示初始化 gate 通過。
+
+來源：[完整原始報告 50584822.json](reports/full_forward/50584822.json)、[三分鐘作業腳本](jobs/full_forward_precision.sbatch)。程式 commit 為 `340b403891ec588c491dc76517437bc5beea5e19`。本次沒有改變預設訓練精度。
 
 ## 6. 保存、重載與更新精度總表
 
@@ -324,6 +384,7 @@ Setonix native 的 QK 分數絕對值最大 22528。使用完全相同的量化 
 | S3 Setonix 預設檢查 | CPU FP32 重建 F | 凍結 BF16；A/B、A0/B0 FP32 | BF16 autocast | 復用 S2；未寫更新檔 | 無，門檻失敗 |
 | S4 FP32 診斷 | CPU FP32 重建 F | 全 FP32 | FP32 | JSON；不另存權重 | 無 |
 | L6/S5 局部探針 | 用保存因子重建 FP32 F，無 SVD | 投影 F/A/B FP32；其他依模式 | 五種路徑見上表 | JSON；不另存權重 | 無 |
+| S6 完整候選 | 用 S2 因子重建 FP32 F，無 SVD | 候選投影 FP32；其餘 BF16；native 最後轉換 | 三種路徑見上表 | JSON；不另存權重 | 無 |
 
 AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**這在小模型測過，在 Setonix 1.5B 上因前置門檻失敗而未執行。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
 
@@ -353,7 +414,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 重新查詢 `sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -363,13 +424,21 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50578622 | GeoRA BF16 初始化門檻 | 5 分鐘 | 1 分 5 秒 | FAILED |
 | 50579441 | 全模型精度診斷 | 5 分鐘 | 1 分 27 秒 | COMPLETED |
 | 50579802 | 第 0 層 attention 探針 | 1 分鐘 | 22 秒 | COMPLETED |
+| 50584822 | 完整模型候選精度比較 | 3 分鐘 | 1 分 27 秒 | COMPLETED |
 
-這六個作業的 allocation 時間合計 **5 分 49 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這七個作業的 allocation 時間合計 **7 分 16 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-下一個需要通過的步驟是：將候選精度修正放進**完整 1.5B 模型 forward**，確認初始化輸出接近原始模型，再做一次 A/B 更新與更新後重載。通過後才接短 GRPO，最後安排固定預算的 LoRA／GeoRA 任務對照。
+完整模型的 FP32 投影候選已測量，尚未通過。下一步建議先測試數值上等價的重排：
+
+```text
+原始：F x + c B(Ax)，F = W_pre - c B0A0
+候選：W_pre x + c [B(Ax) - B0(A0x)]
+```
+
+實數代數上兩者相同；在初始 A=A0、B=B0 時，候選的低秩校正可直接相減為零，保留原始 BF16 分支。校正轉回原始分支 dtype 後再相加，以免意外改變後續 activation 精度。這是待驗證候選，尚未實作／執行，不能宣稱已通過。先在本機驗證初始化、A/B 梯度及保存重載，再用同一初始化與短輸入在 Setonix 完整驗收。初始化通過後才做 1.5B 的 A/B 單步更新與更新後重載、短 GRPO、固定預算的 LoRA／GeoRA 任務對照。
 
 ### 原始記錄的使用約定
 
-本次整理只讀取已有檔案／遠端報告，沒有重新申請 GPU 或改變訓練精度。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續新增 L7／S6，實際申請了一次短 GPU 作業，預設訓練精度未改變。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

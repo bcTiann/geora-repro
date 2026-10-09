@@ -80,7 +80,26 @@
         "memory": "29440M",
         "billing_weight": 128
       }
+    },
+    {
+      "job_id": "50584822",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 87,
+      "time_limit_seconds": 180,
+      "query_date": "2026-10-10",
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50584822|COMPLETED|0:0|87|3|billing=128,cpu=16,energy=42689,gres/gpu=1,mem=29440M,node=1|00:56:21|00:57:48"
     }
   ],
-  "sum_allocation_seconds": 349
+  "sum_allocation_seconds": 436,
+  "latest_query_date": "2026-10-10",
+  "latest_query": "sacct -X -j 50584822 --format=JobID,State,ExitCode,ElapsedRaw,TimelimitRaw,AllocTRES,Start,End -P; squeue -h -u \"$USER\""
 }

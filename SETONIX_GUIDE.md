@@ -311,4 +311,4 @@ git pull --ff-only
 
 ## 當前進度
 
-環境與原始模型 forward 已通過；CPU GeoRA 初始化通過；預設 BF16 全模型初始化門檻失敗，精度診斷完成。下一步是完整模型驗證候選修正，通過後才更新 A/B。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+環境與原始模型 forward 已通過；CPU GeoRA 初始化通過；預設 BF16 全模型初始化門檻失敗，精度診斷完成。完整模型 FP32 投影候選已測試，仍未通過；下一步驗證等價重排，通過初始化後才更新 A/B。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。

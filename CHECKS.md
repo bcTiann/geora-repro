@@ -158,3 +158,25 @@ uv run python tests/check_precision_diagnostic.py
 ```
 
 小模型通過不代表 1.5B 通過。先驗證完整模型的候選精度修正，再執行一次 A/B 更新和更新後重載，之後接 GRPO。
+
+
+## 完整模型候選精度診斷（2026-10-10 已測量，門檻未通過）
+
+小模型預檢在本機：`uv run python tests/check_forward_precision.py`；Setonix 容器內用目前已啟用的 `python`。完整診斷只做 forward，三種模式、三個短輸入，共享保存因子，不重新 SVD／生成／更新。
+
+需要重跑時，在 Setonix 登入節點：
+
+```bash
+cd "$MYSOFTWARE/geora/code"
+git pull --ff-only
+mkdir -p "$MYSCRATCH/geora/runs/logs"
+geora_job_id=$(sbatch --parsable --export=ALL \
+  --account="${PAWSEY_PROJECT}-gpu" \
+  --output="$MYSCRATCH/geora/runs/logs/full-forward-%j.log" \
+  jobs/full_forward_precision.sbatch \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659")
+echo "Job: $geora_job_id"
+echo "Log: $MYSCRATCH/geora/runs/logs/full-forward-$geora_job_id.log"
+```
+
+腳本一個邏輯 GPU、三分鐘上限；報告為 `$MYSCRATCH/geora/runs/full-forward-JOB_ID/full_forward_precision.json`。日誌檔建立後用 `tail -f` 可持續顯示；Ctrl-C 只停止追蹤，取消作業需 `scancel JOB_ID`。診斷報告的 `completed` 不表示所有模式通過；判斷應看各模式與各輸入的 gate 和逐位置分布指標。結果、精度及剩餘實驗集中在 [EXPERIMENT_RECORD.md 第 5 節](EXPERIMENT_RECORD.md)。
