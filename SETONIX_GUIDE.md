@@ -246,7 +246,7 @@ GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--
 
 原始模型固定為 `Qwen/Qwen2.5-1.5B-Instruct`，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`。
 
-完成這一步後，GPU 上從原始 checkpoint 與 A0/B0 重建 F，依 [PRECISION.md](PRECISION.md) 將凍結部分轉 BF16、保留 A/B FP32。確認檔案完整後才執行模型檢查。
+早期 residual 檢查從原始 checkpoint 與 A0/B0 重建 F。下一階段採已驗證的 difference 路徑：從 fresh 原始模型保留 W_pre，載入未訓練的 FP32 因子；凍結權重 BF16、A/B/A0/B0 FP32。兩種路徑的詳細约定見 [PRECISION.md](PRECISION.md)；確認來源與檔案完整後再執行模型檢查。
 
 ## 第 6.1 步：自動執行完整模型 BF16 forward（已完成，命令供重跑）
 
@@ -303,11 +303,11 @@ git pull --ff-only
 
 提交腳本檢查初始化檔案，再將目錄作為明確參數傳入 GPU batch script。此次不執行 CPU SVD；提交後自動顯示 GPU 日誌，Ctrl+C 只停止觀看。job `50578622` 在初始化 logits 門檻停止，尚未更新參數。全模型精度診斷與局部 attention 探針後續已完成，結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)；重跑診斷命令見 [CHECKS.md](CHECKS.md)。
 
-## 第 8 步：接短 GRPO
+## 第 8 步：接短 GRPO（下一步）
 
-依序量測同精度初始化 logits、A/B 梯度與更新、凍結權重不變，以及更新後保存／載入的一致性。
+整體安排與驗收見 [REPRODUCTION_PLAN.md 階段 3](REPRODUCTION_PLAN.md)。先在本機/登入節點準備 GSM8K 與答案解析，核對可手算的 GRPO loss、advantage、ratio、KL 和 completion mask；完成 CPU 預檢後，再申請一個邏輯 GPU 做短 rollout 與一次真實 reward 更新。
 
-這些通過後，接 GSM8K 的短 GRPO，驗證生成、答案檢查器、reward、reference 及訓練更新。短程流程跑通後再設定 LoRA／GeoRA 的比較實驗。
+實際 GRPO 腳本尚未實作。後續需驗證連續更新、完整訓練狀態恢復及 LoRA/GeoRA 共用流程，再安排正式訓練與論文 benchmark；已有短 CE 和未更新 greedy 生成的報告見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 ## 當前進度
 

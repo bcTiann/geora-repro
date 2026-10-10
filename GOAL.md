@@ -1,6 +1,6 @@
 # 本輪目標（已完成）：驗證 GeoRA 等價重排與單步更新
 
-建立：2026-10-10。實際數值與用量集中記錄在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+建立：2026-10-10。實際數值與用量集中記錄在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。本文件保留已完成的數值驗收目標；整體後續路線與目前進度見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。
 
 ## 要回答的問題
 
