@@ -1,0 +1,213 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "fp32_fixed_batch_and_width",
+      "passed": true,
+      "prompt_lengths": [
+        3,
+        3,
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "fp32_eos_variable_lengths_and_truncation",
+      "passed": true
+    },
+    {
+      "name": "fp32_mask_includes_first_eos_and_excludes_later_padding",
+      "passed": true
+    },
+    {
+      "name": "fp32_actual_sampling_and_old_scoring_aligned",
+      "passed": true,
+      "valid_token_count": 40,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "fp32_unchanged_current_old_exact",
+      "passed": true
+    },
+    {
+      "name": "fp32_initial_policy_reference_exact",
+      "passed": true
+    },
+    {
+      "name": "fp32_first_completion_uses_last_prompt_position",
+      "passed": true
+    },
+    {
+      "name": "fp32_full_eight_row_left_padded_backward",
+      "passed": true,
+      "loss": 3.631904125213623
+    },
+    {
+      "name": "fp32_frozen_initial_and_reference_unchanged",
+      "passed": true
+    },
+    {
+      "name": "fp32_post_update_sampling_and_scoring_aligned",
+      "passed": true,
+      "valid_token_count": 50,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "fp32_train_and_reference_modes_preserved",
+      "passed": true
+    },
+    {
+      "name": "bf16_fixed_batch_and_width",
+      "passed": true,
+      "prompt_lengths": [
+        3,
+        3,
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "bf16_eos_variable_lengths_and_truncation",
+      "passed": true
+    },
+    {
+      "name": "bf16_mask_includes_first_eos_and_excludes_later_padding",
+      "passed": true
+    },
+    {
+      "name": "bf16_actual_sampling_and_old_scoring_aligned",
+      "passed": true,
+      "valid_token_count": 40,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bf16_unchanged_current_old_exact",
+      "passed": true
+    },
+    {
+      "name": "bf16_initial_policy_reference_exact",
+      "passed": true
+    },
+    {
+      "name": "bf16_first_completion_uses_last_prompt_position",
+      "passed": true
+    },
+    {
+      "name": "bf16_full_eight_row_left_padded_backward",
+      "passed": true,
+      "loss": 3.6317977905273438
+    },
+    {
+      "name": "bf16_frozen_initial_and_reference_unchanged",
+      "passed": true
+    },
+    {
+      "name": "bf16_post_update_sampling_and_scoring_aligned",
+      "passed": true,
+      "valid_token_count": 50,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bf16_train_and_reference_modes_preserved",
+      "passed": true
+    }
+  ],
+  "stage": "tiny_qwen_aligned_rollout_and_padded_backward",
+  "scope": "Synthetic numerical checks; no task rewards or real GRPO training",
+  "torch_version": "2.14.1",
+  "likelihood_absolute_logp_limit": 2e-05,
+  "likelihood_ratio_minus_one_limit": 2e-05,
+  "elapsed_seconds": 0.07967395799960286
+}

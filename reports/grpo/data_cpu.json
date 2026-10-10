@@ -1,0 +1,38 @@
+{
+  "stage": "gsm8k_data_reward_cpu",
+  "status": "passed",
+  "unit_tests": 11,
+  "dataset_checks": {
+    "source_commit": "3101c7d5072418e28b9008a6636bde82a006892c",
+    "dataset_manifest_sha256": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0",
+    "counts": {
+      "train": 7345,
+      "validation": 128,
+      "test": 1319,
+      "smoke": 16
+    },
+    "split_ids_disjoint": true,
+    "smoke_is_training_only": true,
+    "all_8792_reference_targets_parse": true,
+    "modified_smoke_checksum_rejected": true,
+    "offline_reprepare_identical_manifest": true,
+    "smoke_ids": [
+      "train:01480",
+      "train:06951",
+      "train:05119",
+      "train:05950",
+      "train:03273",
+      "train:05258",
+      "train:06996",
+      "train:02607",
+      "train:02268",
+      "train:00061",
+      "train:01505",
+      "train:03665",
+      "train:04017",
+      "train:05312",
+      "train:03777",
+      "train:00238"
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "scope": "One real GSM8K GRPO update; engineering smoke check, not Table 8 reproduction",
+  "forward_mode": "difference",
+  "seed": 20261010,
+  "questions_per_batch": 2,
+  "answers_per_question": 4,
+  "candidate_question_count": 16,
+  "max_prompt_tokens": 512,
+  "max_new_tokens": 256,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "top_k": 0,
+  "prompt_instruction": "Solve the following math problem. Explain your reasoning, then end your answer with a final line in the form #### <number>. Write only the numeric answer after ####, without units.",
+  "truncated_answer_reward": 0,
+  "learning_rate": 1e-06,
+  "clip_epsilon": 0.2,
+  "kl_coefficient": 0.001,
+  "group_std_correction": 0,
+  "advantage_epsilon": 1e-08,
+  "optimizer_betas": [
+    0.9,
+    0.999
+  ],
+  "optimizer_epsilon": 1e-08,
+  "weight_decay": 0.0,
+  "gradient_clip_norm": 1.0,
+  "updates_per_rollout": 1,
+  "dropout": 0.0,
+  "likelihood_path": "Fixed full-width no-cache decoder; per-position [answers,1,hidden] lm_head for both rollout and scoring",
+  "max_absolute_logp_mismatch": 2e-05,
+  "max_absolute_ratio_mismatch": 2e-05,
+  "runtime_limit_seconds": 510,
+  "choice_sources": {
+    "GeoRA Appendix C": [
+      "base model",
+      "all-linear targets",
+      "rank 16",
+      "alpha 32",
+      "rho 0.2",
+      "learning_rate",
+      "kl_coefficient",
+      "BF16 training"
+    ],
+    "DeepSeekMath section 4.1": [
+      "clipped token surrogate",
+      "group-relative advantages",
+      "sampled-token k3 directly differentiated"
+    ],
+    "our explicit smoke choices": [
+      "all remaining fields",
+      "different smaller rollout budget",
+      "strict reward format",
+      "fixed-width likelihood alignment"
+    ]
+  },
+  "max_absolute_sequence_logp_mismatch": 0.001
+}

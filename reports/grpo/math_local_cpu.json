@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "device": "cpu",
+  "torch_version": "2.14.1",
+  "scope": "Hand-computable artificial examples only; no task reward or model training.",
+  "source": "https://arxiv.org/html/2402.03300v3#S4.SS1",
+  "checks": [
+    {
+      "name": "population_group_normalization_and_fixed_labels",
+      "passed": true,
+      "advantages": [
+        [
+          1.732050895690918,
+          -0.5773502588272095,
+          -0.5773502588272095,
+          -0.5773502588272095
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "name": "positive_and_negative_clipping_values_and_gradients",
+      "passed": true,
+      "loss": -0.3,
+      "current_gradients": [
+        -0.55,
+        0.0,
+        0.45,
+        0.0
+      ]
+    },
+    {
+      "name": "old_reference_and_advantages_detached",
+      "passed": true
+    },
+    {
+      "name": "clipping_does_not_block_wrong_direction_recovery",
+      "passed": true
+    },
+    {
+      "name": "completion_mask_excludes_prompt_padding_and_post_eos_includes_first_eos",
+      "passed": true,
+      "lengths": [
+        2,
+        3,
+        3
+      ]
+    },
+    {
+      "name": "eos_equals_pad_uses_attention_to_distinguish_padding",
+      "passed": true
+    },
+    {
+      "name": "causal_logits_predict_next_token_without_final_logit",
+      "passed": true
+    },
+    {
+      "name": "token_mean_then_completion_mean_not_global_token_mean",
+      "passed": true
+    },
+    {
+      "name": "masked_nonfinite_positions_do_not_contaminate_loss_or_gradients",
+      "passed": true
+    },
+    {
+      "name": "sampled_k3_value_and_direct_surrogate_gradient",
+      "passed": true,
+      "kl_values": [
+        [
+          0.36787944117144233
+        ],
+        [
+          0.7182818284590453
+        ]
+      ],
+      "gradients": [
+        [
+          0.00031606027941427883
+        ],
+        [
+          -0.0008591409142295228
+        ]
+      ]
+    },
+    {
+      "name": "unreduced_k3_finite_nonnegative_near_zero_fp32_fp64",
+      "passed": true
+    },
+    {
+      "name": "identical_rewards_and_identical_reference_zero_policy_and_kl_signal",
+      "passed": true
+    },
+    {
+      "name": "zero_advantage_can_still_have_reference_kl_gradient",
+      "passed": true
+    },
+    {
+      "name": "nonfinite_valid_tokens_and_empty_completions_rejected",
+      "passed": true
+    }
+  ]
+}
