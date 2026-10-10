@@ -1,0 +1,172 @@
+{
+  "stage": "lora_cpu_correctness",
+  "status": "passed",
+  "device": "cpu",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "checks": [
+    {
+      "name": "196_targets_392_AB_tensors_lm_head_excluded",
+      "passed": true
+    },
+    {
+      "name": "private_initialization_generator_preserves_global_rng",
+      "passed": true
+    },
+    {
+      "name": "same_seed_factors_and_manifest_reproducible",
+      "passed": true
+    },
+    {
+      "name": "Gaussian_A_zero_B_no_initial_buffers",
+      "passed": true
+    },
+    {
+      "name": "all_original_base_values_preserved",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_initial_linear_output_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_initial_input_gradient_exact_native",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_initial_A_gradient_zero_B_gradient_nonzero",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_first_step_only_B_changes",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_second_step_A_gradient_nonzero_and_input_gradient_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_second_step_A_changes_base_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_input_gradient_includes_trained_adapter",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_initial_linear_output_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_initial_input_gradient_exact_native",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_initial_A_gradient_zero_B_gradient_nonzero",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_first_step_only_B_changes",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_second_step_A_gradient_nonzero_and_input_gradient_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_second_step_A_changes_base_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_input_gradient_includes_trained_adapter",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_initial_logits_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_only_AB_trainable_FP32",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_step_1_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_first_B_gradient_then_A_gradient",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_step_2_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_second_A_gradient_nonzero",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_AB_changed_frozen_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_tiny_Qwen_FP32_safetensors_reload_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_bad_dtype_rejected_before_modification",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_bad_provenance_rejected_before_modification",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_bad_unexpected_key_rejected_before_modification",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_initial_logits_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_only_AB_trainable_FP32",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_step_1_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_first_B_gradient_then_A_gradient",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_step_2_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_second_A_gradient_nonzero",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_AB_changed_frozen_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_tiny_Qwen_FP32_safetensors_reload_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_bad_dtype_rejected_before_modification",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_bad_provenance_rejected_before_modification",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_bad_unexpected_key_rejected_before_modification",
+      "passed": true
+    }
+  ]
+}

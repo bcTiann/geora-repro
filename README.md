@@ -2,7 +2,7 @@
 
 這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先讀 [復現計畫與目前進度](REPRODUCTION_PLAN.md)，再查 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)：前者安排後續工作，後者集中說明已執行的流程、精度與結果。
 
-目前 difference 模式已通過完整 1.5B 初始化、A/B 單步更新與重載，以及短生成／KV cache／padding forward 和獨立步長比較（64/64）。另已完成一次真實 GSM8K GRPO 更新（20/20）。原 residual BF16 的失敗紀錄保留；連續更新、完整訓練恢復和任務對照仍待驗證。
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。凍結權重與 reference 不變，兩種方法第一批採樣的八份回答完全相同。任務分數和正式 benchmark 待做。原 residual BF16 失敗紀錄保留。
 
 ## 從哪裡開始
 
@@ -10,7 +10,8 @@
 |---|---|
 | [notebooks/gsm8k_grpo_tutorial.ipynb](notebooks/gsm8k_grpo_tutorial.ipynb) | 從 GSM8K、reward 到 GRPO 更新的 CPU 教程，附真實回答 |
 | [GRPO_SMOKE.md](GRPO_SMOKE.md) | 資料／GRPO 檔案分工、精度、命令和結果 |
-| [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md) | 全局階段、目前位置、下一步 GRPO 驗收與正式實驗安排 |
+| [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md) | 共用五步訓練、完整 boundary checkpoint、恢復與資源記錄 |
+| [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md) | 全局階段、目前位置、高吞吐 rollout 驗收與正式實驗安排 |
 | [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) | 統一的實驗目的、流程、精度、結果、作業用量與目前進度 |
 | [geora_layers.py](geora_layers.py) | GeoRA 線性層、mask 與 SVD 初始化、全層替換、adapter 儲存／載入 |
 | [geora_initialization.ipynb](geora_initialization.ipynb) | 第 0 層 Q 矩陣的 FP64 參照初始化與單步更新 |
@@ -85,7 +86,7 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 
 本輪 [GOAL.md](GOAL.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
 
-整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前階段 1（來源與初始化）、2（數值與機械更新）完成；階段 3（資料/答案解析、GRPO 小例子與一次真實獎勵更新）亦完成；下一步為階段 4 的連續更新／完整恢復與 LoRA 共用流程，之後正式評估與幾何分析。
+整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前階段 1（來源與初始化）、2（數值與機械更新）完成；階段 3（資料/答案解析、GRPO 小例子與一次真實獎勵更新）亦完成；階段 4 的共用五步／完整恢復已完成；接著驗證較高吞吐的 rollout，再做 pilot、正式評估與幾何分析。
 
 ## 重跑已完成的 difference 檢查
 

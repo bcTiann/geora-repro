@@ -170,7 +170,7 @@ Job **50601905**，程式 commit `294577e1d9d4bc651ca7d277edbf666ab3cdb063`，**
 
 更新前 scalar loss 約 -1.49e-8（FP32 加總近零）、k3=0；更新後舊樣本 surrogate loss=0.0006171、k3=0.0009681，未證明單步改善。裁剪前梯度 norm=1.30023，有效 ΔW 合併 Frobenius norm=0.01092795。k3 對固定 token 直接求導，採用 GRPO surrogate 約定；更新後舊樣本均值不是精確 current-policy KL。
 
-Slurm allocation **124 秒**，Python **104.02 秒**，峰值 allocated GPU memory **28.90 GiB**。CPU checkpoint staging 10.40 秒、校驗 10.86 秒，不佔 GPU。臨時 software copy 用後移除。更新一次的 FP32 factors／manifest／optimizer 保留於 `$MYSCRATCH/geora/runs/grpo-smoke-50601905/trained_adapter`，未覆寫 untrained 初始化；尚未驗收完整 RNG／資料位置 resume。
+Slurm allocation **124 秒**，Python **104.02 秒**，峰值 allocated GPU memory **28.90 GiB**。CPU checkpoint staging 10.40 秒、校驗 10.86 秒，不佔 GPU。臨時 software copy 用後移除。更新一次的 FP32 factors／manifest／optimizer 保留於 `$MYSCRATCH/geora/runs/grpo-smoke-50601905/trained_adapter`，未覆寫 untrained 初始化。S9 當時尚未驗收完整 RNG／資料位置 resume；後續 S10 已通過，見 [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)。
 
-下一步：階段 4 的少量連續更新、LoRA 共用流程及完整訓練狀態恢復。固定順序保留同分組，各方法不能自行篩選 reward 更有訊號的題目。本次不是論文分數復現。
+階段 4 的 LoRA／GeoRA 共用五步及完整訓練狀態恢復已完成。下一步先驗證高吞吐 rollout 路徑，再固定較長 pilot 的評分與長度協定。固定順序保留同分組，各方法不能自行篩選 reward 更有訊號的題目。本次不是論文分數復現。
 

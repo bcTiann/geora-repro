@@ -1,8 +1,8 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-更新：2026-10-10；新增 GSM8K 資料、GRPO 預檢、一次真實 GRPO 更新與教學 notebook，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-10；新增 LoRA／GeoRA 共用五步、完整訓練恢復與成本記錄，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
-**目前的結論：difference 模式已通過完整模型初始化、單步更新／重載、短生成，以及一次真實 GSM8K GRPO 更新（S9，20/20）。** 有效 token 的採樣／重新打分 logp 差異為 0。連續更新、完整訓練恢復及 LoRA／GeoRA 任務分數仍待驗證。原 residual BF16 的失敗紀錄保留。
+**目前的結論：LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。** 原 residual BF16 失敗紀錄保留；任務效果與正式 benchmark 尚未驗證。
 
 本文件集中記錄「做過什麼、使用什麼精度、得到什麼結果」。[PRECISION.md](PRECISION.md) 說明目前程式的精度約定；[CHECKS.md](CHECKS.md) 與 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 保留操作方法。
 
@@ -26,8 +26,8 @@
 | S6 | 完整模型候選精度比較 | Setonix MI250X | 三種模式 × 三個短輸入，196 投影 | 候選改善誤差，但均未通過 2% 門檻 | 無 |
 | L8/S7 | 等價重排、更新與保存重載 | Mac CPU；Setonix CPU／MI250X | 本機小模型＋完整 1.5B | 完整模型 43 項通過；初始化與重載誤差 0 | 各一次短 CE AdamW；不是 GRPO |
 | L9/S8 | 短生成／cache／padding、步長比較 | Mac CPU；Setonix CPU／MI250X | 小模型＋完整 1.5B | 完整模型 64 項通過；相同生成路徑精確一致 | 三次獨立首步 CE；最後恢復初始化 |
-
 | L10/S9 | GSM8K 與真實一次 GRPO 更新 | Mac CPU；Setonix CPU／MI250X | 完整 1.5B、2 題×4 回答 | CPU 預檢及完整模型 20/20 通過 | 一次真實 reward GRPO AdamW |
+| L11/S10 | 共用 LoRA／GeoRA 五步與完整恢復 | Mac CPU；Setonix CPU／MI250X | 完整 1.5B、每方法五步＋一次重放 | 連續更新、精確恢復、首批一致通過 | 每方法五個真實 GRPO 有效步 |
 
 本機 L1～L6、L7 的小模型預檢及 L8 使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
@@ -520,6 +520,45 @@ Slurm allocation **124 秒**，Python **104.02 秒**，峰值 allocated GPU memo
 
 下一步：階段 4 的少量連續更新、LoRA 共用流程及完整訓練狀態恢復。固定順序保留同分組，各方法不能自行篩選 reward 更有訊號的題目。本次不是論文分數復現。
 
+### L11/S10：LoRA／GeoRA 連續五步與完整訓練恢復
+
+目的：驗證更新後的策略能持續採樣與更新，以及存檔後能否接著做同一次訓練。兩種方法共用 `scripts/check_grpo_continuation.py` 和 `configs/grpo_continuation.json`；流程與完整命令見 [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)。
+
+本機／Setonix login CPU：LoRA 41/41，GeoRA／LoRA × FP32／BF16 的完整 boundary 恢復 4/4 通過。實際隨機抽樣、下一次 GRPO 更新、AdamW、scheduler 和 RNG 完全相同；另驗證來源不符、進行中的 rollout、overwrite 和 optimizer 參數綁定。這些小模型答案／reward 是人工機械檢查，與下列真實 GSM8K 結果分开。
+
+完整模型沿用已保存的未訓練 GeoRA 初始化，沒有重做 SVD。LoRA 則使用私有 CPU generator 產生 Gaussian A、B=0；std=0.02 是我們明示的設定，沒有作者 baseline 程式可核對。兩者 rank=16、alpha=32，196 投影／18,464,768 可訓練參數。原始模型、data manifest、前 10 個 train IDs、prompt、reward、seed、每步 2 題×4 回答、最多 256 tokens、lr=1e-6、GRPO 損失及精度均共用。
+
+精度：原始 frozen weights BF16；A/B、GeoRA A0/B0、低秩分支和相減 FP32，校正轉 BF16 後相加。log-softmax/loss、梯度、AdamW moments 與保存的 adapter 都是 FP32。LoRA 沒有 A0/B0 支路；reference 仍是固定原始模型。採樣／打分沿用固定寬度 no-cache 路徑，每步核對有效 token likelihood；此實作偏重可核對性，不能當作高吞吐框架的效率結果。
+
+每一步存檔的內容是 current adapter、AdamW、constant scheduler、CPU/GPU/Python RNG、專用 rollout generator 和下一題的位置，另保存 base/init/data/config 來源及檔案 hash。checkpoint 位於 completed-rollout boundary，沒有進行中的 old batch。
+
+第 2 步後存檔，正常做第 3 步，再恢復第 2 步重做第 3 步；題目、回答 token IDs、reward、advantage、behavior/old logp、更新後 A/B、AdamW、scheduler，以及所有記錄的 RNG 狀態逐項完全相同。恢復後繼續第 4、5 步。每方法 **5 個有效步，實際 6 次 rollout/backward/optimizer step**；額外的一次重放成本已計入 allocation。兩種方法的第一批回答和 behavior logp 也完全相同。
+
+| 方法 | 作業／檢查 | 有效 completion tokens | Python 秒 | Allocation 秒 | 峰值顯存 GiB |
+|---|---|---:|---:|---:|---:|
+| GeoRA | 50622579，52/52 | 7537 | 461.654 | 480 | 29.008 |
+| LoRA | 50622756，52/52 | 7593 | 412.549 | 434 | 28.874 |
+
+本輪兩個作業依次使用一個邏輯 GPU，共 allocation **914 秒（15 分 14 秒）**。CPU 預檢／副本校驗不佔 GPU allocation。兩個作業 `COMPLETED`、queue 最後為空，臨時大型 model copy 已刪除；原始模型、資料、未訓練因子與每步 training checkpoints 保留在 scratch。來源 commit 為 `dc5487e7bb91f976b0ddf042b3b19cd2076ca120`。
+
+這次不篩選混合 reward 題目；整組同分也保留。下表中 `reward sum` 是該步 8 個回答的 reward 總和；格式失敗和截斷同樣影響數值。它們是工程短程紀錄，不能據此判定 GeoRA 或 LoRA 的任務效果較好。
+
+| 步 | GeoRA reward sum | LoRA reward sum | GeoRA 梯度範數 | LoRA 梯度範數 |
+|---|---:|---:|---:|---:|
+| 1 | 1 | 1 | 1.300229 | 0.774142 |
+| 2 | 1 | 0 | 1.423936 | 0.000424 |
+| 3 | 4 | 0 | 3.847309 | 0.000154 |
+| 4 | 0 | 1 | 0.000093 | 0.459502 |
+| 5 | 0 | 0 | 0.000144 | 0.000058 |
+
+GeoRA：10 組中 6 組同分，40 回答中 21 次解析失敗、14 次截斷。LoRA：8 組同分，25 次解析失敗、13 次截斷；解析失敗與截斷可能重疊。更新後的短採樣／重新打分仍通過 likelihood 門檻；所有 frozen weights、GeoRA A0/B0 與 reference 不變。
+
+GeoRA 的 34 個 reward=0 回答按互斥原因分為：14 個截斷、8 個已 EOS 但不能按格式解析、12 個已 EOS 且解析出的數值錯誤。21 個解析失敗與 14 個截斷有 13 個重疊，不能相加。實際回答中也有數值正確但格式不合的案例。reward 只查最終數值與格式，不驗證推理過程的每一句。
+
+原始報告：[GeoRA](reports/grpo_continuation/50622579.json)、[LoRA](reports/grpo_continuation/50622756.json)、[共用設定與首批比較](reports/grpo_continuation/comparison.json)、[LoRA 本機 CPU](reports/grpo_continuation/lora_local_cpu.json)、[恢復本機 CPU](reports/grpo_continuation/resume_local_cpu.json)、[LoRA Setonix CPU](reports/grpo_continuation/lora_setonix_cpu.json)、[恢復 Setonix CPU](reports/grpo_continuation/resume_setonix_cpu.json)、[本輪副本校驗](reports/grpo_continuation/staging_record.json)。完整 answers/logp/precision/timing 與每步 checkpoint 路徑在原始 JSON 中。
+
+下一步：接入較高吞吐的 rollout 路徑前，重新測量它和 scoring 的 likelihood 差異；再固定 pilot 的 reward/長度協定並做較長訓練及 validation。尚未做任務分數對照、長 response 或論文 Table 8 的 benchmark。
+
 ## 6. 保存、重載與更新精度總表
 
 | 實驗 | 初始化／殘差計算 | 運行參數 | forward | 我們保存的權重檔 | 實際更新 |
@@ -536,6 +575,8 @@ Slurm allocation **124 秒**，Python **104.02 秒**，峰值 allocated GPU memo
 | S6 完整候選 | 用 S2 因子重建 FP32 F，無 SVD | 候選投影 FP32；其餘 BF16；native 最後轉換 | 三種路徑見上表 | JSON；不另存權重 | 無 |
 | L8/S7 difference | 復用 S2 初始因子，保留原 W_pre，無 SVD | 原始權重 BF16；A/B、A0/B0 FP32 | 原始 BF16 分支＋FP32 低秩差，輸出 BF16 | FP32 初始／更新因子，mode/runtime metadata，optimizer | FP32 AdamW 一步 |
 | L9/S8 | 復用 S2 初始因子，無 SVD | 同 S7 | 同 S7，新增 generate／cache | JSON；無新訓練權重檔 | FP32 AdamW 三次獨立首步，最後還原 |
+| L10/S9 | 復用 S2 初始因子，無 SVD | 同 S7 | 固定寬度 BF16 base＋FP32 低秩差；logp/loss FP32 | FP32 A/B/A0/B0、AdamW moments | 一次真實 GRPO |
+| L11/S10 | GeoRA 復用 S2；LoRA Gaussian A／零 B，CPU FP32 | frozen BF16；A/B 和 GeoRA A0/B0 FP32 | 共用固定寬度 BF16 base＋FP32 adapter；logp/loss FP32 | adapter FP32、AdamW FP32 moments、scheduler、RNG、資料位置 | 每方法五個 GRPO 有效步＋一次重放 |
 
 AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**S3 residual 的 1.5B 前置門檻失敗，當時未執行；S7 difference 的 1.5B 已完成一次並通過重載。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
 
@@ -565,7 +606,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7／S8／S9 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7／S8／S9／S10 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -580,13 +621,15 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50596505 | 繼續測試，載入超時、無更新 | 3 分鐘 | 197 秒 | TIMEOUT |
 | 50596774 | 生成／cache／padding、獨立 LR 首步 | 3 分鐘 | 46 秒 | COMPLETED |
 | 50601905 | 一次真實 GSM8K GRPO 更新 | 10 分鐘 | 124 秒 | COMPLETED |
+| 50622579 | geora 五步／完整恢復 | 10 分鐘 | 480 秒 | COMPLETED |
+| 50622756 | lora 五步／完整恢復 | 10 分鐘 | 434 秒 | COMPLETED |
 
-這十一個作業的 allocation 時間合計 **14 分 05 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這十三個作業的 allocation 時間合計 **29 分 19 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。下一階段做連續更新、LoRA 共用流程及完整訓練恢復。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
+等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。L11/S10 的共用五步與完整恢復亦完成；接著驗證高吞吐 rollout，再做 pilot 和任務評估。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
 
 ### 原始記錄的使用約定
 
-初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成；S10 兩方法各一次五步／恢復作業完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

@@ -229,3 +229,7 @@ python scripts/check_staged_checkpoint.py --checkpoint-dir "$MYSOFTWARE/manual/c
 ```
 
 臨時目錄必須為空，約增加 3 GiB 儲存；主資料仍在 scratch。第二步核對逐檔 SHA256 和所有 338 個 FP32 載入值。驗證後，把該目錄作為 `jobs/difference_continuation.sbatch` 的第二個參數；作業記錄副本 provenance，並使用 `disable_mmap=True`、`HF_DEACTIVATE_ASYNC_LOAD=1`。測試完成後清理自己建立的臨時目錄。這個 workaround 沒有改變模型數值，亦未單獨歸因各載入選項的性能作用。原始報告和兩次 allocation 的用量見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+
+## 共用五步與完整訓練恢復
+
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。 `scripts/grpo_training_state.py` 保存 A/B、AdamW、constant scheduler、RNG 和資料位置；與前面純模型／optimizer 重載分開。入口、逐項精度與限制見 [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)，報告見 [實驗記錄 L11/S10](EXPERIMENT_RECORD.md)。

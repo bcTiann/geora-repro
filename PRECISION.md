@@ -139,6 +139,6 @@ BF16 forward 是混合精度路徑，不代表每一步都是 BF16。RMSNorm 的
 
 `GeoRALinear`／`load_geora_state` 支援明確的 `forward_mode=difference`，計算 `W_pre x+c[B(Ax)-B0(A0x)]`。預設 residual 未改。原始 frozen W_pre 和 native attention 保留 BF16；A/B/A0/B0 存 FP32；兩條低秩分支與相減禁用 autocast、計算 FP32，校正轉回原始輸出的 BF16 後相加。
 
-初始分支對 x 保留梯度。FP32 A/B gradients 和 AdamW moments 已在 1.5B 單步實際檢查。公式／梯度、三個初始化輸入、凍結參數及初始／更新後保存重載結果見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。更新後的大策略變化仍待處理，不能從這輪推論 GRPO 穩定性。
+初始分支對 x 保留梯度。FP32 A/B gradients 和 AdamW moments 已在 1.5B 單步實際檢查。公式／梯度、三個初始化輸入、凍結參數及初始／更新後保存重載結果見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。後續 S9 真實一次 GRPO、S10 LoRA／GeoRA 共用五步與完整訓練恢復也已通過，仍不能推論長程 GRPO 的穩定性或任務效果；結果見 [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)。
 
 載入 difference 模式時保留原始 W_pre，不重建 F；manifest 記錄 `forward_mode` 與 `runtime_precision`，`precision_policy` 保留初始化來源的約定。舊無 mode checkpoint 預設 residual；有標記的 checkpoint 不允許衝突覆蓋。merge 仍為 `W_pre+c(BA-B0A0)`，不是普通 LoRA merge。外部 trainer／rollout engine 的接入尚未驗證。

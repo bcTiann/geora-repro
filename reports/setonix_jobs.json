@@ -1,7 +1,7 @@
 {
   "query_date": "2026-10-09",
   "query": "sacct -X -j 50574180,50574324,50578377,50578622,50579441,50579802 --format=JobID,State,Elapsed,Timelimit,AllocTRES%110 -P",
-  "source": "Direct SSH read-only query on Setonix.",
+  "source": "Direct SSH read-only queries on Setonix; exact observed final rows preserved per job.",
   "jobs": [
     {
       "job_id": "50574180",
@@ -164,9 +164,49 @@
       "stage": "GSM8K first real GRPO update",
       "observed_queue_after_completion": "empty",
       "sacct_raw_row": "50601905|COMPLETED|124|00:10:00|billing=128,cpu=16,energy=76838,gres/gpu=1,mem=29440M,node=1"
+    },
+    {
+      "job_id": "50622579",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 480,
+      "time_limit_seconds": 600,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "geora five-step real GSM8K GRPO and complete boundary resume",
+      "query_date": "2026-10-10",
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50622579|COMPLETED|0:0|480|00:10:00|billing=128,cpu=16,energy=438327,gres/gpu=1,mem=29440M,node=1|22:53:55|23:01:55",
+      "start_time_as_displayed": "22:53:55",
+      "end_time_as_displayed": "23:01:55"
+    },
+    {
+      "job_id": "50622756",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 434,
+      "time_limit_seconds": 600,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "lora five-step real GSM8K GRPO and complete boundary resume",
+      "query_date": "2026-10-10",
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50622756|COMPLETED|0:0|434|00:10:00|billing=128,cpu=16,energy=298496,gres/gpu=1,mem=29440M,node=1|23:02:22|23:09:36",
+      "start_time_as_displayed": "23:02:22",
+      "end_time_as_displayed": "23:09:36"
     }
   ],
-  "sum_allocation_seconds": 845,
+  "sum_allocation_seconds": 1759,
   "latest_query_date": "2026-10-10",
-  "latest_query": "sacct -X -j 50601905 --format=JobID,State,ElapsedRaw,Timelimit,AllocTRES%120 -P; squeue -u \"$USER\""
+  "latest_query": "sacct -j 50622579,50622756 --noheader --parsable2 -X --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%120,Start,End; squeue -u \"$USER\""
 }

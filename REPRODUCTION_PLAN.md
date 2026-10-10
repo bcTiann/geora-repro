@@ -2,7 +2,7 @@
 
 更新：2026-10-10。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1、2、3 已完成；下一步是階段 4 的連續更新／完整訓練恢復與 LoRA 共用流程。** 一次真實 GSM8K GRPO 更新已通過（job 50601905，20/20），並有本機教學 notebook；尚未連續訓練或比較任務分數。
+**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步連續更新、完整訓練恢復與成本量測已完成。** 接著驗證较高吞吐 rollout 路徑，再做較長 pilot；尚未比較任務分數。
 
 ## 1. 第一個復現目標
 
@@ -19,7 +19,7 @@
 | 1. 來源與初始化 | 模型、mask、SVD 和 A0/B0 是否符合選定設定？ | 固定來源版本；196 個目標層；FP32 因子與有效權重檢查 | 已完成 |
 | 2. 數值與更新 | 裝入 GeoRA 後能否維持初始輸出，且正確更新和重載？ | 完整模型初始化、A/B 單步 CE、保存重載、短生成/cache/padding 通過 | 已完成 |
 | **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **已完成，S9 20/20** |
-| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | LoRA/GeoRA 共用流程、短程連續更新、完整訓練狀態恢復、量測吞吐 | 待做 |
+| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 五步已完成；擴大 rollout／pilot 待做 |
 | 5. 正式任務實驗 | 相同訓練預算下，效果與能力保留有何差異？ | 固定協定訓練及評估；記錄 Base/LoRA/GeoRA 分數與用量 | 待做 |
 | 6. 機制與擴展 | 結果是否支持論文提出的幾何解釋？ | 分析實際 GRPO 更新，加入必要消融及其他 baseline | 待做 |
 
@@ -73,13 +73,13 @@ c = alpha / r
 4. 用可手算 reward 組與小模型，驗證分組均值/標準差、正負 advantage、ratio、正負分支的 clipping、KL 及梯度。整組同分時 advantage=0，記錄零 policy 訊號組；更新後仍可能有 KL 梯度。不製造 reward 差異。
 5. 核對 causal shift 與 completion token mask：排除 prompt 和 padding，EOS 與截斷回答依明確規則處理；用獨立 token 索引確認 loss。
 
-短程先沿用現有 PyTorch/Transformers 和自訂 GeoRALinear，建立可讀、可測的採樣/打分/更新流程。GRPO 的算法參照 [DeepSeekMath](https://arxiv.org/abs/2402.03300)。目前倉庫沒有 GRPO trainer；正式擴大時再按吞吐評估訓練框架，框架/rollout engine 的 reference、dtype 和有效權重必須另行驗收。
+短程先沿用現有 PyTorch/Transformers 和自訂 GeoRALinear，建立可讀、可測的採樣/打分/更新流程。GRPO 的算法參照 [DeepSeekMath](https://arxiv.org/abs/2402.03300)。倉庫已提供可讀的短 GRPO 共用流程；正式擴大時再按吞吐評估訓練框架，框架/rollout engine 的 reference、dtype 和有效權重必須另行驗收。
 
 ### 3B. Setonix：第一次真實 GRPO 更新
 
 建議檢查配置：一個邏輯 GPU；GSM8K train 固定 16 題的候選池；每次 2 題、每題 4 個回答；response 最長 256；temperature=1、top-p=1、top-k=0，關閉其他採樣修飾；lr=1e-6、beta=0.001。這是本次流程檢查配置。
 
-未由論文逐項指定的 smoke 選項先明確採用：clip epsilon=0.2；組內 population 標準差（除以 G）加 1e-8；每批 rollout 一次更新；先對每個回答的有效 completion token 平均，再對回答平均。AdamW betas=(0.9,0.999)、eps=1e-8、weight_decay=0，gradient norm 上限 1；adapter dropout=0。這些是待實作的配置選擇，後續正式設定依來源補齊情況另行固定。
+未由論文逐項指定的 smoke 選項先明確採用：clip epsilon=0.2；組內 population 標準差（除以 G）加 1e-8；每批 rollout 一次更新；先對每個回答的有效 completion token 平均，再對回答平均。AdamW betas=(0.9,0.999)、eps=1e-8、weight_decay=0，gradient norm 上限 1；adapter dropout=0。這些已作為工程檢查的明示配置執行，後續正式設定依來源補齊情況另行固定。
 
 ```text
 模型對問題採樣多個完整回答
@@ -97,7 +97,7 @@ c = alpha / r
 
 old log probabilities 必須在該批次更新前保存並 detach，固定到該批次使用結束；reference 全程固定原始策略。先用相同 teacher-forcing scoring 路徑檢查未更新 old/current 的 ratio=1、初始化 policy/reference KL 接近零。這只能驗證打分與保存一致，不能證明 rollout 與 scoring 代表同一個策略。
 
-另外測量「採樣時 cache 路徑的概率」與「完整回答重新 scoring 的概率」：有效 token 的 delta logp、對應 importance ratio 分布與整段 log probability 差。在第一次更新前固定容許差異和處理規則，納入配置與驗收。S8 已觀察到原模型自身在不同 cache/padding 路徑下有數值差異；差異明顯時先對齊生成/打分路徑，或驗證有算法依據的 importance correction，再接更新。不能只記錄差異或只靠 old/current ratio=1 就宣稱 GRPO 流程驗收完成。所有有效 token 的 log probabilities、ratio 和 KL 需有限。
+另外測量「實際採樣路徑的概率」與「完整回答重新 scoring 的概率」：有效 token 的 delta logp、對應 importance ratio 分布與整段 log probability 差。S9/S10 已在固定寬度 no-cache 路徑驗證通過；较高吞吐的 cache 路徑尚待單獨驗收。在接入更新前固定容許差異和處理規則，納入配置與驗收。S8 已觀察到原模型自身在不同 cache/padding 路徑下有數值差異；差異明顯時先對齊生成/打分路徑，或驗證有算法依據的 importance correction，再接更新。不能只記錄差異或只靠 old/current ratio=1 就宣稱 GRPO 流程驗收完成。所有有效 token 的 log probabilities、ratio 和 KL 需有限。
 
 至少在一個**真實混合 reward 組**中完成非零策略梯度與 A/B 更新；如果整組同分，記錄並繼續有限候選題，不因 loss=0 就宣稱完成更新。檢查-only 的人工 reward 例子與真實答案 reward 報告分開保存。
 
@@ -118,11 +118,13 @@ old log probabilities 必須在該批次更新前保存並 detach，固定到該
 
 ## 6. 階段 4：短程連續更新與 LoRA 對照
 
-先用同一短程配置各跑 LoRA/GeoRA 的 5 次連續更新，核對更新後採樣、batch token mask 和數值。全組 reward 相同的比例、解析失敗率、長度上限命中率都要記錄；reward 不要求每一步單調增加。
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。一個邏輯 GPU 依次執行，allocation 合計 914 秒；實際結果見 [L11/S10](EXPERIMENT_RECORD.md) 與 [操作說明](GRPO_CONTINUATION.md)。
+
+本輪已用同一短程配置各跑 LoRA/GeoRA 的 5 次連續更新，核對更新後採樣、batch token mask 和數值。全組 reward 相同的比例、解析失敗率、長度上限命中率都要記錄；reward 不要求每一步單調增加。
 
 保存並恢復 adapter、optimizer、scheduler、RNG、資料位置；若 checkpoint 在樣本重用期間，還要恢復該批回答與 old log probabilities。比較恢復前後的相同 scoring 路徑與下一次固定批次更新；純模型/optimizer 重載不足以驗收完整訓練恢復。
 
-上述通過後，建議 pilot 預算為：固定 1024 題 train、128 題 validation；每次更新 2 題、每題 8 個 rollout、response 最長 512；每種方法最多 100 個 optimizer steps，第一次先同 seed。先用前 5–10 步量測生成/打分/更新時間、生成 token 數和峰值顯存，再訂實際 Slurm 時限。
+上述已通過。放大之前先驗證高吞吐 rollout 的 sampling/scoring 一致性，固定 response 上限和 reward 協定，再重測成本。建議 pilot 預算為：固定 1024 題 train、128 題 validation；每次更新 2 題、每題 8 個 rollout、response 最長 512；每種方法最多 100 個 optimizer steps，第一次先同 seed。先用前 5–10 步量測生成/打分/更新時間、生成 token 數和峰值顯存，再訂實際 Slurm 時限。
 
 pilot 驗收是流程連續可用、恢復可靠及測得資源成本；100 步的分數用於決定正式配置，不當作論文 Table 8 的復現結果。若單次 GPU 預算不足，按 checkpoint 分段；不將短 CE 的耗時外推成 GRPO 時間。
 
@@ -155,6 +157,6 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 程式/環境放 software，模型/資料/cache/checkpoint/結果放 scratch。scratch 載入變慢時先 CPU 診斷，必要的臨時副本先校驗、結束後清理。
 - 逐階段保存 JSON、實際 dtype、source commit、dataset IDs、配置和 Slurm allocation。失敗/timeout 保留，計入用量。
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
-- `GOAL.md` 保留已完成數值驗收的歷史目標；本文件是整體復現進度入口。階段 3 開始實作後，再補上實際腳本入口和報告連結。
+- `GOAL.md` 保留已完成數值驗收的歷史目標；本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 GRPO_SMOKE.md、GRPO_CONTINUATION.md。
 
-**下一個可交付結果：一個可重跑的短 GRPO 腳本，保存真實問題/回答/reward，以及一次可核對的 A/B 策略更新。**
+**下一個可交付結果：較高吞吐 rollout 的 likelihood 驗收，然後用固定 reward／長度協定完成一輪有 validation 的 LoRA／GeoRA pilot。**

@@ -68,6 +68,16 @@ LoRA 初始化用獨立 CPU generator；兩種方法的 rollout 也各用獨立�
 
 ## 5. 執行入口
 
+| 檔案 | 在訓練流程中負責什麼 |
+|---|---|
+| `lora_layers.py`／`geora_layers.py` | 決定線性層的計算及可訓練 A/B；不是 GRPO 算法 |
+| `scripts/gsm8k_data.py`／`scripts/grpo_math.py` | 讀取題目、解析答案，以及計算 advantage 和損失 |
+| `scripts/grpo_rollout.py` | 讓模型採樣回答，並重算這些 token 的 log probabilities |
+| `scripts/check_grpo_continuation.py` | 把採樣、打分、更新、存檔與驗證接成連續循環 |
+| `scripts/grpo_training_state.py` | 保存／恢復 A/B、optimizer、scheduler、RNG 和資料位置 |
+| `configs/grpo_continuation.json` | 固定這次五步檢查的所有選項 |
+| `jobs/grpo_continuation.sbatch` | 向 Setonix 申請一個邏輯 GPU，啟動上述 Python 程式 |
+
 本地 CPU 預檢：
 
 ```bash
@@ -75,7 +85,21 @@ uv run python scripts/check_lora_cpu.py --output-dir /private/tmp/geora-lora-cpu
 uv run python scripts/check_grpo_resume_cpu.py --output-dir /private/tmp/geora-resume-cpu
 ```
 
-Setonix 在 CPU 預檢和 checkpoint 副本校驗通過後，從登入節點提交：
+Setonix 登入節點先準備臨時 checkpoint 副本。載入模組後，`pytorch-exec` 會在既有容器內使用我們已建立的環境。這些 CPU 命令不申請 GPU：
+
+```bash
+module load pytorch/2.7.1-rocm6.3.3
+geora_python="$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/python"
+export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2
+export GEORA_VALIDATED_CHECKPOINT="$MYSOFTWARE/manual/cache/geora-continuation-$(date -u +%Y%m%dT%H%M%SZ)"
+pytorch-exec "$geora_python" -u scripts/stage_checkpoint_copy.py \
+  --output-dir "$GEORA_VALIDATED_CHECKPOINT"
+pytorch-exec "$geora_python" -u scripts/check_staged_checkpoint.py \
+  --checkpoint-dir "$GEORA_VALIDATED_CHECKPOINT"
+mkdir -p "$MYSCRATCH/geora/runs/logs"
+```
+
+CPU 預檢及副本校驗通過後，從登入節點提交：
 
 ```bash
 sbatch --account=pawsey0807-gpu \
@@ -85,9 +109,9 @@ sbatch --account=pawsey0807-gpu \
   "$MYSCRATCH/geora/datasets/gsm8k" "$GEORA_VALIDATED_CHECKPOINT"
 ```
 
-LoRA 使用同一個 job，只把方法參數 `geora` 改成 `lora`。`GEORA_VALIDATED_CHECKPOINT` 是先經 CPU checksum 和載入值校驗的臨時副本路徑。一次分配一個邏輯 GPU，10 分鐘上限，Python 540 秒上限；每一步都保存 boundary，若失敗保留報告與最近 checkpoint。
+LoRA 使用同一個 job，只把方法參數 `geora` 改成 `lora`；本輪等 GeoRA 結束後才執行 LoRA。`GEORA_VALIDATED_CHECKPOINT` 是先經 CPU checksum 和載入值校驗的臨時副本路徑。一次分配一個邏輯 GPU，Slurm 硬上限 10 分鐘；程式的 540 秒預算在運算階段邊界檢查，不會立即中斷已開始的運算或存檔。每一步都保存 boundary，若失敗保留報告與最近 checkpoint。
 
-`/bin/bash jobs/watch_gpu_check.sh <job-id>` 可邊看邊印 log。Ctrl-C 只停止觀看；取消作業仍用 `scancel <job-id>`。
+`/bin/bash jobs/watch_gpu_check.sh <job-id> <log-path>` 可邊看邊印 log。Ctrl-C 只停止觀看；取消作業仍用 `scancel <job-id>`。
 
 正式恢復入口是 `scripts/check_grpo_continuation.py --resume-dir <checkpoint-step-N>`，還需原始 model/data/init/output/method 參數。完整重新建立模型後，先驗證來源，再恢復訓練狀態。來源或 backend 不同會拒絕恢復。
 
@@ -101,4 +125,17 @@ LoRA 使用同一個 job，只把方法參數 `geora` 改成 `lora`。`GEORA_VAL
 
 ## 7. 本輪實際結果
 
-待執行。完成後會填入 CPU/GPU 報告、Slurm allocation、精度、恢復比較和限制。
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。一個邏輯 GPU 依次執行，allocation 合計 914 秒。CPU LoRA 41/41、完整恢復 4/4，兩處 runtime 均通過；完整結果見 [EXPERIMENT_RECORD.md L11/S10](EXPERIMENT_RECORD.md) 和 [comparison.json](reports/grpo_continuation/comparison.json)。兩個原始 report、每步回答與 checkpoint 路徑均保留。
+
+不用載入模型，也能重新核對兩份報告的來源、資料順序、mask、likelihood、恢復記錄和首批一致性：
+
+```bash
+uv run python scripts/check_grpo_continuation_reports.py \
+  --geora reports/grpo_continuation/50622579.json \
+  --lora reports/grpo_continuation/50622756.json \
+  --config configs/grpo_continuation.json \
+  --jobs reports/setonix_jobs.json \
+  --output /private/tmp/geora-continuation-comparison.json
+```
+
+本輪 JSON 核對為 66/66；這與 GPU 程式各自的 52 項檢查分開。A/B、AdamW 等張量的精確一致由 GPU 執行器實際比較，JSON 記錄其結果；只讀報告不會重新計算那些張量。

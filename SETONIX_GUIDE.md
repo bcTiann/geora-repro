@@ -23,7 +23,7 @@
 - 主機端 ROCm 有多個版本，預設 `rocm/6.4.1`。
 - Singularity 有多個版本，預設 `singularity/4.1.0-slurm`。
 
-容器 venv、依賴、模型及原始模型 GPU forward 已確認。使用者提供了早期執行輸出；後續也透過 SSH 直接核對報告並執行局部探針。原 residual BF16 初始化門檻未通過；difference 模式已通過完整 1.5B 初始化、單步更新／重載、短生成／cache／padding 與獨立步長比較。另已完成一次真實 GRPO 更新；連續更新和完整訓練恢復尚未驗證；當前結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+容器 venv、依賴、模型及原始模型 GPU forward 已確認。使用者提供了早期執行輸出；後續也透過 SSH 直接核對報告並執行局部探針。原 residual BF16 初始化門檻未通過；difference 模式已通過完整 1.5B 初始化、單步更新／重載、短生成／cache／padding 與獨立步長比較。另已完成一次真實 GRPO 更新；LoRA／GeoRA 五步與完整訓練恢復亦通過；當前結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 ## 已收到的第 1 步結果
 
@@ -307,8 +307,12 @@ git pull --ff-only
 
 整體安排與驗收見 [REPRODUCTION_PLAN.md 階段 3](REPRODUCTION_PLAN.md)。先在本機/登入節點準備 GSM8K 與答案解析，核對可手算的 GRPO loss、advantage、ratio、KL 和 completion mask；完成 CPU 預檢後，再申請一個邏輯 GPU 做短 rollout 與一次真實 reward 更新。
 
-實際入口為 `scripts/check_grpo_training.py`、`configs/grpo_smoke.json`、`jobs/grpo_smoke.sbatch`。CPU 到 GPU 提交／live log 命令見 [GRPO_SMOKE.md](GRPO_SMOKE.md)。job 50601905：20/20、一個邏輯 GPU allocation 124 秒；資料和訓練產物保留在 scratch，臨時 software copy 已清理。後續再驗證連續更新、完整恢復及 LoRA 共用流程。
+實際入口為 `scripts/check_grpo_training.py`、`configs/grpo_smoke.json`、`jobs/grpo_smoke.sbatch`。CPU 到 GPU 提交／live log 命令見 [GRPO_SMOKE.md](GRPO_SMOKE.md)。job 50601905：20/20、一個邏輯 GPU allocation 124 秒；資料和訓練產物保留在 scratch，臨時 software copy 已清理。後續共用五步及完整恢復已完成，見第 9 步。
+
+## 第 9 步：共用五步／完整恢復（已完成）
+
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。 GeoRA job 50622579 allocation 480 秒，LoRA job 50622756 allocation 434 秒，依次使用一個邏輯 GPU。檔案分工、預檢、存檔和 live log 命令見 [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)。
 
 ## 當前進度
 
-環境、CPU 初始化已通過；原 residual BF16 路徑的失敗紀錄保留。difference 等價重排已通過完整 1.5B 初始化、一次 A/B 更新和模型／optimizer 重載；本輪 [GOAL.md](GOAL.md) 完成。後續生成／cache／padding forward、獨立首步比較已通過 64 項；一次真實 GRPO 更新亦已完成；下一階段做連續更新、LoRA 共用流程及完整訓練恢復。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，重跑入口見 [CHECKS.md 文末](CHECKS.md)。
+環境、CPU 初始化已通過；原 residual BF16 路徑的失敗紀錄保留。difference 等價重排已通過完整 1.5B 初始化、一次 A/B 更新和模型／optimizer 重載；本輪 [GOAL.md](GOAL.md) 完成。後續生成／cache／padding forward、獨立首步比較已通過 64 項；一次真實 GRPO 更新亦已完成；共用五步／完整恢復已通過；接著驗證高吞吐 rollout，再做較長 pilot 和任務評估。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，重跑入口見 [CHECKS.md 文末](CHECKS.md)。

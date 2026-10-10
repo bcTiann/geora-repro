@@ -1,0 +1,812 @@
+{
+  "status": "passed",
+  "scope": "Independent checks of recorded five-step continuity/resume reports; no task-score or superiority claim",
+  "checks": [
+    {
+      "name": "reports_have_expected_methods",
+      "passed": true
+    },
+    {
+      "name": "same_training_configuration",
+      "passed": true
+    },
+    {
+      "name": "same_model_repository",
+      "passed": true,
+      "geora": "Qwen/Qwen2.5-1.5B-Instruct",
+      "lora": "Qwen/Qwen2.5-1.5B-Instruct"
+    },
+    {
+      "name": "same_model_revision",
+      "passed": true,
+      "geora": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "lora": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+    },
+    {
+      "name": "same_dataset_manifest_sha256",
+      "passed": true,
+      "geora": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0",
+      "lora": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0"
+    },
+    {
+      "name": "same_source_git_commit",
+      "passed": true,
+      "geora": "dc5487e7bb91f976b0ddf042b3b19cd2076ca120",
+      "lora": "dc5487e7bb91f976b0ddf042b3b19cd2076ca120"
+    },
+    {
+      "name": "same_torch_version",
+      "passed": true,
+      "geora": "2.7.1a0+gite2d141d",
+      "lora": "2.7.1a0+gite2d141d"
+    },
+    {
+      "name": "same_hip_version",
+      "passed": true,
+      "geora": "6.3.42134-a9a80e791",
+      "lora": "6.3.42134-a9a80e791"
+    },
+    {
+      "name": "same_gpu_name",
+      "passed": true,
+      "geora": "AMD Instinct MI250X",
+      "lora": "AMD Instinct MI250X"
+    },
+    {
+      "name": "same_config_and_data_provenance",
+      "passed": true
+    },
+    {
+      "name": "actual_config_file_matches_reports",
+      "passed": true
+    },
+    {
+      "name": "geora_passed_expected_stage",
+      "passed": true
+    },
+    {
+      "name": "geora_all_recorded_gates_passed",
+      "passed": true,
+      "recorded_gate_count": 52
+    },
+    {
+      "name": "geora_required_gates_present",
+      "passed": true,
+      "missing": []
+    },
+    {
+      "name": "geora_five_logical_six_physical",
+      "passed": true
+    },
+    {
+      "name": "geora_five_ordered_batches",
+      "passed": true
+    },
+    {
+      "name": "geora_ten_unique_training_questions",
+      "passed": true
+    },
+    {
+      "name": "geora_provenance_matches_report_identity",
+      "passed": true
+    },
+    {
+      "name": "geora_step_1_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "geora_step_1_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "geora_step_1_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "geora_step_2_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "geora_step_2_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "geora_step_2_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "geora_step_3_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "geora_step_3_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "geora_step_3_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "geora_step_4_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "geora_step_4_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "geora_step_4_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "geora_step_5_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "geora_step_5_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "geora_step_5_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "geora_replay_records_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_token_and_failure_totals",
+      "passed": true
+    },
+    {
+      "name": "geora_total_runtime_and_memory_finite",
+      "passed": true
+    },
+    {
+      "name": "geora_slurm_completed_one_logical_gpu",
+      "passed": true
+    },
+    {
+      "name": "lora_passed_expected_stage",
+      "passed": true
+    },
+    {
+      "name": "lora_all_recorded_gates_passed",
+      "passed": true,
+      "recorded_gate_count": 52
+    },
+    {
+      "name": "lora_required_gates_present",
+      "passed": true,
+      "missing": []
+    },
+    {
+      "name": "lora_five_logical_six_physical",
+      "passed": true
+    },
+    {
+      "name": "lora_five_ordered_batches",
+      "passed": true
+    },
+    {
+      "name": "lora_ten_unique_training_questions",
+      "passed": true
+    },
+    {
+      "name": "lora_provenance_matches_report_identity",
+      "passed": true
+    },
+    {
+      "name": "lora_step_1_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "lora_step_1_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "lora_step_1_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "lora_step_2_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "lora_step_2_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "lora_step_2_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "lora_step_3_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "lora_step_3_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "lora_step_3_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "lora_step_4_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "lora_step_4_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "lora_step_4_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "lora_step_5_answer_and_reward_accounting",
+      "passed": true
+    },
+    {
+      "name": "lora_step_5_finite_measurements",
+      "passed": true
+    },
+    {
+      "name": "lora_step_5_mask_and_likelihood_values",
+      "passed": true
+    },
+    {
+      "name": "lora_replay_records_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_token_and_failure_totals",
+      "passed": true
+    },
+    {
+      "name": "lora_total_runtime_and_memory_finite",
+      "passed": true
+    },
+    {
+      "name": "lora_slurm_completed_one_logical_gpu",
+      "passed": true
+    },
+    {
+      "name": "same_fixed_question_order",
+      "passed": true
+    },
+    {
+      "name": "initial_same_policy_sampling_tokens_exact",
+      "passed": true
+    },
+    {
+      "name": "initial_same_policy_behavior_logp_exact",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Five steps on ten training questions are not a benchmark accuracy estimate.",
+    "Reward zero combines incorrect values, unsupported final-answer format and truncated answers.",
+    "Logical stage times exclude the replay; total Python/Slurm time includes it and restoration/audit overhead.",
+    "Training token totals exclude the separate final eight-token generation diagnostic.",
+    "Throughput describes this correctness-oriented fixed-width path, not the paper's efficiency protocol."
+  ],
+  "methods": {
+    "geora": {
+      "method": "geora",
+      "job_id": "50622579",
+      "reported_checks_passed": 52,
+      "reported_checks_total": 52,
+      "data_order": [
+        "train:01480",
+        "train:06951",
+        "train:05119",
+        "train:05950",
+        "train:03273",
+        "train:05258",
+        "train:06996",
+        "train:02607",
+        "train:02268",
+        "train:00061"
+      ],
+      "logical_optimizer_steps": 5,
+      "physical_optimizer_step_calls": 6,
+      "steps": [
+        {
+          "step": 1,
+          "question_ids": [
+            "train:01480",
+            "train:06951"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 1.3002294301986694,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            false,
+            true
+          ],
+          "parse_failure_count": 6,
+          "truncated_answer_count": 3,
+          "valid_completion_tokens": 1479,
+          "loss": -1.4901161193847656e-08,
+          "sampled_old_token_k3": 0.0,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 72.80381758301519,
+            "scoring_seconds": 3.8269913969561458,
+            "backward_and_step_seconds": 1.472337379003875,
+            "checkpoint_seconds": 3.793532548006624
+          }
+        },
+        {
+          "step": 2,
+          "question_ids": [
+            "train:05119",
+            "train:05950"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 1.4239356517791748,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            false,
+            true
+          ],
+          "parse_failure_count": 2,
+          "truncated_answer_count": 0,
+          "valid_completion_tokens": 1052,
+          "loss": 6.986688845245226e-07,
+          "sampled_old_token_k3": 0.0006956869619898498,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 60.01602276600897,
+            "scoring_seconds": 3.4448767339927144,
+            "backward_and_step_seconds": 0.7836096440441906,
+            "checkpoint_seconds": 1.0251870520296507
+          }
+        },
+        {
+          "step": 3,
+          "question_ids": [
+            "train:03273",
+            "train:05258"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 3.8473093509674072,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            false,
+            false
+          ],
+          "parse_failure_count": 0,
+          "truncated_answer_count": 0,
+          "valid_completion_tokens": 1118,
+          "loss": 1.3113021850585938e-06,
+          "sampled_old_token_k3": 0.0013206977164372802,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 54.605232549016364,
+            "scoring_seconds": 3.1621620599762537,
+            "backward_and_step_seconds": 0.7641949380049482,
+            "checkpoint_seconds": 11.896444913989399
+          }
+        },
+        {
+          "step": 4,
+          "question_ids": [
+            "train:06996",
+            "train:02607"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 9.304667037213221e-05,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            true
+          ],
+          "parse_failure_count": 6,
+          "truncated_answer_count": 4,
+          "valid_completion_tokens": 1861,
+          "loss": 6.176540523483709e-07,
+          "sampled_old_token_k3": 0.00061765406280756,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 67.71511069696862,
+            "scoring_seconds": 3.823372355022002,
+            "backward_and_step_seconds": 0.8676530929515138,
+            "checkpoint_seconds": 1.0203561569796875
+          }
+        },
+        {
+          "step": 5,
+          "question_ids": [
+            "train:02268",
+            "train:00061"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 0.00014402320084627718,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            true
+          ],
+          "parse_failure_count": 7,
+          "truncated_answer_count": 7,
+          "valid_completion_tokens": 2027,
+          "loss": 6.94874017881375e-07,
+          "sampled_old_token_k3": 0.0006948739755898714,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 71.40945226699114,
+            "scoring_seconds": 3.8798380800290033,
+            "backward_and_step_seconds": 0.8926209450000897,
+            "checkpoint_seconds": 1.1763603339786641
+          }
+        }
+      ],
+      "cost": {
+        "total_python_elapsed_seconds": 461.65360631101066,
+        "load_and_setup_seconds": 26.68366746796528,
+        "logical_training_timed_components_seconds": {
+          "rollout_seconds": 326.5496358620003,
+          "scoring_seconds": 18.13724062597612,
+          "backward_and_step_seconds": 4.780415999004617,
+          "checkpoint_seconds": 18.911881004984025
+        },
+        "logical_training_component_sum_seconds": 368.37917349196505,
+        "logical_valid_completion_tokens": 7537,
+        "logical_rollout_valid_tokens_per_second": 23.080717821364015,
+        "replay_valid_completion_tokens": 1118,
+        "replay_timed_components_seconds": {
+          "rollout_seconds": 54.59717968298355,
+          "scoring_seconds": 3.1605572510161437,
+          "backward_and_step_seconds": 0.7617769200005569,
+          "checkpoint_seconds": 0.0
+        },
+        "replay_component_sum_seconds": 58.51951385400025,
+        "physical_training_valid_completion_tokens": 8655,
+        "other_or_untimed_seconds": 8.071251497080084,
+        "peak_allocated_memory_gib": 29.007558822631836,
+        "slurm_allocation": {
+          "source": "supplied Slurm job ledger",
+          "job_id": "50622579",
+          "state": "COMPLETED",
+          "allocation_seconds": 480,
+          "logical_gpu_count": 1,
+          "logical_gpu_allocation_seconds": 480
+        }
+      },
+      "reward_diagnostics": {
+        "equal_reward_group_count": 6,
+        "parse_failure_count": 21,
+        "truncated_answer_count": 14,
+        "correct_training_reward_answers": 6.0,
+        "logical_answer_count": 40
+      }
+    },
+    "lora": {
+      "method": "lora",
+      "job_id": "50622756",
+      "reported_checks_passed": 52,
+      "reported_checks_total": 52,
+      "data_order": [
+        "train:01480",
+        "train:06951",
+        "train:05119",
+        "train:05950",
+        "train:03273",
+        "train:05258",
+        "train:06996",
+        "train:02607",
+        "train:02268",
+        "train:00061"
+      ],
+      "logical_optimizer_steps": 5,
+      "physical_optimizer_step_calls": 6,
+      "steps": [
+        {
+          "step": 1,
+          "question_ids": [
+            "train:01480",
+            "train:06951"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 0.7741418480873108,
+          "changed_parameter_tensors": 196,
+          "equal_reward_groups": [
+            false,
+            true
+          ],
+          "parse_failure_count": 6,
+          "truncated_answer_count": 3,
+          "valid_completion_tokens": 1479,
+          "loss": -1.4901161193847656e-08,
+          "sampled_old_token_k3": 0.0,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 60.17030178103596,
+            "scoring_seconds": 3.6745081419940107,
+            "backward_and_step_seconds": 1.4494948919746093,
+            "checkpoint_seconds": 8.398878776002675
+          }
+        },
+        {
+          "step": 2,
+          "question_ids": [
+            "train:05119",
+            "train:05950"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 0.0004240272974129766,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            true
+          ],
+          "parse_failure_count": 2,
+          "truncated_answer_count": 1,
+          "valid_completion_tokens": 1106,
+          "loss": 7.919240374576475e-07,
+          "sampled_old_token_k3": 0.0007919240742921829,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 55.00407416501548,
+            "scoring_seconds": 3.6326031879871152,
+            "backward_and_step_seconds": 0.7624218200217001,
+            "checkpoint_seconds": 1.318356700008735
+          }
+        },
+        {
+          "step": 3,
+          "question_ids": [
+            "train:03273",
+            "train:05258"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 0.00015400741540361196,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            true
+          ],
+          "parse_failure_count": 7,
+          "truncated_answer_count": 4,
+          "valid_completion_tokens": 1784,
+          "loss": 8.243262641371985e-07,
+          "sampled_old_token_k3": 0.0008243263000622392,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 57.3875765040284,
+            "scoring_seconds": 3.68163009500131,
+            "backward_and_step_seconds": 0.7924340000026859,
+            "checkpoint_seconds": 2.4050901000155136
+          }
+        },
+        {
+          "step": 4,
+          "question_ids": [
+            "train:06996",
+            "train:02607"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 0.45950162410736084,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            false
+          ],
+          "parse_failure_count": 4,
+          "truncated_answer_count": 1,
+          "valid_completion_tokens": 1368,
+          "loss": 8.798034514256869e-07,
+          "sampled_old_token_k3": 0.0008705754880793393,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 55.63803849898977,
+            "scoring_seconds": 3.7030124369775876,
+            "backward_and_step_seconds": 0.8056163379806094,
+            "checkpoint_seconds": 1.0400164609891362
+          }
+        },
+        {
+          "step": 5,
+          "question_ids": [
+            "train:02268",
+            "train:00061"
+          ],
+          "rewards": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "gradient_norm_before_clipping": 5.793169839307666e-05,
+          "changed_parameter_tensors": 392,
+          "equal_reward_groups": [
+            true,
+            true
+          ],
+          "parse_failure_count": 6,
+          "truncated_answer_count": 4,
+          "valid_completion_tokens": 1856,
+          "loss": 6.026705250405939e-07,
+          "sampled_old_token_k3": 0.0006026705959811807,
+          "clip_fraction": 0.0,
+          "timings": {
+            "rollout_seconds": 58.59949692100054,
+            "scoring_seconds": 3.7434876229963265,
+            "backward_and_step_seconds": 0.8316737260320224,
+            "checkpoint_seconds": 8.39367071702145
+          }
+        }
+      ],
+      "cost": {
+        "total_python_elapsed_seconds": 412.54914018698037,
+        "load_and_setup_seconds": 11.37258246599231,
+        "logical_training_timed_components_seconds": {
+          "rollout_seconds": 286.79948787007015,
+          "scoring_seconds": 18.43524148495635,
+          "backward_and_step_seconds": 4.641640776011627,
+          "checkpoint_seconds": 21.55601275403751
+        },
+        "logical_training_component_sum_seconds": 331.43238288507564,
+        "logical_valid_completion_tokens": 7593,
+        "logical_rollout_valid_tokens_per_second": 26.474942672979545,
+        "replay_valid_completion_tokens": 1784,
+        "replay_timed_components_seconds": {
+          "rollout_seconds": 57.375453857006505,
+          "scoring_seconds": 3.6759354639798403,
+          "backward_and_step_seconds": 0.7918676830013283,
+          "checkpoint_seconds": 0.0
+        },
+        "replay_component_sum_seconds": 61.843257003987674,
+        "physical_training_valid_completion_tokens": 9377,
+        "other_or_untimed_seconds": 7.900917831924744,
+        "peak_allocated_memory_gib": 28.87420082092285,
+        "slurm_allocation": {
+          "source": "supplied Slurm job ledger",
+          "job_id": "50622756",
+          "state": "COMPLETED",
+          "allocation_seconds": 434,
+          "logical_gpu_count": 1,
+          "logical_gpu_allocation_seconds": 434
+        }
+      },
+      "reward_diagnostics": {
+        "equal_reward_group_count": 8,
+        "parse_failure_count": 25,
+        "truncated_answer_count": 13,
+        "correct_training_reward_answers": 2.0,
+        "logical_answer_count": 40
+      }
+    }
+  },
+  "combined_logical_gpu_allocation_seconds": 914,
+  "checks_passed": 66,
+  "checks_total": 66
+}
