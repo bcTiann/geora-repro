@@ -1,8 +1,8 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-更新：2026-10-10；新增短生成／cache／padding、獨立首步步長比較與載入診斷，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-10；新增 GSM8K 資料、GRPO 預檢、一次真實 GRPO 更新與教學 notebook，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
-**目前的結論：difference 模式已通過完整模型初始化、單步更新／重載，以及短生成／KV cache／padding forward。** 最新 64/64 項通過；較小步長顯著降低本次首步概率變化。每個 LR 都從同一初始化出發，沒有連續三步訓練；GRPO、多步穩定性與任務分數尚未驗證。原 residual BF16 的失敗紀錄保留。
+**目前的結論：difference 模式已通過完整模型初始化、單步更新／重載、短生成，以及一次真實 GSM8K GRPO 更新（S9，20/20）。** 有效 token 的採樣／重新打分 logp 差異為 0。連續更新、完整訓練恢復及 LoRA／GeoRA 任務分數仍待驗證。原 residual BF16 的失敗紀錄保留。
 
 本文件集中記錄「做過什麼、使用什麼精度、得到什麼結果」。[PRECISION.md](PRECISION.md) 說明目前程式的精度約定；[CHECKS.md](CHECKS.md) 與 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 保留操作方法。
 
@@ -26,6 +26,8 @@
 | S6 | 完整模型候選精度比較 | Setonix MI250X | 三種模式 × 三個短輸入，196 投影 | 候選改善誤差，但均未通過 2% 門檻 | 無 |
 | L8/S7 | 等價重排、更新與保存重載 | Mac CPU；Setonix CPU／MI250X | 本機小模型＋完整 1.5B | 完整模型 43 項通過；初始化與重載誤差 0 | 各一次短 CE AdamW；不是 GRPO |
 | L9/S8 | 短生成／cache／padding、步長比較 | Mac CPU；Setonix CPU／MI250X | 小模型＋完整 1.5B | 完整模型 64 項通過；相同生成路徑精確一致 | 三次獨立首步 CE；最後恢復初始化 |
+
+| L10/S9 | GSM8K 與真實一次 GRPO 更新 | Mac CPU；Setonix CPU／MI250X | 完整 1.5B、2 題×4 回答 | CPU 預檢及完整模型 20/20 通過 | 一次真實 reward GRPO AdamW |
 
 本機 L1～L6、L7 的小模型預檢及 L8 使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
@@ -275,7 +277,7 @@ logit position 39 預測答案 token `5`（token ID 20）：原始 BF16 模型�
 
 來源：[逐層／逐位置診斷](reports/setonix_precision_diagnostic/50579441.json)、[診斷作業記錄](reports/setonix_precision_diagnostic/50579441_checks.json)。Slurm `COMPLETED` 和診斷的 `completed` 表示測量成功完成；**不表示 S3 的初始化門檻通過**。
 
-## 5. 本機與 Setonix 的 attention 精度定位
+## 5. 本機與 Setonix：精度定位、生成與 GRPO 驗收
 
 ### L6/S5：固定同一輸入，只測第 0 層
 
@@ -496,6 +498,28 @@ CPU faulthandler 定位到 safetensors mmap 的材料化／dtype 轉換；關閉
 
 本階段的短生成／cache／padding forward 及獨立首步測量完成。下一階段是 GRPO 的 reward、advantage、ratio、KL、reference 與多步更新整合；尚未證明多步穩定性、長序列生成或 GeoRA 任務效果。
 
+### L10/S9：GSM8K 接入一次真實 GRPO 更新
+
+目的：驗證「問題 → 採樣回答 → 數值 reward → 同題 advantage → clipped token loss＋reference k3 → A/B 更新」整條資料流。[操作與檔案分工](GRPO_SMOKE.md)、[逐步教學 notebook](notebooks/gsm8k_grpo_tutorial.ipynb)。
+
+GSM8K 固定官方 commit `3101c7d5072418e28b9008a6636bde82a006892c`，7473 train／1319 test；從 train 分出 128 validation，剩餘 7345 train，16 題 smoke 只來自 train。SHA256、題目 ID 與來源見 [manifest](reports/grpo/data_manifest.json)。模型只讀問題和格式提示，不讀標準解答。唯一 `####` 後只有數值才能解析，Decimal 精確比較；截斷 training reward=0。
+
+Mac／Setonix login CPU：資料／reward 11 項及 8792 參考答案、手算 GRPO 14 項、小模型 FP32/BF16 更新、固定寬度 rollout/scoring 22 項通過。小模型用人工 token／reward，與真實模型報告分開。Notebook 15 個 code cell 在本機 CPU 執行，沒有載入 1.5B。
+
+GPU 不做 SVD。讀原始 BF16 checkpoint 的 FP32 值並載入未訓練 FP32 A0/B0；運行時 frozen base BF16、A/B/A0/B0 FP32、低秩分支及相減 FP32、校正轉回 BF16。softmax/logp/GRPO loss、AdamW moments 與保存的 adapter 使用 FP32，沿用 S7/S8 difference 模式。
+
+採樣／打分固定整段 decoder shape、no cache、每個位置相同 `[8,1,hidden]` lm_head shape，未來 token 被 causal／attention mask 遮住。這是本次數值對齊選擇，吞吐較慢；沒有假設普通 cache 和全段 scoring 相同。預先固定 token max delta logp／ratio 各 2e-5，整段 max delta logp 1e-3。
+
+Job **50601905**，程式 commit `294577e1d9d4bc651ca7d277edbf666ab3cdb063`，**20/20 通過**。第一批 2×4 回答共 1479 有效 token，reward `[[0,0,0,1],[0,0,0,0]]`，advantage `[-0.57735,-0.57735,-0.57735,1.73205,0,0,0,0]`。behavior/old/gradient-enabled current/reference 的有效 token 初始 logp 差異全為 0。train mode、dropout=0；完整左 padding batch backward 產生有限非零 FP32 梯度，AdamW lr=1e-6 更新 A/B。原權重、A0/B0/reference 不變；更新後 scoring 和短 stochastic sampling 通過。
+
+**reward=0 不一定是算錯。** 第一題兩段雖寫出數字 4，一段缺 `####`，另一段寫 `#### 4 Scoops`；第三段數值錯且無標記。第二題 3/4 在 256 token 上限截斷，另一段給出 30000。真實文字見 [報告](reports/grpo/50601905.json) 和 notebook。不能把這組 reward 當作數學準確率；後續單獨報格式失敗、數值錯誤與截斷。
+
+更新前 scalar loss 約 -1.49e-8（FP32 加總近零）、k3=0；更新後舊樣本 surrogate loss=0.0006171、k3=0.0009681，未證明單步改善。裁剪前梯度 norm=1.30023，有效 ΔW 合併 Frobenius norm=0.01092795。k3 對固定 token 直接求導，採用 GRPO surrogate 約定；更新後舊樣本均值不是精確 current-policy KL。
+
+Slurm allocation **124 秒**，Python **104.02 秒**，峰值 allocated GPU memory **28.90 GiB**。CPU checkpoint staging 10.40 秒、校驗 10.86 秒，不佔 GPU。臨時 software copy 用後移除。更新一次的 FP32 factors／manifest／optimizer 保留於 `$MYSCRATCH/geora/runs/grpo-smoke-50601905/trained_adapter`，未覆寫 untrained 初始化；尚未驗收完整 RNG／資料位置 resume。
+
+下一步：階段 4 的少量連續更新、LoRA 共用流程及完整訓練狀態恢復。固定順序保留同分組，各方法不能自行篩選 reward 更有訊號的題目。本次不是論文分數復現。
+
 ## 6. 保存、重載與更新精度總表
 
 | 實驗 | 初始化／殘差計算 | 運行參數 | forward | 我們保存的權重檔 | 實際更新 |
@@ -541,7 +565,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7／S8 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7／S8／S9 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -555,13 +579,14 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50585414 | difference 初始化、單步更新與重載 | 3 分鐘 | 42 秒 | COMPLETED |
 | 50596505 | 繼續測試，載入超時、無更新 | 3 分鐘 | 197 秒 | TIMEOUT |
 | 50596774 | 生成／cache／padding、獨立 LR 首步 | 3 分鐘 | 46 秒 | COMPLETED |
+| 50601905 | 一次真實 GSM8K GRPO 更新 | 10 分鐘 | 124 秒 | COMPLETED |
 
-這十個作業的 allocation 時間合計 **12 分 01 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這十一個作業的 allocation 時間合計 **14 分 05 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-等價重排及後續 L9/S8 的短生成／KV cache、padding forward 和獨立步長比較已完成。下一階段接短 GRPO 的 reward、advantage、ratio、KL 與 reference 整合，以及多步更新。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
+等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。下一階段做連續更新、LoRA 共用流程及完整訓練恢復。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
 
 ### 原始記錄的使用約定
 
-初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

@@ -1,0 +1,93 @@
+{
+  "status": "passed",
+  "device": "cpu",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "models": {
+    "torch.float32": {
+      "status": "passed",
+      "frozen_dtype": "torch.float32",
+      "adapter_dtype": "torch.float32",
+      "forward_mode": "difference",
+      "reward_source": "artificial mechanical labels, not GSM8K",
+      "rewards": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "advantages": [
+        1.0,
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "completion_lengths": [
+        2,
+        3,
+        2,
+        3
+      ],
+      "initial_logits_exact": true,
+      "initial_old_current_ratios_exactly_one": true,
+      "initial_kl": 0.0,
+      "loss_before": 0.0,
+      "loss_after_same_answers": -0.00016570091247558594,
+      "kl_after_same_answers": 6.597762336468804e-08,
+      "pre_clip_gradient_norm": 0.14906522631645203,
+      "changed_trainable_tensor_count": 14,
+      "frozen_weights_unchanged": true,
+      "initial_factor_buffers_unchanged": true,
+      "reference_has_no_gradients": true,
+      "optimizer_steps": 1,
+      "learning_rate": 0.0001,
+      "learning_rate_scope": "CPU tiny mechanical test only; full-model smoke uses its own configuration"
+    },
+    "torch.bfloat16": {
+      "status": "passed",
+      "frozen_dtype": "torch.bfloat16",
+      "adapter_dtype": "torch.float32",
+      "forward_mode": "difference",
+      "reward_source": "artificial mechanical labels, not GSM8K",
+      "rewards": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "advantages": [
+        1.0,
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "completion_lengths": [
+        2,
+        3,
+        2,
+        3
+      ],
+      "initial_logits_exact": true,
+      "initial_old_current_ratios_exactly_one": true,
+      "initial_kl": 0.0,
+      "loss_before": 0.0,
+      "loss_after_same_answers": 9.700655937194824e-05,
+      "kl_after_same_answers": 1.7121115547524823e-07,
+      "pre_clip_gradient_norm": 0.14875496923923492,
+      "changed_trainable_tensor_count": 14,
+      "frozen_weights_unchanged": true,
+      "initial_factor_buffers_unchanged": true,
+      "reference_has_no_gradients": true,
+      "optimizer_steps": 1,
+      "learning_rate": 0.0001,
+      "learning_rate_scope": "CPU tiny mechanical test only; full-model smoke uses its own configuration"
+    }
+  }
+}

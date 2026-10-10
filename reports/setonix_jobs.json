@@ -148,9 +148,25 @@
       },
       "observed_queue_after_completion": "empty",
       "sacct_raw_row": "50596774|COMPLETED|0:0|46|3|billing=128,cpu=16,energy=21452,gres/gpu=1,mem=29440M,node=1|09:03:11|09:03:57"
+    },
+    {
+      "job_id": "50601905",
+      "state": "COMPLETED",
+      "allocation_seconds": 124,
+      "time_limit_seconds": 600,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "GSM8K first real GRPO update",
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50601905|COMPLETED|124|00:10:00|billing=128,cpu=16,energy=76838,gres/gpu=1,mem=29440M,node=1"
     }
   ],
-  "sum_allocation_seconds": 721,
+  "sum_allocation_seconds": 845,
   "latest_query_date": "2026-10-10",
-  "latest_query": "sacct -X -j 50596505,50596774 --format=JobID,State,ExitCode,ElapsedRaw,TimelimitRaw,AllocTRES,Start,End -P; squeue -h -u \"$USER\""
+  "latest_query": "sacct -X -j 50601905 --format=JobID,State,ElapsedRaw,Timelimit,AllocTRES%120 -P; squeue -u \"$USER\""
 }

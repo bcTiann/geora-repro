@@ -2,7 +2,7 @@
 
 更新：2026-10-10。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1、2 已完成；下一步開始階段 3——真正的 GRPO 更新。** 已經確認 GeoRA 能初始化、生成、更新與恢復；尚未用任務獎勵训练，也沒有 LoRA／GeoRA 的任務分數對照。
+**目前位置：階段 1、2、3 已完成；下一步是階段 4 的連續更新／完整訓練恢復與 LoRA 共用流程。** 一次真實 GSM8K GRPO 更新已通過（job 50601905，20/20），並有本機教學 notebook；尚未連續訓練或比較任務分數。
 
 ## 1. 第一個復現目標
 
@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 1. 來源與初始化 | 模型、mask、SVD 和 A0/B0 是否符合選定設定？ | 固定來源版本；196 個目標層；FP32 因子與有效權重檢查 | 已完成 |
 | 2. 數值與更新 | 裝入 GeoRA 後能否維持初始輸出，且正確更新和重載？ | 完整模型初始化、A/B 單步 CE、保存重載、短生成/cache/padding 通過 | 已完成 |
-| **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **下一步** |
+| **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **已完成，S9 20/20** |
 | 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | LoRA/GeoRA 共用流程、短程連續更新、完整訓練狀態恢復、量測吞吐 | 待做 |
 | 5. 正式任務實驗 | 相同訓練預算下，效果與能力保留有何差異？ | 固定協定訓練及評估；記錄 Base/LoRA/GeoRA 分數與用量 | 待做 |
 | 6. 機制與擴展 | 結果是否支持論文提出的幾何解釋？ | 分析實際 GRPO 更新，加入必要消融及其他 baseline | 待做 |
@@ -63,7 +63,7 @@ c = alpha / r
 
 目前讀到的附錄沒有逐項說清這些設定。後续配置需寫出每項來源：論文、外部算法實作或我們的選擇。若無法補齊，結果標記為公開設定下的獨立復現；保留所有差異，避免把數字接近當作相同實驗協定的證據。
 
-## 5. 下一步：階段 3 的具體工作
+## 5. 已完成：階段 3 的具體工作與驗收
 
 ### 3A. 本機/登入節點：資料與可手算的 GRPO 檢查
 
@@ -105,16 +105,16 @@ old log probabilities 必須在該批次更新前保存並 detach，固定到該
 
 驗收：
 
-- [ ] CPU 資料、答案解析、reward、advantage、clipping、KL 和 token mask 檢查通過。
-- [ ] stochastic sampling 的回答/概率有限；更新前 old/current 的相同 scoring 路徑一致。
-- [ ] rollout/scoring 的 likelihood 差異符合事先固定的協定，必要的路徑對齊/校正已驗證。
-- [ ] 實際 train mode、dropout 設定、device 搬移與 dtype 符合配置；沒有把整個 adapter 轉成 BF16。
-- [ ] 首次真實 GRPO 的 loss、梯度、參數有限，A/B 有實際變化。
-- [ ] 凍結權重/A0/B0/reference 不變，reference 仍代表原始模型。
-- [ ] 更新後可生成；完整 padding batch 的 backward 通過。
-- [ ] 報告保存題目、回答、reward、advantage、token 數、ratio/KL、clip fraction、梯度、精度和用量。
+- [x] CPU 資料、答案解析、reward、advantage、clipping、KL 和 token mask 檢查通過。
+- [x] stochastic sampling 的回答/概率有限；更新前 old/current 的相同 scoring 路徑一致。
+- [x] rollout/scoring 的 likelihood 差異符合事先固定的協定，必要的路徑對齊/校正已驗證。
+- [x] 實際 train mode、dropout 設定、device 搬移與 dtype 符合配置；沒有把整個 adapter 轉成 BF16。
+- [x] 首次真實 GRPO 的 loss、梯度、參數有限，A/B 有實際變化。
+- [x] 凍結權重/A0/B0/reference 不變，reference 仍代表原始模型。
+- [x] 更新後可生成；完整 padding batch 的 backward 通過。
+- [x] 報告保存題目、回答、reward、advantage、token 數、ratio/KL、clip fraction、梯度、精度和用量。
 
-先完成 CPU 預檢和模型載入計時，再申請 GPU。首次上限建議 10 分鐘，報告達到完成條件就結束，不預先排滿 allocation；這是限額，不是已知運行時長。
+本次 CPU 預檢／載入計時先完成；job 50601905 實際 allocation 124 秒，1479 有效 token 的 likelihood 差異 0，20/20 通過。格式和截斷也影響 reward，限制見 [GRPO_SMOKE.md](GRPO_SMOKE.md) 與 [報告](reports/grpo/50601905.json)；教學見 [notebook](notebooks/gsm8k_grpo_tutorial.ipynb)。
 
 ## 6. 階段 4：短程連續更新與 LoRA 對照
 

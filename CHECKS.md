@@ -201,7 +201,7 @@ sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
 
 報告 `$MYSCRATCH/geora/runs/difference-check-JOB_ID/difference_checks.json`；日誌 `$MYSCRATCH/geora/runs/logs/difference-check-JOB_ID.log`。用既有 `jobs/watch_gpu_check.sh JOB_ID LOG_PATH` 可在終端持續顯示並等到作業結束；Ctrl-C 只停止觀看，取消用 `scancel JOB_ID`。
 
-更新檔案明確記錄 `forward_mode=difference`／`runtime_precision`，不要按普通 LoRA merge。此輪完成的是機械驗證；單步策略改變較大，後續 L9/S8 已完成獨立步長比較及短生成／cache／padding forward；GRPO 整合和多步穩定性仍需測量。詳見 [GOAL.md](GOAL.md) 與 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+更新檔案明確記錄 `forward_mode=difference`／`runtime_precision`，不要按普通 LoRA merge。此輪完成的是機械驗證；單步策略改變較大，後續 L9/S8 已完成獨立步長比較及短生成／cache／padding forward；一次真實 GRPO 整合已通過 S9；連續更新與完整訓練恢復仍需測量。詳見 [GOAL.md](GOAL.md) 與 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 
 ## 後續短生成與獨立步長比較（L9/S8 已完成）
