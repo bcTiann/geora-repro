@@ -26,12 +26,14 @@ def pinned_configuration() -> tuple[dict, Path]:
 
 
 def fresh_fp32_model(checkpoint_directory: Path, *, disable_mmap: bool = False) -> torch.nn.Module:
+    # Preserve the former default call; pass the new loader option only when requested.
+    loading_options = {"disable_mmap": True} if disable_mmap else {}
     model = AutoModelForCausalLM.from_pretrained(
         checkpoint_directory,
         dtype=torch.float32,
         attn_implementation="eager",
         local_files_only=True,
-        disable_mmap=disable_mmap,
+        **loading_options,
     )
     model.requires_grad_(False)
     model.eval()

@@ -1,8 +1,8 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-更新：2026-10-10；新增完整模型等價重排、單步更新與重載驗證，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-10；新增短生成／cache／padding、獨立首步步長比較與載入診斷，遠端報告與 Slurm 狀態核對至 2026-10-10。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
-**目前的結論：`difference` 等價重排已在完整 1.5B 模型通過初始化、一次 A/B 更新及模型／optimizer 重載，三個初始化輸入的 logits 誤差均為 0。** 原有 `residual` BF16 路徑仍保留作對照，先前失敗紀錄不變。單步更新後 logits 改變 46.7574%，因此這輪確認更新與恢復機制，不代表步長合適或多步訓練穩定。GRPO、GSM8K 分數及 LoRA／GeoRA 任務對照尚未執行。
+**目前的結論：difference 模式已通過完整模型初始化、單步更新／重載，以及短生成／KV cache／padding forward。** 最新 64/64 項通過；較小步長顯著降低本次首步概率變化。每個 LR 都從同一初始化出發，沒有連續三步訓練；GRPO、多步穩定性與任務分數尚未驗證。原 residual BF16 的失敗紀錄保留。
 
 本文件集中記錄「做過什麼、使用什麼精度、得到什麼結果」。[PRECISION.md](PRECISION.md) 說明目前程式的精度約定；[CHECKS.md](CHECKS.md) 與 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 保留操作方法。
 
@@ -25,6 +25,7 @@
 | L7 | 候選 helper 預檢與 MPS 能力探針 | Mac CPU / MPS；Setonix CPU | 小 Qwen 14 投影；MPS 16×16 BF16 乘法 | dtype、恢復、梯度通路通過；MPS 小乘法有限 | 無 optimizer；單投影 backward |
 | S6 | 完整模型候選精度比較 | Setonix MI250X | 三種模式 × 三個短輸入，196 投影 | 候選改善誤差，但均未通過 2% 門檻 | 無 |
 | L8/S7 | 等價重排、更新與保存重載 | Mac CPU；Setonix CPU／MI250X | 本機小模型＋完整 1.5B | 完整模型 43 項通過；初始化與重載誤差 0 | 各一次短 CE AdamW；不是 GRPO |
+| L9/S8 | 短生成／cache／padding、步長比較 | Mac CPU；Setonix CPU／MI250X | 小模型＋完整 1.5B | 完整模型 64 項通過；相同生成路徑精確一致 | 三次獨立首步 CE；最後恢復初始化 |
 
 本機 L1～L6、L7 的小模型預檢及 L8 使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
@@ -442,7 +443,58 @@ $MYSCRATCH/geora/runs/difference-check-50585414/
 
 來源：[Mac CPU](reports/difference/local_cpu.json)、[Setonix CPU](reports/difference/setonix_cpu.json)、[完整模型 50585414](reports/difference/50585414.json)、[初始 manifest](reports/difference/initial_manifest.json)、[單步後 manifest](reports/difference/trained_manifest.json)。執行程式 commit 為 `75037a65833bdd1cb1fb11e0b0453d92f45bc4e1`。
 
-這輪目標的初始化／單步更新／序列化驗收已完成。之後仍需檢查步長與多步策略變化、autoregressive generation／KV cache、padding batch，以及 GRPO／外部 trainer 的整合。merge 必須用 `W_pre+c(BA-B0A0)`；不能按普通 LoRA 把 `cBA` 直接加回 W_pre。
+這輪目標的初始化／單步更新／序列化驗收已完成。後續 L9/S8 已補上獨立步長比較、短生成／KV cache 及 padding forward；多步策略變化、padding 訓練與 GRPO／外部 trainer 的整合仍需檢查。merge 必須用 `W_pre+c(BA-B0A0)`；不能按普通 LoRA 把 `cBA` 直接加回 W_pre。
+
+### L9/S8：短生成、KV cache、padding 與独立首步的步長比較
+
+這輪繼續使用 S7 的 `difference` 模式與原有因子，沒有 SVD、GRPO 或新的任務評估。原始凍結權重 BF16、A/B/A0/B0 FP32、兩條低秩分支及相減 FP32，校正轉回 BF16 後相加；loss 為 FP32 CE，更新與 AdamW moments 為 FP32。KL/TV 在 CPU FP64 計算，有效 ΔW 範數用 FP64 小 Gram 矩陣。沒有改變初始化或保存精度。
+
+#### 生成與 padding 的比較對象
+
+本機及 Setonix 容器 CPU 的兩層小型 Qwen，FP32/BF16 各 **21/21** 項通過：真實 Transformers `generate`、獨立 DynamicCache 預填及三步解碼、左側 padding，以及答案標籤屏蔽和 causal shift 的獨立 token 索引對照。
+
+完整 1.5B 作業 `50596774` 的總檢查 **64/64 通過**。使用兩個長度為 40／42 token 的 prompt，帶左側 padding；greedy generation 最多 8 個新 token。未更新的 GeoRA 與原模型在**相同輸入布局、精度和 cache 路徑**下，valid logits、生成 token、原始 logits 和生成分數精確相同。每個模型建立自己的 cache，沒有共用可變 cache；預填 40 token 後，以固定 token 連續三步確認 cache 長度為 41、42、43。
+
+同時測量原模型自身的不同計算路徑，避免錯把路徑差異歸因於 GeoRA：
+
+| 原模型自身對照 | 本次 logits 相對差 |
+|---|---:|
+| 單條輸入 vs 左側 padding 批次，同有效 token | 4.0424%、3.8146% |
+| cache 單 token vs 完整前文重新計算，三步 | 4.3867%、2.3018%、2.7660% |
+
+這些路徑可能使用不同的矩陣乘法形狀和捨入。本次 cached／uncached 的短 greedy token 序列仍相同，但不能要求跨路徑 logits 精確相同，也不能把這些數字作為「誤差底限」從後面的更新變化中扣除。生成的精確一致驗收比較的是各路徑中的 GeoRA vs 原模型。padding 的 loss 標籤機制在小模型核對；完整模型做了 padding forward／generation，尚未做 padding batch 的訓練更新。
+
+#### 每個步長都從初始化獨立出發
+
+三次試驗各自原位恢復 A=A0、B=B0，清空梯度，新建空狀態的 AdamW；重算同一個答案 CE 梯度並裁剪 norm 上限 1。初始 loss 都是 0.5805116，裁剪前梯度 norm 都是 157.7638，裁剪後逐元素梯度精確相同。AdamW `betas=(0.9,0.999)`、`eps=1e-8`、`weight_decay=0`；每輪 optimizer 的 step 都是 1。
+
+| LR | 全 196 層有效 ΔW 合併範數 | 更新前後整段 logits 變化 | 答案預測位置 KL，nats | 正確答案首 token 的機率 | 更新後 CE |
+|---|---:|---:|---:|---:|---:|
+| 1e-04 | 1.09068 | 46.7574% | 11.7139 | 0.31634 → 0.99997 | 0.0001907626 |
+| 1e-05 | 0.109067 | 5.7308% | 1.4173 | 0.31634 → 0.93507 | 0.03704078 |
+| 1e-06 | 0.0109067 | 4.3694% | 0.00664044 | 0.31634 → 0.36857 | 0.5047485 |
+
+這裡 ΔW=`c(BA-B0A0)`，跨層合併範數為 `sqrt(sum(layer_norm**2))`，不是直接相加各層範數。答案預測位置為 `logits[:,39]`，比較整個詞表的分布；`logits[:,40]` 預測 EOS，`logits[:,41]` 已在 EOS 後，沒有參與該 CE 的監督。原始 JSON 同時保留全部位置、prompt 末位置和實際監督位置的指標。
+
+LR 減少十倍時，有效權重變化約減少十倍，但 logits／概率變化不必線性縮放。`1e-6` 的 logits 仍改變 4.3694%，這是固定路徑下實際觀察到的更新後變化；本次未分離其數學更新與浮點放大的成分。答案預測 KL 0.00664、機率 0.31634→0.36857，表示本次首步改動較小，不能據此稱為已證明安全的 GRPO 學習率。
+
+物理問題 prompt 的末位置 KL 依次為 0.0837636、0.0000507692、0.0000088030。三個輸入形式只有兩個不同問題：算術帶答案、算術純 prompt、物理純 prompt；前兩者的答案預測前文相同，不是獨立測試集。沒有 reward、GRPO ratio、KL regularizer 或任務分數。
+
+各試驗均通過 FP32 梯度／參數有限、有效更新非零、所有凍結參數／A0/B0 不變及 reference 不變。最後 A/B 又恢復初始化，logits 精確恢復原始模型。報告的 `optimizer_steps=3` 和 `independent_optimizer_steps=3` 是三次獨立首步，`final_model_state=untrained_restored`；沒有連續三步训练，也沒有保存新的訓練 checkpoint。原 S7 的保存檔案未改動。
+
+#### 載入超時與實際用量
+
+第一次作業 `50596505` 在權重載入期間達到三分鐘時限，Slurm allocation 為 **197 秒**（包含結束清理）；只有初始化來源檢查完成，**backward=0、optimizer=0**。原始 JSON 因外部終止仍是 `running`，必須連同 Slurm `TIMEOUT` 判讀，不能宣稱檢查完成。step CPU time 約 18 秒、MaxRSS 約 4.41 GiB。
+
+CPU faulthandler 定位到 safetensors mmap 的材料化／dtype 轉換；關閉 mmap、關閉異步載入後，直接讀原 scratch 檔仍在 120 秒達到 CPU timeout。這些觀察指向載入階段，沒有證據指向 GeoRA forward 或梯度錯誤，也沒有單獨證明底層儲存系統的原因。
+
+為避免再次消耗 GPU 時間，以 CPU 串流複製到 software 的臨時 cache（**141.643 秒**），逐檔核對 SHA256，並確認載入的 **338 個 FP32 張量全部精確等於原 BF16 checkpoint 值**。臨時副本＋關閉 mmap／異步載入的 CPU 模型載入為 **7.061 秒**；驗證總時間 16.653 秒。聯合措施解決了本次載入問題，沒有分別測量每個措施的作用。原始模型仍在 scratch；臨時大型副本已清理，不提交 Git。
+
+成功作業 `50596774` 一個邏輯 GPU、三分鐘上限，allocation **46 秒**，Python **26.969 秒**，peak allocated memory **9.4275 GiB**；Slurm `COMPLETED`、退出碼 `0:0`，完成後 queue 為空。本輪兩次 GPU allocation 合計 **243 秒（4 分 03 秒）**，包括超時，CPU 診斷／複製不佔 GPU allocation。
+
+來源：[本機 CPU](reports/continuation/local_cpu.json)、[Setonix CPU](reports/continuation/setonix_cpu.json)、[載入診斷](reports/continuation/loading_diagnostic.json)、[超時原始報告](reports/continuation/50596505.json)、[完整模型 50596774](reports/continuation/50596774.json)。成功執行程式 commit 為 `ce3de48e7881a57fd4833f396876d0e231f355db`；運行時載入選項和完整副本校驗資訊在報告中。
+
+本階段的短生成／cache／padding forward 及獨立首步測量完成。下一階段是 GRPO 的 reward、advantage、ratio、KL、reference 與多步更新整合；尚未證明多步穩定性、長序列生成或 GeoRA 任務效果。
 
 ## 6. 保存、重載與更新精度總表
 
@@ -459,6 +511,7 @@ $MYSCRATCH/geora/runs/difference-check-50585414/
 | L6/S5 局部探針 | 用保存因子重建 FP32 F，無 SVD | 投影 F/A/B FP32；其他依模式 | 五種路徑見上表 | JSON；不另存權重 | 無 |
 | S6 完整候選 | 用 S2 因子重建 FP32 F，無 SVD | 候選投影 FP32；其餘 BF16；native 最後轉換 | 三種路徑見上表 | JSON；不另存權重 | 無 |
 | L8/S7 difference | 復用 S2 初始因子，保留原 W_pre，無 SVD | 原始權重 BF16；A/B、A0/B0 FP32 | 原始 BF16 分支＋FP32 低秩差，輸出 BF16 | FP32 初始／更新因子，mode/runtime metadata，optimizer | FP32 AdamW 一步 |
+| L9/S8 | 復用 S2 初始因子，無 SVD | 同 S7 | 同 S7，新增 generate／cache | JSON；無新訓練權重檔 | FP32 AdamW 三次獨立首步，最後還原 |
 
 AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**S3 residual 的 1.5B 前置門檻失敗，當時未執行；S7 difference 的 1.5B 已完成一次並通過重載。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
 
@@ -488,7 +541,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增並查詢 S6／S7／S8 作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -500,13 +553,15 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50579802 | 第 0 層 attention 探針 | 1 分鐘 | 22 秒 | COMPLETED |
 | 50584822 | 完整模型候選精度比較 | 3 分鐘 | 1 分 27 秒 | COMPLETED |
 | 50585414 | difference 初始化、單步更新與重載 | 3 分鐘 | 42 秒 | COMPLETED |
+| 50596505 | 繼續測試，載入超時、無更新 | 3 分鐘 | 197 秒 | TIMEOUT |
+| 50596774 | 生成／cache／padding、獨立 LR 首步 | 3 分鐘 | 46 秒 | COMPLETED |
 
-這八個作業的 allocation 時間合計 **7 分 58 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這十個作業的 allocation 時間合計 **12 分 01 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-等價重排已完成本輪 [GOAL.md](GOAL.md) 的驗收。下一階段從更新幅度／步長敏感性及生成／KV cache、padding batch 開始，再接短 GRPO 的 reward、advantage、ratio、KL 與 reference 整合。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
+等價重排及後續 L9/S8 的短生成／KV cache、padding forward 和獨立步長比較已完成。下一階段接短 GRPO 的 reward、advantage、ratio、KL 與 reference 整合，以及多步更新。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
 
 ### 原始記錄的使用約定
 
-初次整理只讀取已有檔案／遠端報告；2026-10-10 後續新增 L7／S6，先後實際申請了 S6／S7 兩次短 GPU 作業，預設訓練精度未改變。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

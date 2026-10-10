@@ -23,7 +23,7 @@
 - 主機端 ROCm 有多個版本，預設 `rocm/6.4.1`。
 - Singularity 有多個版本，預設 `singularity/4.1.0-slurm`。
 
-容器 venv、依賴、模型及原始模型 GPU forward 已確認。使用者提供了早期執行輸出；後續也透過 SSH 直接核對報告並執行局部探針。GeoRA BF16 全模型初始化門檻未通過，1.5B 更新與 GRPO 尚未執行；當前結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+容器 venv、依賴、模型及原始模型 GPU forward 已確認。使用者提供了早期執行輸出；後續也透過 SSH 直接核對報告並執行局部探針。原 residual BF16 初始化門檻未通過；difference 模式已通過完整 1.5B 初始化、單步更新／重載、短生成／cache／padding 與獨立步長比較。GRPO 和多步穩定性尚未驗證；當前結果見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 ## 已收到的第 1 步結果
 
@@ -236,7 +236,7 @@ source "$MYSOFTWARE/manual/software/geora-environments/py312-rocm633/bin/activat
 
 使用者成功申請 `gpu-dev`、account `pawsey0807-gpu`、一個邏輯 GPU、`--time=00:02:00`；job ID 為 `50574180`。實際看到一個 AMD Instinct MI250X，顯存 63.98 GiB。512×512 的 BF16 GPU 矩陣乘法完成，輸出全為有限值。
 
-這確認兩分鐘申請在此次被接受，以及容器的 GPU 基本運算可用。這一步只檢查基本矩陣乘法；後續原始模型 forward 的結果見第 6.2 步，GeoRA backward／更新尚待執行。
+這確認兩分鐘申請在此次被接受，以及容器的 GPU 基本運算可用。這一步只檢查基本矩陣乘法；後續原始模型 forward 的結果見第 6.2 步，difference 模式的 backward／更新與後續測試見 [實驗記錄 L8/S7、L9/S8](EXPERIMENT_RECORD.md)。
 
 GPU 申請只指定節點和 GPU 數，系統配套提供 CPU 與記憶體；`--cpus-per-task` 放在後續的 `srun` 執行步驟。[官方 GPU 作業指南](https://pawsey.atlassian.net/wiki/spaces/US/pages/51929056/Example+Slurm+Batch+Scripts+for+Setonix+on+GPU+Compute+Nodes)
 
@@ -311,4 +311,4 @@ git pull --ff-only
 
 ## 當前進度
 
-環境、CPU 初始化已通過；原 residual BF16 路徑的失敗紀錄保留。difference 等價重排已通過完整 1.5B 初始化、一次 A/B 更新和模型／optimizer 重載；本輪 [GOAL.md](GOAL.md) 完成。下一階段先測更新幅度、生成／cache 和 padding，再接 GRPO。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，重跑入口見 [CHECKS.md 文末](CHECKS.md)。
+環境、CPU 初始化已通過；原 residual BF16 路徑的失敗紀錄保留。difference 等價重排已通過完整 1.5B 初始化、一次 A/B 更新和模型／optimizer 重載；本輪 [GOAL.md](GOAL.md) 完成。後續生成／cache／padding forward、獨立首步比較已通過 64 項；下一階段接 GRPO 與多步更新。所有逐項結果統一見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，重跑入口見 [CHECKS.md 文末](CHECKS.md)。

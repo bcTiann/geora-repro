@@ -41,3 +41,7 @@
 - [x] 統一記錄結果、用量及完成狀態。
 
 完成：2026-10-10。完整模型 43/43 項通過，單個邏輯 GPU 實際 allocation 42 秒；初始化與重載誤差為 0。單步 CE 的 logits 變化較大，仍需下一階段評估步長／多步穩定性。原始報告及具體限制見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。
+
+## 後續測量（2026-10-10 已完成）
+
+L9/S8 完成短生成／KV cache／padding forward 和三種步長的獨立首步比較，64/64 項通過；最後恢復未訓練狀態。成功作業 46 秒，另一次載入超時 197 秒，本輪合计 GPU allocation 243 秒。具體數值與限制集中見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，沒有 GRPO 或多步穩定性結論。

@@ -2,7 +2,7 @@
 
 這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。**先讀 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)**：它集中說明做過哪些實驗，以及來源、初始化、運算、保存和更新各自使用的精度。
 
-目前 FP32 全模型初始化與重載通過；預設 BF16 全模型初始化 logits 檢查未通過，局部 attention 診斷已完成。1.5B 參數更新、GRPO 與任務對照尚未執行。
+目前 difference 模式已通過完整 1.5B 初始化、A/B 單步更新與重載，以及短生成／KV cache／padding forward 和獨立步長比較（64/64）。原 residual BF16 的失敗紀錄保留；GRPO、多步穩定性和任務對照尚未執行。
 
 ## 從哪裡開始
 
@@ -84,7 +84,7 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 
 下一階段依序驗證：
 
-1. 更新幅度／步長敏感性，以及生成／KV cache 和 padding batch。
+1. 生成／KV cache／padding forward 和三種獨立首步的步長比較已完成：64/64 通過，詳見 [L9/S8 記錄](EXPERIMENT_RECORD.md)。多步穩定性仍需驗證。
 2. 短 GRPO 的 reference、答案檢查器、reward、advantage、ratio、KL 與訓練更新。
 3. 固定訓練與評估預算，比較 LoRA／GeoRA。
 

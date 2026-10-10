@@ -1,0 +1,82 @@
+{
+  "status": "diagnosed_with_workaround",
+  "gpu_attempt": {
+    "job_id": "50596505",
+    "slurm_state": "TIMEOUT",
+    "allocation_seconds": 197,
+    "raw_report_status": "running",
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "last_log_progress": "1 of 338 weights; first progress after40.03 seconds",
+    "step_total_cpu_seconds": 18.01,
+    "step_max_rss_kib": 4623072
+  },
+  "cpu_default_loading": {
+    "threads": 2,
+    "completed": false,
+    "observed_progress": "27 of338 weights after75 seconds; later remained in materialization",
+    "stopped_by_agent": true,
+    "worker_stack": "transformers/core_model_loading.py:1240 tensor.to(device=device,dtype=dtype); source was a safetensors mmap slice",
+    "main_stack": "Future.result in materialize_tensors"
+  },
+  "cpu_non_mmap_original": {
+    "disable_mmap": true,
+    "HF_DEACTIVATE_ASYNC_LOAD": "1",
+    "timeout_seconds": 120,
+    "exit_code": 124,
+    "completed": false,
+    "stack": "transformers/modeling_utils.py:4454 read file bytes"
+  },
+  "copy_validation": {
+    "status": "validated",
+    "source": "/scratch/pawsey0807/btian/geora/checkpoints/geora_base",
+    "staged": "/software/projects/pawsey0807/btian/manual/cache/geora-base-test",
+    "host": "setonix-02",
+    "files": {
+      "generation_config.json": {
+        "bytes": 242,
+        "source_sha256": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6"
+      },
+      "model.safetensors": {
+        "bytes": 3087467144,
+        "source_sha256": "dd924a11b4c220f385b51ffa522daea7c9f3d850e31b162bb5661df483c6d3ee"
+      },
+      "tokenizer.json": {
+        "bytes": 7031645,
+        "source_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+      },
+      "tokenizer_config.json": {
+        "bytes": 7305,
+        "source_sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583"
+      },
+      "vocab.json": {
+        "bytes": 2776833,
+        "source_sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+      },
+      "config.json": {
+        "bytes": 660,
+        "source_sha256": "98d2ff8cc47488d08a2b0b3acf4eb99ef210779b42bd48605f6b8e36acdbf670"
+      },
+      "merges.txt": {
+        "bytes": 1671839,
+        "source_sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+      }
+    },
+    "elapsed_seconds": 141.6425802060112,
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "model_load_seconds": 7.061078720027581,
+    "source_tensor_count": 338,
+    "all_source_tensors_exact": true,
+    "validation_seconds": 16.65340192100848,
+    "loader_options": {
+      "disable_mmap": true,
+      "HF_DEACTIVATE_ASYNC_LOAD": "1"
+    }
+  },
+  "interpretation": "Weight materialization/casting and whole-file reading stalled before numerical/generation tests. Workaround combines a streamed temporary software-filesystem copy with non-mmap serialized loading; no isolated performance attribution.",
+  "temporary_copy_cleanup": {
+    "completed": true,
+    "original_scratch_checkpoint_retained": true,
+    "observed_queue_after_cleanup": "empty"
+  }
+}

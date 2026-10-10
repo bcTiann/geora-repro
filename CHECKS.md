@@ -201,4 +201,31 @@ sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
 
 報告 `$MYSCRATCH/geora/runs/difference-check-JOB_ID/difference_checks.json`；日誌 `$MYSCRATCH/geora/runs/logs/difference-check-JOB_ID.log`。用既有 `jobs/watch_gpu_check.sh JOB_ID LOG_PATH` 可在終端持續顯示並等到作業結束；Ctrl-C 只停止觀看，取消用 `scancel JOB_ID`。
 
-更新檔案明確記錄 `forward_mode=difference`／`runtime_precision`，不要按普通 LoRA merge。此輪完成的是機械驗證；單步策略改變較大，後續步長、生成、padding 及 GRPO 整合仍需測量。詳見 [GOAL.md](GOAL.md) 與 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+更新檔案明確記錄 `forward_mode=difference`／`runtime_precision`，不要按普通 LoRA merge。此輪完成的是機械驗證；單步策略改變較大，後續 L9/S8 已完成獨立步長比較及短生成／cache／padding forward；GRPO 整合和多步穩定性仍需測量。詳見 [GOAL.md](GOAL.md) 與 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+
+
+## 後續短生成與獨立步長比較（L9/S8 已完成）
+
+本機小模型：`uv run python tests/check_difference_generation.py`。
+完整模型先檢查未更新的生成／cache／padding，再從同一 A0/B0 出發分別做 `1e-4`、`1e-5`、`1e-6` 的一次 CE AdamW，最後恢復初始化。不是連續三步，也不是 GRPO。
+
+登入節點提交，一個邏輯 GPU、三分鐘上限：
+
+```bash
+sbatch --export=ALL --account="${PAWSEY_PROJECT}-gpu" \
+  --output="$MYSCRATCH/geora/runs/logs/difference-next-%j.log" \
+  jobs/difference_continuation.sbatch \
+  "$MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659"
+```
+
+報告：`$MYSCRATCH/geora/runs/difference-next-JOB_ID/continuation_checks.json`。
+用 `jobs/watch_gpu_check.sh JOB_ID LOG_PATH` 查看實時日誌；完成後以 Slurm State 和 JSON 同時確認結果。
+
+若原 scratch 的載入明顯變慢，先在容器 CPU 做臨時串流複製與校驗，避免在 GPU allocation 中等待：
+
+```bash
+python scripts/stage_checkpoint_copy.py --output-dir "$MYSOFTWARE/manual/cache/geora-base-test"
+python scripts/check_staged_checkpoint.py --checkpoint-dir "$MYSOFTWARE/manual/cache/geora-base-test"
+```
+
+臨時目錄必須為空，約增加 3 GiB 儲存；主資料仍在 scratch。第二步核對逐檔 SHA256 和所有 338 個 FP32 載入值。驗證後，把該目錄作為 `jobs/difference_continuation.sbatch` 的第二個參數；作業記錄副本 provenance，並使用 `disable_mmap=True`、`HF_DEACTIVATE_ASYNC_LOAD=1`。測試完成後清理自己建立的臨時目錄。這個 workaround 沒有改變模型數值，亦未單獨歸因各載入選項的性能作用。原始報告和兩次 allocation 的用量見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。

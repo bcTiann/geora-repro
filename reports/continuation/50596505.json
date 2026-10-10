@@ -1,0 +1,33 @@
+{
+  "status": "running",
+  "checks": [
+    {
+      "name": "untrained_factor_source",
+      "passed": true
+    }
+  ],
+  "stage": "difference_generation_and_independent_lr_trials",
+  "optimizer_steps": 0,
+  "backward_calls": 0,
+  "independent_optimizer_steps": 0,
+  "svd_calls": 0,
+  "forward_mode": "difference",
+  "runtime_precision": {
+    "base_weight_storage": "bfloat16_original_W_pre",
+    "base_forward": "native_bfloat16_autocast",
+    "A_B_A0_B0_storage": "float32",
+    "low_rank_branches_and_subtraction": "float32_autocast_disabled",
+    "correction_before_base_addition": "cast_to_base_output_dtype",
+    "attention": "unmodified_native_eager"
+  },
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "source_git_commit": "388e9da3464afd347b80fbb7d2edcbb6a41a1119",
+  "initialization_directory": "/scratch/pawsey0807/btian/geora/initializations/login-20261009T115357Z-2781659",
+  "initialization_manifest_sha256": "1190d39e0507137d50ef444b0a5e0bee7763057d3e172c76e32e6b4d996fc40e",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "slurm_job_id": "50596505",
+  "scope": "Untrained generation checks plus three independent CE first steps; no GRPO or task scores."
+}
