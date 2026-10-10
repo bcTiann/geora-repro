@@ -25,12 +25,13 @@ def pinned_configuration() -> tuple[dict, Path]:
     return configuration, checkpoint_directory
 
 
-def fresh_fp32_model(checkpoint_directory: Path) -> torch.nn.Module:
+def fresh_fp32_model(checkpoint_directory: Path, *, disable_mmap: bool = False) -> torch.nn.Module:
     model = AutoModelForCausalLM.from_pretrained(
         checkpoint_directory,
         dtype=torch.float32,
         attn_implementation="eager",
         local_files_only=True,
+        disable_mmap=disable_mmap,
     )
     model.requires_grad_(False)
     model.eval()
@@ -141,4 +142,3 @@ class CheckReport:
     def finish(self) -> None:
         self.data["status"] = "passed"
         self.write()
-

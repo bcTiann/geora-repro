@@ -5,6 +5,7 @@ a fresh AdamW optimizer. This is a CE diagnostic, not GRPO or task evaluation.
 """
 
 import argparse
+import faulthandler
 import hashlib
 import json
 import math
@@ -186,6 +187,12 @@ def run(arguments, report):
     torch.manual_seed(0)
     torch.cuda.reset_peak_memory_stats()
     configuration, checkpoint = pinned_configuration()
+    if arguments.checkpoint_dir is not None:
+        checkpoint = arguments.checkpoint_dir
+        staging = json.loads((checkpoint / "staging_record.json").read_text())
+        if staging["status"] != "validated" or staging["model_revision"] != configuration["model_revision"]:
+            raise RuntimeError("Temporary checkpoint must pass CPU checksum/value validation first")
+        report.data["checkpoint_staging"] = staging
     manifest_path = arguments.init_dir / "manifest.json"
     saved_manifest = json.loads(manifest_path.read_text())
     validate_manifest(saved_manifest, configuration)
@@ -202,13 +209,26 @@ def run(arguments, report):
         torch_version=torch.__version__, hip_version=torch.version.hip,
         gpu_name=torch.cuda.get_device_name(0), slurm_job_id=os.environ.get("SLURM_JOB_ID"),
         scope="Untrained generation checks plus three independent CE first steps; no GRPO or task scores.",
+        checkpoint_directory=str(checkpoint),
+        model_loader_options={"disable_mmap": arguments.disable_mmap,
+                              "HF_DEACTIVATE_ASYNC_LOAD": os.environ.get("HF_DEACTIVATE_ASYNC_LOAD")},
     )
     report.write()
     report.require("untrained_factor_source", all(
         torch.equal(state[f"{target['name']}.{factor}"], state[f"{target['name']}.{factor}0"])
         for target in manifest["target_modules"] for factor in ("A", "B")))
-    reference = fresh_fp32_model(checkpoint)
-    model = fresh_fp32_model(checkpoint)
+    report.data["model_loading_seconds"] = {}
+    def load_model(name):
+        report.data["current_stage"] = "loading_" + name
+        report.write()
+        print("Loading", name, "from", checkpoint, flush=True)
+        load_started = time.perf_counter()
+        loaded = fresh_fp32_model(checkpoint, disable_mmap=arguments.disable_mmap)
+        report.data["model_loading_seconds"][name] = time.perf_counter() - load_started
+        report.write()
+        return loaded
+    reference = load_model("reference")
+    model = load_model("difference_model")
     load_geora_state(model, state, manifest)
     del state
     device, frozen_dtype = "cuda", torch.bfloat16
@@ -245,11 +265,13 @@ def run(arguments, report):
         device, frozen_dtype, report, max_new_tokens=8,
     )
     report.data["generation"] = generation
+    report.data["current_stage"] = "independent_lr_trials"
     report.write()
     learning_rate_trials(model, reference, cases, targets, report, device, frozen_dtype)
     torch.cuda.synchronize()
     report.data.update(elapsed_seconds=time.perf_counter()-started,
-                       peak_allocated_memory_gib=torch.cuda.max_memory_allocated()/2**30)
+                       peak_allocated_memory_gib=torch.cuda.max_memory_allocated()/2**30,
+                       current_stage="finished")
     report.finish()
     print("Continuation checks passed:", report.path, flush=True)
 
@@ -258,9 +280,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--init-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--checkpoint-dir", type=Path, help="Optional checksum-verified temporary checkpoint copy.")
+    parser.add_argument("--disable-mmap", action="store_true", help="Read safetensors before materializing weights.")
     arguments = parser.parse_args()
     report = CheckReport(arguments.output_dir, "continuation_checks.json")
     attempted_start = time.perf_counter()
+    faulthandler.dump_traceback_later(30, repeat=True)
     try:
         run(arguments, report)
     except Exception as error:
@@ -269,3 +294,5 @@ if __name__ == "__main__":
             report.data["peak_allocated_memory_gib"] = torch.cuda.max_memory_allocated()/2**30
         report.write()
         raise
+    finally:
+        faulthandler.cancel_dump_traceback_later()
