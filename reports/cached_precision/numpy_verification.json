@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "device": "CPU",
+  "implementation": "NumPy FP64; no model forward",
+  "source_report_sha256": "7eb8bf6c7931d3e5ff4405bc6d7bf7df1433815201116a982792ff333df39d2a",
+  "source_script_sha256": "52a50f63351f82d666c0fe478527e8b70837e828475014c4ef99639ef6db4885",
+  "cases": [
+    {
+      "label": "BF16",
+      "valid_token_count": 103,
+      "full_vocab_probabilities_checked": 206,
+      "snapshot_sha256": "25ce0db77a2c15eaa0c352ee940cc3f05fdaf0a4e0654801cf02441b54af1297",
+      "max_probability_absolute_residual": 4.0389913635863195e-13,
+      "max_ratio_absolute_residual": 1.576337259508176e-13,
+      "max_full_vocab_logit_difference": 0.5
+    },
+    {
+      "label": "same_weight_values_FP32",
+      "valid_token_count": 103,
+      "full_vocab_probabilities_checked": 206,
+      "snapshot_sha256": "89ce3a9b4d421d7fce466c421cc43aaf16e47cdb2293c37e541e9a16bf2e7d18",
+      "max_probability_absolute_residual": 4.0234482412415673e-13,
+      "max_ratio_absolute_residual": 6.596121269493568e-14,
+      "max_full_vocab_logit_difference": 0.00019848346710205078
+    }
+  ]
+}

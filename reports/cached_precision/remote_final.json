@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "job_id": "50668984",
+  "temporary_checkpoint_removed": "/software/projects/pawsey0807/btian/manual/cache/geora-amd-fp32-20261011",
+  "original_checkpoint_present": true,
+  "original_initialization_present": true,
+  "diagnostic_snapshots_retained": true,
+  "sacct_raw_row": "50668984|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=16329,gres/gpu=1,mem=29440M,node=1|22:00:17|22:00:53",
+  "allocation_seconds": 36,
+  "time_limit_seconds": 120,
+  "own_job_queue": "empty"
+}

@@ -855,3 +855,18 @@ relative_error = norm(actual - reference) / norm(reference)
 最终完整模型检查 40/40，49.18 秒；此前探索性本地运行约 34.46 秒。小模型 CPU 22/22；独立 NumPy 从保存中间量复核四个 snapshot 哈希、八个概率、56 个向量分解和六组 MLP 形状对照。本轮新增 Setonix allocation 为 0，上一节累计 55 分 7 秒不变。底层 Metal kernel 累加顺序未捕获，本地起点不能直接替代 AMD 的完整归因。
 
 完整步骤、图、精度表和脚本入口见 [LOCAL_ERROR_PROPAGATION.md](LOCAL_ERROR_PROPAGATION.md)；最终记录见 [reports/local_error_propagation/20261011.json](reports/local_error_propagation/20261011.json)。正式论文复現 pilot 仍未执行；本轮是数值诊断。
+
+
+## 11. L19/S17：AMD 全部 103 个有效 token 的同权重 FP32 对照
+
+2026-10-11，job `50668984`。同一个冻结原始 Qwen，无 GeoRA／LoRA、无新采样、无 optimizer step。固定 S12 的八段旧回答，先 BF16 有／无 cache，然后保持现有 BF16 权重的数值原样提升 FP32，逐元素验证全部 1,543,714,304 个参数值，再重复两条路径。完整词表真实 logits 在强制旧 token 前捕获，两个精度统一 CPU FP64 分析。
+
+两个精度均比较全部 103 个有效下一 token，包含第一 EOS、排除之后 padding。核对有效前文 IDs、positions、传入二维 mask 一致。BF16 原最差位置的完整 vocab logits 精确恢复 S12 snapshot。103 个位置的绝对概率相对差均减小；最大值从 19.69750175% 降到 0.00327280%，约缩小 6018.54 倍。最大绝对 logp 差从 0.1797975554 降到 0.0000327275，平均值从 0.0113921317 降到 0.0000029899。
+
+真实 `This` 位置，BF16 cache／无 cache 概率为 12.62812628%／15.11555167%；FP32 为 13.75969281%／13.76014314%。另一结束 token 位置，BF16 相对差 +5.31006125%，FP32 +0.00304603%。FP32 仍有微小差异，103 个位置中 5 个超过原 ratio 容差 2e-5；本轮没有宣称训练修正已验收，也没有改变训练配置。
+
+完整 GPU 检查 24/24，Python 9.925 秒，peak allocated GPU tensor memory 5.911 GiB。Mac／Setonix login 小模型回放各 18/18；独立 NumPy 在 login CPU 核查两份 snapshot 哈希，并从完整词表重算 412 个条件概率、206 个相对差。模型计算 BF16 或 FP32，logits 以 FP32 保存，概率分析 FP64。代码执行 commit f4ac79c，源文件哈希随报告保存。
+
+两分钟硬上限、一个逻辑 GPU，实际 allocation 36 秒，COMPLETED，0:0；结束后队列为空。临时模型副本已删除，原模型／初始化／完整原始 logits 保留。现在累计 22 个已记录作业 allocation **55 分 43 秒**，不含 login CPU。
+
+详细步骤与全部有效 token 见 [CACHED_PRECISION.md](CACHED_PRECISION.md)、[GPU 报告](reports/cached_precision/50668984.json)、[NumPy 复核](reports/cached_precision/numpy_verification.json)。

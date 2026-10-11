@@ -23,6 +23,8 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 | [CACHED_ROLLOUT.md](CACHED_ROLLOUT.md) | KV cache 實際採樣概率與訓練重算的診斷、門限及下一步 |
 | [CACHED_LOGITS.md](CACHED_LOGITS.md) | 同一原模型的成對原始 logits、softmax 檢查與概率差異分解 |
 | [CACHED_LAYERS.md](CACHED_LAYERS.md) | 重放同一段 token、逐層定位差異與相同權重值的 FP32 對照 |
+| [LOCAL_ERROR_PROPAGATION.md](LOCAL_ERROR_PROPAGATION.md) | 本地 Metal：相同输入的 MLP 形状对照、逐层传播与最终概率差 |
+| [CACHED_PRECISION.md](CACHED_PRECISION.md) | AMD：全部 103 个有效 token 的同权重值 BF16／FP32 概率对照 |
 | [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md) | 全局階段、目前位置、高吞吐 rollout 驗收與正式實驗安排 |
 | [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) | 統一的實驗目的、流程、精度、結果、作業用量與目前進度 |
 | [geora_layers.py](geora_layers.py) | GeoRA 線性層、mask 與 SVD 初始化、全層替換、adapter 儲存／載入 |

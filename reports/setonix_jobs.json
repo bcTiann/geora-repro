@@ -364,11 +364,31 @@
       },
       "observed_queue_after_completion": "empty",
       "sacct_raw_row": "50665075|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=21594,gres/gpu=1,mem=29440M,node=1"
+    },
+    {
+      "job_id": "50668984",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 36,
+      "time_limit_seconds": 120,
+      "query_date": "2026-10-11",
+      "stage": "Same-weight BF16 and FP32 native cached/fixed probabilities for all 103 saved valid tokens",
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50668984|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=16329,gres/gpu=1,mem=29440M,node=1|22:00:17|22:00:53",
+      "start_time_as_displayed": "22:00:17",
+      "end_time_as_displayed": "22:00:53"
     }
   ],
-  "sum_allocation_seconds": 3307,
+  "sum_allocation_seconds": 3343,
   "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50665075 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%110 -P",
+  "latest_query": "sacct -X -j 50668984 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%110,Start,End -P",
   "pending_jobs": [],
-  "latest_own_queue_observation": "empty immediately before final accounting query"
+  "latest_own_queue_observation": "empty immediately after NumPy CPU verification"
 }
