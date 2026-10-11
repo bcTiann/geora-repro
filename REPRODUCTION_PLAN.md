@@ -2,7 +2,7 @@
 
 更新：2026-10-11。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步連續更新、完整訓練恢復與成本量測已完成。** L12/S11 的 KV cache likelihood 門限未通過；L13/S12 已確認同一原模型的兩條路徑在 softmax 前產生不同 logits，FP64 重算可重現最差位置的概率差異。L14/S13 已重放該位置並定位第 0 層差異，確認輸入、position IDs 與可見 key 一致；同權重值全 FP32 對照大幅縮小差異，但尚未驗證可用校正。保留已驗證的固定寬度、無 cache 訓練 sampler。先處理 logits 計算路徑差異，再驗證更新後策略及完整訓練／恢復，最後進入較長 pilot；尚未比較任務分數。詳見 [CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
+**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，pilot 待做。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
 
 ## 1. 第一個復現目標
 
@@ -19,7 +19,7 @@
 | 1. 來源與初始化 | 模型、mask、SVD 和 A0/B0 是否符合選定設定？ | 固定來源版本；196 個目標層；FP32 因子與有效權重檢查 | 已完成 |
 | 2. 數值與更新 | 裝入 GeoRA 後能否維持初始輸出，且正確更新和重載？ | 完整模型初始化、A/B 單步 CE、保存重載、短生成/cache/padding 通過 | 已完成 |
 | **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **已完成，S9 20/20** |
-| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 五步已完成；cache 逐層定位與 FP32 對照已完成，校正及完整模型 likelihood 驗收待做；pilot 待做 |
+| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 兩條路徑的五步與完整恢復已完成；pilot runner／評估及長程執行待做 |
 | 5. 正式任務實驗 | 相同訓練預算下，效果與能力保留有何差異？ | 固定協定訓練及評估；記錄 Base/LoRA/GeoRA 分數與用量 | 待做 |
 | 6. 機制與擴展 | 結果是否支持論文提出的幾何解釋？ | 分析實際 GRPO 更新，加入必要消融及其他 baseline | 待做 |
 
@@ -35,6 +35,9 @@
 - S11 完整 MI250X BF16：10/10 機械檢查通過，初始化 GeoRA 與原模型 cached tokens／logp 完全相同；兩者對無 cache 訓練 scorer 的 likelihood 門限均未通過（0/2）。最大 token logp 差 `0.17979764938354492`，概率比範圍 `[0.8870854910554354, 1.196975129959193]`。兩次 GPU allocation 合計 72 秒，沒有 optimizer update；第一個 job 在 tokenizer API 處失敗，修正後才取得數值結果。
 - L13/S12：成對 logits 的 tiny CPU 檢查在本機與 Setonix 登入節點均為 10/10，FP32／BF16 各一個原模型 case，沒有更新。完整 MI250X BF16 只載入一個凍結原模型，6/6 診斷檢查通過；103 個有效 token 的原始 logits 最大差 `0.5`，捕獲 logits 重算生成 logp 的誤差為 `0`。最差位置的 FP64 概率比 `1.1969750175109515` 重現 S11 的約 19.7% 差異，確認主要差異已在 softmax 前出現；具體 decoder／kernel／BF16 原因尚未定位。job `50659217` 新增 allocation 34 秒、沒有 GeoRA 或 optimizer update；累計已記錄 allocation 1865 秒。
 - L14/S13：[逐層診斷](CACHED_LAYERS.md) 重放 S12 的同一原模型／同一 token，MI250X 檢查 23/23，BF16 兩條路徑精確恢復舊 logits snapshot；實際有效 token、position IDs 與目標 attention 可見 key 一致。固定寬度比較中，當前 token 最早在第 0 層 `q_proj` 出現微差，但 RoPE 後 Q 相同；歷史 V 不同，第 0 層 attention 概率相同而其加權 V 輸出不同。BF16 autocast 路徑包含部分內部 FP32 計算。同一權重值全 FP32 對照把該 token 概率比縮至 `1.0000327280290207`，仍超過原 `2e-5` 相對比例門限；僅此 token 的定位，不是全部 103 token 或訓練驗收，也未指定單一 kernel bug。job `50660028` 一個邏輯 GPU，新增 allocation 36 秒；17 個已記錄作業合計 1901 秒。
+
+- L15/S14：實際 attention P/V snapshot 受控干預26/26；固定 P/V 改乘法形狀的該局部差為0，只換歷史V恢復第0層目標attention輸出差。單層端到端替換仍有約19.27%概率差，沒有唯一根因結論。短GeoRA初始化／合成更新的cache概率亦精確對齊。
+- L16/S15：CPU streaming sampler和attention checkpoint在本機／Setonix各76/76、45/45；MI250X cache GeoRA與LoRA均58/58，五步及完整恢復通過。兩者分別9834／10157實際有效tokens採樣／重算差0；沒有importance correction或門限放寬。三個新單GPU作業共1370秒，全部終止并清理副本。詳細源版本、精度、報告與全部用量見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 S8 最後恢復 `untrained_restored`。三次 CE 試驗是各自從初始化出發的一步，沒有累積成三步模型；也沒有任務獎勵。S7 的單步測試檔案另行保留。**正式 GRPO 訓練必須從基底＋未訓練初始化開始。**
 
@@ -60,7 +63,7 @@ c = alpha / r
 | 預設 learning rate | 1e-6 | 首次 GRPO 試跑採此值；CE 測量只作診斷 |
 | Global batch、每題 rollout | 128、8 | 短檢查縮小；正式前明確 batch 指 prompt 還是回答，以及梯度累積方式 |
 | KL coefficient | 啟用時 0.001 | 首次試跑採 0.001，reference 是凍結的原始模型 |
-| 最大 prompt／response 長度 | 1024／4096 | 短檢查 512／256；pilot 512／512，均標記縮減 |
+| 最大 prompt／response 長度 | 1024／4096 | 短檢查及目前 pilot 計畫均 512／256，標記縮減；擴長前另行驗收 |
 | 數學訓練資源 | 一節點、8 個 80GB GPU | 先用一個 Setonix 邏輯 GPU；擴大前量測及核對分散式運算 |
 
 尚待固定或確認：訓練總步數/epoch、prompt 原文、採樣 temperature/top-p/top-k、old policy 更新與樣本重用次數、clip epsilon、advantage 的標準差約定、KL 估計/求導方式、AdamW 的其他選項、scheduler、seed、截斷回答規則、checkpoint 選擇和每個 benchmark 的解碼/重複採樣協定。
@@ -101,7 +104,7 @@ c = alpha / r
 
 old log probabilities 必須在該批次更新前保存並 detach，固定到該批次使用結束；reference 全程固定原始策略。先用相同 teacher-forcing scoring 路徑檢查未更新 old/current 的 ratio=1、初始化 policy/reference KL 接近零。這只能驗證打分與保存一致，不能證明 rollout 與 scoring 代表同一個策略。
 
-另外測量「實際採樣路徑的概率」與「完整回答重新 scoring 的概率」：有效 token 的 delta logp、對應 importance ratio 分布與整段 log probability 差。S9/S10 已在固定寬度 no-cache 路徑驗證通過；S11 的完整模型 cache 路徑未通過既有門限，尚未接入更新。在接入更新前固定容許差異和處理規則，納入配置與驗收。S8 已觀察到原模型自身在不同 cache/padding 路徑下有數值差異；S11 的 native 與初始化 GeoRA 亦有相同差異；S13 已對其中一個位置定位第 0 層差異，概率對齊／校正仍待驗證。先對齊生成/打分路徑，或驗證有算法依據的 importance correction，再接更新。不能只記錄差異或只靠 old/current ratio=1 就宣稱 GRPO 流程驗收完成。所有有效 token 的 log probabilities、ratio 和 KL 需有限。
+另外測量「實際採樣概率」與「重算已保存 token 的概率」：全部有效 token 的 delta logp、ratio 和整段 logp 差。S9/S10 的 fixed 路徑和S15的新cached路徑皆通過；S11的cache生成＋fixed重算則失敗，該歷史結果保留。S15 用相同執行順序對齊兩端，未採用 importance correction；最大逐token logp差／ratio偏離1仍為2e-5，整段差1e-3。只有old/current相同不夠，實際sampled/old和更新後策略亦須核對，所有有效token的概率、ratio和KL須有限。
 
 至少在一個**真實混合 reward 組**中完成非零策略梯度與 A/B 更新；如果整組同分，記錄並繼續有限候選題，不因 loss=0 就宣稱完成更新。檢查-only 的人工 reward 例子與真實答案 reward 報告分開保存。
 
@@ -128,9 +131,11 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 
 保存並恢復 adapter、optimizer、scheduler、RNG、資料位置；若 checkpoint 在樣本重用期間，還要恢復該批回答與 old log probabilities。比較恢復前後的相同 scoring 路徑與下一次固定批次更新；純模型/optimizer 重載不足以驗收完整訓練恢復。
 
-上述五步與恢復已通過。放大之前的 cache 診斷已執行，但完整模型的採樣／訓練重算概率一致性未通過（[L12/S11](CACHED_ROLLOUT.md)）。[L13/S12](CACHED_LOGITS.md) 成對捕獲原始 logits，已確認最差位置的概率差異可由 softmax 前的 logits 解釋；這一步不是完成校正。[L14/S13](CACHED_LAYERS.md) 已完成同 token 的逐層重放與同權重值 FP32 對照，差異從第 0 層出現；FP32 縮小了該 token 差異，但仍未通過原門限。下一步驗證可用的概率對齊或有算法依據的 importance correction，涵蓋全部有效 token。保留既有門限與訓練 sampler。候選通過後，仍需完整模型更新後策略、LoRA／GeoRA GRPO 及恢復驗收；長生成還要避免保留全部 vocab scores。這輪沒有任務分數或同條件速度比較，不能據此報加速倍數。
+上述無 cache 五步與恢復已通過。後續 S11–S14 釐清混用生成／概率重算路徑的差異；S15 以新 cache 路徑完成兩方法五步、所有token概率核對與完整恢復。受控歸因只建立第0層歷史V的局部貢獻，並未找到整個19.7%差異的唯一根因。[CACHED_TRAINING.md](CACHED_TRAINING.md) 保存完整資料流和成本；新cache可用，但本次整段耗時與顯存較高，pilot兩方法共用已有fixed路徑。
 
-通過上述驗收後，固定 response 上限和 reward 協定，再重測成本。建議 pilot 預算為：固定 1024 題 train、128 題 validation；每次更新 2 題、每題 8 個 rollout、response 最長 512；每種方法最多 100 個 optimizer steps，第一次先同 seed。先用前 5–10 步量測生成/打分/更新時間、生成 token 數和峰值顯存，再訂實際 Slurm 時限。
+**下一步：實作通用 pilot runner 及固定 validation 評估。** [grpo_pilot_plan.json](configs/grpo_pilot_plan.json) 是明示計畫檔，`check_grpo_continuation.py` 仍只驗收五步，不能直接把它當成100步訓練器。規劃固定1024題train／128題validation；每批2題、每題4回答、最長256token，每種方法最多100個optimizer steps，同seed/order/reward/概率路徑。先保存未訓練Base的同協定validation結果；用validation選checkpoint，不查看test選參數。
+
+維持已驗收的batch與長度；本輪cache的截斷／解析失敗比例較高，下一階段要繼續記錄。若改為8回答或512+tokens，先核對容量、全部token概率及恢復，不能視為現有驗收自動涵蓋。先在pilot第一個短段量測完整工作量，再訂Slurm時限及按checkpoint分段；本輪沒有提交pilot。
 
 pilot 驗收是流程連續可用、恢復可靠及測得資源成本；100 步的分數用於決定正式配置，不當作論文 Table 8 的復現結果。若單次 GPU 預算不足，按 checkpoint 分段；不將短 CE 的耗時外推成 GRPO 時間。
 
@@ -163,6 +168,6 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 程式/環境放 software，模型/資料/cache/checkpoint/結果放 scratch。scratch 載入變慢時先 CPU 診斷，必要的臨時副本先校驗、結束後清理。
 - 逐階段保存 JSON、實際 dtype、source commit、dataset IDs、配置和 Slurm allocation。失敗/timeout 保留，計入用量。
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
-- [GOAL.md](GOAL.md) 是目前進行中的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
+- [GOAL.md](GOAL.md) 是已完成的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
-**下一個可交付結果：處理已確認的 cached／固定寬度 logits 差異，驗證可用的概率對齊或校正，通過更新後策略及訓練／恢復驗收，再用固定 reward／長度協定完成一輪有 validation 的 LoRA／GeoRA pilot。**
+**下一個可交付結果：實作通用 fixed_width pilot runner 和固定 validation 評估，核對原五步行為及完整恢復，再按計畫分段完成 LoRA／GeoRA 的較長 pilot。**

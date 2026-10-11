@@ -2,6 +2,8 @@
 
 更新：2026-10-11，L14/S13。接續 [原始 logits 檢查](CACHED_LOGITS.md)。
 
+本文件記錄L14/S13；後續已完成受控干預和cache訓練驗收，見最後一節。
+
 **已定位到第 0 層的投影與 attention 計算開始出現路徑差異。相同權重數值改用 FP32 forward，原最差 token 的概率相對差由 19.6975% 降到 0.0032728%。這是定位結果，尚未通過完整 cached 訓練的概率一致性驗收。**
 
 ## 1. 比較的是哪個模型、哪段文字？
@@ -125,3 +127,10 @@ FP32 對照支持低精度與不同執行形狀對端到端概率差有重要影
 - [逐層捕獲與局部對照](scripts/cache_layer_probe.py)、[CPU 檢查](scripts/check_cache_layers_cpu.py)、[GPU 入口](scripts/check_cache_layers_gpu.py)、[Slurm job](jobs/cache_layers.sbatch)。
 - [Mac CPU](reports/cache_layers/cpu_local.json)、[Setonix CPU](reports/cache_layers/cpu_setonix.json)、[GPU 完整結果](reports/cache_layers/50660028.json)、[作業與清理](reports/cache_layers/remote_final.json)、[用量總表](reports/setonix_jobs.json)。
 - 實際 GPU 執行代碼 commit：`d4ca571`。遠端報告：`/scratch/pawsey0807/btian/geora/runs/cache-layers-50660028/cache_layers_gpu.json`。
+
+
+## 10. 後續受控干預與路徑驗收（L15/S14、L16/S15）
+
+S14已捕獲原生BF16 attention P和歷史V。固定其數值只改query數或零概率future key造成的reduction寬度，這一位置的P@V差為0；固定P/形狀只換歷史V，attention輸出差為0.00006103515625，精確恢復原局部差異。單層端到端V替換改變部分vocab logits，但目標This logit仍23.50、概率比仍1.1927040976，故歷史V只是已證實的局部貢獻。原始snapshot、控制條件、限制與26/26結果見 [S14報告](reports/cache_intervention/50660628.json) 及 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+
+S15改變下一步訓練所用的路徑：生成與可求導重算都使用相同native cache順序，並在backward重算純attention以控制顯存。LoRA/GeoRA各58/58，五步及完整恢復通過，全部有效tokens概率差0，沒有放寬門限。這不表示以前cached和無cache的logits變得一樣，也不是找到唯一kernel bug。方法、兩個真實訓練報告、成本及下一輪選擇見 [CACHED_TRAINING.md](CACHED_TRAINING.md)。

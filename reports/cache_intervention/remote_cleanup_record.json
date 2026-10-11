@@ -1,0 +1,16 @@
+{
+  "status": "cleaned",
+  "checked_at_utc": "2026-10-11T08:59:16.930410+00:00",
+  "job_ids": [
+    "50660628",
+    "50660901",
+    "50661193"
+  ],
+  "queue_empty_for_goal_jobs": true,
+  "removed_path": "/software/projects/pawsey0807/btian/manual/cache/geora-cache-goal-20261011",
+  "removed_bytes": 3098957234,
+  "original_checkpoint_preserved": true,
+  "initialization_preserved": true,
+  "dataset_preserved": true,
+  "training_checkpoints_preserved": true
+}

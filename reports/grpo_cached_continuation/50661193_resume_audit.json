@@ -1,0 +1,16 @@
+{
+  "source_sha256": "67e3b2a2c1681a4ffe8f4a69c1019b89f3565dd3377f7d215214a848bc962f0f",
+  "source_job": "50661193",
+  "status": "passed",
+  "independent_json_replay_fields_exact": {
+    "reference_logp": true,
+    "loss": true,
+    "policy_loss": true,
+    "sampled_old_token_k3": true,
+    "clip_fraction": true,
+    "gradient_norm_before_clipping": true,
+    "learning_rate": true,
+    "changed_parameter_tensors": true
+  },
+  "scope": "Checks persisted reference probabilities and scalar loss/gradient norm. Full gradient tensors are not saved; exact A/B, AdamW, scheduler and RNG checks are in the original runtime report."
+}

@@ -202,3 +202,12 @@ FP64 概率比為 `1.1969750175109515`，實際 GPU FP32 記錄為 `1.1969751299
 把同一組權重值轉為 FP32，關閉 BF16 autocast，該 token 的無 cache／cached 概率比由 `1.1969750175109515` 縮至 `1.0000327280290207`。它仍超過既有 `2e-5` 相對比例門限，且只測這個位置，不能當作全部 103 token、更新後策略或 GRPO 訓練驗收。**已驗證的訓練 sampler、配置與門限保持原樣。**
 
 job `50660028` 的診斷檢查為 23/23，實際 allocation **36 秒**，一個邏輯 GPU、兩分鐘上限；17 個已記錄作業合計 **1901 秒（31 分 41 秒）**。這裡的「診斷通過」是證據和重放檢查通過，概率對齊／校正仍待完成。
+
+
+## 11. 後續完成：原生 cache 五步與完整恢復（L16/S15）
+
+本文件前述52/52屬於 `fixed_width` 路徑。新增可選 `native_cached_differentiable` backend：生成與可求導重算使用相同 native DynamicCache 順序，逐token取logp；backward只重算純attention，cache.update保持在checkpoint外。沒有detach歷史K/V，也沒有使用vLLM。原預設config／fixed路徑保留。
+
+GeoRA `50660901`、LoRA `50661193` 均58/58：各五步真實GSM8K＋一次第3步恢復重放，所有有效tokens採樣/old和current/old概率精確一致；完整A/B、AdamW、scheduler、RNG及資料位置恢復通過。方法、精度、實際成本和cache重跑命令見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，[原始報告及比較](reports/grpo_cached_continuation/comparison.json)。完整GPU梯度張量沒有保存供事後比較；runtime檢查梯度有限、更新後參數和optimizer精確恢復，CPU另驗證checkpoint梯度一致。
+
+cache生成較快，但本次整段訓練耗時與顯存較高；實際token長度與兩次數值軌跡不同，不能當作配對速度測試。下一輪pilot預設共用fixed路徑；[pilot plan](configs/grpo_pilot_plan.json) 是規劃檔，通用訓練runner及validation評估仍待實作。

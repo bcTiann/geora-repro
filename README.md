@@ -1,12 +1,12 @@
 # GeoRA 獨立復現
 
-當前進行中的目標：[選定並驗收 GRPO 的採樣與概率計算路徑](GOAL.md)。
+已完成的目標：[選定並驗收 GRPO 的採樣與概率計算路徑](GOAL.md)。
 
 這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先讀 [復現計畫與目前進度](REPRODUCTION_PLAN.md)，再查 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)：前者安排後續工作，後者集中說明已執行的流程、精度與結果。
 
 LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。凍結權重與 reference 不變，兩種方法第一批採樣的八份回答完全相同。任務分數和正式 benchmark 待做。原 residual BF16 失敗紀錄保留。
 
-2026-10-11 的 [KV cache 檢查](CACHED_ROLLOUT.md) 已完成：小模型 CPU likelihood 通過；完整 MI250X BF16 的原模型與初始化 GeoRA 都未通過採樣／訓練重算的一致性門限。初始化 GeoRA 與原模型的 cached tokens／logp 仍完全相同。**目前繼續使用已驗證的固定寬度、無 cache 訓練 sampler**，先處理這個數值路徑差異，再擴大 pilot。
+2026-10-11 完成 [cache 受控干預及真實訓練驗收](CACHED_TRAINING.md)：LoRA／GeoRA 各 **58/58**，五步＋一次恢復重放共 19,991 有效 completion tokens，生成與可求導 cache 重算的 logp 差均為 0，原門限不變。這使新 cache 路徑成為可用選項；歷史「cache 生成＋無 cache 重算」的約 19.7% 差異仍成立。按本次完整成本，**下一輪 pilot 先沿用已驗收的無 cache 路徑**；100 步 [pilot 配置](configs/grpo_pilot_plan.json) 是計畫，尚未實作通用 runner 或開始長程訓練。
 
 接續的 [原始 logits 診斷](CACHED_LOGITS.md)（L13/S12）只用一個原始模型，確認差異已出現在 softmax 之前；同一份 logits 重算生成 logp 的誤差為 0。最差 token 的 FP64 softmax 仍重現約 19.7% 的概率比例差異。
 
@@ -19,6 +19,7 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 | [notebooks/gsm8k_grpo_tutorial.ipynb](notebooks/gsm8k_grpo_tutorial.ipynb) | 從 GSM8K、reward 到 GRPO 更新的 CPU 教程，附真實回答 |
 | [GRPO_SMOKE.md](GRPO_SMOKE.md) | 資料／GRPO 檔案分工、精度、命令和結果 |
 | [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md) | 共用五步訓練、完整 boundary checkpoint、恢復與資源記錄 |
+| [CACHED_TRAINING.md](CACHED_TRAINING.md) | 已驗收的 cache 生成／梯度資料流、五步恢復、成本與 pilot 路徑選擇 |
 | [CACHED_ROLLOUT.md](CACHED_ROLLOUT.md) | KV cache 實際採樣概率與訓練重算的診斷、門限及下一步 |
 | [CACHED_LOGITS.md](CACHED_LOGITS.md) | 同一原模型的成對原始 logits、softmax 檢查與概率差異分解 |
 | [CACHED_LAYERS.md](CACHED_LAYERS.md) | 重放同一段 token、逐層定位差異與相同權重值的 FP32 對照 |
@@ -95,9 +96,9 @@ Git 只傳程式、配置、教程與小型報告。模型權重、初始化 che
 
 Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器內的 `venv --system-site-packages`，沿用容器已提供的 ROCm PyTorch，再補裝需要的套件。本機 `uv sync` 的 PyTorch 依賴配置不適用於這個容器環境。實際 Python、追加依賴與 GPU 可見性依 [SETONIX_GUIDE.md](SETONIX_GUIDE.md) 逐步確認。
 
-本輪 [GOAL.md](GOAL.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
+初始化階段 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
 
-整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前階段 1（來源與初始化）、2（數值與機械更新）完成；階段 3（資料/答案解析、GRPO 小例子與一次真實獎勵更新）亦完成；階段 4 的共用五步／完整恢復已完成。L12/S11 已測出完整模型兩條路徑的 likelihood 差異，L13/S12 已確認差異在 softmax 前出現，L14/S13 已在同一 token 的重放中定位第 0 層差異並完成 FP32 對照；接著驗證可用的概率對齊或校正，再做更新後策略、訓練／恢復驗收和 pilot。正式評估與幾何分析待做。
+整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前來源／初始化、單步更新、真實 GRPO 流程、兩條路徑的五步與完整恢復均已驗收。[本輪 goal](GOAL.md) 新增 GPU allocation 22 分 50 秒，全部作業已釋放、臨時模型副本已清理。下一步是實作有 validation 評估的通用 pilot runner，先以現有固定寬度、無 cache 配置進行較長連續訓練；正式評估與幾何分析仍待做。
 
 ## 重跑已完成的 difference 檢查
 

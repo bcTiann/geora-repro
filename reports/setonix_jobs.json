@@ -305,9 +305,52 @@
       "start_time_as_displayed": "15:59:29",
       "end_time_as_displayed": "16:00:31",
       "temporary_copy_cleanup_status": "retained for phase3 at S14 completion observation"
+    },
+    {
+      "job_id": "50660901",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 715,
+      "time_limit_seconds": 1200,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "GeoRA native cached five real GSM8K GRPO steps and exact boundary resume; pure attention checkpointing",
+      "query_date": "2026-10-11",
+      "sacct_raw_row": "50660901|COMPLETED|0:0|715|00:20:00|billing=128,cpu=16,energy=404648,gres/gpu=1,mem=29440M,node=1|16:26:36|16:38:31",
+      "start_time_as_displayed": "16:26:36",
+      "end_time_as_displayed": "16:38:31",
+      "temporary_copy_cleanup_status": "retained for subsequent LoRA cached five-step validation"
+    },
+    {
+      "job_id": "50661193",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 593,
+      "time_limit_seconds": 1200,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "LoRA native cached five real GSM8K GRPO steps and exact boundary resume; pure attention checkpointing",
+      "query_date": "2026-10-11",
+      "sacct_raw_row": "50661193|COMPLETED|0:0|593|00:20:00|billing=128,cpu=16,energy=337132,gres/gpu=1,mem=29440M,node=1|16:40:38|16:50:31",
+      "start_time_as_displayed": "16:40:38",
+      "end_time_as_displayed": "16:50:31",
+      "observed_queue_after_completion": "own job queue empty immediately before final accounting query",
+      "temporary_copy_cleanup_status": "final test complete; exact-path cleanup recorded separately"
     }
   ],
-  "sum_allocation_seconds": 1963,
+  "sum_allocation_seconds": 3271,
   "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50660628 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -u btian -o %i"
+  "latest_query": "sacct -X -j 50661193 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End",
+  "pending_jobs": [],
+  "latest_own_queue_observation": "empty immediately before final accounting query"
 }

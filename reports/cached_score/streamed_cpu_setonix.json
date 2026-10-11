@@ -1,0 +1,1208 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "float32_lora_t1.0_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_lora_t1.0_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_t1.0_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "float32_lora_t1.0_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_lora_t1.0_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_t1.0_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "float32_lora_t0.7_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_lora_t0.7_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_t0.7_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "float32_lora_t0.7_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_lora_t0.7_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_t0.7_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "float32_lora_pad_eos_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_lora_pad_eos_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_pad_eos_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 8,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "float32_lora_pad_eos_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 8,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_lora_pad_eos_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_lora_pad_eos_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "float32_geora_t1.0_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_geora_t1.0_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_t1.0_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "float32_geora_t1.0_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_geora_t1.0_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_t1.0_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "float32_geora_t0.7_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_geora_t0.7_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_t0.7_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "float32_geora_t0.7_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_geora_t0.7_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_t0.7_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "float32_geora_pad_eos_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "float32_geora_pad_eos_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_pad_eos_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 8,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "float32_geora_pad_eos_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 8,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "float32_geora_pad_eos_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "float32_geora_pad_eos_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_lora_t1.0_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_lora_t1.0_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_t1.0_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "bfloat16_lora_t1.0_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_lora_t1.0_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_t1.0_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_lora_t0.7_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_lora_t0.7_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_t0.7_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "bfloat16_lora_t0.7_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_lora_t0.7_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_t0.7_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 8,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 8,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_lora_pad_eos_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_geora_t1.0_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_geora_t1.0_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_t1.0_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "bfloat16_geora_t1.0_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_geora_t1.0_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_t1.0_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_geora_t0.7_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_geora_t0.7_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_t0.7_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 41,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ]
+    },
+    {
+      "name": "bfloat16_geora_t0.7_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 41,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_geora_t0.7_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_t0.7_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_recorder_is_final_and_only_processor",
+      "passed": true,
+      "generation_processor_lists": [
+        [
+          "StreamingTokenLogps"
+        ]
+      ]
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_private_rng_isolated_advanced",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_native_retained_scores_and_streamed_scores_exact",
+      "passed": true,
+      "valid_tokens": 8,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_differentiable_cached_score_direct_gate",
+      "passed": true,
+      "valid_token_count": 8,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_first_eos_masks_and_zero_padding",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_geora_pad_eos_no_vocabulary_score_sequence_retained",
+      "passed": true,
+      "pending_vocabulary_elements": 296
+    },
+    {
+      "name": "long_256_native_actual_probabilities_and_rng_exact",
+      "passed": true,
+      "valid_tokens": 512,
+      "pending_vocabulary_elements": 74,
+      "oracle_scope": "Tiny vocab37 retains all scores only to verify streamed semantics"
+    },
+    {
+      "name": "long_256_progress_callback_reports_bounded_steps",
+      "passed": true
+    },
+    {
+      "name": "long_256_sampling_returns_no_graph_or_cache",
+      "passed": true
+    },
+    {
+      "name": "long_256_cached_score_and_backward",
+      "passed": true,
+      "valid_token_count": 512,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    }
+  ],
+  "stage": "streamed_cached_sampling_cpu_preflight",
+  "cases": [
+    {
+      "label": "float32_lora_t1.0",
+      "dtype": "torch.float32",
+      "temperature": 1.0,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "float32_lora_t0.7",
+      "dtype": "torch.float32",
+      "temperature": 0.7,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "float32_lora_pad_eos",
+      "dtype": "torch.float32",
+      "temperature": 0.7,
+      "generated_steps": 1,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "float32_geora_t1.0",
+      "dtype": "torch.float32",
+      "temperature": 1.0,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "float32_geora_t0.7",
+      "dtype": "torch.float32",
+      "temperature": 0.7,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "float32_geora_pad_eos",
+      "dtype": "torch.float32",
+      "temperature": 0.7,
+      "generated_steps": 1,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_lora_t1.0",
+      "dtype": "torch.bfloat16",
+      "temperature": 1.0,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_lora_t0.7",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_lora_pad_eos",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "generated_steps": 1,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_geora_t1.0",
+      "dtype": "torch.bfloat16",
+      "temperature": 1.0,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_geora_t0.7",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "generated_steps": 9,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        9,
+        4,
+        4,
+        8
+      ],
+      "likelihood": {
+        "valid_token_count": 41,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    },
+    {
+      "label": "bfloat16_geora_pad_eos",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "generated_steps": 1,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      }
+    }
+  ],
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "production_sampler_changed": false,
+  "scope": "Tiny synthetic CPU models; no task rewards or GPU allocation",
+  "long_cached_scoring": {
+    "status": "passed",
+    "valid_token_count": 512,
+    "max_absolute_delta_logp": 0.0,
+    "mean_absolute_delta_logp": 0.0,
+    "max_absolute_ratio_minus_one": 0.0,
+    "min_ratio": 1.0,
+    "max_ratio": 1.0,
+    "sequence_delta_logp": [
+      0.0,
+      0.0
+    ],
+    "finite": true,
+    "exact": true
+  },
+  "long_sampling": {
+    "capacity": 256,
+    "generated_steps": 256,
+    "completion_lengths": [
+      256,
+      256
+    ],
+    "full_model_GPU_memory_verified": false
+  },
+  "elapsed_seconds": 3.549463448987808
+}

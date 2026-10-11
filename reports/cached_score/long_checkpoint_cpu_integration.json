@@ -1,0 +1,12 @@
+{
+  "stage": "256_step_pure_attention_checkpoint_history_cpu",
+  "status": "passed",
+  "dtype": "BF16 frozen model with FP32 adapter branch",
+  "batch_size": 2,
+  "completion_steps": 256,
+  "attention_checkpoint_forward_calls": 512,
+  "attention_recompute_calls": 512,
+  "adapter_gradients_equal_to_uncheckpointed_cached_history": true,
+  "autocast_states_match": true,
+  "scope": "Independent additional long-history CPU integration; not full-model GPU memory"
+}

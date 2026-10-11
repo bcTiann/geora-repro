@@ -1,0 +1,28 @@
+{
+  "status": "cleaned",
+  "checked_at_utc": "2026-10-11T08:59:16.930410+00:00",
+  "job_ids": [
+    "50660628",
+    "50660901",
+    "50661193"
+  ],
+  "queue_empty_for_goal_jobs": true,
+  "removed_path": "/software/projects/pawsey0807/btian/manual/cache/geora-cache-goal-20261011",
+  "removed_bytes": 3098957234,
+  "original_checkpoint_preserved": true,
+  "initialization_preserved": true,
+  "dataset_preserved": true,
+  "training_checkpoints_preserved": true,
+  "recorded_at_utc": "2026-10-11T10:17:23.138854+00:00",
+  "cleanup_source": "remote_cleanup_record.json",
+  "cleanup_source_sha256": "9d9a524f14fcf1bd22ebb272c686d540d0a93ee551ed4f185eee5f12dfacb2e1",
+  "final_queue_command": "ssh setonix: squeue -u btian --noheader --format=\"%i %T\"",
+  "final_queue_exit_code": 0,
+  "final_queue_stdout_empty": true,
+  "accounting_rows": [
+    "50660628|COMPLETED|0:0|62|00:05:00|billing=128,cpu=16,energy=31371,gres/gpu=1,mem=29440M,node=1|15:59:29|16:00:31",
+    "50660901|COMPLETED|0:0|715|00:20:00|billing=128,cpu=16,energy=404648,gres/gpu=1,mem=29440M,node=1|16:26:36|16:38:31",
+    "50661193|COMPLETED|0:0|593|00:20:00|billing=128,cpu=16,energy=337132,gres/gpu=1,mem=29440M,node=1|16:40:38|16:50:31"
+  ],
+  "goal_gpu_allocation_seconds": 1370
+}
