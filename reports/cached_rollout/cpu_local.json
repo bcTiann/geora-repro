@@ -1,0 +1,493 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "fp32_native_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "fp32_native_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "fp32_native_private_rng_exact_replay",
+      "passed": true
+    },
+    {
+      "name": "fp32_native_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 2.384185791015625e-07,
+      "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "fp32_geora_initial_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "fp32_geora_initial_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "fp32_geora_initial_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 2.384185791015625e-07,
+      "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "fp32_geora_initial_padded_scoring_backward",
+      "passed": true
+    },
+    {
+      "name": "fp32_initial_cached_policy_matches_native",
+      "passed": true
+    },
+    {
+      "name": "fp32_mixed_eos_and_truncated_rows",
+      "passed": true
+    },
+    {
+      "name": "fp32_geora_after_synthetic_update_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "fp32_geora_after_synthetic_update_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "fp32_geora_after_synthetic_update_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 2.384185791015625e-07,
+      "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "fp32_pad_equals_eos_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "fp32_pad_equals_eos_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "generated_steps": 1
+    },
+    {
+      "name": "fp32_pad_equals_eos_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 2.384185791015625e-07,
+      "max_absolute_ratio_minus_one": 2.3841855067985307e-07,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "fp32_immediate_eos_is_one_scored_token",
+      "passed": true
+    },
+    {
+      "name": "bf16_native_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "bf16_native_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "bf16_native_private_rng_exact_replay",
+      "passed": true
+    },
+    {
+      "name": "bf16_native_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "bf16_geora_initial_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "bf16_geora_initial_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "bf16_geora_initial_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "bf16_geora_initial_padded_scoring_backward",
+      "passed": true
+    },
+    {
+      "name": "bf16_initial_cached_policy_matches_native",
+      "passed": true
+    },
+    {
+      "name": "bf16_mixed_eos_and_truncated_rows",
+      "passed": true
+    },
+    {
+      "name": "bf16_geora_after_synthetic_update_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "bf16_geora_after_synthetic_update_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "generated_steps": 8
+    },
+    {
+      "name": "bf16_geora_after_synthetic_update_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "bf16_pad_equals_eos_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "bf16_pad_equals_eos_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "generated_steps": 1
+    },
+    {
+      "name": "bf16_pad_equals_eos_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "likelihood_gate_passed": true
+    },
+    {
+      "name": "bf16_immediate_eos_is_one_scored_token",
+      "passed": true
+    }
+  ],
+  "stage": "tiny_cached_rollout_likelihood_diagnostic",
+  "cases": [
+    {
+      "label": "fp32_native",
+      "dtype": "torch.float32",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.008383041997149121,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 2.384185791015625e-07,
+        "mean_absolute_delta_logp": 4.1723251342773435e-08,
+        "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+        "min_ratio": 0.9999997615814493,
+        "max_ratio": 1.0000002384186075,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.384185791015625e-07,
+          4.76837158203125e-07,
+          2.384185791015625e-07,
+          -2.384185791015625e-07
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.001160250001703389,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "fp32_geora_initial",
+      "dtype": "torch.float32",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.008743459002289455,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 2.384185791015625e-07,
+        "mean_absolute_delta_logp": 4.1723251342773435e-08,
+        "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+        "min_ratio": 0.9999997615814493,
+        "max_ratio": 1.0000002384186075,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.384185791015625e-07,
+          4.76837158203125e-07,
+          2.384185791015625e-07,
+          -2.384185791015625e-07
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.0017591670002730098,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "fp32_geora_after_synthetic_update",
+      "dtype": "torch.float32",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.008388540998566896,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 2.384185791015625e-07,
+        "mean_absolute_delta_logp": 2.384185791015625e-08,
+        "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+        "min_ratio": 0.9999997615814493,
+        "max_ratio": 1.0000002384186075,
+        "sequence_delta_logp": [
+          -2.384185791015625e-07,
+          2.384185791015625e-07,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.0018638340006873477,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "fp32_pad_equals_eos",
+      "dtype": "torch.float32",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.002105042000039248,
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 2.384185791015625e-07,
+        "mean_absolute_delta_logp": 2.9802322387695312e-08,
+        "max_absolute_ratio_minus_one": 2.3841855067985307e-07,
+        "min_ratio": 0.9999997615814493,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          -2.384185791015625e-07,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.0015037920020404272,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "bf16_native",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.007867415999498917,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true,
+        "scoring_seconds": 0.0020441660017240793,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "bf16_geora_initial",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.010261040999466786,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true,
+        "scoring_seconds": 0.002633166997838998,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "bf16_geora_after_synthetic_update",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.010633749996486586,
+      "likelihood": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true,
+        "scoring_seconds": 0.00252583299879916,
+        "gate_passed": true
+      }
+    },
+    {
+      "label": "bf16_pad_equals_eos",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 0.0021838329994352534,
+      "likelihood": {
+        "valid_token_count": 8,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true,
+        "scoring_seconds": 0.0023117499986256007,
+        "gate_passed": true
+      }
+    }
+  ],
+  "scope": "No real model, task reward, GRPO step or GPU allocation",
+  "torch_version": "2.14.1",
+  "transformers_version": "5.19.0",
+  "gates": {
+    "max_absolute_delta_logp": 2e-05,
+    "max_absolute_ratio_minus_one": 2e-05,
+    "max_absolute_sequence_delta_logp": 0.001
+  },
+  "production_sampler_changed": false,
+  "likelihood_gate_passed": true,
+  "decision": "candidate_requires_full_model_validation",
+  "mechanical_checks_passed": true,
+  "elapsed_seconds": 0.12984012499873643
+}
