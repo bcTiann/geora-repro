@@ -125,4 +125,3 @@ FP32 對照支持低精度與不同執行形狀對端到端概率差有重要影
 - [逐層捕獲與局部對照](scripts/cache_layer_probe.py)、[CPU 檢查](scripts/check_cache_layers_cpu.py)、[GPU 入口](scripts/check_cache_layers_gpu.py)、[Slurm job](jobs/cache_layers.sbatch)。
 - [Mac CPU](reports/cache_layers/cpu_local.json)、[Setonix CPU](reports/cache_layers/cpu_setonix.json)、[GPU 完整結果](reports/cache_layers/50660028.json)、[作業與清理](reports/cache_layers/remote_final.json)、[用量總表](reports/setonix_jobs.json)。
 - 實際 GPU 執行代碼 commit：`d4ca571`。遠端報告：`/scratch/pawsey0807/btian/geora/runs/cache-layers-50660028/cache_layers_gpu.json`。
-
