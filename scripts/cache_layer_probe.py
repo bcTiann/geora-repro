@@ -168,10 +168,10 @@ class LayerTrace:
         return torch.cat(self.history[name], dim=0)[:self.prefix_width]
 
 
-def trace_path(model, ids, mask, prompt_width, step, row, pad_id, eos_ids, dtype, device, path):
+def trace_path(model, ids, mask, prompt_width, step, row, pad_id, eos_ids, dtype, device, path, trace_factory=LayerTrace):
     prefix_width = prompt_width + step
     column = prefix_width - 1
-    trace = LayerTrace(model, row, column, prefix_width, path)
+    trace = trace_factory(model, row, column, prefix_width, path)
     with trace.installed(), torch.no_grad(), forward_context(device, dtype):
         if path == 'cached':
             config = GenerationConfig(
