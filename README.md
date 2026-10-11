@@ -1,5 +1,7 @@
 # GeoRA 獨立復現
 
+當前進行中的目標：[選定並驗收 GRPO 的採樣與概率計算路徑](GOAL.md)。
+
 這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先讀 [復現計畫與目前進度](REPRODUCTION_PLAN.md)，再查 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)：前者安排後續工作，後者集中說明已執行的流程、精度與結果。
 
 LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。凍結權重與 reference 不變，兩種方法第一批採樣的八份回答完全相同。任務分數和正式 benchmark 待做。原 residual BF16 失敗紀錄保留。

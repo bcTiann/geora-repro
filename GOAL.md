@@ -1,47 +1,66 @@
-# 本輪目標（已完成）：驗證 GeoRA 等價重排與單步更新
+# 當前目標：選定並驗收 GRPO 的採樣與概率計算路徑
 
-建立：2026-10-10。實際數值與用量集中記錄在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。本文件保留已完成的數值驗收目標；整體後續路線與目前進度見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。
+建立：2026-10-11。狀態：**進行中**。
 
-## 要回答的問題
+## 要達成什麼
 
-把殘差形式 `F x + c B(Ax)` 改為 `W_pre x + c [B(Ax) - B0(A0x)]` 後，能否保留原始 BF16 模型的初始化輸出，且仍然可以正確更新與恢復 A/B？其中 `F=W_pre-cB0A0`、`c=alpha/r`。
+完成 KV cache 數值差異的受控歸因，選定下一輪 LoRA／GeoRA GRPO 可可靠使用的路徑，交付可執行命令、驗收報告和資源成本。
 
-這是本次復現的數值實作候選。實數代數等價，不代表作者採用了這個計算順序，也不保證浮點訓練軌跡和原 residual 路徑完全一致。
+目標到短程流程驗收為止；100 步 pilot 和論文任務分數對照接續安排。整體進度見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)；已完成的初始化目標見 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。
 
-## 精度與資料
+## 出發點
 
-- 原始凍結模型與 attention 保留原有 BF16 路徑。
-- A/B、A0/B0 保存 FP32；兩條低秩分支及相減使用 FP32，校正轉回原分支輸出 dtype 後相加。
-- 初始 A0/B0 分支對輸入保留梯度，僅因子固定。
-- 復用既有 FP32 初始化，不重新做完整模型 SVD。
-- 保存 checkpoint 時記錄 `forward_mode=difference` 與實際 runtime precision；舊無標籤 checkpoint 的預設仍是 residual。
+- 已完成：GeoRA difference 初始化、單步更新、LoRA／GeoRA 各五步無 cache GRPO 及完整恢復。
+- 已確認：同一原模型、同一有效前文，有／無 cache 的 logits 不同；原最差 token 的概率相對差 19.6975%。
+- 已定位：第 0 層歷史 V 與 attention 輸出有差；原始 Q 微差在 RoPE 後消失，不能直接當作根因。
+- 相同權重數值 FP32 forward 把該 token 差異縮小至 0.0032728%，仍超原 ratio 門限，沒有完成完整訓練驗收。
 
-## 驗收條件與順序
+上述是已執行的結果，詳見 [CACHED_LAYERS.md](CACHED_LAYERS.md) 和 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。下列項目尚待執行。
 
-1. 本機：更新後的兩層輸出、輸入梯度、A/B 梯度，與獨立 FP64 有效權重公式一致。
-2. 本機：小型 Qwen 的 FP32/BF16 初始化 logits 精確一致；A/B 單步更新、凍結參數、模型與 optimizer 重載通過；舊 residual 模式仍可運作。
-3. Setonix：完整 196 個投影保留原權重；三個固定短輸入的初始化 logits 全部精確一致，同時保留原有 2%／KL 門檻。
-4. Setonix：一次短答案 cross-entropy 的 backward/AdamW；392 個 A/B 梯度與更新、凍結參數不變、實際 logits 改變、有效更新非零。
-5. Setonix：初始化與更新後的因子／manifest／模型 logits／optimizer 保存重載一致。
-6. 整理原始報告、實際精度、局限和 Slurm 用量，推送 GitHub，確認 allocation 已釋放。
+## 執行順序與完成條件
 
-任一前置門檻失敗時保留報告，先定位原因，再決定最小的修正或下一次測量；不放寬門檻宣稱成功。
+### 1. 分離差異來源
 
-## 資源與邊界
+- [ ] 使用原保存的前文，捕獲並保存實際 attention 權重 P 和歷史 V；目前 JSON 只有差異指標。
+- [ ] 固定相同 P/V 數值，只改 P×V 的執行形狀。
+- [ ] 固定 P 和形狀，只替換 cached／重算的歷史 V。
+- [ ] 分別量化 attention 輸出影響，再用受控替換檢查後續 logits／token 概率的變化；區分局部來源與端到端放大。
 
-本機 CPU 完成小模型預檢。Setonix 使用一個邏輯 GPU，每次短作業上限 3 分鐘；依實際失敗證據才安排必要的後續作業。模型與 optimizer 檔案留在 scratch，Git 只保存程式、教程與小報告。
+### 2. 驗證可用方案
 
-本目標只完成初始化和機械更新／重載驗證，不包含 GRPO、多步穩定性、GSM8K 分數或 LoRA／GeoRA 性能結論。
+最多驗證兩類有明確依據的候選：計算路徑／精度對齊；或具有明確推導的 importance correction。每次改變記錄實際計算順序和 dtype。
 
-## 進度
+- [ ] 候選先通過 CPU 小模型與梯度預檢，再測完整模型。
+- [ ] 完整批次的所有有效 tokens 均有採樣概率、重算概率、差值及有限值檢查；不能只看原最差 token。
+- [ ] 覆蓋初始化與更新後策略，短／較長回答及不同有效長度。
+- [ ] 直接對齊方案維持原門限：最大逐 token logp 差 `2e-5`、ratio 偏離 1 不超過 `2e-5`、最大整段 logp 差 `1e-3`。
+- [ ] 若採用校正，先寫明採樣分布、優化目標、權重、detach 和 clipping 的處理，建立獨立、由推導支持的驗收協定；不把原始差異標成「對齊通過」。
 
-- [x] 新模式實作、兩層 FP64 公式與梯度對照。
-- [x] 本機小模型 FP32/BF16 的更新與重載。
-- [x] Setonix 容器 CPU 預檢及完整 1.5B 驗收。
-- [x] 統一記錄結果、用量及完成狀態。
+不要求每個中間算子逐位一致。相同重算路徑 old/current ratio=1、小模型通過或初始化生成相同，都不足以單獨驗收完整流程。
 
-完成：2026-10-10。完整模型 43/43 項通過，單個邏輯 GPU 實際 allocation 42 秒；初始化與重載誤差為 0。單步 CE 的 logits 變化較大，仍需下一階段評估步長／多步穩定性。原始報告及具體限制見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。
+### 3. 短程訓練與恢復
 
-## 後續測量（2026-10-10 已完成）
+若選用新路徑：
 
-L9/S8 完成短生成／KV cache／padding forward 和三種步長的獨立首步比較，64/64 項通過；最後恢復未訓練狀態。成功作業 46 秒，另一次載入超時 197 秒，本輪合计 GPU allocation 243 秒。具體數值與限制集中見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)，沒有 GRPO 或多步穩定性結論。
+- [ ] LoRA／GeoRA 在相同資料與協定下，各完成五個真實 GSM8K GRPO 有效更新。
+- [ ] 驗證 loss／logp／梯度有限、僅 A/B 更新、凍結參數不變。
+- [ ] checkpoint 後下一步恢復包含 optimizer、scheduler、RNG、資料位置；樣本重用中存檔時包含回答、reward、advantage 和 old logp。
+- [ ] 比較恢復前後的下一次更新，記錄一致性及允許誤差的依據。
+- [ ] 在相同工作量下量測端到端時間、生成 token 數及峰值顯存，包含校正／額外分支的成本。
+
+若新方案不合格，選用既有無 cache 路徑時，復用已通過的五步與恢復證據；只有具體修改或剩餘風險才重跑。
+
+### 4. 作出決定並交付
+
+- [ ] 明確選用哪條路徑，以及它通過的是對齊驗收或校正驗收。
+- [ ] 若兩類候選均不合格，記錄失敗證據與成本，正式選用已驗收的無 cache 路徑；不無限追加精度實驗。
+- [ ] 更新執行命令、pilot 配置、復現計畫與統一實驗記錄；提交推送程式和小型報告。
+- [ ] 核對實際 Slurm allocation、確認本目標作業已釋放，清理臨時副本。
+
+## 資源使用
+
+CPU 完成預檢與資料分析。Setonix GPU 合併相關對照、復用已驗證初始化並減少重複載入；按工作量安排合理時限，不拘泥每次幾十秒。開始新一類 GPU 工作時通知用途，完成後記錄實際用量。權重與資料留在 scratch，不加入 Git。
+
+## 完成的定義
+
+有受控歸因證據、明確採用／不採用 cache 的決定、相應流程驗收、可重現命令與成本記錄，即完成本目標。僅讓某個誤差變小或診斷腳本通過，不代表目標完成。

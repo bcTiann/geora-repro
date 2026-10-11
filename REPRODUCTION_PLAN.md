@@ -163,6 +163,6 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 程式/環境放 software，模型/資料/cache/checkpoint/結果放 scratch。scratch 載入變慢時先 CPU 診斷，必要的臨時副本先校驗、結束後清理。
 - 逐階段保存 JSON、實際 dtype、source commit、dataset IDs、配置和 Slurm allocation。失敗/timeout 保留，計入用量。
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
-- `GOAL.md` 保留已完成數值驗收的歷史目標；本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
+- [GOAL.md](GOAL.md) 是目前進行中的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
 **下一個可交付結果：處理已確認的 cached／固定寬度 logits 差異，驗證可用的概率對齊或校正，通過更新後策略及訓練／恢復驗收，再用固定 reward／長度協定完成一輪有 validation 的 LoRA／GeoRA pilot。**
