@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "snapshot_sha256": "6ab0d5a062230dff6ba9086f1a3c28ca4bbaf1f57909afddcf25f34a14d7fc77",
+  "coordinate_count": 6,
+  "cache_preserves_projection_exact": true,
+  "six_native_difference_coordinates_exact": true,
+  "independent_numpy_and_fsum_rechecks": [
+    {
+      "padded_column": 11,
+      "channel": 58,
+      "numpy_dot_plus_bias": 8.324968803208321e-06,
+      "fsum_dot_plus_bias": 8.324968803208321e-06,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    },
+    {
+      "padded_column": 12,
+      "channel": 57,
+      "numpy_dot_plus_bias": -0.09301755059277639,
+      "fsum_dot_plus_bias": -0.09301755059277639,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    },
+    {
+      "padded_column": 30,
+      "channel": 57,
+      "numpy_dot_plus_bias": -0.09301755059277639,
+      "fsum_dot_plus_bias": -0.09301755059277639,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    },
+    {
+      "padded_column": 33,
+      "channel": 57,
+      "numpy_dot_plus_bias": -0.09301755059277639,
+      "fsum_dot_plus_bias": -0.09301755059277639,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    },
+    {
+      "padded_column": 34,
+      "channel": 133,
+      "numpy_dot_plus_bias": 0.04406728397589177,
+      "fsum_dot_plus_bias": 0.04406728397589177,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    },
+    {
+      "padded_column": 44,
+      "channel": 35,
+      "numpy_dot_plus_bias": -2.651498289196752e-05,
+      "fsum_dot_plus_bias": -2.651498289196752e-05,
+      "delta_to_GPU_recorded_CPU_FP64": 0.0
+    }
+  ],
+  "promoted_FP32_then_BF16_unequal_elements": 7,
+  "scope": "Verify saved original tensors and six-coordinate analysis; no new model forward or GPU use"
+}

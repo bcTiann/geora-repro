@@ -812,6 +812,7 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50660628 | attention 受控干預／可求導 cache 初始及合成更新後概率 | 5 分鐘 | 62 秒 | COMPLETED |
 | 50660901 | GeoRA cache 真實五步／純 attention checkpoint／精確恢復 | 20 分鐘 | 715 秒 | COMPLETED |
 | 50661193 | LoRA cache 真實五步／純 attention checkpoint／精確恢復 | 20 分鐘 | 593 秒 | COMPLETED |
+| 50665075 | 历史 V 投影来源／同输入形状对照／cache 存取保持 | 2 分钟 | 36 秒 | COMPLETED |
 
 這二十個已取得終態的作業，allocation 時間合計 **54 分 31 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。本 goal 的三個新增作業為 50660628／50660901／50661193，共 **22 分 50 秒**。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
@@ -822,3 +823,18 @@ relative_error = norm(actual - reference) / norm(reference)
 初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成；S10 兩方法各一次五步／恢復作業完成；S11 首次 tokenizer 錯誤已修正、第二次完成數值診斷但 likelihood gate 失敗；S12 一次原模型 logits 診斷確認 softmax 前差異，下載後 CPU FP64 復查完成；S13 一次原模型逐層定位與相同權重 FP32 對照完成；S14 一次合併 GPU 作業完成原模型 attention 受控干預及完整 GeoRA 的 cache 概率／合成更新初驗；S15 兩方法依次完成真實 cache 五步／恢復。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。
+
+
+## 9. L17/S16：历史 V 的差异是在进入 cache 前产生的
+
+2026-10-11。复用同一冻结原模型、S12 的 token IDs 与原 logits snapshot；没有 GeoRA、奖励或更新。新检查先在 Mac／Setonix login CPU 各通过 13/13，再在 MI250X job `50665075` 通过 17/17。
+
+整个 batch 的 724,992 个历史投影输入逐元素相同。原始 V 投影输出按原顺序拼接和 reshape 后，与 attention 从原生 cache 读到的 120,832 个 V 元素逐元素相同。固定同一份输入、BF16 权重和 bias，仅改变投影分块形状，精确恢复两组原生输出和原六个 V 差异；同形状重复也精确一致。六处均来自 prompt 的 prefill50 对 fixed66，而非 cache 追加／读取。
+
+其中三个换行 token 的同一 V channel 的 CPU FP64 点积＋bias 为 `-0.09301755059277639`，距相邻 BF16 数的舍入分界 `-0.093017578125` 只有 `2.7532e-8`。这支持形状相关的浮点差异跨越 BF16 舍入分界；没有捕获内部累加器或查明具体 GPU kernel。一个近零位置有 dot＋bias 相消，其两条 BF16 值不相邻，不能把两值中点叫作舍入分界。
+
+相同输入／权重值改用 FP32 Linear 再转 BF16，原六处中五处一致，但全部有效历史仍有七处更小差异，最大 `7.62939453125e-6`；没有把它作为训练修正。原始快照下载后，独立 NumPy FP64／math.fsum 的六坐标计算与 GPU 报告中的 CPU FP64 结果逐项一致。
+
+本轮解释早期历史 V 的来源；S14 已表明单层目标位置替换无法解释整个最终 19.7%，因此不作唯一端到端根因结论。训练方案和精度不变。详细来龙去脉、六个坐标、源文件哈希与报告见 [CACHED_PROJECTION.md](CACHED_PROJECTION.md)。
+
+本轮一个逻辑 GPU allocation 36 秒，Python 14.819 秒，两分钟硬上限，`COMPLETED, 0:0`。结束后队列为空，临时模型副本已删除，原 checkpoint／初始化／远端 snapshot 保留。现在累计 21 个已记录作业 allocation **55 分 7 秒**，不含 login CPU。上一节二十个作业的 54 分 31 秒保留为 S15 当时累计。

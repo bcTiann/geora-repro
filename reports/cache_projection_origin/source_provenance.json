@@ -1,0 +1,18 @@
+{
+  "status": "verified",
+  "job_id": "50665075",
+  "uploaded_sources_sha256": {
+    "cache_projection_origin.py": "45720be2f6410e00b6b0c929d8ff18cd66710dce0a1291d180af49f234dad558",
+    "check_cache_projection_origin.py": "972fc6d5ef0f72943365879cc7d798fa7579d3dc25ce9df3f9ef4779df2f8932",
+    "cache_projection_origin.sbatch": "a0b4ab3e0065c1ada7a76253f94fd3405725dcc4b8b2399ebb845106146daa28",
+    "stage_projection_check.py": "bbf32e252511b9dc7c9146e6e9f020aa493cfc1470a527482934bd4375fb192a"
+  },
+  "remote_source_hashes_match": true,
+  "base_checkout_commit": "b5bee41569a6adbeaa63651bff39800edc659fb9",
+  "source_note": "Diagnostic scripts uploaded separately; base commit does not identify these new files.",
+  "snapshot_sha256": "6ab0d5a062230dff6ba9086f1a3c28ca4bbaf1f57909afddcf25f34a14d7fc77",
+  "own_queue_after_completion": "empty",
+  "temporary_model_copy_removed": true,
+  "original_model_and_remote_snapshot_retained": true,
+  "remote_final_output": "45720be2f6410e00b6b0c929d8ff18cd66710dce0a1291d180af49f234dad558  /software/projects/pawsey0807/btian/manual/cache/geora-projection-probe-20261011/cache_projection_origin.py\n972fc6d5ef0f72943365879cc7d798fa7579d3dc25ce9df3f9ef4779df2f8932  /software/projects/pawsey0807/btian/manual/cache/geora-projection-probe-20261011/check_cache_projection_origin.py\na0b4ab3e0065c1ada7a76253f94fd3405725dcc4b8b2399ebb845106146daa28  /software/projects/pawsey0807/btian/manual/cache/geora-projection-probe-20261011/cache_projection_origin.sbatch\nbbf32e252511b9dc7c9146e6e9f020aa493cfc1470a527482934bd4375fb192a  /software/projects/pawsey0807/btian/manual/cache/geora-projection-probe-20261011/stage_projection_check.py\nJobID|State|ExitCode|ElapsedRaw|Timelimit|AllocTRES\n50665075|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=21594,gres/gpu=1,mem=29440M,node=1\nTemporary model copy removed; original checkpoint and diagnostic snapshot retained.\n"
+}

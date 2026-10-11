@@ -134,3 +134,8 @@ FP32 對照支持低精度與不同執行形狀對端到端概率差有重要影
 S14已捕獲原生BF16 attention P和歷史V。固定其數值只改query數或零概率future key造成的reduction寬度，這一位置的P@V差為0；固定P/形狀只換歷史V，attention輸出差為0.00006103515625，精確恢復原局部差異。單層端到端V替換改變部分vocab logits，但目標This logit仍23.50、概率比仍1.1927040976，故歷史V只是已證實的局部貢獻。原始snapshot、控制條件、限制與26/26結果見 [S14報告](reports/cache_intervention/50660628.json) 及 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
 S15改變下一步訓練所用的路徑：生成與可求導重算都使用相同native cache順序，並在backward重算純attention以控制顯存。LoRA/GeoRA各58/58，五步及完整恢復通過，全部有效tokens概率差0，沒有放寬門限。這不表示以前cached和無cache的logits變得一樣，也不是找到唯一kernel bug。方法、兩個真實訓練報告、成本及下一輪選擇見 [CACHED_TRAINING.md](CACHED_TRAINING.md)。
+
+
+## 11. 历史 V 来源已进一步定位（L17/S16）
+
+新实验完整重现六个历史 V 差异，并验证它们在投影时就已产生，原生 cache 存取逐元素保持输出值；六处均来自 prompt prefill50 对 fixed66。相同输入／权重值的不同投影形状及 BF16 舍入分界证据、FP32 对照限制、本地原始张量复查和 36 秒 GPU 用量见 [CACHED_PROJECTION.md](CACHED_PROJECTION.md)。这仍不是完整 19.7% 最终概率差的唯一归因。

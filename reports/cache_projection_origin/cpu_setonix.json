@@ -1,0 +1,203 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "frozen_native_model_no_dropout",
+      "passed": true
+    },
+    {
+      "name": "forced_saved_tokens_replayed",
+      "passed": true
+    },
+    {
+      "name": "actual_target_tokens_and_positions_equal",
+      "passed": true
+    },
+    {
+      "name": "actual_target_allowed_history_equal",
+      "passed": true
+    },
+    {
+      "name": "all_batch_historical_projection_inputs_exactly_equal",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 2048,
+      "exact": true
+    },
+    {
+      "name": "cached_attention_V_exactly_preserves_raw_projection",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 1024,
+      "exact": true
+    },
+    {
+      "name": "fixed_no_cache_attention_V_exactly_preserves_raw_projection",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 1152,
+      "exact": true
+    },
+    {
+      "name": "same_inputs_chunk_shape_recovers_native_projection",
+      "passed": true
+    },
+    {
+      "name": "same_inputs_full_shape_recovers_native_projection",
+      "passed": true
+    },
+    {
+      "name": "identical_shape_repeats_are_exact",
+      "passed": true
+    },
+    {
+      "name": "contiguous_copy_controls_preserve_results",
+      "passed": true
+    },
+    {
+      "name": "model_parameters_and_gradients_unchanged",
+      "passed": true
+    },
+    {
+      "name": "temporary_hooks_restored",
+      "passed": true
+    }
+  ],
+  "stage": "historical_V_projection_before_cache_storage",
+  "model_count": 1,
+  "optimizer_steps": 0,
+  "device": "cpu",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "production_sampler_changed": false,
+  "case": {
+    "row": 1,
+    "completion_step": 3,
+    "token_id": 14,
+    "prefix_width": 8,
+    "prompt_width": 5,
+    "fixed_width": 9,
+    "actual_call_layouts": {
+      "cached": [
+        {
+          "shape": [
+            8,
+            5,
+            32
+          ],
+          "stride": [
+            160,
+            32,
+            1
+          ],
+          "dtype": "torch.bfloat16",
+          "storage_offset": 0,
+          "contiguous": true,
+          "pointer_modulo_256": 0
+        },
+        {
+          "shape": [
+            8,
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            32,
+            1
+          ],
+          "dtype": "torch.bfloat16",
+          "storage_offset": 0,
+          "contiguous": true,
+          "pointer_modulo_256": 192
+        },
+        {
+          "shape": [
+            8,
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            32,
+            1
+          ],
+          "dtype": "torch.bfloat16",
+          "storage_offset": 0,
+          "contiguous": true,
+          "pointer_modulo_256": 64
+        },
+        {
+          "shape": [
+            8,
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            32,
+            1
+          ],
+          "dtype": "torch.bfloat16",
+          "storage_offset": 0,
+          "contiguous": true,
+          "pointer_modulo_256": 64
+        }
+      ],
+      "fixed_no_cache": [
+        {
+          "shape": [
+            8,
+            9,
+            32
+          ],
+          "stride": [
+            288,
+            32,
+            1
+          ],
+          "dtype": "torch.bfloat16",
+          "storage_offset": 0,
+          "contiguous": true,
+          "pointer_modulo_256": 64
+        }
+      ]
+    },
+    "historical_V_difference": {
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 96,
+      "exact": true
+    },
+    "promoted_fp32_difference": {
+      "max_absolute": 7.450580596923828e-09,
+      "relative_l2": 1.2191698930255338e-08,
+      "unequal_elements": 4,
+      "element_count": 96,
+      "exact": false
+    },
+    "promoted_then_rounded_difference": {
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 96,
+      "exact": true
+    },
+    "mismatches": [],
+    "fixed_to_cached_token_probability_ratio": 1.0,
+    "snapshot": {
+      "path": "/scratch/pawsey0807/btian/geora/runs/projection-origin-cpu-20261011/projection_origin.safetensors",
+      "bytes": 23136,
+      "sha256": "c3cbd9133bf42473c6b3950d94aade2dfcf45feaba72fc718c27e9854e799064"
+    },
+    "scope": "Layer-0 historical V origin, not a unique attribution of all final logits differences"
+  },
+  "elapsed_seconds": 0.10249247500905767
+}
