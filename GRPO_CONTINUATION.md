@@ -139,3 +139,24 @@ uv run python scripts/check_grpo_continuation_reports.py \
 ```
 
 本輪 JSON 核對為 66/66；這與 GPU 程式各自的 52 項檢查分開。A/B、AdamW 等張量的精確一致由 GPU 執行器實際比較，JSON 記錄其結果；只讀報告不會重新計算那些張量。
+
+## 8. 接續階段：KV cache 診斷（L12/S11）
+
+2026-10-11 新增獨立的 cached rollout 候選，檢查生成時實際抽樣的 token logp，是否與本文件的固定寬度、無 cache 訓練 scorer 一致。**上述五步流程及 `grpo_rollout.py` 沒有修改。** 完整方法與門限見 [CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)。
+
+本機和 Setonix 登入節點的 tiny CPU 檢查均為 34/34 機械檢查、8/8 likelihood 門限通過；FP32 最大逐 token logp 差 `2.384185791015625e-7`，BF16 為 `0`。合成小模型有一次 AdamW 檢查，不是 GSM8K GRPO 訓練。
+
+完整 MI250X BF16 job `50658753` 為 10/10 機械檢查通過，兩個 likelihood cases 均未通過（0/2）。初始化 GeoRA 與原模型的 cached tokens／logp 完全相同；但兩者各自與無 cache 訓練 scorer 比較時，在 103 個有效 token 上得到相同的差異指標：
+
+| 測量 | 結果 |
+|---|---|
+| 最大逐 token logp 差 | `0.17979764938354492` |
+| 平均絕對逐 token logp 差 | `0.011392114763262687` |
+| scored／behavior 概率比範圍 | `[0.8870854910554354, 1.196975129959193]` |
+| 最大絕對整段 logp 差 | `0.06114433162656496` |
+
+這是短生成的數值診斷，沒有 reward 或 GPU optimizer update，也沒有比較任務分數。原模型亦有相同差異，因此目前不能把問題歸因於 GeoRA 初始化；具體的算子或運算順序原因仍未定位。
+
+兩次作業均只申請一個邏輯 GPU、兩分鐘上限。job `50658705` 在 tokenizer API 處失敗，實際 allocation 34 秒；以 `tokenize=False` 取得文字再 `tokenizer.encode` 的修正經本機與登入節點 CPU 檢查後，job `50658753` 完成數值測量，Python 執行 9.741 秒、allocation 38 秒。本階段 allocation 合計 **72 秒**，另於上一階段的 914 秒記錄；失敗成本沒有省略。
+
+**下一步保留已驗證的無 cache 訓練 sampler**，先以 CPU 診斷採樣／打分路徑差異，或驗證有算法依據的 importance correction。候選通過後，還要測完整模型已更新策略，以及 LoRA／GeoRA GRPO 和精確恢復。較長 pilot 前另需節省 scores 記錄的顯存；目前沒有足夠證據宣稱 KV cache 訓練已驗收或有多少加速。

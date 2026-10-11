@@ -1,0 +1,52 @@
+{
+  "status": "failed",
+  "checks": [
+    {
+      "name": "reuses_CPU_validated_checkpoint_copy",
+      "passed": true
+    },
+    {
+      "name": "reuses_untrained_FP32_GeoRA_initialization",
+      "passed": true
+    }
+  ],
+  "stage": "full_model_cached_likelihood_diagnostic",
+  "cases": [],
+  "scope": "Short numerical measurement; no task reward or optimizer updates",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "source_git_commit": "b2abed092a730943602964222aab96f01e5d6b75",
+  "slurm_job_id": "50658705",
+  "max_new_tokens": 16,
+  "gates": {
+    "max_absolute_delta_logp": 2e-05,
+    "max_absolute_ratio_minus_one": 2e-05,
+    "max_absolute_sequence_delta_logp": 0.001
+  },
+  "production_sampler_changed": false,
+  "optimizer_steps": 0,
+  "precision": {
+    "frozen_weights": "BF16",
+    "A_B_A0_B0": "FP32",
+    "low_rank_correction": "FP32 then BF16 before addition",
+    "sampling_log_softmax": "FP32",
+    "scoring_log_softmax": "FP32"
+  },
+  "prompt_lengths": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "native_load_seconds": 4.618937794992235,
+  "error": "Could not infer dtype of tokenizers.Encoding",
+  "elapsed_seconds": 7.083815155026969
+}

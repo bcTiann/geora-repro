@@ -1,0 +1,173 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "reuses_CPU_validated_checkpoint_copy",
+      "passed": true
+    },
+    {
+      "name": "reuses_untrained_FP32_GeoRA_initialization",
+      "passed": true
+    },
+    {
+      "name": "tokenizer_produces_eight_integer_prompt_rows",
+      "passed": true
+    },
+    {
+      "name": "native_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "native_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        10,
+        16,
+        10,
+        10,
+        16,
+        16,
+        9,
+        16
+      ],
+      "generated_steps": 16
+    },
+    {
+      "name": "native_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.17979764938354492,
+      "max_absolute_ratio_minus_one": 0.19697512995919308,
+      "likelihood_gate_passed": false
+    },
+    {
+      "name": "geora_initial_private_rng_isolated_and_advanced",
+      "passed": true
+    },
+    {
+      "name": "geora_initial_completion_layout_and_first_eos",
+      "passed": true,
+      "completion_lengths": [
+        10,
+        16,
+        10,
+        10,
+        16,
+        16,
+        9,
+        16
+      ],
+      "generated_steps": 16
+    },
+    {
+      "name": "geora_initial_sampling_and_scoring_finite",
+      "passed": true,
+      "max_absolute_delta_logp": 0.17979764938354492,
+      "max_absolute_ratio_minus_one": 0.19697512995919308,
+      "likelihood_gate_passed": false
+    },
+    {
+      "name": "initial_cached_GeoRA_matches_original",
+      "passed": true
+    }
+  ],
+  "stage": "full_model_cached_likelihood_diagnostic",
+  "cases": [
+    {
+      "label": "native",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 1.5115504080313258,
+      "likelihood": {
+        "valid_token_count": 103,
+        "max_absolute_delta_logp": 0.17979764938354492,
+        "mean_absolute_delta_logp": 0.011392114763262687,
+        "max_absolute_ratio_minus_one": 0.19697512995919308,
+        "min_ratio": 0.8870854910554354,
+        "max_ratio": 1.196975129959193,
+        "sequence_delta_logp": [
+          0.04207648494025307,
+          -0.056319958890071575,
+          -0.011388676561722377,
+          -0.024047802161277332,
+          -0.016734604814701015,
+          0.06114433162656496,
+          0.03173714168951847,
+          -0.004036131335197979
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.0945673689711839,
+        "gate_passed": false
+      }
+    },
+    {
+      "label": "geora_initial",
+      "dtype": "torch.bfloat16",
+      "path": "transformers_generate_dynamic_cache_scores",
+      "generation_seconds": 1.55485699797282,
+      "likelihood": {
+        "valid_token_count": 103,
+        "max_absolute_delta_logp": 0.17979764938354492,
+        "mean_absolute_delta_logp": 0.011392114763262687,
+        "max_absolute_ratio_minus_one": 0.19697512995919308,
+        "min_ratio": 0.8870854910554354,
+        "max_ratio": 1.196975129959193,
+        "sequence_delta_logp": [
+          0.04207648494025307,
+          -0.056319958890071575,
+          -0.011388676561722377,
+          -0.024047802161277332,
+          -0.016734604814701015,
+          0.06114433162656496,
+          0.03173714168951847,
+          -0.004036131335197979
+        ],
+        "finite": true,
+        "exact": false,
+        "scoring_seconds": 0.13880987599259242,
+        "gate_passed": false
+      }
+    }
+  ],
+  "scope": "Short numerical measurement; no task reward or optimizer updates",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "hip_version": "6.3.42134-a9a80e791",
+  "gpu_name": "AMD Instinct MI250X",
+  "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "source_git_commit": "8d4cc4f30467fadb5e36896117f77eb3be3a6414",
+  "slurm_job_id": "50658753",
+  "max_new_tokens": 16,
+  "gates": {
+    "max_absolute_delta_logp": 2e-05,
+    "max_absolute_ratio_minus_one": 2e-05,
+    "max_absolute_sequence_delta_logp": 0.001
+  },
+  "production_sampler_changed": false,
+  "optimizer_steps": 0,
+  "precision": {
+    "frozen_weights": "BF16",
+    "A_B_A0_B0": "FP32",
+    "low_rank_correction": "FP32 then BF16 before addition",
+    "sampling_log_softmax": "FP32",
+    "scoring_log_softmax": "FP32"
+  },
+  "prompt_lengths": [
+    40,
+    40,
+    40,
+    40,
+    50,
+    50,
+    50,
+    50
+  ],
+  "native_load_seconds": 2.9285845260019414,
+  "geora_load_seconds": 3.0251983790076338,
+  "mechanical_checks_passed": true,
+  "likelihood_gate_passed": false,
+  "decision": "keep_validated_fixed_width_training_sampler",
+  "peak_allocated_memory_gib": 3.1779627799987793,
+  "elapsed_seconds": 9.741247305995785
+}

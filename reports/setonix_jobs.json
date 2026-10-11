@@ -204,9 +204,49 @@
       "sacct_raw_row": "50622756|COMPLETED|0:0|434|00:10:00|billing=128,cpu=16,energy=298496,gres/gpu=1,mem=29440M,node=1|23:02:22|23:09:36",
       "start_time_as_displayed": "23:02:22",
       "end_time_as_displayed": "23:09:36"
+    },
+    {
+      "job_id": "50658705",
+      "state": "FAILED",
+      "exit_code": "1:0",
+      "allocation_seconds": 34,
+      "time_limit_seconds": 120,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "cached rollout tokenizer API failure before numeric cases",
+      "query_date": "2026-10-11",
+      "observed_queue_after_completion": "own diagnostic jobs empty",
+      "sacct_raw_row": "50658705|FAILED|1:0|34|00:02:00|billing=128,cpu=16,energy=17081,gres/gpu=1,mem=29440M,node=1|13:30:54|13:31:28",
+      "start_time_as_displayed": "13:30:54",
+      "end_time_as_displayed": "13:31:28"
+    },
+    {
+      "job_id": "50658753",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 38,
+      "time_limit_seconds": 120,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "native and initial GeoRA cached likelihood diagnostic; mechanical checks passed but likelihood gates failed",
+      "query_date": "2026-10-11",
+      "observed_queue_after_completion": "own diagnostic jobs empty",
+      "sacct_raw_row": "50658753|COMPLETED|0:0|38|00:02:00|billing=128,cpu=16,energy=17317,gres/gpu=1,mem=29440M,node=1|13:37:25|13:38:03",
+      "start_time_as_displayed": "13:37:25",
+      "end_time_as_displayed": "13:38:03"
     }
   ],
-  "sum_allocation_seconds": 1759,
-  "latest_query_date": "2026-10-10",
-  "latest_query": "sacct -j 50622579,50622756 --noheader --parsable2 -X --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%120,Start,End; squeue -u \"$USER\""
+  "sum_allocation_seconds": 1831,
+  "latest_query_date": "2026-10-11",
+  "latest_query": "sacct -X -j 50658705,50658753 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -j 50658705,50658753"
 }
