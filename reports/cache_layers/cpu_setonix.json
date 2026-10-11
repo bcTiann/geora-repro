@@ -1,0 +1,4091 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "float32_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "float32_cached_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_prefix_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_fixed_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_forced_replay_ids",
+      "passed": true
+    },
+    {
+      "name": "float32_actual_valid_input_and_positions_match",
+      "passed": true,
+      "cached_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            5
+          ]
+        },
+        {
+          "input_ids": [
+            31
+          ],
+          "position_ids": [
+            3
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 5,
+          "input_shape": [
+            8,
+            1
+          ]
+        }
+      ],
+      "no_cache_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5,
+            31,
+            18,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "name": "float32_actual_target_attention_allowed_keys_match",
+      "passed": true,
+      "allowed_key_count": 4,
+      "prefix_width": 6,
+      "shapes": {
+        "cached": {
+          "query_shape": [
+            8,
+            4,
+            1,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            6,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            1,
+            6
+          ]
+        },
+        "prefix_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            6,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            6,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            6,
+            6
+          ]
+        },
+        "fixed_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            13,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            13,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "float32_replay_exactly_recovers_previous_cached_logits",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 37,
+      "exact": true
+    },
+    {
+      "name": "float32_full_path_exactly_recovers_previous_no_cache_logits",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 37,
+      "exact": true
+    },
+    {
+      "name": "float32_common_input_full_controls_recover_trace",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_cached_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_prefix_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_fixed_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_forced_replay_ids",
+      "passed": true
+    },
+    {
+      "name": "float32_decode_actual_valid_input_and_positions_match",
+      "passed": true,
+      "cached_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            5
+          ]
+        },
+        {
+          "input_ids": [
+            13
+          ],
+          "position_ids": [
+            3
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 5,
+          "input_shape": [
+            8,
+            1
+          ]
+        },
+        {
+          "input_ids": [
+            15
+          ],
+          "position_ids": [
+            4
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 6,
+          "input_shape": [
+            8,
+            1
+          ]
+        }
+      ],
+      "no_cache_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5,
+            13,
+            15,
+            36,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "name": "float32_decode_actual_target_attention_allowed_keys_match",
+      "passed": true,
+      "allowed_key_count": 5,
+      "prefix_width": 7,
+      "shapes": {
+        "cached": {
+          "query_shape": [
+            8,
+            4,
+            1,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            1,
+            7
+          ]
+        },
+        "prefix_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            7,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            7,
+            7
+          ]
+        },
+        "fixed_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            13,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            13,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "float32_decode_common_input_full_controls_recover_trace",
+      "passed": true
+    },
+    {
+      "name": "float32_hooks_and_attention_wrapper_restored",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_cached_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_prefix_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_fixed_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_forced_replay_ids",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_actual_valid_input_and_positions_match",
+      "passed": true,
+      "cached_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            5
+          ]
+        }
+      ],
+      "no_cache_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5,
+            13,
+            15,
+            36,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bfloat16_actual_target_attention_allowed_keys_match",
+      "passed": true,
+      "allowed_key_count": 3,
+      "prefix_width": 5,
+      "shapes": {
+        "cached": {
+          "query_shape": [
+            8,
+            4,
+            5,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            5,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            5,
+            5
+          ]
+        },
+        "prefix_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            5,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            5,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            5,
+            5
+          ]
+        },
+        "fixed_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            13,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            13,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "bfloat16_replay_exactly_recovers_previous_cached_logits",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 37,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_full_path_exactly_recovers_previous_no_cache_logits",
+      "passed": true,
+      "max_absolute": 0.0,
+      "relative_l2": 0.0,
+      "unequal_elements": 0,
+      "element_count": 37,
+      "exact": true
+    },
+    {
+      "name": "bfloat16_common_input_full_controls_recover_trace",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_cached_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_prefix_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_fixed_no_cache_finite",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_forced_replay_ids",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_decode_actual_valid_input_and_positions_match",
+      "passed": true,
+      "cached_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            5
+          ]
+        },
+        {
+          "input_ids": [
+            13
+          ],
+          "position_ids": [
+            3
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 5,
+          "input_shape": [
+            8,
+            1
+          ]
+        },
+        {
+          "input_ids": [
+            15
+          ],
+          "position_ids": [
+            4
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "cached_length_before": 6,
+          "input_shape": [
+            8,
+            1
+          ]
+        }
+      ],
+      "no_cache_inputs": [
+        {
+          "input_ids": [
+            0,
+            0,
+            3,
+            4,
+            5,
+            13,
+            15,
+            36,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position_ids": [
+            0,
+            0,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attention_mask": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "cached_length_before": 0,
+          "input_shape": [
+            8,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bfloat16_decode_actual_target_attention_allowed_keys_match",
+      "passed": true,
+      "allowed_key_count": 5,
+      "prefix_width": 7,
+      "shapes": {
+        "cached": {
+          "query_shape": [
+            8,
+            4,
+            1,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            1,
+            7
+          ]
+        },
+        "prefix_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            7,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            7,
+            7
+          ]
+        },
+        "fixed_no_cache": {
+          "query_shape": [
+            8,
+            4,
+            13,
+            8
+          ],
+          "key_shape": [
+            8,
+            2,
+            13,
+            8
+          ],
+          "mask_shape": [
+            8,
+            1,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "bfloat16_decode_common_input_full_controls_recover_trace",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_hooks_and_attention_wrapper_restored",
+      "passed": true
+    }
+  ],
+  "stage": "tiny_cache_layer_replay",
+  "cases": [
+    {
+      "label": "float32",
+      "dtype": "torch.float32",
+      "row": 3,
+      "completion_step": 1,
+      "sampled_token_id": 18,
+      "prefix_width": 6,
+      "fixed_width": 13,
+      "logits": {
+        "cached": -0.026993002742528915,
+        "prefix_no_cache": -0.02699301205575466,
+        "fixed_no_cache": -0.026992984116077423
+      },
+      "logps": {
+        "cached": -3.6252657039391107,
+        "prefix_no_cache": -3.625265714148217,
+        "fixed_no_cache": -3.6252656810208
+      },
+      "cached_to_fixed_probability_ratio": 1.000000022918311,
+      "comparisons": {
+        "prefix_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.412677483553001e-08,
+              "unequal_elements": 16,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.405153184362767e-07,
+              "unequal_elements": 12,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 7.654326920741643e-08,
+              "unequal_elements": 9,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 1.1161234072757245e-07,
+              "unequal_elements": 21,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 1.5438167655431395e-07,
+              "unequal_elements": 27,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 4.3496470846956395e-08,
+              "unequal_elements": 14,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.4651652292804204e-07,
+              "unequal_elements": 40,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.4705427320391678e-07,
+              "unequal_elements": 40,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 4.0745362639427185e-10,
+              "relative_l2": 2.3313806062074948e-07,
+              "unequal_elements": 30,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 3.873554853176707e-08,
+              "unequal_elements": 16,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 3.981477393853839e-08,
+              "unequal_elements": 14,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.4853901468038808e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 2.2351741790771484e-08,
+              "relative_l2": 9.426622086705569e-08,
+              "unequal_elements": 10,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 9.365109728153134e-08,
+              "unequal_elements": 12,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 2.2351741790771484e-08,
+              "relative_l2": 1.5944463649049268e-07,
+              "unequal_elements": 23,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 2.3283064365386963e-09,
+              "relative_l2": 1.9612221873573338e-07,
+              "unequal_elements": 27,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 1.7881393432617188e-07,
+              "relative_l2": 7.340968433370372e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.478372609787702e-07,
+              "unequal_elements": 37,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 6.146728992462158e-08,
+              "relative_l2": 1.4385762751972948e-07,
+              "unequal_elements": 39,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 6.984919309616089e-10,
+              "relative_l2": 2.446771307718072e-07,
+              "unequal_elements": 30,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 7.608805617637333e-08,
+              "unequal_elements": 21,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 1.7881393432617188e-07,
+              "relative_l2": 7.89973914651156e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.3575662416203905e-07,
+              "unequal_elements": 33,
+              "element_count": 37,
+              "exact": false
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 128,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 128,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.278550406032272e-08,
+              "unequal_elements": 31,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.663606523569385e-08,
+              "unequal_elements": 23,
+              "element_count": 64,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.921955032809598e-08,
+              "unequal_elements": 18,
+              "element_count": 64,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 5.587935447692871e-09,
+              "relative_l2": 7.447017831607384e-08,
+              "unequal_elements": 69,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 9.313225746154785e-09,
+              "relative_l2": 1.1657534594455907e-07,
+              "unequal_elements": 91,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 4.76837158203125e-07,
+              "relative_l2": 1.5370803716802743e-07,
+              "unequal_elements": 97,
+              "element_count": 128,
+              "exact": false
+            }
+          ],
+          "first_target_difference": "layer.0.q_proj",
+          "first_history_difference": "layer.0.q_proj",
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.924537646496565e-08,
+              "unequal_elements": 18,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 9.466686182487137e-08,
+              "unequal_elements": 22,
+              "element_count": 64,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.921955032809598e-08,
+              "unequal_elements": 18,
+              "element_count": 64,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 3.649624136672298e-08,
+              "unequal_elements": 3,
+              "element_count": 16,
+              "exact": false
+            }
+          }
+        },
+        "fixed_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.412677483553001e-08,
+              "unequal_elements": 16,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.405153184362767e-07,
+              "unequal_elements": 12,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 7.654326920741643e-08,
+              "unequal_elements": 9,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 7.450580596923828e-09,
+              "relative_l2": 8.594206777043128e-08,
+              "unequal_elements": 19,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 1.3969838619232178e-09,
+              "relative_l2": 1.0665273152107231e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 6.705522537231445e-08,
+              "relative_l2": 2.184544308015335e-08,
+              "unequal_elements": 12,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.476318311405094e-07,
+              "unequal_elements": 41,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.5191204646283646e-07,
+              "unequal_elements": 37,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 3.637978807091713e-10,
+              "relative_l2": 2.9305525390112134e-07,
+              "unequal_elements": 29,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 3.406270635483459e-08,
+              "unequal_elements": 14,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 3.234611195887143e-08,
+              "unequal_elements": 13,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.6006680129104766e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.3935160613273206e-07,
+              "unequal_elements": 14,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.1803037717726615e-07,
+              "unequal_elements": 13,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 1.1175870895385742e-08,
+              "relative_l2": 8.06691941997739e-08,
+              "unequal_elements": 23,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 1.534090683455247e-07,
+              "unequal_elements": 27,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 6.588427645322918e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.3376299390039293e-07,
+              "unequal_elements": 38,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.5051713236761984e-07,
+              "unequal_elements": 37,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 9.313225746154785e-10,
+              "relative_l2": 2.6568062032973453e-07,
+              "unequal_elements": 31,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 7.156810912952754e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 3.5762786865234375e-07,
+              "relative_l2": 1.282973201132347e-07,
+              "unequal_elements": 29,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 8.940696716308594e-08,
+              "relative_l2": 2.1291888439496795e-07,
+              "unequal_elements": 32,
+              "element_count": 37,
+              "exact": false
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 128,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 128,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 4.9040814165480316e-08,
+              "unequal_elements": 16,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.15049055693176e-08,
+              "unequal_elements": 12,
+              "element_count": 64,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 3.9345127077709526e-08,
+              "unequal_elements": 9,
+              "element_count": 64,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 2.7939677238464355e-09,
+              "relative_l2": 2.543277134973998e-08,
+              "unequal_elements": 32,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 4.762620073962604e-08,
+              "unequal_elements": 47,
+              "element_count": 128,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 3.5762786865234375e-07,
+              "relative_l2": 7.775815158990344e-08,
+              "unequal_elements": 54,
+              "element_count": 128,
+              "exact": false
+            }
+          ],
+          "first_target_difference": "layer.0.q_proj",
+          "first_history_difference": "layer.0.q_proj",
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.924537646496565e-08,
+              "unequal_elements": 18,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.237997189736313e-08,
+              "unequal_elements": 11,
+              "element_count": 64,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 3.9345127077709526e-08,
+              "unequal_elements": 9,
+              "element_count": 64,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 2.9799056292642355e-08,
+              "unequal_elements": 1,
+              "element_count": 16,
+              "exact": false
+            }
+          }
+        }
+      },
+      "common_input_linear_controls": [
+        {
+          "module": "layer.0.q_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              6,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 8.412677483553001e-08,
+            "unequal_elements": 16,
+            "element_count": 32,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 8.412677483553001e-08,
+            "unequal_elements": 16,
+            "element_count": 32,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          }
+        },
+        {
+          "module": "layer.0.k_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              6,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.405153184362767e-07,
+            "unequal_elements": 12,
+            "element_count": 16,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.405153184362767e-07,
+            "unequal_elements": 12,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          }
+        },
+        {
+          "module": "layer.0.v_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              6,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 7.654326920741643e-08,
+            "unequal_elements": 9,
+            "element_count": 16,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 7.654326920741643e-08,
+            "unequal_elements": 9,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "float32_decode",
+      "dtype": "torch.float32",
+      "row": 0,
+      "completion_step": 2,
+      "sampled_token_id": 36,
+      "prefix_width": 7,
+      "fixed_width": 13,
+      "logits": {
+        "cached": -0.05906461924314499,
+        "prefix_no_cache": -0.059064604341983795,
+        "fixed_no_cache": -0.05906461551785469
+      },
+      "logps": {
+        "cached": -3.6803475915539634,
+        "prefix_no_cache": -3.680347578931084,
+        "fixed_no_cache": -3.6803475868438063
+      },
+      "cached_to_fixed_probability_ratio": 1.0000000047101572,
+      "comparisons": {
+        "prefix_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 3.725290298461914e-08,
+              "relative_l2": 1.2636161041685722e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.3002965164658068e-07,
+              "unequal_elements": 14,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.3197859150113756e-07,
+              "unequal_elements": 13,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 7.450580596923828e-09,
+              "relative_l2": 8.739820002670152e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 1.280568540096283e-09,
+              "relative_l2": 1.0987584763119218e-07,
+              "unequal_elements": 23,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 3.991009664870219e-08,
+              "unequal_elements": 8,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 3.725290298461914e-08,
+              "relative_l2": 1.2461644988264745e-07,
+              "unequal_elements": 38,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.1855192338686415e-07,
+              "unequal_elements": 34,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 5.820766091346741e-10,
+              "relative_l2": 2.2624173414417298e-07,
+              "unequal_elements": 28,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 3.414927421902495e-08,
+              "unequal_elements": 12,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 3.804020215296903e-08,
+              "unequal_elements": 11,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.3051794835908445e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.2732813717931503e-07,
+              "unequal_elements": 14,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.4515953300844588e-07,
+              "unequal_elements": 11,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 1.1175870895385742e-08,
+              "relative_l2": 7.361284983866137e-08,
+              "unequal_elements": 17,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 1.4748065395978265e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 5.074347723816957e-08,
+              "unequal_elements": 14,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.3269526857017587e-07,
+              "unequal_elements": 39,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.5644913110870106e-07,
+              "unequal_elements": 39,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 2.9103830456733704e-10,
+              "relative_l2": 2.1893783823393996e-07,
+              "unequal_elements": 27,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 6.270625792561071e-08,
+              "unequal_elements": 16,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 5.874823112265344e-08,
+              "unequal_elements": 14,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 2.2351741790771484e-08,
+              "relative_l2": 1.0348022457162003e-07,
+              "unequal_elements": 30,
+              "element_count": 37,
+              "exact": false
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 3.725290298461914e-08,
+              "relative_l2": 5.993302123338391e-08,
+              "unequal_elements": 37,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.44155620719976e-08,
+              "unequal_elements": 14,
+              "element_count": 80,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.483263993581242e-08,
+              "unequal_elements": 13,
+              "element_count": 80,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 1.9300646616107567e-08,
+              "unequal_elements": 25,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 3.68792820949535e-08,
+              "unequal_elements": 35,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 2.384185791015625e-07,
+              "relative_l2": 5.492666053291373e-08,
+              "unequal_elements": 43,
+              "element_count": 160,
+              "exact": false
+            }
+          ],
+          "first_target_difference": "layer.0.q_proj",
+          "first_history_difference": "layer.0.q_proj",
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.1282638539130449e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.179222568753827e-08,
+              "unequal_elements": 12,
+              "element_count": 80,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.483263993581242e-08,
+              "unequal_elements": 13,
+              "element_count": 80,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 20,
+              "exact": true
+            }
+          }
+        },
+        "fixed_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 3.725290298461914e-08,
+              "relative_l2": 1.2636161041685722e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.3002965164658068e-07,
+              "unequal_elements": 14,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.3197859150113756e-07,
+              "unequal_elements": 13,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 1.2316247816874036e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 1.862645149230957e-09,
+              "relative_l2": 1.9368364772713791e-07,
+              "unequal_elements": 28,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 2.384185791015625e-07,
+              "relative_l2": 7.073021424961602e-08,
+              "unequal_elements": 17,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.2287666336895042e-07,
+              "unequal_elements": 38,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 3.5390257835388184e-08,
+              "relative_l2": 1.2074800703722452e-07,
+              "unequal_elements": 39,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 4.656612873077393e-10,
+              "relative_l2": 2.247412271579244e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 6.564051285053366e-08,
+              "unequal_elements": 21,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 6.750368358201914e-08,
+              "unequal_elements": 20,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.2793449076355665e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.9246923548405906e-07,
+              "unequal_elements": 14,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.1295204801257414e-07,
+              "unequal_elements": 12,
+              "element_count": 16,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 1.1834336119566077e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 2.7939677238464355e-09,
+              "relative_l2": 2.0372551060998795e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 7.597517985988404e-08,
+              "unequal_elements": 22,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.7538700802159003e-07,
+              "unequal_elements": 37,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 1.8259206964193708e-07,
+              "unequal_elements": 41,
+              "element_count": 48,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 4.656612873077393e-10,
+              "relative_l2": 2.5325671683313476e-07,
+              "unequal_elements": 28,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 8.46504207044747e-08,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 1.1920928955078125e-07,
+              "relative_l2": 7.046827504592218e-08,
+              "unequal_elements": 22,
+              "element_count": 32,
+              "exact": false
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.75347403222539e-07,
+              "unequal_elements": 32,
+              "element_count": 37,
+              "exact": false
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 3.725290298461914e-08,
+              "relative_l2": 5.993302123338391e-08,
+              "unequal_elements": 37,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.44155620719976e-08,
+              "unequal_elements": 14,
+              "element_count": 80,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.483263993581242e-08,
+              "unequal_elements": 13,
+              "element_count": 80,
+              "exact": false
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 3.638117572756663e-08,
+              "unequal_elements": 55,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 3.725290298461914e-09,
+              "relative_l2": 5.646091254075954e-08,
+              "unequal_elements": 74,
+              "element_count": 160,
+              "exact": false
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 3.5762786865234375e-07,
+              "relative_l2": 7.09124648825401e-08,
+              "unequal_elements": 76,
+              "element_count": 160,
+              "exact": false
+            }
+          ],
+          "first_target_difference": "layer.0.q_proj",
+          "first_history_difference": "layer.0.q_proj",
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 1.1282638539130449e-07,
+              "unequal_elements": 25,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 6.179222568753827e-08,
+              "unequal_elements": 12,
+              "element_count": 80,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 7.483263993581242e-08,
+              "unequal_elements": 13,
+              "element_count": 80,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 7.450159623178135e-08,
+              "unequal_elements": 5,
+              "element_count": 20,
+              "exact": false
+            }
+          }
+        }
+      },
+      "common_input_linear_controls": [
+        {
+          "module": "layer.0.q_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 3.725290298461914e-08,
+            "relative_l2": 1.2636161041685722e-07,
+            "unequal_elements": 26,
+            "element_count": 32,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 3.725290298461914e-08,
+            "relative_l2": 1.2636161041685722e-07,
+            "unequal_elements": 26,
+            "element_count": 32,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          }
+        },
+        {
+          "module": "layer.0.k_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.3002965164658068e-07,
+            "unequal_elements": 14,
+            "element_count": 16,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.3002965164658068e-07,
+            "unequal_elements": 14,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          }
+        },
+        {
+          "module": "layer.0.v_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.float32",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 4.470348358154297e-08,
+            "relative_l2": 1.3197859150113756e-07,
+            "unequal_elements": 13,
+            "element_count": 16,
+            "exact": false
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 4.470348358154297e-08,
+            "relative_l2": 1.3197859150113756e-07,
+            "unequal_elements": 13,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "bfloat16",
+      "dtype": "torch.bfloat16",
+      "row": 0,
+      "completion_step": 0,
+      "sampled_token_id": 13,
+      "prefix_width": 5,
+      "fixed_width": 13,
+      "logits": {
+        "cached": -0.07421875,
+        "prefix_no_cache": -0.07421875,
+        "fixed_no_cache": -0.07421875
+      },
+      "logps": {
+        "cached": -3.6761361412317433,
+        "prefix_no_cache": -3.6761361412317433,
+        "fixed_no_cache": -3.6761361412317433
+      },
+      "cached_to_fixed_probability_ratio": 1.0,
+      "comparisons": {
+        "prefix_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 37,
+              "exact": true
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            }
+          ],
+          "first_target_difference": null,
+          "first_history_difference": null,
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 12,
+              "exact": true
+            }
+          }
+        },
+        "fixed_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 37,
+              "exact": true
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            }
+          ],
+          "first_target_difference": null,
+          "first_history_difference": null,
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 12,
+              "exact": true
+            }
+          }
+        }
+      },
+      "common_input_linear_controls": [
+        {
+          "module": "layer.0.q_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              5,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 7.450580596923828e-09,
+            "relative_l2": 1.1821134285580353e-08,
+            "unequal_elements": 1,
+            "element_count": 32,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.00032788515090942383,
+            "relative_l2": 0.0014736104092674892,
+            "unequal_elements": 32,
+            "element_count": 32,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.00032788515090942383,
+            "relative_l2": 0.0014736102386501877,
+            "unequal_elements": 32,
+            "element_count": 32,
+            "exact": false
+          }
+        },
+        {
+          "module": "layer.0.k_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              5,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0009460747241973877,
+            "relative_l2": 0.0026783383124337934,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0009460747241973877,
+            "relative_l2": 0.0026783383124337934,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          }
+        },
+        {
+          "module": "layer.0.v_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              5,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.00044333934783935547,
+            "relative_l2": 0.002058421414628331,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.00044333934783935547,
+            "relative_l2": 0.002058421414628331,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          }
+        }
+      ]
+    },
+    {
+      "label": "bfloat16_decode",
+      "dtype": "torch.bfloat16",
+      "row": 0,
+      "completion_step": 2,
+      "sampled_token_id": 36,
+      "prefix_width": 7,
+      "fixed_width": 13,
+      "logits": {
+        "cached": -0.05859375,
+        "prefix_no_cache": -0.05859375,
+        "fixed_no_cache": -0.05859375
+      },
+      "logps": {
+        "cached": -3.6799741407166073,
+        "prefix_no_cache": -3.6799741407166073,
+        "fixed_no_cache": -3.6799741407166073
+      },
+      "cached_to_fixed_probability_ratio": 1.0,
+      "comparisons": {
+        "prefix_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 37,
+              "exact": true
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            }
+          ],
+          "first_target_difference": null,
+          "first_history_difference": null,
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 20,
+              "exact": true
+            }
+          }
+        },
+        "fixed_no_cache": {
+          "target_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 16,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.attention_output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.o_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.post_attention_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.gate_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.up_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 48,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.down_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            {
+              "boundary": "lm_head",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 37,
+              "exact": true
+            }
+          ],
+          "causal_history_boundaries": [
+            {
+              "boundary": "embedding",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.input_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.q_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.k_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.v_proj",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            {
+              "boundary": "layer.0.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "layer.1.output",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            },
+            {
+              "boundary": "final_norm",
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 160,
+              "exact": true
+            }
+          ],
+          "first_target_difference": null,
+          "first_history_difference": null,
+          "layer0_attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 80,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 20,
+              "exact": true
+            }
+          }
+        }
+      },
+      "common_input_linear_controls": [
+        {
+          "module": "layer.0.q_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 3.2371470239470564e-08,
+            "unequal_elements": 4,
+            "element_count": 32,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0004571974277496338,
+            "relative_l2": 0.0017374150433858142,
+            "unequal_elements": 32,
+            "element_count": 32,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0004571974277496338,
+            "relative_l2": 0.0017374029322105183,
+            "unequal_elements": 32,
+            "element_count": 32,
+            "exact": false
+          }
+        },
+        {
+          "module": "layer.0.k_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 7.016454396561173e-08,
+            "unequal_elements": 3,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0004491657018661499,
+            "relative_l2": 0.001984002458462584,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0004491657018661499,
+            "relative_l2": 0.0019839887787214726,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          }
+        },
+        {
+          "module": "layer.0.v_proj",
+          "identical_selected_input": true,
+          "native_forward_dtype": "torch.bfloat16",
+          "full_control_reproduces_trace_exact": true,
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "prefix": [
+              8,
+              7,
+              32
+            ],
+            "full": [
+              8,
+              13,
+              32
+            ]
+          },
+          "forward_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "forward_prefix_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 16,
+            "exact": true
+          },
+          "fp32_one_vs_full": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 4.981129679717225e-08,
+            "unequal_elements": 4,
+            "element_count": 16,
+            "exact": false
+          },
+          "one_vs_fp32": {
+            "max_absolute": 0.0004338175058364868,
+            "relative_l2": 0.0015721491362670984,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          },
+          "full_vs_fp32": {
+            "max_absolute": 0.0004338175058364868,
+            "relative_l2": 0.0015721502485878513,
+            "unequal_elements": 16,
+            "element_count": 16,
+            "exact": false
+          }
+        }
+      ]
+    }
+  ],
+  "optimizer_steps": 0,
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "elapsed_seconds": 0.3556094589876011
+}

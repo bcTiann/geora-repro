@@ -99,3 +99,7 @@ uv run python scripts/check_cached_rollout_cpu.py \
 先在 CPU 小模型建立「按 cache 生成的順序逐 token、可求導地重算 logp」的對照，核對 probability、padding/EOS 和 A/B 梯度；計算損失時不能把歷史 KV 一律 detach，否則會截斷參數對過去 token 的影響。這是候選方案，尚未實作或通過。另一條方案是有明確算法依據並經驗證的 rollout importance correction，不能只把兩條路徑的 old logp 改名就當作修正。
 
 CPU 對照通過後，才安排完整模型的短 GPU 對照，包含更新後的 LoRA／GeoRA。然後驗收真實 GRPO 更新與存檔恢復，再量測長回答成本。當前暫緩擴大 cached pilot；原有固定寬度訓練路徑仍可使用。
+
+## 後續定位（L14/S13，2026-10-11）
+
+[逐層定位](CACHED_LAYERS.md) 已完成：固定回放原有 tokens，實際輸入／位置／可見 keys 一致；第 0 層歷史 V 和 attention 輸出出現差異。原始 Q 微差在 RoPE 後消失，不能據此單獨解釋端到端偏差。相同權重數值改用 FP32 forward，原最差 token 的概率相對差由 19.6975% 降至 0.0032728%，仍超原 ratio 門限，尚未驗收完整訓練修正。新增單 GPU allocation 36 秒；目前 17 作業合計 1901 秒。以上是後續證據，本頁 S12／S11 記錄保留各自執行時的範圍與用量。

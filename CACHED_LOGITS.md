@@ -146,3 +146,7 @@ print(probabilities)
 print('No-cache / cached probability:', probabilities['no_cache_logits'] / probabilities['cached_logits'])
 PY
 ```
+
+## 後續定位（L14/S13，2026-10-11）
+
+[逐層定位](CACHED_LAYERS.md) 已完成：固定回放原有 tokens，實際輸入／位置／可見 keys 一致；第 0 層歷史 V 和 attention 輸出出現差異。原始 Q 微差在 RoPE 後消失，不能據此單獨解釋端到端偏差。相同權重數值改用 FP32 forward，原最差 token 的概率相對差由 19.6975% 降至 0.0032728%，仍超原 ratio 門限，尚未驗收完整訓練修正。新增單 GPU allocation 36 秒；目前 17 作業合計 1901 秒。以上是後續證據，本頁 S12／S11 記錄保留各自執行時的範圍與用量。

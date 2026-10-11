@@ -6,7 +6,9 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 
 2026-10-11 的 [KV cache 檢查](CACHED_ROLLOUT.md) 已完成：小模型 CPU likelihood 通過；完整 MI250X BF16 的原模型與初始化 GeoRA 都未通過採樣／訓練重算的一致性門限。初始化 GeoRA 與原模型的 cached tokens／logp 仍完全相同。**目前繼續使用已驗證的固定寬度、無 cache 訓練 sampler**，先處理這個數值路徑差異，再擴大 pilot。
 
-接續的 [原始 logits 診斷](CACHED_LOGITS.md)（L13/S12）只用一個原始模型，確認差異已出現在 softmax 之前；同一份 logits 重算生成 logp 的誤差為 0。最差 token 的 FP64 softmax 仍重現約 19.7% 的概率比例差異。具體上游算子原因與可用校正尚未驗證，訓練 sampler 保持原路徑。
+接續的 [原始 logits 診斷](CACHED_LOGITS.md)（L13/S12）只用一個原始模型，確認差異已出現在 softmax 之前；同一份 logits 重算生成 logp 的誤差為 0。最差 token 的 FP64 softmax 仍重現約 19.7% 的概率比例差異。
+
+接續的 [逐層診斷](CACHED_LAYERS.md)（L14/S13）核對了相同輸入、位置與可見 key，並定位到第 0 層的數值差異；全 FP32 對照大幅縮小該 token 的概率差異，但仍超過既有門限，沒有驗證出訓練修正。訓練 sampler 保持原路徑。
 
 ## 從哪裡開始
 
@@ -17,6 +19,7 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 | [GRPO_CONTINUATION.md](GRPO_CONTINUATION.md) | 共用五步訓練、完整 boundary checkpoint、恢復與資源記錄 |
 | [CACHED_ROLLOUT.md](CACHED_ROLLOUT.md) | KV cache 實際採樣概率與訓練重算的診斷、門限及下一步 |
 | [CACHED_LOGITS.md](CACHED_LOGITS.md) | 同一原模型的成對原始 logits、softmax 檢查與概率差異分解 |
+| [CACHED_LAYERS.md](CACHED_LAYERS.md) | 重放同一段 token、逐層定位差異與相同權重值的 FP32 對照 |
 | [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md) | 全局階段、目前位置、高吞吐 rollout 驗收與正式實驗安排 |
 | [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) | 統一的實驗目的、流程、精度、結果、作業用量與目前進度 |
 | [geora_layers.py](geora_layers.py) | GeoRA 線性層、mask 與 SVD 初始化、全層替換、adapter 儲存／載入 |
@@ -92,7 +95,7 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 
 本輪 [GOAL.md](GOAL.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
 
-整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前階段 1（來源與初始化）、2（數值與機械更新）完成；階段 3（資料/答案解析、GRPO 小例子與一次真實獎勵更新）亦完成；階段 4 的共用五步／完整恢復已完成。L12/S11 已測出完整模型兩條路徑的 likelihood 差異，L13/S12 已直接確認差異在 softmax 前出現；接著先定位或驗證校正，再做更新後策略、訓練／恢復驗收和 pilot。正式評估與幾何分析待做。
+整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前階段 1（來源與初始化）、2（數值與機械更新）完成；階段 3（資料/答案解析、GRPO 小例子與一次真實獎勵更新）亦完成；階段 4 的共用五步／完整恢復已完成。L12/S11 已測出完整模型兩條路徑的 likelihood 差異，L13/S12 已確認差異在 softmax 前出現，L14/S13 已在同一 token 的重放中定位第 0 層差異並完成 FP32 對照；接著驗證可用的概率對齊或校正，再做更新後策略、訓練／恢復驗收和 pilot。正式評估與幾何分析待做。
 
 ## 重跑已完成的 difference 檢查
 

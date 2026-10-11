@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "job_id": "50660028",
+  "sacct_raw_row": "50660028|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=16222,gres/gpu=1,mem=29440M,node=1|15:12:18|15:12:54",
+  "allocation_seconds": 36,
+  "own_job_queue": "empty",
+  "temporary_copy_removed": true,
+  "original_model_present": true,
+  "original_initialization_present": true
+}

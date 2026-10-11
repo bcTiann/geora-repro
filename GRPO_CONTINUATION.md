@@ -192,3 +192,13 @@ FP64 概率比為 `1.1969750175109515`，實際 GPU FP32 記錄為 `1.1969751299
 最差位置兩份 FP32 logits 保存為 `1,215,656` bytes 的 safetensors；原始檔保留於 scratch 與本機由 Git 忽略的 outputs，JSON 保存前文、token ID、值和 SHA256 `f865de782dd4079f02683335c0a6cb69067cab6daa03dd11d5488d2b917a6f1b`。job 只用一個邏輯 GPU、兩分鐘上限，實際 allocation **34 秒**；所有已記錄作業 allocation 累計由 1831 增至 **1865 秒**。
 
 `grpo_rollout.py` 與已驗證的訓練 sampler 保持原樣。這次交付是概率差異的直接 logits 證據；概率對齊／校正、更新後策略、完整訓練與恢復仍待驗收，沒有任務分數或加速結論。
+
+## 10. 同一 token 的逐層重放與 FP32 對照（L14/S13）
+
+[逐層診斷](CACHED_LAYERS.md) 使用 S12 已保存的回答，重放同一原模型的 cached、prefix 無 cache、固定寬度無 cache 三條計算路徑，沒有重新採樣、GeoRA 或 optimizer update。實際有效 token IDs、position IDs 與目標 attention 可見 key 一致；BF16 重放精確恢復 S12 的兩份 logits snapshot。
+
+固定寬度比較中，當前 token 最早在第 0 層 `q_proj` 出現微差，但 RoPE 後 Q 相同。歷史 V 有差，第 0 層 attention 概率相同，其加權 V 輸出仍不同。這定位了早期數值分岔，尚未證明單一 kernel 有 bug；BF16 autocast 路徑包含部分內部 FP32 計算，不能把所有運算概括為 BF16。
+
+把同一組權重值轉為 FP32，關閉 BF16 autocast，該 token 的無 cache／cached 概率比由 `1.1969750175109515` 縮至 `1.0000327280290207`。它仍超過既有 `2e-5` 相對比例門限，且只測這個位置，不能當作全部 103 token、更新後策略或 GRPO 訓練驗收。**已驗證的訓練 sampler、配置與門限保持原樣。**
+
+job `50660028` 的診斷檢查為 23/23，實際 allocation **36 秒**，一個邏輯 GPU、兩分鐘上限；17 個已記錄作業合計 **1901 秒（31 分 41 秒）**。這裡的「診斷通過」是證據和重放檢查通過，概率對齊／校正仍待完成。
