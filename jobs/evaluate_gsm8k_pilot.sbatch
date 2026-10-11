@@ -14,6 +14,8 @@ geora_adapter="${5:-}"
 geora_initialization="${6:-}"
 geora_question_limit="${7:-128}"
 geora_resume="${8:-fresh}"
+geora_config="${9:-configs/grpo_pilot_plan.json}"
+geora_runtime="${10:-1000}"
 if [[ "$geora_resume" != "fresh" && "$geora_resume" != "resume" ]]; then
   echo "The final argument must be fresh or resume." >&2
   exit 2
@@ -36,9 +38,9 @@ geora_arguments=(
   --data-dir "$geora_data"
   --checkpoint-dir "$geora_checkpoint"
   --output-dir "$geora_output"
-  --config configs/grpo_pilot_plan.json
+  --config "$geora_config"
   --question-limit "$geora_question_limit"
-  --runtime-limit-seconds 1000
+  --runtime-limit-seconds "$geora_runtime"
 )
 if [[ -n "$geora_adapter" ]]; then
   geora_arguments+=(--adapter-checkpoint "$geora_adapter")

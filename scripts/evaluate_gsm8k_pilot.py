@@ -26,7 +26,7 @@ from geora_layers import export_adapter_state, load_geora_state
 from lora_layers import export_lora_state, install_lora
 from check_grpo_continuation import adapter_digest
 from geora_check_utils import forward_context, fresh_fp32_model, move_with_precision, pinned_configuration, validate_manifest
-from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, build_prompt, file_sha256, load_prepared_rows, score_answer
+from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, configured_answer_rule, build_prompt, file_sha256, load_prepared_rows, score_answer
 from grpo_training_state import (
     BOUNDARY, CHECKPOINT_FORMAT, PROVENANCE_FIELDS,
     _validate_progress, _validate_provenance, canonical_json_sha256,
@@ -56,7 +56,7 @@ def validation_rows(directory, limit):
     return rows[:limit]
 
 
-def grade_completion(token_ids, eos_ids, text, row):
+def grade_completion(token_ids, eos_ids, text, row, answer_rule=ANSWER_RULE):
     """A numerically correct but capped answer receives zero, as in training."""
     if (not isinstance(token_ids, list) or not token_ids
             or any(isinstance(value, bool) or not isinstance(value, int) or value < 0 for value in token_ids)):
@@ -67,7 +67,7 @@ def grade_completion(token_ids, eos_ids, text, row):
     if any(value in eos_ids for value in token_ids[:-1]):
         raise ValueError("Greedy generation must stop at the first EOS token")
     ended = bool(token_ids and token_ids[-1] in eos_ids)
-    grading = score_answer(text, row["target"])
+    grading = score_answer(text, row["target"], answer_rule)
     return dict(
         question_id=row["id"], question=row["question"], completion=text,
         token_ids=token_ids, token_count=len(token_ids), ended_with_eos=ended,
@@ -101,7 +101,7 @@ def validate_resume_identity(previous, identity):
             raise ValueError(f"Evaluation resume identity differs: {name}")
 
 
-def validate_answer_prefix(answers, rows, eos_ids, max_new_tokens, decode):
+def validate_answer_prefix(answers, rows, eos_ids, max_new_tokens, decode, answer_rule=ANSWER_RULE):
     """Do not trust a stored reward or allow reordered/skipped validation rows."""
     if not isinstance(answers, list) or len(answers) > len(rows):
         raise ValueError("Invalid saved evaluation answer count")
@@ -112,7 +112,7 @@ def validate_answer_prefix(answers, rows, eos_ids, max_new_tokens, decode):
         if not isinstance(token_ids, list) or len(token_ids) > max_new_tokens:
             raise ValueError("Saved completion exceeds the configured token cap")
         text = decode(token_ids)
-        expected = grade_completion(token_ids, eos_ids, text, row)
+        expected = grade_completion(token_ids, eos_ids, text, row, answer_rule)
         if expected["truncated"] and len(token_ids) != max_new_tokens:
             raise ValueError("A saved non-EOS completion must reach the configured token cap")
         if any(answer.get(name) != value for name, value in expected.items()):
@@ -175,6 +175,7 @@ def run(arguments, report, report_path):
     previous_elapsed = report.get("elapsed_seconds", 0.0) if previous is not None else 0.0
     deadline = time.monotonic() + arguments.runtime_limit_seconds
     config = json.loads(arguments.config.read_text())
+    answer_rule = configured_answer_rule(config)
     for name in ("max_prompt_tokens", "max_new_tokens"):
         if isinstance(config[name], bool) or not isinstance(config[name], int) or config[name] < 1:
             raise ValueError(f"Evaluation {name} must be a positive integer")
@@ -217,14 +218,14 @@ def run(arguments, report, report_path):
         "scripts/evaluate_gsm8k_pilot.py", "scripts/pilot_runtime.py",
         "scripts/grpo_training_state.py", "scripts/check_grpo_continuation.py",
         "scripts/geora_check_utils.py", "scripts/gsm8k_data.py", "geora_layers.py", "lora_layers.py",
-        "configs/base_model.json",
+        "configs/base_model.json", "third_party/verl/gsm8k.py", "third_party/verl/provenance.json",
     )
     identity = dict(
         stage="gsm8k_validation_greedy", method=arguments.method,
         model_repository=base_config["model_repository"], model_revision=base_config["model_revision"],
         training_config_sha256=training_config_hash(config),
         dataset_manifest_sha256=file_sha256(arguments.data_dir / "manifest.json"),
-        question_ids=[row["id"] for row in rows], split="validation", answer_rule=ANSWER_RULE,
+        question_ids=[row["id"] for row in rows], split="validation", answer_rule=answer_rule,
         source_git_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=PROJECT_DIRECTORY, text=True).strip(),
         source_sha256={name: file_sha256(PROJECT_DIRECTORY / name) for name in source_paths},
         torch_version=str(torch.__version__), hip_version=torch.version.hip,
@@ -249,7 +250,7 @@ def run(arguments, report, report_path):
         validate_resume_identity(previous, identity)
         validate_answer_prefix(previous.get("answers"), rows, eos_ids, config["max_new_tokens"],
                                lambda tokens: tokenizer.decode(tokens, skip_special_tokens=True,
-                                   clean_up_tokenization_spaces=False))
+                                   clean_up_tokenization_spaces=False), answer_rule)
         if (isinstance(previous_elapsed, bool) or not isinstance(previous_elapsed, (int, float))
                 or not math.isfinite(previous_elapsed) or previous_elapsed < 0):
             raise ValueError("Invalid previous evaluation elapsed time")
@@ -321,7 +322,7 @@ def run(arguments, report, report_path):
                                     generation_config=generation_config)
         token_ids = output[0, len(prompt_ids):].tolist()
         text = tokenizer.decode(token_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-        answer = grade_completion(token_ids, eos_ids, text, row)
+        answer = grade_completion(token_ids, eos_ids, text, row, answer_rule)
         answer["generation_seconds"] = time.perf_counter() - generation_started
         report["answers"].append(answer)
         report.update(evaluation_summary(report["answers"], limit))

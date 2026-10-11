@@ -74,10 +74,33 @@ def extract_final_answer(completion: str) -> Decimal | None:
     return Decimal(numeric_text.replace(",", ""))
 
 
-def score_answer(completion: str, target: str) -> dict:
+VERL_ANSWER_RULE = "verl_gsm8k_strict_1d367a4f_v1"
+
+
+def configured_answer_rule(config: dict) -> str:
+    """Historical configs retain their rule; new runs select a named rule explicitly."""
+    rule = config.get("answer_rule", ANSWER_RULE)
+    if rule not in (ANSWER_RULE, VERL_ANSWER_RULE):
+        raise ValueError(f"Unsupported answer rule: {rule}")
+    return rule
+
+
+def score_answer(completion: str, target: str, answer_rule: str = ANSWER_RULE) -> dict:
     """Reward is 1 exactly when the parsed final number equals the target."""
     if NUMBER.fullmatch(target) is None:
         raise ValueError("The reference target must be a supported numeric string.")
+    if answer_rule == VERL_ANSWER_RULE:
+        # Preserve the pinned upstream string comparison, including 9.00 != 9.
+        from third_party.verl.gsm8k import compute_score, extract_solution
+        predicted = extract_solution(completion, method="strict")
+        return {
+            "reward": float(compute_score(completion, target, method="strict", format_score=0.0)),
+            "predicted_answer": predicted,
+            "target_answer": target,
+            "answer_rule": answer_rule,
+        }
+    if answer_rule != ANSWER_RULE:
+        raise ValueError(f"Unsupported answer rule: {answer_rule}")
     expected = Decimal(target.replace(",", ""))
     predicted = extract_final_answer(completion)
     return {

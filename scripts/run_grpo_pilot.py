@@ -32,7 +32,7 @@ from check_grpo_continuation import adapter_digest, one_step
 from geora_check_utils import fresh_fp32_model, move_with_precision, pinned_configuration, validate_manifest
 from geora_layers import GeoRALinear, export_adapter_state, load_geora_state
 from grpo_training_state import load_boundary_checkpoint, make_constant_scheduler, save_boundary_checkpoint
-from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, load_prepared_rows
+from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, configured_answer_rule, load_prepared_rows
 from lora_layers import LoRALinear, export_lora_state, install_lora
 from pilot_runtime import (
     COUNTERS, PilotReport, atomic_json, canonical_hash, exclusive_run, file_hash,
@@ -135,7 +135,7 @@ def open_report(arguments, config, rows, source_record):
     data = dict(
         status="running", stage="gsm8k_bounded_grpo_pilot", checks=[],
         pilot_run_id=str(uuid.uuid4()), created_at_utc=utc_now(), identity=identity,
-        config=config, answer_rule=ANSWER_RULE, logical_optimizer_steps=0,
+        config=config, answer_rule=configured_answer_rule(config), logical_optimizer_steps=0,
         next_data_position=0, completed_answer_tokens=0, active_step_records=[], segments=[],
         physical_tokens_accounted_rollout_count=0, svd_calls=0,
         **{key: 0 for key in COUNTERS},

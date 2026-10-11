@@ -1,0 +1,16 @@
+{
+  "repository": "volcengine/verl",
+  "commit": "1d367a4f459a43768f76312c0d3430a99ec46b8c",
+  "path": "verl/utils/reward_score/gsm8k.py",
+  "source_url": "https://github.com/volcengine/verl/blob/1d367a4f459a43768f76312c0d3430a99ec46b8c/verl/utils/reward_score/gsm8k.py",
+  "sha256": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+  "license": "Apache-2.0",
+  "rule": "verl_gsm8k_strict_1d367a4f_v1",
+  "options": {
+    "method": "strict",
+    "format_score": 0.0,
+    "score": 1.0
+  },
+  "comparison": "Comma removal then string equality; no Decimal normalization",
+  "scope": "Our independently selected GSM8K grading protocol, not verified author code"
+}

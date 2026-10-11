@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "checks": 262,
+  "fixed_source_verified": true,
+  "question_ids_unchanged": true,
+  "max_prompt_tokens_actual": 195,
+  "new_rule_summary": {
+    "evaluated_questions": 128,
+    "requested_questions": 128,
+    "correct_count": 31,
+    "accuracy": 0.2421875,
+    "parse_failure_count": 63,
+    "parsed_incorrect_count": 34,
+    "correct_but_truncated_count": 0,
+    "truncated_answer_count": 42,
+    "generated_tokens": 26772,
+    "complete": true
+  }
+}

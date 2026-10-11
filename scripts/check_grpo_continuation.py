@@ -30,7 +30,7 @@ from check_grpo_training import likelihood_gate
 from grpo_math import completion_token_mask, group_advantages, grpo_loss
 from grpo_rollout import sample_completions, score_completion_logps
 from grpo_training_state import load_boundary_checkpoint, make_constant_scheduler, save_boundary_checkpoint
-from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, build_prompt, file_sha256, load_prepared_rows, score_answer
+from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, configured_answer_rule, build_prompt, file_sha256, load_prepared_rows, score_answer
 
 
 def rollout_functions(config):
@@ -127,7 +127,7 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
         mask_row = rollout["completion_mask"][index]
         ids = rollout["completion_ids"][index][mask_row].tolist()
         text = tokenizer.decode(ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-        grading = score_answer(text, row["target"])
+        grading = score_answer(text, row["target"], configured_answer_rule(config))
         ended = bool(rollout["ended_with_eos"][index].item())
         reward = grading["reward"] if ended else config["truncated_answer_reward"]
         rewards.append(reward)
