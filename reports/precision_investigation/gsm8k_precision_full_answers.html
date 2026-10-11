@@ -1,0 +1,1931 @@
+<!doctype html><html lang='zh-CN'><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>GSM8K 完整回答：精度与 KV cache</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#172534;font:16px/1.65 system-ui,sans-serif}
+main{max-width:1450px;margin:auto;padding:24px}h1,h2,h3{line-height:1.3}h1{font-size:28px}h2{margin-top:0}
+a{color:#1758a5}.intro,.question,.summary{background:white;border:1px solid #d8e0e7;border-radius:10px;padding:22px;margin:20px 0}
+nav{position:sticky;top:0;background:#e8edf2f5;border-bottom:1px solid #c9d4df;padding:12px;z-index:1;display:flex;flex-wrap:wrap;gap:8px}
+nav a{background:white;border:1px solid #c9d4df;border-radius:5px;padding:3px 9px;text-decoration:none}
+.question{scroll-margin-top:120px}.question-text{white-space:pre-wrap;margin:14px 0}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{border:1px solid #d8e0e7;border-top:4px solid #3878b4;border-radius:7px;padding:16px;min-width:0;background:#fbfcfd}
+.card h3{margin:0 0 10px;font-size:18px}.card.amd{border-top-color:#7656a4}.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.badge{border-radius:4px;padding:2px 7px;background:#e8edf2;font-size:13px}.correct{background:#dff2e6;color:#185b32}
+.numeric_mismatch{background:#ffe7de;color:#923c20}.format_failure{background:#fff1cb;color:#775217}.missing{background:#ececec;color:#555}
+pre.answer{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;margin:16px 0 0;font:15px/1.7 ui-monospace,monospace;border-top:1px solid #d8e0e7;padding-top:14px}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border-bottom:1px solid #d8e0e7;padding:8px;text-align:left;white-space:nowrap}th{background:#eef2f6}
+.muted{color:#536779;font-size:14px}.notice{background:#fff1cb;padding:10px;border-radius:5px}.metadata{overflow-wrap:anywhere}.metric{font-size:14px}
+@media(max-width:800px){main{padding:12px}.cards{grid-template-columns:1fr}.intro,.question,.summary{padding:16px}h1{font-size:23px}nav{position:static}.question{scroll-margin-top:10px}}
+@media print{nav{position:static}.cards{grid-template-columns:1fr}.card{break-inside:avoid}body{background:white}}
+</style>
+<main><h1>GSM8K 完整回答：BF16 / FP32 × 有 / 无 KV cache</h1>
+<section class='intro'><h2>我们在比较什么</h2><p>同一个未训练的原始 Qwen 模型，在 Metal 与 AMD 上运行 8 个计算条件，各自从相同题目独立贪心生成。没有 GeoRA 训练。FP32 路径精确提升同一 BF16 检查点的数值，不恢复已丢失的精度。有 cache 使用 Transformers DynamicCache；无 cache 每一步重算增长的完整前文。</p><p>这里展示全部回答原文，没有省略或截断。EOS 表示自然生成结束标记。回答分岔以后前文不同，本页不是固定前文下的概率差比较；完整 token 一致也不代表概率数值完全相同。</p><p>严格 reward 要求恰好一个 <code>####</code>，其后全部非空白文字是单个受支持的十进制数字，且等于目标。格式无法解析与可解析数字不匹配分别统计，不从推理正文宽松提取答案。这 10 题来自预先选定的训练集 smoke 子集，不是最终测试成绩。</p></section>
+<nav aria-label='题目导航'>
+<a href='#q1'>第 1 题 · train:01480</a>
+<a href='#q2'>第 2 题 · train:06951</a>
+<a href='#q3'>第 3 题 · train:05119</a>
+<a href='#q4'>第 4 题 · train:05950</a>
+<a href='#q5'>第 5 题 · train:03273</a>
+<a href='#q6'>第 6 题 · train:05258</a>
+<a href='#q7'>第 7 题 · train:06996</a>
+<a href='#q8'>第 8 题 · train:02607</a>
+<a href='#q9'>第 9 题 · train:02268</a>
+<a href='#q10'>第 10 题 · train:00061</a>
+</nav><section class='summary'><h2>按计算条件汇总</h2><div class='table-wrap'><table><tr><th>条件</th><th>已生成</th><th>严格正确</th><th>格式失败</th><th>数字不匹配</th><th>EOS</th><th>token 总数</th><th>实测秒数</th></tr>
+<tr><td>Metal · BF16 · 有 KV cache</td><td>10</td><td>2</td><td>4</td><td>4</td><td>10</td><td>2261</td><td>58.1</td></tr>
+<tr><td>Metal · BF16 · 无 KV cache</td><td>10</td><td>3</td><td>3</td><td>4</td><td>10</td><td>2292</td><td>401.4</td></tr>
+<tr><td>Metal · FP32 · 有 KV cache</td><td>10</td><td>6</td><td>3</td><td>1</td><td>10</td><td>2759</td><td>115.0</td></tr>
+<tr><td>Metal · FP32 · 无 KV cache</td><td>10</td><td>6</td><td>3</td><td>1</td><td>10</td><td>2759</td><td>886.5</td></tr>
+<tr><td>AMD · BF16 · 有 KV cache</td><td>10</td><td>1</td><td>2</td><td>7</td><td>10</td><td>2195</td><td>58.8</td></tr>
+<tr><td>AMD · BF16 · 无 KV cache</td><td>10</td><td>2</td><td>4</td><td>4</td><td>10</td><td>2287</td><td>62.6</td></tr>
+<tr><td>AMD · FP32 · 有 KV cache</td><td>10</td><td>6</td><td>3</td><td>1</td><td>10</td><td>2759</td><td>71.7</td></tr>
+<tr><td>AMD · FP32 · 无 KV cache</td><td>10</td><td>6</td><td>3</td><td>1</td><td>10</td><td>2759</td><td>105.1</td></tr>
+</table></div><p class='muted'>生成时间包含记录统计的开销，输出长度可能不同；不是公平的训练性能基准。</p><h3>两条件比较</h3><p class='muted'>M=Metal，A=AMD，16=BF16，32=FP32，C=有 cache，N=无 cache。完整 token 比较包含 EOS。有效数字一致要求两边均解析成功；None==None 不计为一致。相同错误答案仍可数字一致。</p><div class='table-wrap'><table><tr><th>条件对</th><th>两边有结果</th><th>完整 token 相同</th><th>两边均可解析</th><th>有效数字相同</th><th>至少一边解析失败</th><th>两边均正确</th></tr>
+<tr><td>M16C / M16N</td><td>10</td><td>1</td><td>6</td><td>2</td><td>4</td><td>1</td></tr>
+<tr><td>M32C / M32N</td><td>10</td><td>10</td><td>7</td><td>7</td><td>3</td><td>6</td></tr>
+<tr><td>M16C / M32C</td><td>10</td><td>0</td><td>5</td><td>2</td><td>5</td><td>2</td></tr>
+<tr><td>M16N / M32N</td><td>10</td><td>0</td><td>6</td><td>3</td><td>4</td><td>3</td></tr>
+<tr><td>A16C / A16N</td><td>10</td><td>3</td><td>6</td><td>3</td><td>4</td><td>1</td></tr>
+<tr><td>A32C / A32N</td><td>10</td><td>10</td><td>7</td><td>7</td><td>3</td><td>6</td></tr>
+<tr><td>A16C / A32C</td><td>10</td><td>0</td><td>6</td><td>1</td><td>4</td><td>1</td></tr>
+<tr><td>A16N / A32N</td><td>10</td><td>0</td><td>5</td><td>2</td><td>5</td><td>2</td></tr>
+<tr><td>M16C / A16C</td><td>10</td><td>3</td><td>6</td><td>5</td><td>4</td><td>1</td></tr>
+<tr><td>M16N / A16N</td><td>10</td><td>3</td><td>6</td><td>4</td><td>4</td><td>2</td></tr>
+<tr><td>M32C / A32C</td><td>10</td><td>10</td><td>7</td><td>7</td><td>3</td><td>6</td></tr>
+<tr><td>M32N / A32N</td><td>10</td><td>10</td><td>7</td><td>7</td><td>3</td><td>6</td></tr>
+</table></div></section>
+<section class='question' id='q1'><h2>第 1 题 · train:01480</h2><div class='question-text'>Oli&#x27;s banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli&#x27;s. How many more scoops of ice cream does Victoria have than Oli?</div><p><strong>目标数字：4</strong> <span class='muted'>来源：train / 1480</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：111；生成耗时：5.52 秒。</div>
+<pre class='answer'><span>To find out how many more scoops of ice cream Victoria has than Oli, we can follow these steps:
+
+1. Determine the number of scoops Victoria has. Since Victoria has twice as many scoops as Oli, and Oli has 4 scoops, we calculate:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+
+2. Now, to find out how many more scoops Victoria has than Oli, we subtract the number of scoops Oli has from the number of scoops Victoria has:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Therefore, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：149（包含返回的特殊 token）；输入 token：111；生成耗时：19.90 秒。</div>
+<pre class='answer'><span>To find out how many more scoops of ice cream Victoria has than Oli, we can follow these steps:
+
+1. Determine the number of scoops Victoria has.
+   - Victoria has twice as many scoops as Oli.
+   - Oli has 4 scoops.
+   - Therefore, Victoria has \(2 \times 4 = 8\) scoops.
+
+2. Calculate the difference in the number of scoops between Victoria and Oli.
+   - Victoria has 8 scoops.
+   - Oli has 4 scoops.
+   - The difference is \(8 - 4 = 4\) scoops.
+
+So, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：206（包含返回的特殊 token）；输入 token：111；生成耗时：9.94 秒。</div>
+<pre class='answer'><span>To determine how many more scoops of ice cream Victoria has compared to Oli, we start by identifying the number of scoops each person has.
+
+1. Oli&#x27;s banana split has 4 scoops of ice cream.
+2. Victoria has twice as many scoops as Oli. Therefore, we calculate Victoria&#x27;s scoops as follows:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+3. To find out how many more scoops Victoria has than Oli, we subtract the number of Oli&#x27;s scoops from the number of Victoria&#x27;s scoops:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Thus, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：206（包含返回的特殊 token）；输入 token：111；生成耗时：43.47 秒。</div>
+<pre class='answer'><span>To determine how many more scoops of ice cream Victoria has compared to Oli, we start by identifying the number of scoops each person has.
+
+1. Oli&#x27;s banana split has 4 scoops of ice cream.
+2. Victoria has twice as many scoops as Oli. Therefore, we calculate Victoria&#x27;s scoops as follows:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+3. To find out how many more scoops Victoria has than Oli, we subtract the number of Oli&#x27;s scoops from the number of Victoria&#x27;s scoops:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Thus, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：147（包含返回的特殊 token）；输入 token：111；生成耗时：4.76 秒。</div>
+<pre class='answer'><span>To find out how many more scoops of ice cream Victoria has than Oli, we can follow these steps:
+
+1. Determine the number of scoops Victoria has.
+   - Victoria has twice as many scoops as Oli.
+   - Oli has 4 scoops.
+   - Therefore, Victoria has \(2 \times 4 = 8\) scoops.
+
+2. Calculate the difference in the number of scoops between Victoria and Oli.
+   - Victoria has 8 scoops.
+   - Oli has 4 scoops.
+   - The difference is \(8 - 4 = 4\).
+
+So, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：111；生成耗时：5.24 秒。</div>
+<pre class='answer'><span>To find out how many more scoops of ice cream Victoria has than Oli, we can follow these steps:
+
+1. Determine the number of scoops Victoria has. Since Victoria has twice as many scoops as Oli, and Oli has 4 scoops, we calculate:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+
+2. Now, to find out how many more scoops Victoria has than Oli, we subtract the number of scoops Oli has from the number of scoops Victoria has:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Therefore, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：206（包含返回的特殊 token）；输入 token：111；生成耗时：5.80 秒。</div>
+<pre class='answer'><span>To determine how many more scoops of ice cream Victoria has compared to Oli, we start by identifying the number of scoops each person has.
+
+1. Oli&#x27;s banana split has 4 scoops of ice cream.
+2. Victoria has twice as many scoops as Oli. Therefore, we calculate Victoria&#x27;s scoops as follows:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+3. To find out how many more scoops Victoria has than Oli, we subtract the number of Oli&#x27;s scoops from the number of Victoria&#x27;s scoops:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Thus, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：4</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：206（包含返回的特殊 token）；输入 token：111；生成耗时：6.48 秒。</div>
+<pre class='answer'><span>To determine how many more scoops of ice cream Victoria has compared to Oli, we start by identifying the number of scoops each person has.
+
+1. Oli&#x27;s banana split has 4 scoops of ice cream.
+2. Victoria has twice as many scoops as Oli. Therefore, we calculate Victoria&#x27;s scoops as follows:
+   \[
+   \text{Victoria&#x27;s scoops} = 2 \times \text{Oli&#x27;s scoops} = 2 \times 4 = 8
+   \]
+3. To find out how many more scoops Victoria has than Oli, we subtract the number of Oli&#x27;s scoops from the number of Victoria&#x27;s scoops:
+   \[
+   \text{Difference} = \text{Victoria&#x27;s scoops} - \text{Oli&#x27;s scoops} = 8 - 4 = 4
+   \]
+
+Thus, Victoria has 4 more scoops of ice cream than Oli.
+
+#### 4</span></pre></article>
+</div></section>
+<section class='question' id='q2'><h2>第 2 题 · train:06951</h2><div class='question-text'>Bubba bought a new two-story warehouse.  When empty, the first floor of the building contains twice as much floor space for storage as the second floor.  The first items he brought into his empty building were several thousand boxes; and he put them all on the second floor, which filled one-quarter of the second floor storage space.  If the boxes used up 5,000 square feet of storage space, how many square feet of storage space is still available in the building?</div><p><strong>目标数字：55000</strong> <span class='muted'>来源：train / 6951</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：444（包含返回的特殊 token）；输入 token：169；生成耗时：11.64 秒。</div>
+<p class='metric'>解析数字 15000 不等于目标 55000。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the first floor has \( 2S \) square feet.
+
+Bubba put boxes on the second floor, filling one-quarter of the second floor&#x27;s storage space. This means he filled \( \frac{1}{4}S \) square feet of the second floor.
+
+The problem states that the boxes used up 5,000 square feet of storage space. This 5,000 square feet is the same as the space filled on the second floor, so we can set up the equation:
+\[ \frac{1}{4}S = 5000 \]
+
+To find \( S \), we multiply both sides of the equation by 4:
+\[ S = 5000 \times 4 \]
+\[ S = 20000 \ \text{square feet} \]
+
+Now, we know the second floor has 20,000 square feet of storage space. Since the first floor has twice as much space, it has:
+\[ 2S = 2 \times 20000 = 40000 \ \text{square feet} \]
+
+The total storage space in the building is the sum of the space on both floors:
+\[ 40000 + 20000 = 60000 \ \text{square feet} \]
+
+Bubba filled one-quarter of the second floor, which which is 5,000 square feet, so the remaining space on the second floor is:
+\[ 20000 - 5000 = 15000 \ \text{square feet} \]
+
+The total storage space in the building is 60,000 square feet, and the second floor has 15,000 square feet of space still available. Therefore, the number of square feet of storage space still available in the building is:
+#### 15000</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：404（包含返回的特殊 token）；输入 token：169；生成耗时：94.65 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the first floor has \( 2S \) square feet.
+
+Bubba put boxes on the second floor, filling one-quarter of the second floor&#x27;s storage space. This means he filled \( \frac{1}{4}S \) square feet of the second floor.
+
+The problem states that the boxes used up 5,000 square feet of storage space. This 5,000 square feet is the same as the space filled on the second floor, so we can set up the equation:
+\[ \frac{1}{4}S = 5000 \]
+
+To find \( S \), we multiply both sides of the equation by 4:
+\[ S = 5000 \times 4 \]
+\[ S = 20000 \ \text{square feet} \]
+
+Now, we know the second floor has 20,000 square feet of storage space. Since the first floor has twice as much space, it has:
+\[ 2S = 2 \times 20000 = 40000 \ \text{square feet} \]
+
+The total storage space in the building is the sum of the first and second floors:
+\[ 40000 + 20000 = 60000 \ \text{square feet} \]
+
+Bubba filled one-quarter of the second floor, which which is 5,000 square feet, so the remaining storage space is:
+\[ 60000 - 5000 = 55000 \ \text{square feet} \]
+
+Therefore, the number of square feet of storage space still available in the building is:
+#### 55000</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：424（包含返回的特殊 token）；输入 token：169；生成耗时：17.68 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the storage space of the first floor is \( 2S \) square feet.
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, we can write the equation:
+
+\[
+\frac{1}{4} S = 5000
+\]
+
+To find \( S \), we multiply both sides of the equation by 4:
+
+\[
+S = 5000 \times 4 = 20000 \text{ square feet}
+\]
+
+Now, we know the storage space of the second floor is 20,000 square feet. Since the first floor has twice as much space, the storage space of the first floor is:
+
+\[
+2S = 2 \times 20000 = 40000 \text{ square feet}
+\]
+
+The total storage space in the building is the sum of the storage space on both floors:
+
+\[
+40000 + 20000 = 60000 \text{ square feet}
+\]
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, the remaining storage space on the second floor is:
+
+\[
+\frac{3}{4} \times 20000 = 15000 \text{ square feet}
+\]
+
+The total storage space still available in the building is the sum of the remaining storage space on the second floor and the first floor:
+
+\[
+15000 + 40000 = 55000 \text{ square feet}
+\]
+
+Therefore, the number of square feet of storage space still available in the building is:
+
+#### 55000</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：424（包含返回的特殊 token）；输入 token：169；生成耗时：181.44 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the storage space of the first floor is \( 2S \) square feet.
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, we can write the equation:
+
+\[
+\frac{1}{4} S = 5000
+\]
+
+To find \( S \), we multiply both sides of the equation by 4:
+
+\[
+S = 5000 \times 4 = 20000 \text{ square feet}
+\]
+
+Now, we know the storage space of the second floor is 20,000 square feet. Since the first floor has twice as much space, the storage space of the first floor is:
+
+\[
+2S = 2 \times 20000 = 40000 \text{ square feet}
+\]
+
+The total storage space in the building is the sum of the storage space on both floors:
+
+\[
+40000 + 20000 = 60000 \text{ square feet}
+\]
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, the remaining storage space on the second floor is:
+
+\[
+\frac{3}{4} \times 20000 = 15000 \text{ square feet}
+\]
+
+The total storage space still available in the building is the sum of the remaining storage space on the second floor and the first floor:
+
+\[
+15000 + 40000 = 55000 \text{ square feet}
+\]
+
+Therefore, the number of square feet of storage space still available in the building is:
+
+#### 55000</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：444（包含返回的特殊 token）；输入 token：169；生成耗时：11.69 秒。</div>
+<p class='metric'>解析数字 15000 不等于目标 55000。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the first floor has \( 2S \) square feet.
+
+Bubba put boxes on the second floor, filling one-quarter of the second floor&#x27;s storage space. This means he filled \( \frac{1}{4}S \) square feet of the second floor.
+
+The problem states that the boxes used up 5,000 square feet of storage space. This 5,000 square feet is the same as the space filled on the second floor, so we can set up the equation:
+\[ \frac{1}{4}S = 5000 \]
+
+To find \( S \), we multiply both sides of the equation by 4:
+\[ S = 5000 \times 4 \]
+\[ S = 20000 \ \text{square feet} \]
+
+Now, we know the second floor has 20,000 square feet of storage space. Since the first floor has twice as much space, it has:
+\[ 2S = 2 \times 20000 = 40000 \ \text{square feet} \]
+
+The total storage space in the building is the sum of the first and second floors:
+\[ 40000 + 20000 = 60000 \ \text{square feet} \]
+
+Bubba filled one-quarter of the second floor, which which is 5,000 square feet, so the remaining space on the second floor is:
+\[ 20000 - 5000 = 15000 \ \text{square feet} \]
+
+The total storage space in the building is 60,000 square feet, and the second floor has 15,000 square feet of space still available. Therefore, the number of square feet of storage space still available in the building is:
+#### 15000</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：404（包含返回的特殊 token）；输入 token：169；生成耗时：11.92 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the first floor has \( 2S \) square feet.
+
+Bubba put boxes on the second floor, filling one-quarter of the second floor&#x27;s storage space. This means he filled \( \frac{1}{4}S \) square feet of the second floor.
+
+The problem states that the boxes used up 5,000 square feet of storage space. This 5,000 square feet is the same as the space filled on the second floor, so we can set up the equation:
+\[ \frac{1}{4}S = 5000 \]
+
+To find \( S \), we multiply both sides of the equation by 4:
+\[ S = 5000 \times 4 \]
+\[ S = 20000 \ \text{square feet} \]
+
+Now, we know the second floor has 20,000 square feet of storage space. Since the first floor has twice as much space, it has:
+\[ 2S = 2 \times 20000 = 40000 \ \text{square feet} \]
+
+The total storage space in the building is the sum of the first and second floors:
+\[ 40000 + 20000 = 60000 \ \text{square feet} \]
+
+Bubba filled one-quarter of the second floor, which which is 5,000 square feet, so the remaining storage space is:
+\[ 60000 - 5000 = 55000 \ \text{square feet} \]
+
+Therefore, the number of square feet of storage space still available in the building is:
+#### 55000</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：424（包含返回的特殊 token）；输入 token：169；生成耗时：10.95 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the storage space of the first floor is \( 2S \) square feet.
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, we can write the equation:
+
+\[
+\frac{1}{4} S = 5000
+\]
+
+To find \( S \), we multiply both sides of the equation by 4:
+
+\[
+S = 5000 \times 4 = 20000 \text{ square feet}
+\]
+
+Now, we know the storage space of the second floor is 20,000 square feet. Since the first floor has twice as much space, the storage space of the first floor is:
+
+\[
+2S = 2 \times 20000 = 40000 \text{ square feet}
+\]
+
+The total storage space in the building is the sum of the storage space on both floors:
+
+\[
+40000 + 20000 = 60000 \text{ square feet}
+\]
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, the remaining storage space on the second floor is:
+
+\[
+\frac{3}{4} \times 20000 = 15000 \text{ square feet}
+\]
+
+The total storage space still available in the building is the sum of the remaining storage space on the second floor and the first floor:
+
+\[
+15000 + 40000 = 55000 \text{ square feet}
+\]
+
+Therefore, the number of square feet of storage space still available in the building is:
+
+#### 55000</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：55000</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：424（包含返回的特殊 token）；输入 token：169；生成耗时：19.85 秒。</div>
+<pre class='answer'><span>Let&#x27;s denote the storage space of the second floor as \( S \) square feet. According to the problem, the first floor has twice as much space as the second floor, so the storage space of the first floor is \( 2S \) square feet.
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, we can write the equation:
+
+\[
+\frac{1}{4} S = 5000
+\]
+
+To find \( S \), we multiply both sides of the equation by 4:
+
+\[
+S = 5000 \times 4 = 20000 \text{ square feet}
+\]
+
+Now, we know the storage space of the second floor is 20,000 square feet. Since the first floor has twice as much space, the storage space of the first floor is:
+
+\[
+2S = 2 \times 20000 = 40000 \text{ square feet}
+\]
+
+The total storage space in the building is the sum of the storage space on both floors:
+
+\[
+40000 + 20000 = 60000 \text{ square feet}
+\]
+
+Bubba filled one-quarter of the second floor with boxes, which used up 5,000 square feet of storage space. Therefore, the remaining storage space on the second floor is:
+
+\[
+\frac{3}{4} \times 20000 = 15000 \text{ square feet}
+\]
+
+The total storage space still available in the building is the sum of the remaining storage space on the second floor and the first floor:
+
+\[
+15000 + 40000 = 55000 \text{ square feet}
+\]
+
+Therefore, the number of square feet of storage space still available in the building is:
+
+#### 55000</span></pre></article>
+</div></section>
+<section class='question' id='q3'><h2>第 3 题 · train:05119</h2><div class='question-text'>If we assume all thirty 4-wheel drive cars in the parking lot have their spare tire with them, how many tires are in the parking lot?</div><p><strong>目标数字：150</strong> <span class='muted'>来源：train / 5119</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：131（包含返回的特殊 token）；输入 token：98；生成耗时：3.37 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+Each car has 4 tires, and there are 30 cars. Therefore, the total number of tires is calculated as follows:
+
+\[
+\text{Total number of tires} = \text{Number of cars} \times \text{Number of tires per car}
+\]
+
+\[
+\text{Total number of tires} = 30 \times 4 = 120
+\]
+
+Therefore, the total number of tires in the parking lot is 120.</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：131（包含返回的特殊 token）；输入 token：98；生成耗时：15.14 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+Each car has 4 tires, and there are 30 cars. Therefore, the total number of tires is calculated as follows:
+
+\[
+\text{Total number of tires} = \text{Number of cars} \times \text{Number of tires per car}
+\]
+
+\[
+\text{Total number of tires} = 30 \times 4 = 120
+\]
+
+Therefore, the total number of tires in the parking lot is 120.</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：155（包含返回的特殊 token）；输入 token：98；生成耗时：6.43 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+1. Each car has 4 tires (2 for the regular tires and 2 for the spare tire).
+2. There are 30 cars in the parking lot.
+
+First, calculate the total number of tires for all the cars:
+\[ 30 \text{ cars} \times 4 \text{ tires per car} = 120 \text{ tires} \]
+
+Since each car has a spare tire, we do not need to add any extra tires for the spare tires.
+
+Therefore, the total number of tires in the parking lot is:
+\[ \boxed{120} \]</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：155（包含返回的特殊 token）；输入 token：98；生成耗时：32.76 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+1. Each car has 4 tires (2 for the regular tires and 2 for the spare tire).
+2. There are 30 cars in the parking lot.
+
+First, calculate the total number of tires for all the cars:
+\[ 30 \text{ cars} \times 4 \text{ tires per car} = 120 \text{ tires} \]
+
+Since each car has a spare tire, we do not need to add any extra tires for the spare tires.
+
+Therefore, the total number of tires in the parking lot is:
+\[ \boxed{120} \]</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：131（包含返回的特殊 token）；输入 token：98；生成耗时：3.46 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+Each car has 4 tires, and there are 30 cars. Therefore, the total number of tires is calculated as follows:
+
+\[
+\text{Total number of tires} = \text{Number of cars} \times \text{Number of tires per car}
+\]
+
+\[
+\text{Total number of tires} = 30 \times 4 = 120
+\]
+
+Therefore, the total number of tires in the parking lot is 120.</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：131（包含返回的特殊 token）；输入 token：98；生成耗时：3.50 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+Each car has 4 tires, and there are 30 cars. Therefore, the total number of tires is calculated as follows:
+
+\[
+\text{Total number of tires} = \text{Number of cars} \times \text{Number of tires per car}
+\]
+
+\[
+\text{Total number of tires} = 30 \times 4 = 120
+\]
+
+Therefore, the total number of tires in the parking lot is 120.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：155（包含返回的特殊 token）；输入 token：98；生成耗时：4.00 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+1. Each car has 4 tires (2 for the regular tires and 2 for the spare tire).
+2. There are 30 cars in the parking lot.
+
+First, calculate the total number of tires for all the cars:
+\[ 30 \text{ cars} \times 4 \text{ tires per car} = 120 \text{ tires} \]
+
+Since each car has a spare tire, we do not need to add any extra tires for the spare tires.
+
+Therefore, the total number of tires in the parking lot is:
+\[ \boxed{120} \]</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：155（包含返回的特殊 token）；输入 token：98；生成耗时：4.43 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine the total number of tires in the parking lot, we need to consider the number of tires each car has and the number of cars.
+
+1. Each car has 4 tires (2 for the regular tires and 2 for the spare tire).
+2. There are 30 cars in the parking lot.
+
+First, calculate the total number of tires for all the cars:
+\[ 30 \text{ cars} \times 4 \text{ tires per car} = 120 \text{ tires} \]
+
+Since each car has a spare tire, we do not need to add any extra tires for the spare tires.
+
+Therefore, the total number of tires in the parking lot is:
+\[ \boxed{120} \]</span></pre></article>
+</div></section>
+<section class='question' id='q4'><h2>第 4 题 · train:05950</h2><div class='question-text'>During the Mardi Gras parade, Latch caught four less than three times as many necklaces as did Rhonda.  If Rhonda caught half as many necklaces as did Boudreaux, and Boudreaux caught twelve necklaces, how many necklaces did Latch catch?</div><p><strong>目标数字：14</strong> <span class='muted'>来源：train / 5950</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：14</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：135（包含返回的特殊 token）；输入 token：129；生成耗时：3.48 秒。</div>
+<pre class='answer'><span>To find out how many necklaces Latch caught, we need to follow the steps given in the problem.
+
+1. First, we know that Boudreaux caught twelve necklaces.
+2. Rhonda caught half as many necklaces as Boudreaux, so Rhonda caught \(12 \div 2 = 6\) necklaces.
+3. Latch caught four less than three times as many necklaces as Rhonda. So, Latch caught \(3 \times 6 - 4 = 18 - 4 = 14\) necklaces.
+
+Therefore, Latch caught 14 necklaces.
+
+#### 14</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：18</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：129（包含返回的特殊 token）；输入 token：129；生成耗时：16.88 秒。</div>
+<p class='metric'>解析数字 18 不等于目标 14。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To find out how many necklaces Latch caught, we need to follow the steps given in the problem.
+
+1. First, we know that Boudreaux caught twelve necklaces.
+2. Rhonda caught half as many necklaces as Boudreaux. So, Rhonda caught \(12 \div 2 = 6\) necklaces.
+3. Latch caught four less than three times as many necklaces as Rhonda. So, Latch caught \(3 \times 6 - 4 = 18\) necklaces.
+
+Therefore, Latch caught 18 necklaces.
+
+#### 18</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：14</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：129；生成耗时：8.16 秒。</div>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Determine how many necklaces Boudreaux caught:**
+   Boudreaux caught twelve necklaces.
+
+2. **Determine how many necklaces Rhonda caught:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Determine how many necklaces Latch caught:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 14
+   \]
+
+Therefore, Latch caught 14 necklaces.
+
+#### 14</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：14</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：129；生成耗时：51.24 秒。</div>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Determine how many necklaces Boudreaux caught:**
+   Boudreaux caught twelve necklaces.
+
+2. **Determine how many necklaces Rhonda caught:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Determine how many necklaces Latch caught:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 14
+   \]
+
+Therefore, Latch caught 14 necklaces.
+
+#### 14</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：12</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：183（包含返回的特殊 token）；输入 token：129；生成耗时：4.82 秒。</div>
+<p class='metric'>解析数字 12 不等于目标 14。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Boudreaux&#x27;s Necklaces:**
+   Boudreaux caught twelve necklaces.
+
+2. **Rhonda&#x27;s Necklaces:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Latch&#x27;s Necklaces:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 12
+   \]
+
+Therefore, Latch caught 12 necklaces.
+
+#### 12</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：12</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：183（包含返回的特殊 token）；输入 token：129；生成耗时：4.89 秒。</div>
+<p class='metric'>解析数字 12 不等于目标 14。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Boudreaux&#x27;s Necklaces:**
+   Boudreaux caught twelve necklaces.
+
+2. **Rhonda&#x27;s Necklaces:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Latch&#x27;s Necklaces:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 12
+   \]
+
+Therefore, Latch caught 12 necklaces.
+
+#### 12</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：14</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：129；生成耗时：5.06 秒。</div>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Determine how many necklaces Boudreaux caught:**
+   Boudreaux caught twelve necklaces.
+
+2. **Determine how many necklaces Rhonda caught:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Determine how many necklaces Latch caught:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 14
+   \]
+
+Therefore, Latch caught 14 necklaces.
+
+#### 14</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：14</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：196（包含返回的特殊 token）；输入 token：129；生成耗时：6.32 秒。</div>
+<pre class='answer'><span>To determine how many necklaces Latch caught, we need to follow the relationships given in the problem step by step.
+
+1. **Determine how many necklaces Boudreaux caught:**
+   Boudreaux caught twelve necklaces.
+
+2. **Determine how many necklaces Rhonda caught:**
+   Rhonda caught half as many necklaces as Boudreaux.
+   \[
+   \text{Rhonda&#x27;s necklaces} = \frac{1}{2} \times 12 = 6
+   \]
+
+3. **Determine how many necklaces Latch caught:**
+   Latch caught four less than three times as many necklaces as Rhonda.
+   \[
+   \text{Latch&#x27;s necklaces} = 3 \times 6 - 4 = 18 - 4 = 14
+   \]
+
+Therefore, Latch caught 14 necklaces.
+
+#### 14</span></pre></article>
+</div></section>
+<section class='question' id='q5'><h2>第 5 题 · train:03273</h2><div class='question-text'>A farmer is growing corn. For every 4 seeds he plants, he gets one ear of corn, that he can sell for $.1. It costs $.5 for a bag with 100 seeds. If he makes $40 in profit, how many ears did he sell?</div><p><strong>目标数字：500</strong> <span class='muted'>来源：train / 3273</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：900</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：146（包含返回的特殊 token）；输入 token：127；生成耗时：3.80 秒。</div>
+<p class='metric'>解析数字 900 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the number of ears of corn the farmer sold to make a $40 profit.
+
+First, let&#x27;s calculate the cost of the seeds:
+Cost of seeds = $0.5 per bag * 100 seeds = $50
+
+Now, let&#x27;s calculate the revenue from selling the corn:
+Revenue = $40 profit + $50 cost of seeds = $90
+
+Finally, let&#x27;s calculate the number of ears of corn sold:
+Number of ears sold = Revenue / Price per ear = $90 / $0.1 = 900 ears
+
+Therefore, the farmer sold 900 ears of corn.
+
+#### 900</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：400</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：218（包含返回的特殊 token）；输入 token：127；生成耗时：33.73 秒。</div>
+<p class='metric'>解析数字 400 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the number of ears of corn the farmer sold to make a $40 profit.
+
+First, we need to calculate the cost of the seeds. The cost of a bag of 100 seeds is $0.5, so the cost per seed is $0.5/100 = $0.005.
+
+Next, we need to calculate the number of seeds the farmer needs to plant to make a $40 profit. Since he makes $0.1 from each ear of corn, he needs to sell $40/$0.1 = 400 ears of corn to make a $40 profit.
+
+Finally, we need to calculate the number of ears of corn the farmer sold. Since he needs to plant 4 seeds to get one ear of corn, he needs to plant 400/4 = 100 bags of seeds to get 400 ears of corn.
+
+Therefore, the farmer sold 400 ears of corn.
+
+#### 400</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：800</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：238（包含返回的特殊 token）；输入 token：127；生成耗时：9.81 秒。</div>
+<p class='metric'>解析数字 800 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Determine the profit per ear of corn:**
+   - Selling price per ear: $0.1
+   - Cost per bag of seeds: $0.5
+   - Cost per ear of corn: $0.5 (since 100 seeds cost $0.5 and he gets 1 ear for every 4 seeds)
+
+2. **Calculate the profit per ear:**
+   - Profit per ear = Selling price - Cost per ear
+   - Profit per ear = $0.1 - $0.05 = $0.05
+
+3. **Determine the number of ears sold to make $40 in profit:**
+   - Total profit needed: $40
+   - Profit per ear: $0.05
+   - Number of ears sold = Total profit / Profit per ear
+   - Number of ears sold = $40 / $0.05 = 800 ears
+
+Therefore, the farmer sold 800 ears of corn to make $40 in profit.
+
+#### 800</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：800</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：238（包含返回的特殊 token）；输入 token：127；生成耗时：66.43 秒。</div>
+<p class='metric'>解析数字 800 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Determine the profit per ear of corn:**
+   - Selling price per ear: $0.1
+   - Cost per bag of seeds: $0.5
+   - Cost per ear of corn: $0.5 (since 100 seeds cost $0.5 and he gets 1 ear for every 4 seeds)
+
+2. **Calculate the profit per ear:**
+   - Profit per ear = Selling price - Cost per ear
+   - Profit per ear = $0.1 - $0.05 = $0.05
+
+3. **Determine the number of ears sold to make $40 in profit:**
+   - Total profit needed: $40
+   - Profit per ear: $0.05
+   - Number of ears sold = Total profit / Profit per ear
+   - Number of ears sold = $40 / $0.05 = 800 ears
+
+Therefore, the farmer sold 800 ears of corn to make $40 in profit.
+
+#### 800</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：900</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：147（包含返回的特殊 token）；输入 token：127；生成耗时：3.89 秒。</div>
+<p class='metric'>解析数字 900 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the number of ears of corn the farmer sold to make a $40 profit.
+
+First, let&#x27;s calculate the cost of the seeds:
+Cost of seeds = $0.5 per bag * 100 seeds = $50
+
+Now, let&#x27;s calculate the revenue from selling the corn:
+Revenue = $40 profit + $50 cost of seeds = $90
+
+Now, let&#x27;s calculate the number of ears of corn sold:
+Ears of corn sold = Revenue / Price per ear = $90 / $0.1 = 900 ears
+
+Therefore, the farmer sold 900 ears of corn.
+
+#### 900</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：400</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：218（包含返回的特殊 token）；输入 token：127；生成耗时：5.84 秒。</div>
+<p class='metric'>解析数字 400 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the number of ears of corn the farmer sold to make a $40 profit.
+
+First, we need to calculate the cost of the seeds. The cost of a bag of 100 seeds is $0.5, so the cost per seed is $0.5/100 = $0.005.
+
+Next, we need to calculate the number of seeds the farmer needs to plant to make a $40 profit. Since he makes $0.1 from each ear of corn, he needs to sell $40/$0.1 = 400 ears of corn to make a $40 profit.
+
+Finally, we need to calculate the number of ears of corn the farmer sold. Since he needs to plant 4 seeds to get one ear of corn, he needs to plant 400/4 = 100 bags of seeds to get 400 ears of corn.
+
+Therefore, the farmer sold 400 ears of corn.
+
+#### 400</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：800</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：238（包含返回的特殊 token）；输入 token：127；生成耗时：6.15 秒。</div>
+<p class='metric'>解析数字 800 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Determine the profit per ear of corn:**
+   - Selling price per ear: $0.1
+   - Cost per bag of seeds: $0.5
+   - Cost per ear of corn: $0.5 (since 100 seeds cost $0.5 and he gets 1 ear for every 4 seeds)
+
+2. **Calculate the profit per ear:**
+   - Profit per ear = Selling price - Cost per ear
+   - Profit per ear = $0.1 - $0.05 = $0.05
+
+3. **Determine the number of ears sold to make $40 in profit:**
+   - Total profit needed: $40
+   - Profit per ear: $0.05
+   - Number of ears sold = Total profit / Profit per ear
+   - Number of ears sold = $40 / $0.05 = 800 ears
+
+Therefore, the farmer sold 800 ears of corn to make $40 in profit.
+
+#### 800</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：800</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：238（包含返回的特殊 token）；输入 token：127；生成耗时：8.08 秒。</div>
+<p class='metric'>解析数字 800 不等于目标 500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Determine the profit per ear of corn:**
+   - Selling price per ear: $0.1
+   - Cost per bag of seeds: $0.5
+   - Cost per ear of corn: $0.5 (since 100 seeds cost $0.5 and he gets 1 ear for every 4 seeds)
+
+2. **Calculate the profit per ear:**
+   - Profit per ear = Selling price - Cost per ear
+   - Profit per ear = $0.1 - $0.05 = $0.05
+
+3. **Determine the number of ears sold to make $40 in profit:**
+   - Total profit needed: $40
+   - Profit per ear: $0.05
+   - Number of ears sold = Total profit / Profit per ear
+   - Number of ears sold = $40 / $0.05 = 800 ears
+
+Therefore, the farmer sold 800 ears of corn to make $40 in profit.
+
+#### 800</span></pre></article>
+</div></section>
+<section class='question' id='q6'><h2>第 6 题 · train:05258</h2><div class='question-text'>Jim decides he wants to practice for a marathon coming up.  He starts off by running 5 miles every day for 30 days straight.  He then pushes himself to run 10 miles a day for the next 30 days.  Finally, as marathon day gets closer Jim runs 20 miles a day for 30 days straight.  How many miles does Jim run in total during the 90 days?</div><p><strong>目标数字：1050</strong> <span class='muted'>来源：train / 5258</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：221（包含返回的特殊 token）；输入 token：158；生成耗时：5.64 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find the total number of miles Jim runs in 90 days, we need to calculate the miles he runs each month and then sum them up.
+
+#### 3150
+
+Explanation:
+1. For the first 30 days, Jim runs 5 miles a day. So, the total miles for the first 30 days is 5 * 30 = 150 miles.
+2. For the next 30 days, Jim runs 10 miles a day. So, the total miles for the next 30 days is 10 * 30 = 300 miles.
+3. For the final 30 days, Jim runs 20 miles a day. So, the total miles for the final 30 days is 20 * 30 = 600 miles.
+4. To find the total miles run in 90 days, we add the miles from each period: 150 + 300 + 600 = 1050 miles.</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：185（包含返回的特殊 token）；输入 token：158；生成耗时：30.10 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find the total number of miles Jim runs in 90 days, we need to calculate the miles he runs each month and then sum them up.
+
+#### 3150
+
+Jim runs 5 miles a day for the first 30 days, so he runs 5 * 30 = 150 miles in the first month.
+He then runs 10 miles a day for the next 30 days, so he runs 10 * 30 = 300 miles in the second month.
+Finally, he runs 20 miles a day for the last 30 days, so he runs 20 * 30 = 600 miles in the third month.
+Therefore, Jim runs a total of 150 + 300 + 600 = 1050 miles in 90 days.</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：1050</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：305（包含返回的特殊 token）；输入 token：158；生成耗时：12.68 秒。</div>
+<pre class='answer'><span>To find out how many miles Jim runs in total during the 90 days, we need to calculate the total miles run in each of the three phases and then sum them up.
+
+1. **First 30 days**: Jim runs 5 miles every day.
+   \[
+   \text{Total miles} = 5 \text{ miles/day} \times 30 \text{ days} = 150 \text{ miles}
+   \]
+
+2. **Next 30 days**: Jim runs 10 miles every day.
+   \[
+   \text{Total miles} = 10 \text{ miles/day} \times 30 \text{ days} = 300 \text{ miles}
+   \]
+
+3. **Final 30 days**: Jim runs 20 miles every day.
+   \[
+   \text{Total miles} = 20 \text{ miles/day} \times 30 \text{ days} = 600 \text{ miles}
+   \]
+
+Now, we sum up the total miles from all three phases:
+\[
+\text{Total miles} = 150 \text{ miles} + 300 \text{ miles} + 600 \text{ miles} = 1050 \text{ miles}
+\]
+
+Therefore, the total number of miles Jim runs in 90 days is:
+#### 1050</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：1050</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：305（包含返回的特殊 token）；输入 token：158；生成耗时：104.62 秒。</div>
+<pre class='answer'><span>To find out how many miles Jim runs in total during the 90 days, we need to calculate the total miles run in each of the three phases and then sum them up.
+
+1. **First 30 days**: Jim runs 5 miles every day.
+   \[
+   \text{Total miles} = 5 \text{ miles/day} \times 30 \text{ days} = 150 \text{ miles}
+   \]
+
+2. **Next 30 days**: Jim runs 10 miles every day.
+   \[
+   \text{Total miles} = 10 \text{ miles/day} \times 30 \text{ days} = 300 \text{ miles}
+   \]
+
+3. **Final 30 days**: Jim runs 20 miles every day.
+   \[
+   \text{Total miles} = 20 \text{ miles/day} \times 30 \text{ days} = 600 \text{ miles}
+   \]
+
+Now, we sum up the total miles from all three phases:
+\[
+\text{Total miles} = 150 \text{ miles} + 300 \text{ miles} + 600 \text{ miles} = 1050 \text{ miles}
+\]
+
+Therefore, the total number of miles Jim runs in 90 days is:
+#### 1050</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：212（包含返回的特殊 token）；输入 token：158；生成耗时：5.59 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find the total number of miles Jim runs in 90 days, we need to calculate the miles he runs each month and then sum them up.
+
+#### 3150
+
+Explanation:
+1. For the first 30 days, Jim runs 5 miles a day. So, the total miles for the first month is 5 * 30 = 150 miles.
+2. For the next 30 days, Jim runs 10 miles a day. So, the total miles for the second month is 10 * 30 = 300 miles.
+3. For the final 30 days, Jim runs 20 miles a day. So, the total miles for the third month is 20 * 30 = 600 miles.
+4. To find the total miles run in 90 days, we add the miles from each month: 150 + 300 + 600 = 1050 miles.</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：186（包含返回的特殊 token）；输入 token：158；生成耗时：4.97 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find the total number of miles Jim runs in 90 days, we need to calculate the miles he runs each month and then sum them up.
+
+#### 3150
+
+Explanation:
+- In the first month, Jim runs 5 miles a day for 30 days, so he runs 5 * 30 = 150 miles.
+- In the second month, Jim runs 10 miles a day for 30 days, so he runs 10 * 30 = 300 miles.
+- In the third month, Jim runs 20 miles a day for 30 days, so he runs 20 * 30 = 600 miles.
+
+Adding these up, Jim runs 150 + 300 + 600 = 1050 miles in total during the 90 days.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：1050</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：305（包含返回的特殊 token）；输入 token：158；生成耗时：7.87 秒。</div>
+<pre class='answer'><span>To find out how many miles Jim runs in total during the 90 days, we need to calculate the total miles run in each of the three phases and then sum them up.
+
+1. **First 30 days**: Jim runs 5 miles every day.
+   \[
+   \text{Total miles} = 5 \text{ miles/day} \times 30 \text{ days} = 150 \text{ miles}
+   \]
+
+2. **Next 30 days**: Jim runs 10 miles every day.
+   \[
+   \text{Total miles} = 10 \text{ miles/day} \times 30 \text{ days} = 300 \text{ miles}
+   \]
+
+3. **Final 30 days**: Jim runs 20 miles every day.
+   \[
+   \text{Total miles} = 20 \text{ miles/day} \times 30 \text{ days} = 600 \text{ miles}
+   \]
+
+Now, we sum up the total miles from all three phases:
+\[
+\text{Total miles} = 150 \text{ miles} + 300 \text{ miles} + 600 \text{ miles} = 1050 \text{ miles}
+\]
+
+Therefore, the total number of miles Jim runs in 90 days is:
+#### 1050</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：1050</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：305（包含返回的特殊 token）；输入 token：158；生成耗时：12.15 秒。</div>
+<pre class='answer'><span>To find out how many miles Jim runs in total during the 90 days, we need to calculate the total miles run in each of the three phases and then sum them up.
+
+1. **First 30 days**: Jim runs 5 miles every day.
+   \[
+   \text{Total miles} = 5 \text{ miles/day} \times 30 \text{ days} = 150 \text{ miles}
+   \]
+
+2. **Next 30 days**: Jim runs 10 miles every day.
+   \[
+   \text{Total miles} = 10 \text{ miles/day} \times 30 \text{ days} = 300 \text{ miles}
+   \]
+
+3. **Final 30 days**: Jim runs 20 miles every day.
+   \[
+   \text{Total miles} = 20 \text{ miles/day} \times 30 \text{ days} = 600 \text{ miles}
+   \]
+
+Now, we sum up the total miles from all three phases:
+\[
+\text{Total miles} = 150 \text{ miles} + 300 \text{ miles} + 600 \text{ miles} = 1050 \text{ miles}
+\]
+
+Therefore, the total number of miles Jim runs in 90 days is:
+#### 1050</span></pre></article>
+</div></section>
+<section class='question' id='q7'><h2>第 7 题 · train:06996</h2><div class='question-text'>Bob gets rent assistance because he&#x27;s low-income. If he gets a raise of $0.50/hour and works 40 hours a week, how much more will he actually earn a week if his housing benefit is reduced by $60/month?</div><p><strong>目标数字：5</strong> <span class='muted'>来源：train / 6996</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：235（包含返回的特殊 token）；输入 token：121；生成耗时：5.86 秒。</div>
+<p class='metric'>解析数字 15 不等于目标 5。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then subtract the reduction in his housing benefit.
+
+1. Calculate the additional earnings from the raise:
+   - Bob gets a raise of $0.50/hour.
+   - He works 40 hours a week.
+   - Additional earnings per week = $0.50/hour * 40 hours/week = $20/week
+
+2. Calculate the reduction in housing benefit:
+   - The housing benefit is reduced by $60/month.
+   - There are approximately 4 weeks in a month.
+   - Reduction in housing benefit per week = $60/month / 4 weeks/month = $15/week
+
+3. Calculate the net increase in earnings:
+   - Net increase in earnings per week = Additional earnings per week - Reduction in housing benefit per week
+   - Net increase in earnings per week = $20/week - $15/week = $15/week
+
+Therefore, Bob will earn $15 more per week after his raise and the reduction in his housing benefit.
+
+#### 15</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：230（包含返回的特殊 token）；输入 token：121；生成耗时：35.53 秒。</div>
+<p class='metric'>解析数字 15 不等于目标 5。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then subtract the reduction in his housing benefit.
+
+1. Calculate the additional earnings from the raise:
+   - Bob gets a raise of $0.50/hour.
+   - He works 40 hours a week.
+   - Additional earnings per week = $0.50/hour * 40 hours/week = $20/week
+
+2. Calculate the reduction in housing benefit:
+   - The housing benefit is reduced by $60/month.
+   - There are approximately 4 weeks in a month.
+   - Reduction in housing benefit per week = $60/month / 4 weeks/month = $15/week
+
+3. Calculate the net increase in earnings:
+   - Net increase in earnings per week = Additional earnings per week - Reduction in housing benefit per week
+   - Net increase in earnings per week = $20/week - $15/week = $15/week
+
+Therefore, the net increase in Bob&#x27;s weekly earnings is $15/week.
+
+#### 15</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：5</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：121；生成耗时：13.98 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then compare it to the reduction in his housing benefit.
+
+1. **Calculate the additional earnings from the raise:**
+   - Bob gets a raise of $0.50 per hour.
+   - He works 40 hours a week.
+   - Therefore, the additional earnings per week from the raise are:
+     \[
+     0.50 \, \text{dollars/hour} \times 40 \, \text{hours/week} = 20 \, \text{dollars/week}
+     \]
+
+2. **Calculate the reduction in housing benefit:**
+   - The housing benefit is reduced by $60 per month.
+   - There are approximately 4 weeks in a month.
+   - Therefore, the reduction in housing benefit per week is:
+     \[
+     \frac{60 \, \text{dollars/month}}{4 \, \text{weeks/month}} = 15 \, \text{dollars/week}
+     \]
+
+3. **Compare the additional earnings to the reduction in housing benefit:**
+   - Additional earnings per week: $20
+   - Reduction in housing benefit per week: $15
+   - The difference is:
+     \[
+     20 \, \text{dollars/week} - 15 \, \text{dollars/week} = 5 \, \text{dollars/week}
+     \]
+
+Therefore, Bob will earn $5 more per week after the raise and the reduction in housing benefit.
+
+#### 5</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：5</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：121；生成耗时：112.75 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then compare it to the reduction in his housing benefit.
+
+1. **Calculate the additional earnings from the raise:**
+   - Bob gets a raise of $0.50 per hour.
+   - He works 40 hours a week.
+   - Therefore, the additional earnings per week from the raise are:
+     \[
+     0.50 \, \text{dollars/hour} \times 40 \, \text{hours/week} = 20 \, \text{dollars/week}
+     \]
+
+2. **Calculate the reduction in housing benefit:**
+   - The housing benefit is reduced by $60 per month.
+   - There are approximately 4 weeks in a month.
+   - Therefore, the reduction in housing benefit per week is:
+     \[
+     \frac{60 \, \text{dollars/month}}{4 \, \text{weeks/month}} = 15 \, \text{dollars/week}
+     \]
+
+3. **Compare the additional earnings to the reduction in housing benefit:**
+   - Additional earnings per week: $20
+   - Reduction in housing benefit per week: $15
+   - The difference is:
+     \[
+     20 \, \text{dollars/week} - 15 \, \text{dollars/week} = 5 \, \text{dollars/week}
+     \]
+
+Therefore, Bob will earn $5 more per week after the raise and the reduction in housing benefit.
+
+#### 5</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：235（包含返回的特殊 token）；输入 token：121；生成耗时：6.19 秒。</div>
+<p class='metric'>解析数字 15 不等于目标 5。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then subtract the reduction in his housing benefit.
+
+1. Calculate the additional earnings from the raise:
+   - Bob gets a raise of $0.50/hour.
+   - He works 40 hours a week.
+   - Additional earnings per week = $0.50/hour * 40 hours/week = $20/week
+
+2. Calculate the reduction in housing benefit:
+   - The housing benefit is reduced by $60/month.
+   - There are approximately 4 weeks in a month.
+   - Reduction in housing benefit per week = $60/month / 4 weeks/month = $15/week
+
+3. Calculate the net increase in earnings:
+   - Net increase in earnings per week = Additional earnings per week - Reduction in housing benefit per week
+   - Net increase in earnings per week = $20/week - $15/week = $15/week
+
+Therefore, Bob will earn $15 more per week after his raise and the reduction in his housing benefit.
+
+#### 15</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：15</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：235（包含返回的特殊 token）；输入 token：121；生成耗时：6.29 秒。</div>
+<p class='metric'>解析数字 15 不等于目标 5。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then subtract the reduction in his housing benefit.
+
+1. Calculate the additional earnings from the raise:
+   - Bob gets a raise of $0.50/hour.
+   - He works 40 hours a week.
+   - Additional earnings per week = $0.50/hour * 40 hours/week = $20/week
+
+2. Calculate the reduction in housing benefit:
+   - The housing benefit is reduced by $60/month.
+   - There are approximately 4 weeks in a month.
+   - Reduction in housing benefit per week = $60/month / 4 weeks/month = $15/week
+
+3. Calculate the net increase in earnings:
+   - Net increase in earnings per week = Additional earnings per week - Reduction in housing benefit per week
+   - Net increase in earnings per week = $20/week - $15/week = $15/week
+
+Therefore, Bob will earn $15 more per week after his raise and the reduction in his housing benefit.
+
+#### 15</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：5</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：121；生成耗时：8.86 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then compare it to the reduction in his housing benefit.
+
+1. **Calculate the additional earnings from the raise:**
+   - Bob gets a raise of $0.50 per hour.
+   - He works 40 hours a week.
+   - Therefore, the additional earnings per week from the raise are:
+     \[
+     0.50 \, \text{dollars/hour} \times 40 \, \text{hours/week} = 20 \, \text{dollars/week}
+     \]
+
+2. **Calculate the reduction in housing benefit:**
+   - The housing benefit is reduced by $60 per month.
+   - There are approximately 4 weeks in a month.
+   - Therefore, the reduction in housing benefit per week is:
+     \[
+     \frac{60 \, \text{dollars/month}}{4 \, \text{weeks/month}} = 15 \, \text{dollars/week}
+     \]
+
+3. **Compare the additional earnings to the reduction in housing benefit:**
+   - Additional earnings per week: $20
+   - Reduction in housing benefit per week: $15
+   - The difference is:
+     \[
+     20 \, \text{dollars/week} - 15 \, \text{dollars/week} = 5 \, \text{dollars/week}
+     \]
+
+Therefore, Bob will earn $5 more per week after the raise and the reduction in housing benefit.
+
+#### 5</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：5</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：121；生成耗时：13.16 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to calculate the additional earnings Bob will have after his raise and then compare it to the reduction in his housing benefit.
+
+1. **Calculate the additional earnings from the raise:**
+   - Bob gets a raise of $0.50 per hour.
+   - He works 40 hours a week.
+   - Therefore, the additional earnings per week from the raise are:
+     \[
+     0.50 \, \text{dollars/hour} \times 40 \, \text{hours/week} = 20 \, \text{dollars/week}
+     \]
+
+2. **Calculate the reduction in housing benefit:**
+   - The housing benefit is reduced by $60 per month.
+   - There are approximately 4 weeks in a month.
+   - Therefore, the reduction in housing benefit per week is:
+     \[
+     \frac{60 \, \text{dollars/month}}{4 \, \text{weeks/month}} = 15 \, \text{dollars/week}
+     \]
+
+3. **Compare the additional earnings to the reduction in housing benefit:**
+   - Additional earnings per week: $20
+   - Reduction in housing benefit per week: $15
+   - The difference is:
+     \[
+     20 \, \text{dollars/week} - 15 \, \text{dollars/week} = 5 \, \text{dollars/week}
+     \]
+
+Therefore, Bob will earn $5 more per week after the raise and the reduction in housing benefit.
+
+#### 5</span></pre></article>
+</div></section>
+<section class='question' id='q8'><h2>第 8 题 · train:02607</h2><div class='question-text'>John&#x27;s dog has a litter of 8 puppies.  He gives away half of them.  He keeps one of the remaining puppies.  He then takes the remaining puppies and sells them each for $600.  He had to give the owner of the stud $300.  How much money does he profit?</div><p><strong>目标数字：1500</strong> <span class='muted'>来源：train / 2607</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：2100</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：287（包含返回的特殊 token）；输入 token：136；生成耗时：7.13 秒。</div>
+<p class='metric'>解析数字 2100 不等于目标 1500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To calculate John&#x27;s profit, we need to follow these steps:
+
+1. **Calculate the number of puppies John gives away:**
+   John gives away half of the 8 puppies.
+   \[
+   \frac{8}{2} = 4 \text{ puppies}
+   \]
+
+2. **Calculate the number of puppies John keeps:**
+   After giving away 4 puppies, John keeps the remaining 4 puppies.
+
+   \[
+   8 - 4 = 4 \text{ puppies}
+   \]
+
+3. **Calculate the number of puppies John sells:**
+   John sells the remaining 4 puppies.
+
+   \[
+   4 \text{ puppies}
+   \]
+
+4. **Calculate the total revenue from selling the puppies:**
+   Each puppy is sold for $600.
+   \[
+   4 \times 600 = 2400 \text{ dollars}
+   \]
+
+5. **Calculate the total expenses:**
+   John has to pay $300 to the owner of the stud.
+   \[
+   300 \text{ dollars}
+   \]
+
+6. **Calculate the profit:**
+   Profit is the total revenue minus the total expenses.
+   \[
+   2400 - 300 = 2100 \text{ dollars}
+   \
+
+#### 2100</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：2700</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：252（包含返回的特殊 token）；输入 token：136；生成耗时：42.41 秒。</div>
+<p class='metric'>解析数字 2700 不等于目标 1500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To calculate John&#x27;s profit, we need to follow these steps:
+
+1. **Calculate the number of puppies John gives away:**
+   John gives away half of the 8 puppies.
+   \[
+   \frac{8}{2} = 4 \text{ puppies}
+   \]
+
+2. **Calculate the number of puppies John keeps:**
+   John keeps one of the remaining puppies.
+   \[
+   8 - 4 + 1 = 5 \text{ puppies}
+   \]
+
+3. **Calculate the total revenue from selling the puppies:**
+   John sells the remaining 5 puppies for $600 each.
+   \[
+   5 \times 600 = 3000 \text{ dollars}
+   \]
+
+4. **Calculate the total expenses:**
+   John has to pay $300 to the owner of the stud.
+   \[
+   300 \text{ dollars}
+   \]
+
+5. **Calculate the profit:**
+   Profit is the total revenue minus the total expenses.
+   \[
+   3000 - 300 = 2700 \text{ dollars}
+   \]
+
+#### 2700</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：260（包含返回的特殊 token）；输入 token：136；生成耗时：10.61 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Initial Litter**: John starts with 8 puppies.
+
+2. **Giving Away Half**: He gives away half of the puppies.
+   - Half of 8 is 4 puppies.
+   - So, he gives away 4 puppies.
+
+3. **Remaining Puppies**: After giving away half, he has 4 puppies left.
+
+4. **Keeping One**: He keeps one of the remaining puppies.
+   - So, he keeps 1 puppy.
+
+5. **Remaining Puppies for Sale**: He has 4 puppies left, but he keeps 1, so he sells 3 puppies.
+   - He sells each puppy for $600.
+   - Total money from selling 3 puppies = 3 * $600 = $1800.
+
+6. **Expenses**: He had to give the owner of the stud $300.
+
+7. **Calculating Profit**: Profit is the total money from selling the puppies minus the expenses.
+   - Profit = Total money from selling puppies - Expenses
+   - Profit = $1800 - $300 = $1500.
+
+Therefore, the final answer is #### 1500.</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：260（包含返回的特殊 token）；输入 token：136；生成耗时：76.19 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Initial Litter**: John starts with 8 puppies.
+
+2. **Giving Away Half**: He gives away half of the puppies.
+   - Half of 8 is 4 puppies.
+   - So, he gives away 4 puppies.
+
+3. **Remaining Puppies**: After giving away half, he has 4 puppies left.
+
+4. **Keeping One**: He keeps one of the remaining puppies.
+   - So, he keeps 1 puppy.
+
+5. **Remaining Puppies for Sale**: He has 4 puppies left, but he keeps 1, so he sells 3 puppies.
+   - He sells each puppy for $600.
+   - Total money from selling 3 puppies = 3 * $600 = $1800.
+
+6. **Expenses**: He had to give the owner of the stud $300.
+
+7. **Calculating Profit**: Profit is the total money from selling the puppies minus the expenses.
+   - Profit = Total money from selling puppies - Expenses
+   - Profit = $1800 - $300 = $1500.
+
+Therefore, the final answer is #### 1500.</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：2100</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：287（包含返回的特殊 token）；输入 token：136；生成耗时：7.59 秒。</div>
+<p class='metric'>解析数字 2100 不等于目标 1500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To calculate John&#x27;s profit, we need to follow these steps:
+
+1. **Calculate the number of puppies John gives away:**
+   John gives away half of the 8 puppies.
+   \[
+   \frac{8}{2} = 4 \text{ puppies}
+   \]
+
+2. **Calculate the number of puppies John keeps:**
+   After giving away 4 puppies, John keeps the remaining 4 puppies.
+
+   \[
+   8 - 4 = 4 \text{ puppies}
+   \]
+
+3. **Calculate the number of puppies John sells:**
+   John sells the remaining 4 puppies.
+
+   \[
+   4 \text{ puppies}
+   \]
+
+4. **Calculate the total revenue from selling the puppies:**
+   Each puppy is sold for $600.
+   \[
+   4 \times 600 = 2400 \text{ dollars}
+   \]
+
+5. **Calculate the total expenses:**
+   John has to pay $300 to the owner of the stud.
+   \[
+   300 \text{ dollars}
+   \]
+
+6. **Calculate the profit:**
+   Profit is the total revenue minus the total expenses.
+   \[
+   2400 - 300 = 2100 \text{ dollars}
+   \
+
+#### 2100</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：2400</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：268（包含返回的特殊 token）；输入 token：136；生成耗时：7.25 秒。</div>
+<p class='metric'>解析数字 2400 不等于目标 1500。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To calculate John&#x27;s profit, we need to follow these steps:
+
+1. **Calculate the number of puppies John gives away:**
+   John gives away half of the 8 puppies.
+   \[
+   \frac{8}{2} = 4 \text{ puppies}
+   \]
+
+2. **Calculate the number of puppies John keeps:**
+   John keeps one of the remaining puppies.
+   \[
+   8 - 4 + 1 = 5 \text{ puppies}
+   \]
+
+3. **Calculate the total revenue from selling the puppies:**
+   John sells the remaining 5 puppies for $600 each.
+   \[
+   5 \times 600 = 3000 \text{ dollars}
+   \]
+
+4. **Subtract the cost of the stud:**
+   John had to give the owner of the stud $300.
+   \[
+   3000 - 300 = 2700 \text{ dollars}
+   \]
+
+5. **Calculate the profit:**
+   Profit is the total revenue minus the cost of the stud.
+   \[
+   2700 - 300 = 2400 \text{ dollars}
+   \]
+
+#### 2400</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：260（包含返回的特殊 token）；输入 token：136；生成耗时：6.71 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Initial Litter**: John starts with 8 puppies.
+
+2. **Giving Away Half**: He gives away half of the puppies.
+   - Half of 8 is 4 puppies.
+   - So, he gives away 4 puppies.
+
+3. **Remaining Puppies**: After giving away half, he has 4 puppies left.
+
+4. **Keeping One**: He keeps one of the remaining puppies.
+   - So, he keeps 1 puppy.
+
+5. **Remaining Puppies for Sale**: He has 4 puppies left, but he keeps 1, so he sells 3 puppies.
+   - He sells each puppy for $600.
+   - Total money from selling 3 puppies = 3 * $600 = $1800.
+
+6. **Expenses**: He had to give the owner of the stud $300.
+
+7. **Calculating Profit**: Profit is the total money from selling the puppies minus the expenses.
+   - Profit = Total money from selling puppies - Expenses
+   - Profit = $1800 - $300 = $1500.
+
+Therefore, the final answer is #### 1500.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：260（包含返回的特殊 token）；输入 token：136；生成耗时：9.28 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, let&#x27;s break it down step by step:
+
+1. **Initial Litter**: John starts with 8 puppies.
+
+2. **Giving Away Half**: He gives away half of the puppies.
+   - Half of 8 is 4 puppies.
+   - So, he gives away 4 puppies.
+
+3. **Remaining Puppies**: After giving away half, he has 4 puppies left.
+
+4. **Keeping One**: He keeps one of the remaining puppies.
+   - So, he keeps 1 puppy.
+
+5. **Remaining Puppies for Sale**: He has 4 puppies left, but he keeps 1, so he sells 3 puppies.
+   - He sells each puppy for $600.
+   - Total money from selling 3 puppies = 3 * $600 = $1800.
+
+6. **Expenses**: He had to give the owner of the stud $300.
+
+7. **Calculating Profit**: Profit is the total money from selling the puppies minus the expenses.
+   - Profit = Total money from selling puppies - Expenses
+   - Profit = $1800 - $300 = $1500.
+
+Therefore, the final answer is #### 1500.</span></pre></article>
+</div></section>
+<section class='question' id='q9'><h2>第 9 题 · train:02268</h2><div class='question-text'>Kevin has a shoebox filled with toads.  Every day, Kevin feeds each toad 3 worms.  It takes Kevin 15 minutes to find each worm.  If it takes Kevin 6 hours to find enough worms to feed all of his toads, how many toads does Kevin have in his shoebox?</div><p><strong>目标数字：8</strong> <span class='muted'>来源：train / 2268</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：185（包含返回的特殊 token）；输入 token：136；生成耗时：4.67 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find out how many toads Kevin has, we need to first determine how many worms Kevin can find in 6 hours. Since it takes him 15 minutes to find each worm, we can calculate the total number of worms he can find in 6 hours by multiplying the number of minutes in 6 hours by the number of minutes it takes to find each worm.
+
+6 hours = 6 * 60 = 360 minutes
+360 minutes / 15 minutes per worm = 72 worms
+
+Now that we know Kevin can find 72 worms in 6 hours, we can calculate how many toads he has by dividing the total number of worms by the number of worms each toad eats per day.
+
+72 worms / 3 worms per toad = 24 toads
+
+Therefore, Kevin has 24 toads in his shoebox.</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：287（包含返回的特殊 token）；输入 token：136；生成耗时：51.13 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine how many toads Kevin has in his shoebox, we need to follow these steps:
+
+1. **Calculate the total time Kevin spends finding worms:**
+   Kevin spends 6 hours finding worms. Since there are 60 minutes in an hour, we convert 6 hours to minutes:
+   \[
+   6 \text{ hours} \times 60 \text{ minutes/hour} = 360 \text{ minutes}
+   \]
+
+2. **Determine the total number of worms Kevin finds:**
+   Kevin spends 360 minutes finding worms. Since it takes him 15 minutes to find each worm, we divide the total time by the time it takes to find one worm:
+   \[
+   \frac{360 \text{ minutes}}{15 \text{ minutes/worm}} = 72 \text{ worms}
+   \]
+
+3. **Calculate the number of toads Kevin has:**
+   Each toad eats 3 worms per day. To find the number of toads, we divide the total number of worms by the number of worms each toad eats:
+   \[
+   \frac{72 \text{ worms}}{3 \text{ worms/toad}} = 24 \text{ toads}
+   \]
+
+Therefore, Kevin has 24 toads in his shoebox.</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：289（包含返回的特殊 token）；输入 token：136；生成耗时：11.80 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine how many toads Kevin has in his shoebox, we need to follow these steps:
+
+1. **Calculate the total time Kevin spends finding worms:**
+   Kevin spends 6 hours finding worms. Since there are 60 minutes in an hour, we convert the time to minutes:
+   \[
+   6 \text{ hours} \times 60 \text{ minutes/hour} = 360 \text{ minutes}
+   \]
+
+2. **Determine the total number of worms Kevin finds:**
+   Kevin spends 360 minutes finding worms. Since it takes him 15 minutes to find each worm, we divide the total time by the time it takes to find one worm:
+   \[
+   \frac{360 \text{ minutes}}{15 \text{ minutes/worm}} = 24 \text{ worms}
+   \]
+
+3. **Calculate the number of toads:**
+   Each toad eats 3 worms per day. To find out how many toads Kevin has, we divide the total number of worms by the number of worms each toad eats:
+   \[
+   \frac{24 \text{ worms}}{3 \text{ worms/toad}} = 8 \text{ toads}
+   \]
+
+Therefore, Kevin has \(\boxed{8}\) toads in his shoebox.</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：289（包含返回的特殊 token）；输入 token：136；生成耗时：91.36 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine how many toads Kevin has in his shoebox, we need to follow these steps:
+
+1. **Calculate the total time Kevin spends finding worms:**
+   Kevin spends 6 hours finding worms. Since there are 60 minutes in an hour, we convert the time to minutes:
+   \[
+   6 \text{ hours} \times 60 \text{ minutes/hour} = 360 \text{ minutes}
+   \]
+
+2. **Determine the total number of worms Kevin finds:**
+   Kevin spends 360 minutes finding worms. Since it takes him 15 minutes to find each worm, we divide the total time by the time it takes to find one worm:
+   \[
+   \frac{360 \text{ minutes}}{15 \text{ minutes/worm}} = 24 \text{ worms}
+   \]
+
+3. **Calculate the number of toads:**
+   Each toad eats 3 worms per day. To find out how many toads Kevin has, we divide the total number of worms by the number of worms each toad eats:
+   \[
+   \frac{24 \text{ worms}}{3 \text{ worms/toad}} = 8 \text{ toads}
+   \]
+
+Therefore, Kevin has \(\boxed{8}\) toads in his shoebox.</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：24</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：188（包含返回的特殊 token）；输入 token：136；生成耗时：4.96 秒。</div>
+<p class='metric'>解析数字 24 不等于目标 8。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To find out how many toads Kevin has, we need to first determine how many worms Kevin can find in 6 hours. Since it takes Kevin 15 minutes to find each worm, we can calculate the total number of worms he can find in 6 hours by multiplying the number of minutes in 6 hours by the number of minutes it takes to find each worm.
+
+6 hours = 6 * 60 = 360 minutes
+360 minutes / 15 minutes per worm = 72 worms
+
+Now, since Kevin feeds each toad 3 worms per day, we can find out how many toads he has by dividing the total number of worms by the number of worms each toad eats per day.
+
+72 worms / 3 worms per toad = 24 toads
+
+Therefore, Kevin has 24 toads in his shoebox.
+
+#### 24</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：185（包含返回的特殊 token）；输入 token：136；生成耗时：4.95 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To find out how many toads Kevin has, we need to first determine how many worms Kevin can find in 6 hours. Since it takes Kevin 15 minutes to find each worm, we can calculate the total number of worms he can find in 6 hours by multiplying the number of minutes in 6 hours by the number of minutes it takes to find each worm.
+
+6 hours = 6 * 60 = 360 minutes
+360 minutes / 15 minutes per worm = 72 worms
+
+Now that we know Kevin can find 72 worms in 6 hours, we can calculate how many toads he has by dividing the total number of worms by the number of worms each toad eats per day.
+
+72 worms / 3 worms per toad = 24 toads
+
+Therefore, Kevin has 24 toads in his shoebox.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：289（包含返回的特殊 token）；输入 token：136；生成耗时：7.47 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine how many toads Kevin has in his shoebox, we need to follow these steps:
+
+1. **Calculate the total time Kevin spends finding worms:**
+   Kevin spends 6 hours finding worms. Since there are 60 minutes in an hour, we convert the time to minutes:
+   \[
+   6 \text{ hours} \times 60 \text{ minutes/hour} = 360 \text{ minutes}
+   \]
+
+2. **Determine the total number of worms Kevin finds:**
+   Kevin spends 360 minutes finding worms. Since it takes him 15 minutes to find each worm, we divide the total time by the time it takes to find one worm:
+   \[
+   \frac{360 \text{ minutes}}{15 \text{ minutes/worm}} = 24 \text{ worms}
+   \]
+
+3. **Calculate the number of toads:**
+   Each toad eats 3 worms per day. To find out how many toads Kevin has, we divide the total number of worms by the number of worms each toad eats:
+   \[
+   \frac{24 \text{ worms}}{3 \text{ worms/toad}} = 8 \text{ toads}
+   \]
+
+Therefore, Kevin has \(\boxed{8}\) toads in his shoebox.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：289（包含返回的特殊 token）；输入 token：136；生成耗时：10.69 秒。</div>
+<p class='metric'>缺少 #### 标记。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To determine how many toads Kevin has in his shoebox, we need to follow these steps:
+
+1. **Calculate the total time Kevin spends finding worms:**
+   Kevin spends 6 hours finding worms. Since there are 60 minutes in an hour, we convert the time to minutes:
+   \[
+   6 \text{ hours} \times 60 \text{ minutes/hour} = 360 \text{ minutes}
+   \]
+
+2. **Determine the total number of worms Kevin finds:**
+   Kevin spends 360 minutes finding worms. Since it takes him 15 minutes to find each worm, we divide the total time by the time it takes to find one worm:
+   \[
+   \frac{360 \text{ minutes}}{15 \text{ minutes/worm}} = 24 \text{ worms}
+   \]
+
+3. **Calculate the number of toads:**
+   Each toad eats 3 worms per day. To find out how many toads Kevin has, we divide the total number of worms by the number of worms each toad eats:
+   \[
+   \frac{24 \text{ worms}}{3 \text{ worms/toad}} = 8 \text{ toads}
+   \]
+
+Therefore, Kevin has \(\boxed{8}\) toads in his shoebox.</span></pre></article>
+</div></section>
+<section class='question' id='q10'><h2>第 10 题 · train:00061</h2><div class='question-text'>A bear is preparing to hibernate for the winter and needs to gain 1000 pounds. At the end of summer, the bear feasts on berries and small woodland animals. During autumn, it devours acorns and salmon. It gained a fifth of the weight it needed from berries during summer, and during autumn, it gained twice that amount from acorns. Salmon made up half of the remaining weight it had needed to gain. How many pounds did it gain eating small animals?</div><p><strong>目标数字：200</strong> <span class='muted'>来源：train / 61</span></p><div class='cards'>
+<article class='card local'><h3>Metal · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：281（包含返回的特殊 token）；输入 token：168；生成耗时：7.01 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate the amount it gained from each source.
+
+1. **Berries**: The bear gained a fifth of the weight it needed from berries during summer. Since it needed to gain 1000 pounds, it gained \( \frac{1000}{5} = 200 \) pounds from berries.
+
+2. **Acorns**: During autumn, the bear gained twice the amount it gained from berries, which that is \( 2 \times 200 = 400 \) pounds from acorns.
+
+3. **Salmon**: Salmon made up half of the remaining weight it had needed to gain. After gaining from berries and acorns, the bear still needed \( 1000 - 200 - 400 = 400 \) pounds. Salmon accounted for half of this remaining weight, so it gained \( \frac{400}{2} = 200 \) pounds from salmon.
+
+4. **Small Animals**: The remaining weight the bear needed to gain was \( 1000 - 200 - 400 - 200 = 100 \) pounds. This is the amount the bear gained from small animals.
+
+#### 100.</span></pre></article>
+<article class='card local'><h3>Metal · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：200</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：307（包含返回的特殊 token）；输入 token：168；生成耗时：61.92 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate the amount it gained from each source.
+
+1. **Berries**: The bear gained a fifth of the weight it needed from berries during summer. Since it needed to gain 1000 pounds, it gained \( \frac{1000}{5} = 200 \ \text{pounds} \) from berries.
+
+2. **Acorns**: During autumn, the bear gained twice the amount it gained from berries, which is \( 2 \times 200 = 400 \ \text{pounds} \) from acorns.
+
+3. **Salmon**: Salmon made up half of the remaining weight it had needed to gain. After gaining from berries and acorns, the bear still needed \( 1000 - 200 - 400 = 300 \ \text{pounds} \). Salmon accounted for half of this remaining weight, so it gained \( \frac{300}{2} = 150 \ \text{pounds} \) from salmon.
+
+4. **Small Animals**: The remaining weight the bear needed to gain was \( 1000 - 200 - 400 - 150 = 200 \ \text{pounds} \). This is the amount the bear gained from small animals.
+
+#### 200</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：200</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：168；生成耗时：13.91 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate each part step by step.
+
+1. **Total weight needed**: 1000 pounds.
+
+2. **Weight gained from berries**: The bear gained a fifth of the total weight from berries.
+   \[
+   \text{Weight from berries} = \frac{1000}{5} = 200 \text{ pounds}
+   \]
+
+3. **Weight gained from acorns**: The bear gained twice the weight from acorns as it did from berries.
+   \[
+   \text{Weight from acorns} = 2 \times 200 = 400 \text{ pounds}
+   \]
+
+4. **Remaining weight needed**: After gaining from berries and acorns, the bear still needs to gain:
+   \[
+   \text{Remaining weight} = 1000 - 200 - 400 = 400 \text{ pounds}
+   \]
+
+5. **Weight gained from salmon**: Salmon made up half of the remaining weight.
+   \[
+   \text{Weight from salmon} = \frac{400}{2} = 200 \text{ pounds}
+   \]
+
+6. **Weight gained from small animals**: The remaining weight needed after gaining from berries, acorns, and salmon.
+   \[
+   \text{Weight from small animals} = 400 - 200 = 200 \text{ pounds}
+   \]
+
+So, the bear gained 200 pounds eating small animals.
+
+#### 200</span></pre></article>
+<article class='card local'><h3>Metal · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：200</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：168；生成耗时：126.25 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate each part step by step.
+
+1. **Total weight needed**: 1000 pounds.
+
+2. **Weight gained from berries**: The bear gained a fifth of the total weight from berries.
+   \[
+   \text{Weight from berries} = \frac{1000}{5} = 200 \text{ pounds}
+   \]
+
+3. **Weight gained from acorns**: The bear gained twice the weight from acorns as it did from berries.
+   \[
+   \text{Weight from acorns} = 2 \times 200 = 400 \text{ pounds}
+   \]
+
+4. **Remaining weight needed**: After gaining from berries and acorns, the bear still needs to gain:
+   \[
+   \text{Remaining weight} = 1000 - 200 - 400 = 400 \text{ pounds}
+   \]
+
+5. **Weight gained from salmon**: Salmon made up half of the remaining weight.
+   \[
+   \text{Weight from salmon} = \frac{400}{2} = 200 \text{ pounds}
+   \]
+
+6. **Weight gained from small animals**: The remaining weight needed after gaining from berries, acorns, and salmon.
+   \[
+   \text{Weight from small animals} = 400 - 200 = 200 \text{ pounds}
+   \]
+
+So, the bear gained 200 pounds eating small animals.
+
+#### 200</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 有 KV cache</h3>
+<div class='badges'><span class='badge numeric_mismatch'>数字不匹配（可解析）</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：900</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：221（包含返回的特殊 token）；输入 token：168；生成耗时：5.83 秒。</div>
+<p class='metric'>解析数字 900 不等于目标 200。这里只核对最终数字，不自动判定是哪一步推理出了错。</p>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate the amount it gained from each source.
+
+1. The bear needs to gain 1000 pounds in total.
+2. During summer, it gained a fifth of the weight it needed, which is 1000/5 = 200 pounds.
+3. During autumn, it gained twice that amount from acorns, which is 2 * 200 = 400 pounds.
+4. Salmon made up half of the remaining weight it had needed to gain, which is 1000/2 = 500 pounds.
+
+5. The total weight gained from berries, acorns, and salmon is 200 + 400 + 500 = 1100 pounds.
+6. The remaining weight it needed to gain is 1000 - 1100 = 900 pounds.
+
+Therefore, the bear gained 900 pounds eating small animals.
+
+#### 900</span></pre></article>
+<article class='card amd'><h3>AMD · BF16 · 无 KV cache</h3>
+<div class='badges'><span class='badge format_failure'>格式无法解析</span><span class='badge'>严格 reward = 0</span><span class='badge'>数字：无法解析</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：281（包含返回的特殊 token）；输入 token：168；生成耗时：7.76 秒。</div>
+<p class='metric'>#### 后的全部非空白文字不是单个受支持的十进制数字。 R=0 不等于证明推理正文的数字算错。</p>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate the amount it gained from each source.
+
+1. **Berries**: The bear gained a fifth of the weight it needed from berries during summer. Since it needed to gain 1000 pounds, it gained \( \frac{1000}{5} = 200 \) pounds from berries.
+
+2. **Acorns**: During autumn, the bear gained twice the amount it gained from berries, which that is \( 2 \times 200 = 400 \) pounds from acorns.
+
+3. **Salmon**: Salmon made up half of the remaining weight it had needed to gain. After gaining from berries and acorns, the bear still needed \( 1000 - 200 - 400 = 400 \) pounds. Salmon accounted for half of this remaining weight, so it gained \( \frac{400}{2} = 200 \) pounds from salmon.
+
+4. **Small Animals**: The remaining weight the bear needed to gain was \( 1000 - 200 - 400 - 200 = 100 \) pounds. This is the amount the bear gained from small animals.
+
+#### 100.</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 有 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：200</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：168；生成耗时：8.85 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate each part step by step.
+
+1. **Total weight needed**: 1000 pounds.
+
+2. **Weight gained from berries**: The bear gained a fifth of the total weight from berries.
+   \[
+   \text{Weight from berries} = \frac{1000}{5} = 200 \text{ pounds}
+   \]
+
+3. **Weight gained from acorns**: The bear gained twice the weight from acorns as it did from berries.
+   \[
+   \text{Weight from acorns} = 2 \times 200 = 400 \text{ pounds}
+   \]
+
+4. **Remaining weight needed**: After gaining from berries and acorns, the bear still needs to gain:
+   \[
+   \text{Remaining weight} = 1000 - 200 - 400 = 400 \text{ pounds}
+   \]
+
+5. **Weight gained from salmon**: Salmon made up half of the remaining weight.
+   \[
+   \text{Weight from salmon} = \frac{400}{2} = 200 \text{ pounds}
+   \]
+
+6. **Weight gained from small animals**: The remaining weight needed after gaining from berries, acorns, and salmon.
+   \[
+   \text{Weight from small animals} = 400 - 200 = 200 \text{ pounds}
+   \]
+
+So, the bear gained 200 pounds eating small animals.
+
+#### 200</span></pre></article>
+<article class='card amd'><h3>AMD · FP32 · 无 KV cache</h3>
+<div class='badges'><span class='badge correct'>正确（严格规则）</span><span class='badge'>严格 reward = 1</span><span class='badge'>数字：200</span><span class='badge'>EOS ✓</span></div><div class='metric'>回答 token：343（包含返回的特殊 token）；输入 token：168；生成耗时：14.62 秒。</div>
+<pre class='answer'><span>To solve this problem, we need to break down the bear&#x27;s weight gain into parts and calculate each part step by step.
+
+1. **Total weight needed**: 1000 pounds.
+
+2. **Weight gained from berries**: The bear gained a fifth of the total weight from berries.
+   \[
+   \text{Weight from berries} = \frac{1000}{5} = 200 \text{ pounds}
+   \]
+
+3. **Weight gained from acorns**: The bear gained twice the weight from acorns as it did from berries.
+   \[
+   \text{Weight from acorns} = 2 \times 200 = 400 \text{ pounds}
+   \]
+
+4. **Remaining weight needed**: After gaining from berries and acorns, the bear still needs to gain:
+   \[
+   \text{Remaining weight} = 1000 - 200 - 400 = 400 \text{ pounds}
+   \]
+
+5. **Weight gained from salmon**: Salmon made up half of the remaining weight.
+   \[
+   \text{Weight from salmon} = \frac{400}{2} = 200 \text{ pounds}
+   \]
+
+6. **Weight gained from small animals**: The remaining weight needed after gaining from berries, acorns, and salmon.
+   \[
+   \text{Weight from small animals} = 400 - 200 = 200 \text{ pounds}
+   \]
+
+So, the bear gained 200 pounds eating small animals.
+
+#### 200</span></pre></article>
+</div></section>
+<section class='summary metadata'><h2>输入报告与版本</h2>
+<h3>Metal</h3><ul>
+<li>输入：<code>/Users/tianbaochen/geora-repro/reports/precision_investigation/metal_inference.json.gz</code></li>
+<li>SHA256：<code>7af03b0e172ba40d0ba3786d0997191a2b80b68f95c5a87c719d1d8f7ae6554a</code></li>
+<li>状态：<code>completed</code></li>
+<li>设备：<code>mps</code></li>
+<li>HIP：<code>None</code></li>
+<li>PyTorch：<code>2.14.1</code></li>
+<li>Transformers：<code>5.19.0</code></li>
+<li>模型：<code>Qwen/Qwen2.5-1.5B-Instruct</code></li>
+<li>模型版本：<code>989aa7980e4cf806f80c7fef2b1adb7bc71aa306</code></li>
+<li>数据版本：<code>3101c7d5072418e28b9008a6636bde82a006892c</code></li>
+<li>最多新 token：<code>1024</code></li>
+</ul>
+<h3>AMD</h3><ul>
+<li>输入：<code>/Users/tianbaochen/geora-repro/reports/precision_investigation/amd_inference.json.gz</code></li>
+<li>SHA256：<code>d3783b33071a9fabe50623f928bb9e080939d532ae9bf01f8a9a6744901b4504</code></li>
+<li>状态：<code>completed</code></li>
+<li>设备：<code>AMD Instinct MI250X</code></li>
+<li>HIP：<code>6.3.42134-a9a80e791</code></li>
+<li>PyTorch：<code>2.7.1a0+gite2d141d</code></li>
+<li>Transformers：<code>5.19.0</code></li>
+<li>模型：<code>Qwen/Qwen2.5-1.5B-Instruct</code></li>
+<li>模型版本：<code>989aa7980e4cf806f80c7fef2b1adb7bc71aa306</code></li>
+<li>数据版本：<code>3101c7d5072418e28b9008a6636bde82a006892c</code></li>
+<li>最多新 token：<code>1024</code></li>
+</ul>
+</section></main></html>

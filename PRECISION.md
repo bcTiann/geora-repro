@@ -1,8 +1,8 @@
 # GeoRA 復現：精度與驗證約定
 
-更新：2026-10-10。這份文件說明目前實作的精度約定；實際執行結果集中在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
+更新：2026-10-11。当前实际使用第 9 节的 `difference` 模式，已通过初始化、短 GRPO 更新与恢复检查。本轮两平台完整回答、AMD FP32/BF16 训练成本和论文精度调查集中在 [PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)；实际执行历史保留在 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
-**下表是目前 GPU 檢查的預設配置，尚未通過 1.5B 初始化 logits 門檻，不能當作已驗證的訓練方案。** FP32 投影與 FP32 投影＋attention 分數已做完整模型診斷，仍未通過 2% logits 門檻，尚未取代預設。詳見實驗記錄 S6。`difference` 模式已通過初始化／單步更新／重載，精度另見第 9 節；這不把其多步訓練視為已驗證。
+**下面第 1–8 节保留早期 residual 实现的约定和失败记录，不应当作当前 difference 训练配置。** residual 的 BF16 初始化及若干 FP32 投影方案未通过原 logits 门限；第 9 节的 difference 模式后来通过短 GRPO 多步与恢复，但长期稳定性和论文任务分数仍未验证。
 
 ## 1. 採用的精度
 

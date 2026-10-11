@@ -1,0 +1,393 @@
+{
+  "status": "passed",
+  "created_utc": "2026-10-11T15:19:48.189236+00:00",
+  "scope": "Independent CPU-only read/parse/aggregation audit; no model forward, GPU use, or repository writes.",
+  "source_inputs": {
+    "local": {
+      "path": "/Users/tianbaochen/geora-repro/outputs/gsm8k_precision_comparison/20261011/answers.json",
+      "sha256": "7af03b0e172ba40d0ba3786d0997191a2b80b68f95c5a87c719d1d8f7ae6554a"
+    },
+    "amd": {
+      "path": "/private/tmp/gsm8k-amd-complete.json",
+      "sha256": "d3783b33071a9fabe50623f928bb9e080939d532ae9bf01f8a9a6744901b4504"
+    }
+  },
+  "audited_rendered_files": {
+    "/Users/tianbaochen/geora-repro/reports/precision_investigation/gsm8k_precision_summary.json": "b19261aaa7540bf604eb5befbb5db04ce87685d21e6e93caef4d6485c37c777b",
+    "/Users/tianbaochen/geora-repro/reports/precision_investigation/gsm8k_precision_full_answers.html": "b527dc780b7e4f6d0ba2ac14eb1e5a4aff2a6e2cd7f7fb654d055a7a9904a69a"
+  },
+  "renderer_sha256": "b269db1d97284abb87412c3812d4c15b634b4dc7dc5bc653ff4c9bac752db3d4",
+  "checks": {
+    "model_data_generation_settings_match": true,
+    "question_ids": [
+      "train:01480",
+      "train:06951",
+      "train:05119",
+      "train:05950",
+      "train:03273",
+      "train:05258",
+      "train:06996",
+      "train:02607",
+      "train:02268",
+      "train:00061"
+    ],
+    "both_platforms_exact_first_ten_prepared_smoke_and_pinned_source_rows": true,
+    "pinned_train_source_hash_matches": true,
+    "answer_count": 80,
+    "natural_eos_count": 80,
+    "eos_id": 151645,
+    "no_eos_before_last_returned_token": true,
+    "exact_token_decode_to_saved_completion_count": 80,
+    "strict_production_grading_match_count": 80,
+    "html_full_answer_count": 80,
+    "html_full_text_exactly_matches_all_original_completions": true,
+    "saved_condition_and_pair_counts_match_independent_recomputation": true,
+    "final_summary_rejects_None_None_as_valid_numeric_agreement": true,
+    "final_summary_not_partial": true
+  },
+  "conditions": [
+    {
+      "condition": "Metal · BF16 · 有 KV cache",
+      "condition_short": "M16C",
+      "counts": {
+        "correct": 2,
+        "present": 10,
+        "eos": 10,
+        "numeric_mismatch": 4,
+        "format_failure": 4
+      },
+      "tokens": 2261,
+      "seconds": 58.11843712400878
+    },
+    {
+      "condition": "Metal · BF16 · 无 KV cache",
+      "condition_short": "M16N",
+      "counts": {
+        "correct": 3,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 4
+      },
+      "tokens": 2292,
+      "seconds": 401.3888322089988
+    },
+    {
+      "condition": "Metal · FP32 · 有 KV cache",
+      "condition_short": "M32C",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 114.99979795899708
+    },
+    {
+      "condition": "Metal · FP32 · 无 KV cache",
+      "condition_short": "M32N",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 886.4947532079968
+    },
+    {
+      "condition": "AMD · BF16 · 有 KV cache",
+      "condition_short": "A16C",
+      "counts": {
+        "correct": 1,
+        "present": 10,
+        "eos": 10,
+        "numeric_mismatch": 7,
+        "format_failure": 2
+      },
+      "tokens": 2195,
+      "seconds": 58.78892846388044
+    },
+    {
+      "condition": "AMD · BF16 · 无 KV cache",
+      "condition_short": "A16N",
+      "counts": {
+        "correct": 2,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 4,
+        "numeric_mismatch": 4
+      },
+      "tokens": 2287,
+      "seconds": 62.62657543603564
+    },
+    {
+      "condition": "AMD · FP32 · 有 KV cache",
+      "condition_short": "A32C",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 71.74279965291498
+    },
+    {
+      "condition": "AMD · FP32 · 无 KV cache",
+      "condition_short": "A32N",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 105.05422523396555
+    }
+  ],
+  "comparison_counts": [
+    {
+      "pair_short": "M16C / M16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 1,
+        "both_parsed": 6,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      }
+    },
+    {
+      "pair_short": "M32C / M32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      }
+    },
+    {
+      "pair_short": "M16C / M32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 5,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 5,
+        "both_correct": 2
+      }
+    },
+    {
+      "pair_short": "M16N / M32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 6,
+        "valid_numeric_equal": 3,
+        "unparsed_pairs": 4,
+        "both_correct": 3
+      }
+    },
+    {
+      "pair_short": "A16C / A16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 3,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      }
+    },
+    {
+      "pair_short": "A32C / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      }
+    },
+    {
+      "pair_short": "A16C / A32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 6,
+        "valid_numeric_equal": 1,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      }
+    },
+    {
+      "pair_short": "A16N / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 5,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 5,
+        "both_correct": 2
+      }
+    },
+    {
+      "pair_short": "M16C / A16C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 5,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      }
+    },
+    {
+      "pair_short": "M16N / A16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 4,
+        "unparsed_pairs": 4,
+        "both_correct": 2
+      }
+    },
+    {
+      "pair_short": "M32C / A32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      }
+    },
+    {
+      "pair_short": "M32N / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      }
+    }
+  ],
+  "original_helper_parse_bug": {
+    "field": "comparisons.final_numeric_answers_equal",
+    "description": "Original raw reports count paired predicted_answer=None as equal in this helper field. Final renderer independently recomputes both_parsed and valid_numeric_equal, so final summaries do not inherit the issue.",
+    "original_affected_pair_counts": {
+      "local": 10,
+      "amd": 8
+    },
+    "affected_pairs": {
+      "local": [
+        {
+          "question_id": "train:05119",
+          "left": "bf16_cache",
+          "right": "bf16_no_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "bf16_cache",
+          "right": "fp32_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "bf16_no_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:05258",
+          "left": "bf16_cache",
+          "right": "bf16_no_cache"
+        },
+        {
+          "question_id": "train:02607",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "bf16_cache",
+          "right": "bf16_no_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "bf16_cache",
+          "right": "fp32_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "bf16_no_cache",
+          "right": "fp32_no_cache"
+        }
+      ],
+      "amd": [
+        {
+          "question_id": "train:05119",
+          "left": "bf16_cache",
+          "right": "bf16_no_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "bf16_cache",
+          "right": "fp32_cache"
+        },
+        {
+          "question_id": "train:05119",
+          "left": "bf16_no_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:05258",
+          "left": "bf16_cache",
+          "right": "bf16_no_cache"
+        },
+        {
+          "question_id": "train:02607",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "fp32_cache",
+          "right": "fp32_no_cache"
+        },
+        {
+          "question_id": "train:02268",
+          "left": "bf16_no_cache",
+          "right": "fp32_no_cache"
+        }
+      ]
+    },
+    "raw_records_preserved": true
+  }
+}

@@ -1,0 +1,372 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "bf16_internal_source_hashes_match_external_record",
+      "passed": true
+    },
+    {
+      "name": "fp32_internal_source_hashes_match_external_record",
+      "passed": true
+    },
+    {
+      "name": "both_completed_successfully",
+      "passed": true
+    },
+    {
+      "name": "correct_precision_conditions",
+      "passed": true
+    },
+    {
+      "name": "input_sha256_valid_and_equal",
+      "passed": true
+    },
+    {
+      "name": "frozen_value_sha256_valid_and_equal",
+      "passed": true
+    },
+    {
+      "name": "initial_adapter_file_sha256_valid_and_equal",
+      "passed": true
+    },
+    {
+      "name": "initial_manifest_sha256_valid_and_equal",
+      "passed": true
+    },
+    {
+      "name": "source_report_sha256_valid_and_equal",
+      "passed": true
+    },
+    {
+      "name": "all_six_source_hashes_equal",
+      "passed": true
+    },
+    {
+      "name": "device_equal",
+      "passed": true
+    },
+    {
+      "name": "device_name_equal",
+      "passed": true
+    },
+    {
+      "name": "torch_version_equal",
+      "passed": true
+    },
+    {
+      "name": "transformers_version_equal",
+      "passed": true
+    },
+    {
+      "name": "hip_version_equal",
+      "passed": true
+    },
+    {
+      "name": "scope_equal",
+      "passed": true
+    },
+    {
+      "name": "reference_anchor_equal",
+      "passed": true
+    },
+    {
+      "name": "real_original_reference_model_resident_equal",
+      "passed": true
+    },
+    {
+      "name": "attention_backend_equal",
+      "passed": true
+    },
+    {
+      "name": "training_probability_path_equal",
+      "passed": true
+    },
+    {
+      "name": "gradient_checkpointing_equal",
+      "passed": true
+    },
+    {
+      "name": "optimizer_foreach_equal",
+      "passed": true
+    },
+    {
+      "name": "float32_matmul_precision_equal",
+      "passed": true
+    },
+    {
+      "name": "source_forward_mode_equal",
+      "passed": true
+    },
+    {
+      "name": "actual_forward_mode_equal",
+      "passed": true
+    },
+    {
+      "name": "frozen_parameter_count_equal",
+      "passed": true
+    },
+    {
+      "name": "trainable_parameter_count_equal",
+      "passed": true
+    },
+    {
+      "name": "question_ids_equal",
+      "passed": true
+    },
+    {
+      "name": "complete_source_answer_lengths_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_completion_lengths_equal",
+      "passed": true
+    },
+    {
+      "name": "truncation_is_runtime_workload_only_equal",
+      "passed": true
+    },
+    {
+      "name": "advantages_from_original_complete_answers_equal",
+      "passed": true
+    },
+    {
+      "name": "intended_runtime_scope",
+      "passed": true
+    },
+    {
+      "name": "FP32_factors_optimizer_and_loss_in_both",
+      "passed": true
+    },
+    {
+      "name": "nonzero_finite_fixed_advantages",
+      "passed": true
+    },
+    {
+      "name": "positive_parameter_counts",
+      "passed": true
+    },
+    {
+      "name": "benchmark_warmup_count_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_measurement_count_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_optimizer_steps_are_independent_first_step_trials_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_valid_completion_tokens_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_input_shape_equal",
+      "passed": true
+    },
+    {
+      "name": "benchmark_fixed_width_equal",
+      "passed": true
+    },
+    {
+      "name": "valid_input_and_completion_layout",
+      "passed": true
+    },
+    {
+      "name": "bf16_real_measured_trials",
+      "passed": true
+    },
+    {
+      "name": "bf16_benchmark_dtype",
+      "passed": true
+    },
+    {
+      "name": "bf16_finite_nonzero_gradients",
+      "passed": true
+    },
+    {
+      "name": "bf16_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "bf16_forward_and_loss_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "bf16_backward_clip_step_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "bf16_total_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "bf16_GPU_peaks_valid",
+      "passed": true
+    },
+    {
+      "name": "fp32_real_measured_trials",
+      "passed": true
+    },
+    {
+      "name": "fp32_benchmark_dtype",
+      "passed": true
+    },
+    {
+      "name": "fp32_finite_nonzero_gradients",
+      "passed": true
+    },
+    {
+      "name": "fp32_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "fp32_forward_and_loss_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "fp32_backward_clip_step_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "fp32_total_seconds_summary_recomputed",
+      "passed": true
+    },
+    {
+      "name": "fp32_GPU_peaks_valid",
+      "passed": true
+    }
+  ],
+  "scope": "fixed-data policy first-update runtime comparison; not whole GRPO or task quality",
+  "report_paths": {
+    "bf16": "/tmp/benchmark-amd-bf16.json",
+    "fp32": "/tmp/benchmark-amd-fp32.json"
+  },
+  "report_sha256": {
+    "bf16": "741337c4af95f0e9deb1b18bb51980d7fdbf12e7fb967d47a945ae5ea8c81bf2",
+    "fp32": "318ec21cd8bb3c60a166bdab6937906942baaba73a2d0ac2be98ca6b1f7b0902"
+  },
+  "external_execution_source_record": {
+    "path": "/tmp/benchmark-source-manifest.json",
+    "sha256": "1be52bba13da6ebd47e2574824a4adfe0ae94958bafd1a535f1bb183fa28405e",
+    "record": {
+      "source_sha256": {
+        "scripts/check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+        "scripts/precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+        "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+        "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+        "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+        "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+      },
+      "capture_method": "SSH sha256sum of actual Setonix source files after both benchmark processes, during the same job inference stage; root local bytes independently match all six; no source changes during run",
+      "slurm_job_id": "50670799",
+      "inside_execution_report": false
+    },
+    "provenance": "external_execution_source_record"
+  },
+  "source_hash_provenance": {
+    "bf16": "in_report_execution_source_record",
+    "fp32": "in_report_execution_source_record"
+  },
+  "computed_timing_statistics": {
+    "bf16": {
+      "forward_and_loss_seconds": {
+        "median": 0.21962648699991405,
+        "minimum": 0.21864211501087993,
+        "maximum": 0.2202451570192352
+      },
+      "backward_clip_step_seconds": {
+        "median": 0.17185813700780272,
+        "minimum": 0.1718150939559564,
+        "maximum": 0.17205311503494158
+      },
+      "total_seconds": {
+        "median": 0.39144158095587045,
+        "minimum": 0.3906952300458215,
+        "maximum": 0.3921032940270379
+      }
+    },
+    "fp32": {
+      "forward_and_loss_seconds": {
+        "median": 0.3653780239983462,
+        "minimum": 0.3653164650313556,
+        "maximum": 0.3658785360166803
+      },
+      "backward_clip_step_seconds": {
+        "median": 0.23451299499720335,
+        "minimum": 0.23439577699173242,
+        "maximum": 0.2347373099764809
+      },
+      "total_seconds": {
+        "median": 0.6000537750078365,
+        "minimum": 0.5997738009900786,
+        "maximum": 0.6003915310138837
+      }
+    }
+  },
+  "median_time_ratio_FP32_over_BF16": {
+    "forward_and_loss_seconds": 1.6636336945939,
+    "backward_clip_step_seconds": 1.3645731245565402,
+    "total_seconds": 1.5329331481406523
+  },
+  "policy_update_effective_tokens_per_second": {
+    "bf16": 633.5555854705137,
+    "fp32": 413.2962916477964
+  },
+  "measured_memory": {
+    "bf16": {
+      "max_measured_peak_allocated_gib": 6.354330539703369,
+      "median_measured_peak_allocated_gib": 6.354330539703369,
+      "max_measured_peak_reserved_gib": 6.763671875,
+      "median_resident_allocated_gib": 3.151407241821289
+    },
+    "fp32": {
+      "max_measured_peak_allocated_gib": 9.9411940574646,
+      "median_measured_peak_allocated_gib": 9.9411940574646,
+      "max_measured_peak_reserved_gib": 10.236328125,
+      "median_resident_allocated_gib": 6.026677131652832
+    }
+  },
+  "measured_peak_difference": {
+    "max_peak_allocated_delta_gib": 3.5868635177612305,
+    "max_peak_allocated_ratio_fp32_over_bf16": 1.5644754384981476,
+    "resident_allocated_delta_gib": 2.875269889831543
+  },
+  "theoretical_parameter_storage": {
+    "one_policy_frozen_parameter_count": 1543714304,
+    "trainable_AB_parameter_count": 18464768,
+    "one_policy_frozen_BF16_gib": 2.875391960144043,
+    "one_policy_frozen_FP32_gib": 5.750783920288086,
+    "one_policy_FP32_minus_BF16_gib": 2.875391960144043,
+    "policy_plus_original_reference_FP32_minus_BF16_gib": 5.750783920288086,
+    "hypothetical_original_reference_extra_resident_BF16_gib": 2.875391960144043,
+    "hypothetical_original_reference_extra_resident_FP32_gib": 5.750783920288086,
+    "FP32_AB_grads_two_moments_A0B0_total_mib": 352.1875,
+    "scope": "parameter and initial-buffer storage only; not measured whole-step peak or activation prediction"
+  },
+  "common_input_shape": [
+    4,
+    175
+  ],
+  "common_valid_completion_tokens": 248,
+  "common_initial_adapter_sha256": "2cd66e8694060ca386622e2aedf186582da5836c544ca4398358f1d90f8c8ca6",
+  "common_input_sha256": "f3aec95b66036ed5b5da0836d6d8973ba101c7c160913a423a2a4aacda4e6eaf",
+  "common_frozen_value_sha256": "2caab39ac9c0070bfbb4c5afe39077cdb75a1971d88e3f42a9f429687cea6ef4",
+  "common_sources_sha256": {
+    "check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+    "precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+    "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+    "grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+    "grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+    "geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+  },
+  "interpretation_limits": [
+    "One policy only; original reference model not resident or timed",
+    "No generation, checkpoint writes, SVD or data download in timed current update",
+    "Original complete-answer advantages on truncated fixed token workload",
+    "FP32 changes frozen storage and model arithmetic, not FP32 factors/optimizer/loss",
+    "Device timing ratio is not a whole-job or task-quality result",
+    "Parameter storage estimate does not predict activation or differentiable-cache memory"
+  ]
+}

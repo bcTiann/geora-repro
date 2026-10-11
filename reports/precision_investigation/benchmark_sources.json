@@ -1,0 +1,13 @@
+{
+  "source_sha256": {
+    "scripts/check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+    "scripts/precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+    "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+    "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+    "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+    "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+  },
+  "capture_method": "SSH sha256sum of actual Setonix source files after both benchmark processes, during the same job inference stage; root local bytes independently match all six; no source changes during run",
+  "slurm_job_id": "50670799",
+  "inside_execution_report": false
+}

@@ -171,3 +171,8 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - [GOAL.md](GOAL.md) 是已完成的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
 **下一個可交付結果：實作通用 fixed_width pilot runner 和固定 validation 評估，核對原五步行為及完整恢復，再按計畫分段完成 LoRA／GeoRA 的較長 pilot。**
+
+
+## 10. 2026-10-11 精度调查后的状态
+
+Metal／AMD 各完成同一十题的四条件完整生成，另完成同一 GeoRA 短更新负载的 BF16／FP32 成本对照及相关文献调查，见 [PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。正式 LoRA／GeoRA 对照仍保留已验收的 BF16 混合精度和共同概率计算路径；FP32 独立作为数值／短训练对照。十题输出与单 policy 计时不等于论文成绩，也不代替完整 pilot 容量测量。下一交付仍是第 6 节的通用 pilot runner 和固定 validation；本轮未提交 pilot。

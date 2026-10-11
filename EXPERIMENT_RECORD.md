@@ -870,3 +870,21 @@ relative_error = norm(actual - reference) / norm(reference)
 两分钟硬上限、一个逻辑 GPU，实际 allocation 36 秒，COMPLETED，0:0；结束后队列为空。临时模型副本已删除，原模型／初始化／完整原始 logits 保留。现在累计 22 个已记录作业 allocation **55 分 43 秒**，不含 login CPU。
 
 详细步骤与全部有效 token 见 [CACHED_PRECISION.md](CACHED_PRECISION.md)、[GPU 报告](reports/cached_precision/50668984.json)、[NumPy 复核](reports/cached_precision/numpy_verification.json)。
+
+## 12. L20/S18：两平台十题完整输出、GeoRA 精度成本及文献调查
+
+2026-10-11。原始 Qwen2.5-1.5B-Instruct 冻结模型在 Metal／MI250X 各用 BF16／FP32、有／无原生 Transformers DynamicCache 生成预选 GSM8K smoke 前十题。greedy、batch=1、eager attention、最多 1024 新 token；80 个回答全部自然到 EOS，未截断。FP32 是同一 BF16 权重值的准确提升，逐参数核对 1,543,714,304 个元素，没有重新取得高精度检查点。
+
+无 cache 本轮是逐渐增长前文的原生 generate，区别于此前 fixed_width 训练。各平台有／无 cache 的完整 token 一致数：BF16 为 Metal 1/10、AMD 3/10；FP32 两者均 10/10。跨平台 BF16 两种 cache 条件各 3/10；FP32 两种条件各 10/10。四条 FP32 路径的全部十题完整 token 序列相同，不表示 logits／概率逐数值相同，也不表示全部答案正确。PyTorch 版本不同，不能声称纯硬件隔离实验。
+
+四条 FP32 的严格 reward 都为 6/10，一题数字不匹配、三题格式解析失败；两次解析失败不计为有效数字一致。十题是预选训练 smoke，不能当标准 GSM8K 测试成绩。独立 CPU 审计验证固定题目／版本、80 个 EOS、80 条 token 解码与正文、HTML 全文保留、评分和汇总。原 JSON 旧辅助比较把 None==None 当数字相同（Metal 10 对、AMD 8 对）；保留原始字节，最终汇总独立重算，后续代码修正，不重跑推理。
+
+同一 GPU allocation 另用未训练 GeoRA 初始化做精度成本对照。主干 BF16 autocast／FP32；A/B、A0/B0、低秩差分、A/B 参数梯度、AdamW、log-softmax/loss 保持 FP32。两组冻结数值一致。固定四段已保存完整回答的前至多 64 token，实际 248 有效 token，总输入 [4,175]。单 policy、固定 old 概率作为 reference anchor，没有第二个 reference 模型常驻。独立进程每组预热 2 次、测 3 次；每次恢复初始化并清空 optimizer，测 forward/loss/backward/clip/AdamW 首步，排除采样、加载、SVD、恢复和保存。
+
+中位合计 BF16 0.391442 秒／FP32 0.600054 秒，FP32 1.533 倍；GPU tensor 峰值 6.354331／9.941194 GiB，增 3.586864 GiB。不能外推为完整 GRPO 或长序列开销。CPU 小模型协议 75/75，AMD 两份报告独立重算 59/59。两份远端原始报告已有进程内源码哈希，并与本地保留副本字节哈希相同；额外 login CPU 源码复核与之相同。
+
+文献调查区分训练声明、初始化、参数保存、计算、optimizer 和生成。GeoRA v4 C.1 明确 BF16 训练，未报告所有环节 dtype；PiSSA 原文 FP32 LoRA/PiSSA 与当前 BF16 官方范例分开；The Path Not Taken、RL's Razor 讨论保存舍入；Precision-RL、MiniMax-M1、verl 讨论训练／推理概率差。正式论文对照继续已验收 BF16 混合精度，FP32 保留独立数值／短训练对照，生成与训练计算概率仍需共用已验收路径。
+
+Setonix job 50670799，20 分钟上限，一个逻辑 GPU，实际 allocation 430 秒（7 分 10 秒）、COMPLETED 0:0，结束后队列为空。现在累计 23 作业，62 分 53 秒 allocation，不含 login CPU，也不是八卡用量。完整训练 pilot 尚未启动。
+
+完整解释与执行入口：[PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。80 个完整回答：[HTML](reports/precision_investigation/gsm8k_precision_full_answers.html)；[汇总](reports/precision_investigation/gsm8k_precision_summary.md)。原始字节无损 gzip、实际执行源码、哈希、成本报告与审计保留于 reports/precision_investigation/。

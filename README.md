@@ -32,6 +32,7 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 | [geora_model_check.ipynb](geora_model_check.ipynb) | 只替換一個 Q 層，檢查完整模型 forward 與儲存／載入 |
 | [geora_full_model_check.ipynb](geora_full_model_check.ipynb) | 全部 196 個目標層的 CPU FP32 初始化與載入檢查 |
 | [PRECISION.md](PRECISION.md) | 精度、目標層、殘差重建與 reference 策略約定 |
+| [PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md) | 十道 GSM8K 的 Metal/AMD 完整输出、FP32/BF16 训练开销和相关论文精度调查 |
 | [jobs/submit_gpu_check.sh](jobs/submit_gpu_check.sh) | 復用已保存的初始化，提交 GPU 檢查並即時顯示日誌；支援精度診斷 |
 | [CHECKS.md](CHECKS.md) | 登入節點初始化後自動提交 GPU 完整檢查；包含結果解讀及失敗門檻 |
 | [SETONIX_GUIDE.md](SETONIX_GUIDE.md) | Setonix 容器、儲存路徑與下一階段操作記錄 |

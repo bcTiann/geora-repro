@@ -1,0 +1,52 @@
+{
+  "status": "completed",
+  "slurm_job_id": "50670799",
+  "execution_source_sha256": "6464a22a4d96b57c64d8472c3766b01a9c7c3227e8c613f569479b0c6beb5a34",
+  "execution_source_snapshot": "executed_compare_gsm8k_precision.py",
+  "both_platform_sources_identical": true,
+  "raw_reports_preserved_unchanged": true,
+  "derived_comparisons_recomputed_from_tokens_and_strict_grading": true,
+  "legacy_numeric_equality_bug": "Two None parse failures were counted equal by the original helper. Final summaries ignore these helper fields; future helper fixed without rerunning inference.",
+  "reports": {
+    "metal": {
+      "file": "metal_inference.json.gz",
+      "raw_sha256": "7af03b0e172ba40d0ba3786d0997191a2b80b68f95c5a87c719d1d8f7ae6554a",
+      "gzip_sha256": "f8a77165d9834622480b855c8cc58e668356e7b45972d1f967c6280ceeb0b173",
+      "raw_bytes": 10728969,
+      "compressed_bytes": 1574008
+    },
+    "amd": {
+      "file": "amd_inference.json.gz",
+      "raw_sha256": "d3783b33071a9fabe50623f928bb9e080939d532ae9bf01f8a9a6744901b4504",
+      "gzip_sha256": "4250547e21d544aa5d6ef2a2f11f132d8bae8a7f17c85806dd7cfd86588c9ef0",
+      "raw_bytes": 10657506,
+      "compressed_bytes": 1578577
+    }
+  },
+  "remote_original_benchmark_verification": [
+    {
+      "file": "/scratch/pawsey0807/btian/geora/runs/gsm8k-precision-50670799/benchmark-bf16/precision_benchmark.json",
+      "sha256": "741337c4af95f0e9deb1b18bb51980d7fdbf12e7fb967d47a945ae5ea8c81bf2",
+      "source_sha256": {
+        "/software/projects/pawsey0807/btian/geora/code/scripts/check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+        "/software/projects/pawsey0807/btian/geora/code/geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+      }
+    },
+    {
+      "file": "/scratch/pawsey0807/btian/geora/runs/gsm8k-precision-50670799/benchmark-fp32/precision_benchmark.json",
+      "sha256": "318ec21cd8bb3c60a166bdab6937906942baaba73a2d0ac2be98ca6b1f7b0902",
+      "source_sha256": {
+        "/software/projects/pawsey0807/btian/geora/code/scripts/check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+        "/software/projects/pawsey0807/btian/geora/code/geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+        "/software/projects/pawsey0807/btian/geora/code/scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+      }
+    }
+  ]
+}

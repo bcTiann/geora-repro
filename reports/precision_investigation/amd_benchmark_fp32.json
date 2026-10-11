@@ -1,0 +1,167 @@
+{
+  "status": "passed",
+  "dtype": "fp32",
+  "device": "cuda",
+  "scope": "independent fixed-data first-step runtime trials; no rollout or task score",
+  "real_original_reference_model_resident": false,
+  "reference_anchor": "same-condition untrained fixed-path old probabilities",
+  "source_report": "/scratch/pawsey0807/btian/geora/runs/precision-benchmark-source-50660901.json",
+  "source_report_sha256": "4c040d7dc4e0ff0b9f2a82456484e63a64c55d939815ee91a091ae41eacd4ab7",
+  "precision": {
+    "adapters_initial_buffers_gradients_optimizer": "FP32",
+    "logits_log_softmax_loss": "FP32",
+    "frozen_model": "fp32",
+    "shared_frozen_values": "BF16 rounded once; exact upcast for FP32"
+  },
+  "attention_backend": "eager",
+  "training_probability_path": "fixed_width_no_cache",
+  "gradient_checkpointing": false,
+  "optimizer_foreach": false,
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "hip_version": "6.3.42134-a9a80e791",
+  "slurm_job_id": "50670799",
+  "float32_matmul_precision": "highest",
+  "device_name": "AMD Instinct MI250X",
+  "source_sha256": {
+    "/software/projects/pawsey0807/btian/geora/code/scripts/check_geora_precision_benchmark.py": "d2b6aee9f6957676a34222b52d9b57a184a3166c458fd21f8500f3daf92e70c8",
+    "/software/projects/pawsey0807/btian/geora/code/scripts/precision_benchmark_helpers.py": "dc53f423fd151a6b064a267e919546900ed42ae69de7a772ea62c113819ffc89",
+    "/software/projects/pawsey0807/btian/geora/code/geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+    "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+    "/software/projects/pawsey0807/btian/geora/code/scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+    "/software/projects/pawsey0807/btian/geora/code/scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd"
+  },
+  "input_sha256": "f3aec95b66036ed5b5da0836d6d8973ba101c7c160913a423a2a4aacda4e6eaf",
+  "question_ids": [
+    "train:01480",
+    "train:01480",
+    "train:01480",
+    "train:01480"
+  ],
+  "complete_source_answer_lengths": [
+    152,
+    180,
+    56,
+    134
+  ],
+  "benchmark_completion_lengths": [
+    64,
+    64,
+    56,
+    64
+  ],
+  "truncation_is_runtime_workload_only": true,
+  "advantages_from_original_complete_answers": [
+    -1.0,
+    1.0,
+    -1.0,
+    1.0
+  ],
+  "source_forward_mode": "residual",
+  "actual_forward_mode": "difference",
+  "initial_adapter_file_sha256": "2cd66e8694060ca386622e2aedf186582da5836c544ca4398358f1d90f8c8ca6",
+  "initial_manifest_sha256": "1190d39e0507137d50ef444b0a5e0bee7763057d3e172c76e32e6b4d996fc40e",
+  "frozen_value_sha256": "2caab39ac9c0070bfbb4c5afe39077cdb75a1971d88e3f42a9f429687cea6ef4",
+  "frozen_parameter_count": 1543714304,
+  "trainable_parameter_count": 18464768,
+  "initial_resident_memory": {
+    "allocated_gib": 5.889101982116699,
+    "reserved_gib": 5.990234375,
+    "peak_allocated_gib": 5.889101982116699,
+    "peak_reserved_gib": 5.990234375
+  },
+  "setup_seconds": 8.33981194201624,
+  "one_old_probability_forward_seconds": 1.1987219920265488,
+  "benchmark": {
+    "warmup_count": 2,
+    "measurement_count": 3,
+    "optimizer_steps_are_independent_first_step_trials": true,
+    "valid_completion_tokens": 248,
+    "input_shape": [
+      4,
+      175
+    ],
+    "fixed_width": 175,
+    "frozen_dtype": "torch.float32",
+    "summary": {
+      "forward_and_loss_seconds": {
+        "median": 0.3653780239983462,
+        "minimum": 0.3653164650313556,
+        "maximum": 0.3658785360166803
+      },
+      "backward_clip_step_seconds": {
+        "median": 0.23451299499720335,
+        "minimum": 0.23439577699173242,
+        "maximum": 0.2347373099764809
+      },
+      "total_seconds": {
+        "median": 0.6000537750078365,
+        "minimum": 0.5997738009900786,
+        "maximum": 0.6003915310138837
+      }
+    },
+    "measurements": [
+      {
+        "forward_and_loss_seconds": 0.3658785360166803,
+        "backward_clip_step_seconds": 0.23451299499720335,
+        "total_seconds": 0.6003915310138837,
+        "loss": 0.0,
+        "gradient_norm_before_clipping": 3.1171228885650635,
+        "start_memory": {
+          "allocated_gib": 6.026677131652832,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 6.026677131652832,
+          "peak_reserved_gib": 10.236328125
+        },
+        "memory": {
+          "allocated_gib": 6.026684284210205,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 9.9411940574646,
+          "peak_reserved_gib": 10.236328125
+        },
+        "warmup": false
+      },
+      {
+        "forward_and_loss_seconds": 0.3653164650313556,
+        "backward_clip_step_seconds": 0.2347373099764809,
+        "total_seconds": 0.6000537750078365,
+        "loss": 0.0,
+        "gradient_norm_before_clipping": 3.1171228885650635,
+        "start_memory": {
+          "allocated_gib": 6.026677131652832,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 6.026677131652832,
+          "peak_reserved_gib": 10.236328125
+        },
+        "memory": {
+          "allocated_gib": 6.026684284210205,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 9.9411940574646,
+          "peak_reserved_gib": 10.236328125
+        },
+        "warmup": false
+      },
+      {
+        "forward_and_loss_seconds": 0.3653780239983462,
+        "backward_clip_step_seconds": 0.23439577699173242,
+        "total_seconds": 0.5997738009900786,
+        "loss": 0.0,
+        "gradient_norm_before_clipping": 3.1171228885650635,
+        "start_memory": {
+          "allocated_gib": 6.026677131652832,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 6.026677131652832,
+          "peak_reserved_gib": 10.236328125
+        },
+        "memory": {
+          "allocated_gib": 6.026684284210205,
+          "reserved_gib": 10.236328125,
+          "peak_allocated_gib": 9.9411940574646,
+          "peak_reserved_gib": 10.236328125
+        },
+        "warmup": false
+      }
+    ]
+  },
+  "elapsed_seconds": 12.957924432994332
+}

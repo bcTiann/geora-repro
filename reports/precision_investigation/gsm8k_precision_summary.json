@@ -1,0 +1,1390 @@
+{
+  "created_utc": "2026-10-11T15:19:39.958802+00:00",
+  "partial_preview": false,
+  "question_count": 10,
+  "condition_count": 8,
+  "answer_rule": "single_final_hash_marker_exact_decimal_v1",
+  "raw_legacy_comparisons_used": false,
+  "sources": {
+    "local": {
+      "path": "/Users/tianbaochen/geora-repro/reports/precision_investigation/metal_inference.json.gz",
+      "sha256": "7af03b0e172ba40d0ba3786d0997191a2b80b68f95c5a87c719d1d8f7ae6554a",
+      "stored_sha256": "f8a77165d9834622480b855c8cc58e668356e7b45972d1f967c6280ceeb0b173",
+      "compression": "gzip"
+    },
+    "amd": {
+      "path": "/Users/tianbaochen/geora-repro/reports/precision_investigation/amd_inference.json.gz",
+      "sha256": "d3783b33071a9fabe50623f928bb9e080939d532ae9bf01f8a9a6744901b4504",
+      "stored_sha256": "4250547e21d544aa5d6ef2a2f11f132d8bae8a7f17c85806dd7cfd86588c9ef0",
+      "compression": "gzip"
+    }
+  },
+  "conditions": [
+    {
+      "condition": "Metal · BF16 · 有 KV cache",
+      "condition_short": "M16C",
+      "counts": {
+        "correct": 2,
+        "present": 10,
+        "eos": 10,
+        "numeric_mismatch": 4,
+        "format_failure": 4
+      },
+      "tokens": 2261,
+      "seconds": 58.11843712400878
+    },
+    {
+      "condition": "Metal · BF16 · 无 KV cache",
+      "condition_short": "M16N",
+      "counts": {
+        "correct": 3,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 4
+      },
+      "tokens": 2292,
+      "seconds": 401.3888322089988
+    },
+    {
+      "condition": "Metal · FP32 · 有 KV cache",
+      "condition_short": "M32C",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 114.99979795899708
+    },
+    {
+      "condition": "Metal · FP32 · 无 KV cache",
+      "condition_short": "M32N",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 886.4947532079968
+    },
+    {
+      "condition": "AMD · BF16 · 有 KV cache",
+      "condition_short": "A16C",
+      "counts": {
+        "correct": 1,
+        "present": 10,
+        "eos": 10,
+        "numeric_mismatch": 7,
+        "format_failure": 2
+      },
+      "tokens": 2195,
+      "seconds": 58.78892846388044
+    },
+    {
+      "condition": "AMD · BF16 · 无 KV cache",
+      "condition_short": "A16N",
+      "counts": {
+        "correct": 2,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 4,
+        "numeric_mismatch": 4
+      },
+      "tokens": 2287,
+      "seconds": 62.62657543603564
+    },
+    {
+      "condition": "AMD · FP32 · 有 KV cache",
+      "condition_short": "A32C",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 71.74279965291498
+    },
+    {
+      "condition": "AMD · FP32 · 无 KV cache",
+      "condition_short": "A32N",
+      "counts": {
+        "correct": 6,
+        "present": 10,
+        "eos": 10,
+        "format_failure": 3,
+        "numeric_mismatch": 1
+      },
+      "tokens": 2759,
+      "seconds": 105.05422523396555
+    }
+  ],
+  "comparisons": [
+    {
+      "left": "Metal · BF16 · 有 KV cache",
+      "right": "Metal · BF16 · 无 KV cache",
+      "pair_short": "M16C / M16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 1,
+        "both_parsed": 6,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 33,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 285,
+          "left_numeric_answer": "15000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 131,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 53,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "18"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 28,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "400"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 210,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "15"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 72,
+          "left_numeric_answer": "2100",
+          "right_numeric_answer": "2700"
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 79,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "Metal · FP32 · 有 KV cache",
+      "right": "Metal · FP32 · 无 KV cache",
+      "pair_short": "M32C / M32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 206,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 424,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 155,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 196,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 238,
+          "left_numeric_answer": "800",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 305,
+          "left_numeric_answer": "1050",
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "5",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 260,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 289,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "Metal · BF16 · 有 KV cache",
+      "right": "Metal · FP32 · 有 KV cache",
+      "pair_short": "M16C / M32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 5,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 5,
+        "both_correct": 2
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": "15000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 5,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 2,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 20,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "2100",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 19,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "Metal · BF16 · 无 KV cache",
+      "right": "Metal · FP32 · 无 KV cache",
+      "pair_short": "M16N / M32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 6,
+        "valid_numeric_equal": 3,
+        "unparsed_pairs": 4,
+        "both_correct": 3
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "18",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 5,
+          "left_numeric_answer": "400",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 2,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 20,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "2700",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 55,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 19,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "AMD · BF16 · 有 KV cache",
+      "right": "AMD · BF16 · 无 KV cache",
+      "pair_short": "A16C / A16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 3,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 33,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 346,
+          "left_numeric_answer": "15000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 131,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 183,
+          "left_numeric_answer": "12",
+          "right_numeric_answer": "12"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 28,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "400"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 40,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 235,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "15"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 72,
+          "left_numeric_answer": "2100",
+          "right_numeric_answer": "2400"
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 110,
+          "left_numeric_answer": "24",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": null
+        }
+      ]
+    },
+    {
+      "left": "AMD · FP32 · 有 KV cache",
+      "right": "AMD · FP32 · 无 KV cache",
+      "pair_short": "A32C / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 206,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 424,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 155,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 196,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 238,
+          "left_numeric_answer": "800",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 305,
+          "left_numeric_answer": "1050",
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "5",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 260,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 289,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "AMD · BF16 · 有 KV cache",
+      "right": "AMD · FP32 · 有 KV cache",
+      "pair_short": "A16C / A32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 6,
+        "valid_numeric_equal": 1,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": "15000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 27,
+          "left_numeric_answer": "12",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 5,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 2,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 20,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "2100",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "24",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 19,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "AMD · BF16 · 无 KV cache",
+      "right": "AMD · FP32 · 无 KV cache",
+      "pair_short": "A16N / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 0,
+        "both_parsed": 5,
+        "valid_numeric_equal": 2,
+        "unparsed_pairs": 5,
+        "both_correct": 2
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 27,
+          "left_numeric_answer": "12",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 5,
+          "left_numeric_answer": "400",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 2,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 20,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "2400",
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 19,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "Metal · BF16 · 有 KV cache",
+      "right": "AMD · BF16 · 有 KV cache",
+      "pair_short": "M16C / A16C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 5,
+        "unparsed_pairs": 4,
+        "both_correct": 1
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 33,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 285,
+          "left_numeric_answer": "15000",
+          "right_numeric_answer": "15000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 131,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "12"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 88,
+          "left_numeric_answer": "900",
+          "right_numeric_answer": "900"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 66,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 235,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "15"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 287,
+          "left_numeric_answer": "2100",
+          "right_numeric_answer": "2100"
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "24"
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 29,
+          "left_numeric_answer": null,
+          "right_numeric_answer": "900"
+        }
+      ]
+    },
+    {
+      "left": "Metal · BF16 · 无 KV cache",
+      "right": "AMD · BF16 · 无 KV cache",
+      "pair_short": "M16N / A16N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 3,
+        "both_parsed": 6,
+        "valid_numeric_equal": 4,
+        "unparsed_pairs": 4,
+        "both_correct": 2
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 33,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 404,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 131,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": "18",
+          "right_numeric_answer": "12"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 218,
+          "left_numeric_answer": "400",
+          "right_numeric_answer": "400"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 38,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 210,
+          "left_numeric_answer": "15",
+          "right_numeric_answer": "15"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": false,
+          "both_parsed": true,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 160,
+          "left_numeric_answer": "2700",
+          "right_numeric_answer": "2400"
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 1,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": false,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 79,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": null
+        }
+      ]
+    },
+    {
+      "left": "Metal · FP32 · 有 KV cache",
+      "right": "AMD · FP32 · 有 KV cache",
+      "pair_short": "M32C / A32C",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 206,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 424,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 155,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 196,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 238,
+          "left_numeric_answer": "800",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 305,
+          "left_numeric_answer": "1050",
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "5",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 260,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 289,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": "200"
+        }
+      ]
+    },
+    {
+      "left": "Metal · FP32 · 无 KV cache",
+      "right": "AMD · FP32 · 无 KV cache",
+      "pair_short": "M32N / A32N",
+      "counts": {
+        "available_pairs": 10,
+        "exact_tokens_equal": 10,
+        "both_parsed": 7,
+        "valid_numeric_equal": 7,
+        "unparsed_pairs": 3,
+        "both_correct": 6
+      },
+      "questions": [
+        {
+          "question_id": "train:01480",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 206,
+          "left_numeric_answer": "4",
+          "right_numeric_answer": "4"
+        },
+        {
+          "question_id": "train:06951",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 424,
+          "left_numeric_answer": "55000",
+          "right_numeric_answer": "55000"
+        },
+        {
+          "question_id": "train:05119",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 155,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:05950",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 196,
+          "left_numeric_answer": "14",
+          "right_numeric_answer": "14"
+        },
+        {
+          "question_id": "train:03273",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 238,
+          "left_numeric_answer": "800",
+          "right_numeric_answer": "800"
+        },
+        {
+          "question_id": "train:05258",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 305,
+          "left_numeric_answer": "1050",
+          "right_numeric_answer": "1050"
+        },
+        {
+          "question_id": "train:06996",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "5",
+          "right_numeric_answer": "5"
+        },
+        {
+          "question_id": "train:02607",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 260,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:02268",
+          "exact_tokens_equal": true,
+          "both_parsed": false,
+          "valid_numeric_equal": false,
+          "common_prefix_tokens": 289,
+          "left_numeric_answer": null,
+          "right_numeric_answer": null
+        },
+        {
+          "question_id": "train:00061",
+          "exact_tokens_equal": true,
+          "both_parsed": true,
+          "valid_numeric_equal": true,
+          "common_prefix_tokens": 343,
+          "left_numeric_answer": "200",
+          "right_numeric_answer": "200"
+        }
+      ]
+    }
+  ]
+}

@@ -384,11 +384,28 @@
       "sacct_raw_row": "50668984|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=16329,gres/gpu=1,mem=29440M,node=1|22:00:17|22:00:53",
       "start_time_as_displayed": "22:00:17",
       "end_time_as_displayed": "22:00:53"
+    },
+    {
+      "job_id": "50670799",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 430,
+      "time_limit_seconds": 1200,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "purpose": "paired GeoRA policy-update precision microbenchmark and 40 full GSM8K original-model answers on AMD",
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50670799|COMPLETED|430|20|billing=128,cpu=16,energy=266285,gres/gpu=1,mem=29440M,node=1|0:0"
     }
   ],
-  "sum_allocation_seconds": 3343,
+  "sum_allocation_seconds": 3773,
   "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50668984 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%110,Start,End -P",
+  "latest_query": "sacct -X -j 50670799 --format=JobID,State,ElapsedRaw,TimelimitRaw,AllocTRES%150,ExitCode -P",
   "pending_jobs": [],
-  "latest_own_queue_observation": "empty immediately after NumPy CPU verification"
+  "latest_own_queue_observation": "empty after full ten-question AMD generation completed"
 }

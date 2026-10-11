@@ -1,0 +1,460 @@
+{
+  "status": "passed",
+  "scope": "CPU small Qwen protocol test; no GPU performance claim",
+  "checks": [
+    {
+      "name": "BF16_trial_0_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_0_grad_none",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_0_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_0_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_0_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_0_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_grad_none",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_1_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_grad_none",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_2_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_grad_none",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_3_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_grad_none",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "BF16_trial_4_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "BF16_five_trials_identical_updates",
+      "passed": true
+    },
+    {
+      "name": "BF16_adapter_values_changed",
+      "passed": true
+    },
+    {
+      "name": "BF16_frozen_values_unchanged",
+      "passed": true
+    },
+    {
+      "name": "BF16_measured_count",
+      "passed": true
+    },
+    {
+      "name": "BF16_FP32_adapter_and_optimizer",
+      "passed": true
+    },
+    {
+      "name": "BF16_warmed_reset_equals_fresh_AdamW_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_grad_none",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_0_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_grad_none",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_1_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_grad_none",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_2_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_grad_none",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_3_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_initial_AB",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_grad_none",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_zero_moments_and_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_first_step",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_nonzero_gradient",
+      "passed": true
+    },
+    {
+      "name": "FP32_trial_4_timing_partition",
+      "passed": true
+    },
+    {
+      "name": "FP32_five_trials_identical_updates",
+      "passed": true
+    },
+    {
+      "name": "FP32_adapter_values_changed",
+      "passed": true
+    },
+    {
+      "name": "FP32_frozen_values_unchanged",
+      "passed": true
+    },
+    {
+      "name": "FP32_measured_count",
+      "passed": true
+    },
+    {
+      "name": "FP32_FP32_adapter_and_optimizer",
+      "passed": true
+    },
+    {
+      "name": "FP32_warmed_reset_equals_fresh_AdamW_first_step",
+      "passed": true
+    },
+    {
+      "name": "BF16_FP32_exact_same_frozen_numeric_values",
+      "passed": true
+    },
+    {
+      "name": "BF16_FP32_same_initial_adapter",
+      "passed": true
+    },
+    {
+      "name": "BF16_FP32_same_input_and_advantages",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "label": "BF16",
+      "frozen_hash": "4c5e36fa2a6039981a73ab0b6639559d3f26ed0aca67a501bb53bbf04c47a2e4",
+      "initial_adapter_hash": "5eecc8264dc66e52c9b0d60a5b272cbb1ba7bb380574bd4ee16a67af4ecd27b5",
+      "input_shape": [
+        4,
+        10
+      ],
+      "advantages": [
+        -1.0,
+        1.0,
+        -1.0,
+        1.0
+      ],
+      "benchmark": {
+        "warmup_count": 2,
+        "measurement_count": 3,
+        "optimizer_steps_are_independent_first_step_trials": true,
+        "valid_completion_tokens": 13,
+        "input_shape": [
+          4,
+          10
+        ],
+        "fixed_width": 10,
+        "frozen_dtype": "torch.bfloat16",
+        "summary": {
+          "forward_and_loss_seconds": {
+            "median": 0.0005559999990509823,
+            "minimum": 0.0005469579991768114,
+            "maximum": 0.0006639170023845509
+          },
+          "backward_clip_step_seconds": {
+            "median": 0.000749708000512328,
+            "minimum": 0.0006412500006263144,
+            "maximum": 0.0007760420048725791
+          },
+          "total_seconds": {
+            "median": 0.0013230000040493906,
+            "minimum": 0.0011972499996772967,
+            "maximum": 0.0014136250028968789
+          }
+        },
+        "measurements": [
+          {
+            "forward_and_loss_seconds": 0.0005559999990509823,
+            "backward_clip_step_seconds": 0.0006412500006263144,
+            "total_seconds": 0.0011972499996772967,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.022643808275461197,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          },
+          {
+            "forward_and_loss_seconds": 0.0005469579991768114,
+            "backward_clip_step_seconds": 0.0007760420048725791,
+            "total_seconds": 0.0013230000040493906,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.022643808275461197,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          },
+          {
+            "forward_and_loss_seconds": 0.0006639170023845509,
+            "backward_clip_step_seconds": 0.000749708000512328,
+            "total_seconds": 0.0014136250028968789,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.022643808275461197,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "FP32",
+      "frozen_hash": "4c5e36fa2a6039981a73ab0b6639559d3f26ed0aca67a501bb53bbf04c47a2e4",
+      "initial_adapter_hash": "5eecc8264dc66e52c9b0d60a5b272cbb1ba7bb380574bd4ee16a67af4ecd27b5",
+      "input_shape": [
+        4,
+        10
+      ],
+      "advantages": [
+        -1.0,
+        1.0,
+        -1.0,
+        1.0
+      ],
+      "benchmark": {
+        "warmup_count": 2,
+        "measurement_count": 3,
+        "optimizer_steps_are_independent_first_step_trials": true,
+        "valid_completion_tokens": 13,
+        "input_shape": [
+          4,
+          10
+        ],
+        "fixed_width": 10,
+        "frozen_dtype": "torch.float32",
+        "summary": {
+          "forward_and_loss_seconds": {
+            "median": 0.0005621250020340085,
+            "minimum": 0.0005522079954971559,
+            "maximum": 0.0006398750047083013
+          },
+          "backward_clip_step_seconds": {
+            "median": 0.0006389170011971146,
+            "minimum": 0.0006326250004349276,
+            "maximum": 0.0006694170006085187
+          },
+          "total_seconds": {
+            "median": 0.0012315420026425272,
+            "minimum": 0.0011848329959320836,
+            "maximum": 0.0012787920059054159
+          }
+        },
+        "measurements": [
+          {
+            "forward_and_loss_seconds": 0.0005621250020340085,
+            "backward_clip_step_seconds": 0.0006694170006085187,
+            "total_seconds": 0.0012315420026425272,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.02259950526058674,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          },
+          {
+            "forward_and_loss_seconds": 0.0005522079954971559,
+            "backward_clip_step_seconds": 0.0006326250004349276,
+            "total_seconds": 0.0011848329959320836,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.02259950526058674,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          },
+          {
+            "forward_and_loss_seconds": 0.0006398750047083013,
+            "backward_clip_step_seconds": 0.0006389170011971146,
+            "total_seconds": 0.0012787920059054159,
+            "loss": 0.0,
+            "gradient_norm_before_clipping": 0.02259950526058674,
+            "start_memory": {},
+            "memory": {},
+            "warmup": false
+          }
+        ]
+      }
+    }
+  ]
+}
