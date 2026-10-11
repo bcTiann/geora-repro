@@ -28,6 +28,24 @@ from geora_check_utils import (
 )
 
 
+def diagnostic_prompt_token_ids(tokenizer):
+    """Build integer token rows using the validated training tokenization path."""
+    prompts = []
+    for text in ("What is 7 + 5? Explain briefly.",
+                 "A box has 3 red balls and 5 blue balls. How many balls are there in total?"):
+        chat = tokenizer.apply_chat_template(
+            [{"role": "user", "content": text}], tokenize=False,
+            add_generation_prompt=True,
+        )
+        tokens = tokenizer.encode(chat, add_special_tokens=False)
+        if not tokens or any(not isinstance(token, int) for token in tokens):
+            raise RuntimeError("Diagnostic prompt must be a nonempty list of integer token IDs")
+        prompts.extend([tokens] * 4)
+    if len(set(map(len, prompts))) != 2:
+        raise RuntimeError("Diagnostic needs two unequal prompt lengths to exercise left padding")
+    return prompts
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint-dir", type=Path, required=True)
@@ -78,14 +96,9 @@ def main():
             for target in manifest["target_modules"] for factor in ("A", "B")))
         tokenizer = AutoTokenizer.from_pretrained(arguments.checkpoint_dir, local_files_only=True)
         # Unequal prompt lengths exercise a real left-padded 8-answer batch.
-        prompts = []
-        for text in ("What is 7 + 5? Explain briefly.",
-                     "A box has 3 red balls and 5 blue balls. How many balls are there in total?"):
-            tokens = tokenizer.apply_chat_template(
-                [{"role": "user", "content": text}], tokenize=True, add_generation_prompt=True,
-            )
-            prompts.extend([tokens] * 4)
+        prompts = diagnostic_prompt_token_ids(tokenizer)
         report.data["prompt_lengths"] = list(map(len, prompts))
+        report.require("tokenizer_produces_eight_integer_prompt_rows", len(prompts) == 8)
 
         loading_started = time.perf_counter()
         native_model = fresh_fp32_model(arguments.checkpoint_dir, disable_mmap=True)
