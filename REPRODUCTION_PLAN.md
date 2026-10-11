@@ -2,7 +2,7 @@
 
 更新：2026-10-12。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现；原模型128题Base验证已完成（32/128=25%，单逻辑GPU793秒），LoRA／GeoRA各10步首段待验收。详见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
+**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现；原模型256-token诊断已完成（32/128=25%，单逻辑GPU793秒），但42/128截断，不能继续作为效果实验基线。下一步先对齐1024／4096长度与最终数值提取规则，建立新基线并验证长回答容量，再开始LoRA／GeoRA训练。详见下文“长度与正式目标修正”及 [BASE_VALIDATION.md](BASE_VALIDATION.md)。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
 
 ## 1. 第一個復現目標
 
@@ -170,7 +170,7 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
 - [GOAL.md](GOAL.md) 是已完成的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
-**Base validation已完成：32/128=25%，完整回答与GPU用量见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。下一可交付结果是LoRA／GeoRA各10步及同协议评估，保存可恢复检查点；训练入口的CPU检查不替代MI250X完整模型首段验收。**
+**下一可交付结果调整为：完成1024／4096长度和明确最终数值提取规则的评估协议，重新建立Base基线，并量测长回答训练容量。完成后再做LoRA／GeoRA首段训练。已完成的256-token、25%结果保留为历史诊断，不与新协议分数直接比较。**
 
 
 ## 10. 2026-10-11 精度调查后的状态
@@ -180,3 +180,24 @@ Metal／AMD 各完成同一十题的四条件完整生成，另完成同一 GeoR
 ## 11. 2026-10-12 阅读后的精度决定与新入口
 
 暂缓BF16／FP32×LoRA／GeoRA四组100步精度消融；先推进已验收精度和fixed_width概率路径下的两方法试跑。理由、精度表、训练／评估数据流、脚本和资源控制见 [PILOT_RUN.md](PILOT_RUN.md)。新入口支持完整边界恢复，固定validation评估不参与训练loss；尚未启动100步pilot，不作论文分数或长期稳定性结论。
+
+
+## 12. 长度与正式目标修正（2026-10-12）
+
+原模型128题诊断有42题（32.81%）达到256新token上限。将早期256-token流程检查直接延用到效果比较，会使长度和格式遵循过多影响结果。后续效果实验先调整协议，再开始训练；本轮未追加GPU作业。
+
+重新直接核对 [GeoRA v4附录C.1–C.3、Table8](https://arxiv.org/html/2601.09361v4)：数学**训练**公开上限为prompt1024／response4096；1.5B扩展使用Qwen2.5-1.5B-Instruct、GSM8K。论文的数学评估为AIME24／AIME25／MATH500／OlymMATH，Table8没有GSM8K分数栏。数学评估的生成上限、temperature和重复采样次数没有逐项单列，不能宣称已确认其全部评估也使用4096。
+
+先前128题是我们从GSM8K train留出的近端验证集，用于验证生成、判分及资源成本，并为同协议的小规模变化提供观察；它没有比较GeoRA，也没有复现Table8。25%属于当前严格格式和短长度条件。此前承接“LoRA／GeoRA各10步、256token”的安排被本节替代。
+
+修正后的顺序：
+
+1. 对齐公开长度：后续数学训练目标prompt1024／response4096；下一版Base验证也采用4096作为明确的独立复现选择。4096是上限，遇EOS立即结束。
+2. 在运行前冻结并测试最终数字的提取规则。论文只写提取最终数值再exact match，没有声明必须唯一`####`。支持哪些明确最终答案格式需列出来源／补充选择，解析失败与数值错误分别报告；不能任取推理中的数字来凑正确。历史严格`####`结果保留，不覆盖、不与新规则混算。
+3. 重建长回答Base基线，128题仍只作诊断／调参；正式任务评价先落实MATH500，并继续列出Table8其余数学及域外指标的复现范围。
+4. 先量测4096回答长度下的生成、全部有效token概率、backward、显存及恢复容量。现有单逻辑GPU、batch与fixed_width的256验收不自动覆盖4096。优先用实际提前EOS的长度、分组微批和必要的梯度累积控制内存；容量结果决定训练实现。
+5. 长回答训练验收后开始LoRA／GeoRA对照，两方法共用数据顺序、每题采样数、有效batch定义和优化预算。论文默认rollout=8、global batch=128；需明确我们实现的batch单位及梯度累积，不能将每批2题／4回答直接称为同设置。
+
+论文未报告的总训练步数／epoch、prompt原文、最终数值提取代码、checkpoint选择及详细评估解码，需要记录为补充选择或向作者确认。扩大训练步数之前先补齐协议；少步数验收的目的仍是流程和容量，不能当方法效果结论。
+
+`configs/grpo_pilot_plan.json` 的256-token数值保留用于历史流程检查和证据身份，不作为修正后效果训练配置。新协议需独立保存，避免旧检查点／旧基线与新长度或评分规则混用。

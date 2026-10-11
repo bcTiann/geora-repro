@@ -1,5 +1,7 @@
 # BF16 LoRA／GeoRA 分段试跑
 
+**2026-10-12修正：下文256-token方案保留为历史流程检查。42/128截断后，不继续使用它做效果训练／比较；下一步先完成长回答协议、答案提取规则、新Base基线和容量验收。最新顺序以 [复现计划第12节](REPRODUCTION_PLAN.md#12-长度与正式目标修正2026-10-12) 为准。**
+
 ## 1. 2026-10-12 的决定
 
 先推进 BF16 下的两种初始化方法，不立即扩大为 BF16／FP32 × LoRA／GeoRA 四组。
@@ -135,4 +137,4 @@ tail -f "$MYSCRATCH/geora/runs/logs/pilot-lora-实际JOBID.log"
 
 Setonix job `50674076` 完成固定128题原模型验证：32正确（25%）、26数字错误、28非截断格式失败、42截断；四类互斥。一次单逻辑GPU allocation793秒，COMPLETED 0:0，已释放；CPU独立审计660项通过。完整解释、全部回答及证据见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。
 
-Base是本项目尚未微调的Qwen2.5-1.5B-Instruct，BF16、greedy、batch=1、原生cache、最多256新token。25%是本协议基线，不能直接代替公开benchmark；42道截断和格式遵循会影响分数。下一步仍是LoRA／GeoRA各10步及相同验证；本轮未开始两种训练。
+Base是本项目尚未微调的Qwen2.5-1.5B-Instruct，BF16、greedy、batch=1、原生cache、最多256新token。25%是本协议基线，不能直接代替公开benchmark；42道截断和格式遵循会影响分数。下一步已调整为长回答协议、最终数字提取、新Base基线与容量验收；本轮未开始两种训练。
