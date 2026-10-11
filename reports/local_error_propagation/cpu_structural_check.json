@@ -1,0 +1,1351 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "float32_same_saved_tokens",
+      "passed": true
+    },
+    {
+      "name": "float32_same_valid_ids_positions_and_all_layer_attention_masks",
+      "passed": true
+    },
+    {
+      "name": "float32_finite_native_logits",
+      "passed": true
+    },
+    {
+      "name": "float32_softmax_exact_decomposition",
+      "passed": true
+    },
+    {
+      "name": "float32_layer0_shape_controls_recover_fixed_native_outputs",
+      "passed": true
+    },
+    {
+      "name": "float32_no_op_input_replacement_exact_logits",
+      "passed": true
+    },
+    {
+      "name": "float32_all_layer_input_interventions_are_scoped_and_exact",
+      "passed": true
+    },
+    {
+      "name": "float32_all_layer_no_op_replacements_and_layout_controls_exact",
+      "passed": true
+    },
+    {
+      "name": "float32_all_layer_vector_decompositions_exact",
+      "passed": true
+    },
+    {
+      "name": "float32_head_control_same_input_and_native_recovery",
+      "passed": true
+    },
+    {
+      "name": "float32_no_parameter_update_or_gradient",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_same_saved_tokens",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_same_valid_ids_positions_and_all_layer_attention_masks",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_finite_native_logits",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_softmax_exact_decomposition",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_layer0_shape_controls_recover_fixed_native_outputs",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_no_op_input_replacement_exact_logits",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_all_layer_input_interventions_are_scoped_and_exact",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_all_layer_no_op_replacements_and_layout_controls_exact",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_all_layer_vector_decompositions_exact",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_head_control_same_input_and_native_recovery",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_no_parameter_update_or_gradient",
+      "passed": true
+    }
+  ],
+  "stage": "tiny_CPU_structural_error_propagation",
+  "device": "cpu",
+  "model_count": 1,
+  "optimizer_steps": 0,
+  "scope": "two sequential synthetic 2-layer models; not pretrained Qwen measurements",
+  "cases": [
+    {
+      "label": "float32",
+      "dtype": "torch.float32",
+      "row": 1,
+      "completion_step": 3,
+      "token_id": 14,
+      "target_prefix_column": 7,
+      "prefix_width": 8,
+      "valid_prefix_tokens": 6,
+      "fixed_width": 10,
+      "boundaries": [
+        {
+          "boundary": "embedding",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.input",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.input_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.q_proj",
+          "max_absolute": 5.960464477539063e-08,
+          "relative_l2": 1.3982612226165167e-07,
+          "unequal_elements": 26,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.k_proj",
+          "max_absolute": 7.450580596923828e-09,
+          "relative_l2": 6.62017245659622e-08,
+          "unequal_elements": 13,
+          "element_count": 16,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.v_proj",
+          "max_absolute": 2.2351741790771484e-08,
+          "relative_l2": 9.711716070840169e-08,
+          "unequal_elements": 12,
+          "element_count": 16,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.attention_output",
+          "max_absolute": 8.381903171539307e-09,
+          "relative_l2": 1.1720529860851018e-07,
+          "unequal_elements": 23,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.o_proj",
+          "max_absolute": 9.313225746154785e-10,
+          "relative_l2": 1.2518568797168395e-07,
+          "unequal_elements": 26,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.attention_residual",
+          "max_absolute": 1.862645149230957e-09,
+          "relative_l2": 3.985230022135826e-08,
+          "unequal_elements": 15,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.post_attention_norm",
+          "max_absolute": 1.1920928955078125e-07,
+          "relative_l2": 4.4205794180829814e-08,
+          "unequal_elements": 14,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.gate_proj",
+          "max_absolute": 2.9802322387695312e-08,
+          "relative_l2": 9.077936749412907e-08,
+          "unequal_elements": 34,
+          "element_count": 48,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.up_proj",
+          "max_absolute": 2.9802322387695312e-08,
+          "relative_l2": 9.814805643741846e-08,
+          "unequal_elements": 36,
+          "element_count": 48,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.down_proj",
+          "max_absolute": 6.984919309616089e-10,
+          "relative_l2": 2.4920927469967426e-07,
+          "unequal_elements": 29,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.mlp_output",
+          "max_absolute": 6.984919309616089e-10,
+          "relative_l2": 2.4920927469967426e-07,
+          "unequal_elements": 29,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.0.output",
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 5.1840997965798596e-08,
+          "unequal_elements": 15,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.input",
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 5.1840997965798596e-08,
+          "unequal_elements": 15,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.input_norm",
+          "max_absolute": 1.1920928955078125e-07,
+          "relative_l2": 4.751385456613245e-08,
+          "unequal_elements": 15,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.q_proj",
+          "max_absolute": 2.60770320892334e-08,
+          "relative_l2": 9.952956415789087e-08,
+          "unequal_elements": 22,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.k_proj",
+          "max_absolute": 2.2351741790771484e-08,
+          "relative_l2": 1.3281421993416637e-07,
+          "unequal_elements": 14,
+          "element_count": 16,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.v_proj",
+          "max_absolute": 2.9802322387695312e-08,
+          "relative_l2": 9.031782353153244e-08,
+          "unequal_elements": 10,
+          "element_count": 16,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.attention_output",
+          "max_absolute": 1.4901161193847656e-08,
+          "relative_l2": 8.499390311959718e-08,
+          "unequal_elements": 22,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.o_proj",
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 2.0505357163421543e-07,
+          "unequal_elements": 27,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.attention_residual",
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 7.247179401683352e-08,
+          "unequal_elements": 23,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.post_attention_norm",
+          "max_absolute": 2.384185791015625e-07,
+          "relative_l2": 7.813875388600538e-08,
+          "unequal_elements": 23,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.gate_proj",
+          "max_absolute": 4.470348358154297e-08,
+          "relative_l2": 1.3455964814270594e-07,
+          "unequal_elements": 38,
+          "element_count": 48,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.up_proj",
+          "max_absolute": 5.960464477539063e-08,
+          "relative_l2": 1.4312912638260856e-07,
+          "unequal_elements": 38,
+          "element_count": 48,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.down_proj",
+          "max_absolute": 6.984919309616089e-10,
+          "relative_l2": 3.2408594179779517e-07,
+          "unequal_elements": 28,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.mlp_output",
+          "max_absolute": 6.984919309616089e-10,
+          "relative_l2": 3.2408594179779517e-07,
+          "unequal_elements": 28,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "layer.1.output",
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 8.047172909909927e-08,
+          "unequal_elements": 24,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "final_norm",
+          "max_absolute": 1.7881393432617188e-07,
+          "relative_l2": 7.965197693074889e-08,
+          "unequal_elements": 23,
+          "element_count": 32,
+          "exact": false
+        },
+        {
+          "boundary": "lm_head",
+          "max_absolute": 3.725290298461914e-08,
+          "relative_l2": 1.9375760763006004e-07,
+          "unequal_elements": 30,
+          "element_count": 37,
+          "exact": false
+        }
+      ],
+      "layers": [
+        {
+          "layer": 0,
+          "input": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "output": {
+            "max_absolute": 3.725290298461914e-09,
+            "relative_l2": 5.1840997965798596e-08,
+            "unequal_elements": 15,
+            "element_count": 32,
+            "exact": false
+          },
+          "valid_history_output": {
+            "max_absolute": 3.725290298461914e-09,
+            "relative_l2": 2.754289376743754e-08,
+            "unequal_elements": 45,
+            "element_count": 192,
+            "exact": false
+          },
+          "attention": {
+            "query": {
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 1.5010549124769103e-07,
+              "unequal_elements": 26,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 5.960464477539063e-08,
+              "relative_l2": 8.51591280852148e-08,
+              "unequal_elements": 33,
+              "element_count": 96,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.5343903789647e-08,
+              "unequal_elements": 34,
+              "element_count": 96,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 24,
+              "exact": true
+            }
+          }
+        },
+        {
+          "layer": 1,
+          "input": {
+            "max_absolute": 3.725290298461914e-09,
+            "relative_l2": 5.1840997965798596e-08,
+            "unequal_elements": 15,
+            "element_count": 32,
+            "exact": false
+          },
+          "output": {
+            "max_absolute": 3.725290298461914e-09,
+            "relative_l2": 8.047172909909927e-08,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "valid_history_output": {
+            "max_absolute": 3.725290298461914e-09,
+            "relative_l2": 5.169326805804046e-08,
+            "unequal_elements": 75,
+            "element_count": 192,
+            "exact": false
+          },
+          "attention": {
+            "query": {
+              "max_absolute": 2.60770320892334e-08,
+              "relative_l2": 9.322329523086588e-08,
+              "unequal_elements": 24,
+              "element_count": 32,
+              "exact": false
+            },
+            "key": {
+              "max_absolute": 2.9802322387695312e-08,
+              "relative_l2": 8.781266510127163e-08,
+              "unequal_elements": 37,
+              "element_count": 96,
+              "exact": false
+            },
+            "value": {
+              "max_absolute": 4.470348358154297e-08,
+              "relative_l2": 8.453507187151397e-08,
+              "unequal_elements": 34,
+              "element_count": 96,
+              "exact": false
+            },
+            "probabilities": {
+              "max_absolute": 1.4901161193847656e-08,
+              "relative_l2": 1.8249045687132107e-08,
+              "unequal_elements": 1,
+              "element_count": 24,
+              "exact": false
+            }
+          }
+        }
+      ],
+      "first_target_difference": "layer.0.q_proj",
+      "endpoint": {
+        "cached": {
+          "selected_logit": 0.03739789128303528,
+          "logsumexp": 3.612233695576151,
+          "selected_logp": -3.574835804293116,
+          "selected_probability": 0.028020026164532304
+        },
+        "fixed": {
+          "selected_logit": 0.037397872656583786,
+          "logsumexp": 3.6122336939970463,
+          "selected_logp": -3.5748358213404625,
+          "selected_probability": 0.02802002568686521
+        },
+        "selected_logit_difference": -1.862645149230957e-08,
+        "normalizer_difference": -1.5791048468827285e-09,
+        "logp_difference": -1.7047346645426842e-08,
+        "probability_relative_difference": -1.7047346500120828e-08,
+        "identity_residual": 0.0
+      },
+      "interventions": [
+        {
+          "layer": 0,
+          "input_values_aligned_exactly": true,
+          "unaffected_elements_exact": true,
+          "input_call_count": 1,
+          "layout_preserved": true,
+          "input_layout": {
+            "shape": [
+              8,
+              10,
+              32
+            ],
+            "stride": [
+              320,
+              32,
+              1
+            ],
+            "contiguous": true,
+            "storage_offset": 0
+          },
+          "no_op_exact_layer_output": true,
+          "no_op_exact_full_vocab_logits": true,
+          "prior_input_history_difference_l2": 0.0,
+          "total_output_difference_l2": 5.350040874013704e-09,
+          "propagated_prior_difference_l2": 0.0,
+          "same_input_path_difference_l2": 5.350040874013704e-09,
+          "component_cosine": null,
+          "vector_decomposition_max_residual": 0.0,
+          "valid_history_decomposition": {
+            "total_l2": 7.762379515063787e-09,
+            "propagated_prior_l2": 0.0,
+            "same_input_path_l2": 7.762379515063787e-09,
+            "vector_identity_max_residual": 0.0
+          },
+          "remaining_endpoint": {
+            "cached": {
+              "selected_logit": 0.03739789128303528,
+              "logsumexp": 3.612233695576151,
+              "selected_logp": -3.574835804293116,
+              "selected_probability": 0.028020026164532304
+            },
+            "fixed": {
+              "selected_logit": 0.037397872656583786,
+              "logsumexp": 3.6122336939970463,
+              "selected_logp": -3.5748358213404625,
+              "selected_probability": 0.02802002568686521
+            },
+            "selected_logit_difference": -1.862645149230957e-08,
+            "normalizer_difference": -1.5791048468827285e-09,
+            "logp_difference": -1.7047346645426842e-08,
+            "probability_relative_difference": -1.7047346500120828e-08,
+            "identity_residual": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "input_values_aligned_exactly": true,
+          "unaffected_elements_exact": true,
+          "input_call_count": 1,
+          "layout_preserved": true,
+          "input_layout": {
+            "shape": [
+              8,
+              10,
+              32
+            ],
+            "stride": [
+              320,
+              32,
+              1
+            ],
+            "contiguous": true,
+            "storage_offset": 0
+          },
+          "no_op_exact_layer_output": true,
+          "no_op_exact_full_vocab_logits": true,
+          "prior_input_history_difference_l2": 7.762379515063787e-09,
+          "total_output_difference_l2": 9.19404698727335e-09,
+          "propagated_prior_difference_l2": 8.77546850216967e-09,
+          "same_input_path_difference_l2": 5.379093369537928e-09,
+          "component_cosine": -0.22681302090258995,
+          "vector_decomposition_max_residual": 0.0,
+          "valid_history_decomposition": {
+            "total_l2": 1.5970446861169097e-08,
+            "propagated_prior_l2": 1.299257057414752e-08,
+            "same_input_path_l2": 1.281864327859061e-08,
+            "vector_identity_max_residual": 0.0
+          },
+          "remaining_endpoint": {
+            "cached": {
+              "selected_logit": 0.03739789128303528,
+              "logsumexp": 3.612233695576151,
+              "selected_logp": -3.574835804293116,
+              "selected_probability": 0.028020026164532304
+            },
+            "fixed": {
+              "selected_logit": 0.03739789128303528,
+              "logsumexp": 3.6122336968229782,
+              "selected_logp": -3.574835805539943,
+              "selected_probability": 0.028020026129596177
+            },
+            "selected_logit_difference": 0.0,
+            "normalizer_difference": 1.246827086021085e-09,
+            "logp_difference": -1.246827086021085e-09,
+            "probability_relative_difference": -1.2468270852437963e-09,
+            "identity_residual": 0.0
+          }
+        }
+      ],
+      "layer0_mlp_same_input_shape_controls": [
+        {
+          "module": "layer.0.gate_proj",
+          "identical_target_input_values": false,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": false,
+          "same_input_one_vs_full": {
+            "max_absolute": 4.470348358154297e-08,
+            "relative_l2": 1.0942464672448615e-07,
+            "unequal_elements": 36,
+            "element_count": 48,
+            "exact": false
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        },
+        {
+          "module": "layer.0.up_proj",
+          "identical_target_input_values": false,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": false,
+          "same_input_one_vs_full": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 9.486083833887643e-08,
+            "unequal_elements": 34,
+            "element_count": 48,
+            "exact": false
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        },
+        {
+          "module": "layer.0.mlp_output",
+          "identical_target_input_values": false,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": false,
+          "same_input_one_vs_full": {
+            "max_absolute": 8.149072527885437e-10,
+            "relative_l2": 2.4585304777488213e-07,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        }
+      ],
+      "head_layout_control": {
+        "values_identical": true,
+        "contiguous_stride": [
+          32,
+          32,
+          1
+        ],
+        "strided_stride": [
+          320,
+          32,
+          1
+        ],
+        "contiguous_recovers_native_cached_logits": true,
+        "logits": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 37,
+          "exact": true
+        },
+        "endpoint": {
+          "cached": {
+            "selected_logit": 0.03739789128303528,
+            "logsumexp": 3.612233695576151,
+            "selected_logp": -3.574835804293116,
+            "selected_probability": 0.028020026164532304
+          },
+          "fixed": {
+            "selected_logit": 0.03739789128303528,
+            "logsumexp": 3.612233695576151,
+            "selected_logp": -3.574835804293116,
+            "selected_probability": 0.028020026164532304
+          },
+          "selected_logit_difference": 0.0,
+          "normalizer_difference": 0.0,
+          "logp_difference": 0.0,
+          "probability_relative_difference": 0.0,
+          "identity_residual": 0.0
+        }
+      },
+      "snapshot": {
+        "path": "outputs/local_error_propagation/cpu-verified/float32_propagation.safetensors",
+        "bytes": 42024,
+        "sha256": "886b84ffadd67cfd1d65b14b523328bfbc34f84cd8f3e91f152b6d5ea611db18"
+      }
+    },
+    {
+      "label": "bfloat16",
+      "dtype": "torch.bfloat16",
+      "row": 1,
+      "completion_step": 3,
+      "token_id": 14,
+      "target_prefix_column": 7,
+      "prefix_width": 8,
+      "valid_prefix_tokens": 6,
+      "fixed_width": 10,
+      "boundaries": [
+        {
+          "boundary": "embedding",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.input",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.input_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.q_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.k_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.v_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.attention_output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.o_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.attention_residual",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.post_attention_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.gate_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 48,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.up_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 48,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.down_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.mlp_output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.0.output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.input",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.input_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.q_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.k_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.v_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.attention_output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.o_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.attention_residual",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.post_attention_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.gate_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 48,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.up_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 48,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.down_proj",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.mlp_output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "layer.1.output",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "final_norm",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 32,
+          "exact": true
+        },
+        {
+          "boundary": "lm_head",
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 37,
+          "exact": true
+        }
+      ],
+      "layers": [
+        {
+          "layer": 0,
+          "input": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "output": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "valid_history_output": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 192,
+            "exact": true
+          },
+          "attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 24,
+              "exact": true
+            }
+          }
+        },
+        {
+          "layer": 1,
+          "input": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "output": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "valid_history_output": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 192,
+            "exact": true
+          },
+          "attention": {
+            "query": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 32,
+              "exact": true
+            },
+            "key": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            "value": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 96,
+              "exact": true
+            },
+            "probabilities": {
+              "max_absolute": 0.0,
+              "relative_l2": 0.0,
+              "unequal_elements": 0,
+              "element_count": 24,
+              "exact": true
+            }
+          }
+        }
+      ],
+      "first_target_difference": null,
+      "endpoint": {
+        "cached": {
+          "selected_logit": 0.037109375,
+          "logsumexp": 3.612240190896565,
+          "selected_logp": -3.575130815896565,
+          "selected_probability": 0.028011761150882226
+        },
+        "fixed": {
+          "selected_logit": 0.037109375,
+          "logsumexp": 3.612240190896565,
+          "selected_logp": -3.575130815896565,
+          "selected_probability": 0.028011761150882226
+        },
+        "selected_logit_difference": 0.0,
+        "normalizer_difference": 0.0,
+        "logp_difference": 0.0,
+        "probability_relative_difference": 0.0,
+        "identity_residual": 0.0
+      },
+      "interventions": [
+        {
+          "layer": 0,
+          "input_values_aligned_exactly": true,
+          "unaffected_elements_exact": true,
+          "input_call_count": 1,
+          "layout_preserved": true,
+          "input_layout": {
+            "shape": [
+              8,
+              10,
+              32
+            ],
+            "stride": [
+              320,
+              32,
+              1
+            ],
+            "contiguous": true,
+            "storage_offset": 0
+          },
+          "no_op_exact_layer_output": true,
+          "no_op_exact_full_vocab_logits": true,
+          "prior_input_history_difference_l2": 0.0,
+          "total_output_difference_l2": 0.0,
+          "propagated_prior_difference_l2": 0.0,
+          "same_input_path_difference_l2": 0.0,
+          "component_cosine": null,
+          "vector_decomposition_max_residual": 0.0,
+          "valid_history_decomposition": {
+            "total_l2": 0.0,
+            "propagated_prior_l2": 0.0,
+            "same_input_path_l2": 0.0,
+            "vector_identity_max_residual": 0.0
+          },
+          "remaining_endpoint": {
+            "cached": {
+              "selected_logit": 0.037109375,
+              "logsumexp": 3.612240190896565,
+              "selected_logp": -3.575130815896565,
+              "selected_probability": 0.028011761150882226
+            },
+            "fixed": {
+              "selected_logit": 0.037109375,
+              "logsumexp": 3.612240190896565,
+              "selected_logp": -3.575130815896565,
+              "selected_probability": 0.028011761150882226
+            },
+            "selected_logit_difference": 0.0,
+            "normalizer_difference": 0.0,
+            "logp_difference": 0.0,
+            "probability_relative_difference": 0.0,
+            "identity_residual": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "input_values_aligned_exactly": true,
+          "unaffected_elements_exact": true,
+          "input_call_count": 1,
+          "layout_preserved": true,
+          "input_layout": {
+            "shape": [
+              8,
+              10,
+              32
+            ],
+            "stride": [
+              320,
+              32,
+              1
+            ],
+            "contiguous": true,
+            "storage_offset": 0
+          },
+          "no_op_exact_layer_output": true,
+          "no_op_exact_full_vocab_logits": true,
+          "prior_input_history_difference_l2": 0.0,
+          "total_output_difference_l2": 0.0,
+          "propagated_prior_difference_l2": 0.0,
+          "same_input_path_difference_l2": 0.0,
+          "component_cosine": null,
+          "vector_decomposition_max_residual": 0.0,
+          "valid_history_decomposition": {
+            "total_l2": 0.0,
+            "propagated_prior_l2": 0.0,
+            "same_input_path_l2": 0.0,
+            "vector_identity_max_residual": 0.0
+          },
+          "remaining_endpoint": {
+            "cached": {
+              "selected_logit": 0.037109375,
+              "logsumexp": 3.612240190896565,
+              "selected_logp": -3.575130815896565,
+              "selected_probability": 0.028011761150882226
+            },
+            "fixed": {
+              "selected_logit": 0.037109375,
+              "logsumexp": 3.612240190896565,
+              "selected_logp": -3.575130815896565,
+              "selected_probability": 0.028011761150882226
+            },
+            "selected_logit_difference": 0.0,
+            "normalizer_difference": 0.0,
+            "logp_difference": 0.0,
+            "probability_relative_difference": 0.0,
+            "identity_residual": 0.0
+          }
+        }
+      ],
+      "layer0_mlp_same_input_shape_controls": [
+        {
+          "module": "layer.0.gate_proj",
+          "identical_target_input_values": true,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": true,
+          "same_input_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 48,
+            "exact": true
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        },
+        {
+          "module": "layer.0.up_proj",
+          "identical_target_input_values": true,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": true,
+          "same_input_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 48,
+            "exact": true
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        },
+        {
+          "module": "layer.0.mlp_output",
+          "identical_target_input_values": true,
+          "full_exactly_recovers_fixed_output": true,
+          "one_exactly_recovers_cached_output": true,
+          "same_input_one_vs_full": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "input_shapes": {
+            "one": [
+              8,
+              1,
+              32
+            ],
+            "full": [
+              8,
+              10,
+              32
+            ]
+          }
+        }
+      ],
+      "head_layout_control": {
+        "values_identical": true,
+        "contiguous_stride": [
+          32,
+          32,
+          1
+        ],
+        "strided_stride": [
+          320,
+          32,
+          1
+        ],
+        "contiguous_recovers_native_cached_logits": true,
+        "logits": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 37,
+          "exact": true
+        },
+        "endpoint": {
+          "cached": {
+            "selected_logit": 0.037109375,
+            "logsumexp": 3.612240190896565,
+            "selected_logp": -3.575130815896565,
+            "selected_probability": 0.028011761150882226
+          },
+          "fixed": {
+            "selected_logit": 0.037109375,
+            "logsumexp": 3.612240190896565,
+            "selected_logp": -3.575130815896565,
+            "selected_probability": 0.028011761150882226
+          },
+          "selected_logit_difference": 0.0,
+          "normalizer_difference": 0.0,
+          "logp_difference": 0.0,
+          "probability_relative_difference": 0.0,
+          "identity_residual": 0.0
+        }
+      },
+      "snapshot": {
+        "path": "outputs/local_error_propagation/cpu-verified/bfloat16_propagation.safetensors",
+        "bytes": 42024,
+        "sha256": "235cd06076c4b013d72ba44562916d964249a34ad5fbfb66f0a5aa8813bc1f29"
+      }
+    }
+  ],
+  "elapsed_seconds": 0.04035895800188882,
+  "source_sha256": {
+    "check_local_error_propagation_cpu.py": "902bce91db659feec9c65bbd586b4aa7e1808ff615eb29d40835f30b62994b38",
+    "local_error_propagation.py": "be40c078916599d86a618fc8df16275aba21c93bd64c92876edf1d4cf61b9093"
+  }
+}

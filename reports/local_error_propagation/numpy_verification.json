@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "device": "CPU",
+  "implementation": "independent NumPy FP64",
+  "cases": [
+    {
+      "label": "BF16_This",
+      "snapshot_sha256": "5a4e620c456156ebadcbf6ec6970de3fe9f939dccf8809492bd04348738e9909",
+      "cached_probability": 0.13372805203149782,
+      "cached_probability_absolute_residual": 1.942890293094024e-16,
+      "fixed_probability": 0.13866547540052473,
+      "fixed_probability_absolute_residual": 2.7755575615628914e-17,
+      "exact_target_vector_decompositions_checked": 28,
+      "layer0_control_native_recoveries_checked": 3
+    },
+    {
+      "label": "BF16_End",
+      "snapshot_sha256": "7fa36f2b234800e9d7ca82ba423e83096c9e97cdeb35fad4ea7fed6cc756b400",
+      "cached_probability": 0.3410292321108169,
+      "cached_probability_absolute_residual": 1.6653345369377348e-16,
+      "fixed_probability": 0.38481563564281185,
+      "fixed_probability_absolute_residual": 5.551115123125783e-16,
+      "exact_target_vector_decompositions_checked": 28,
+      "layer0_control_native_recoveries_checked": 3
+    },
+    {
+      "label": "same_weights_FP32_This",
+      "snapshot_sha256": "2a2d8862b1b9a6bb47ddf259c995e903bc4d29ee0c7e3f183633afde1f309b45",
+      "cached_probability": 0.13759899885699645,
+      "cached_probability_absolute_residual": 1.942890293094024e-16,
+      "fixed_probability": 0.13759773585010993,
+      "fixed_probability_absolute_residual": 1.3877787807814457e-16,
+      "exact_target_vector_decompositions_checked": 0,
+      "layer0_control_native_recoveries_checked": 0
+    },
+    {
+      "label": "same_weights_FP32_End",
+      "snapshot_sha256": "f19fa4059d77d7208478af6c79817066086f2ed3ffb8dbae79e585da29ed74aa",
+      "cached_probability": 0.3174264475836559,
+      "cached_probability_absolute_residual": 4.440892098500626e-16,
+      "fixed_probability": 0.31742470147686835,
+      "fixed_probability_absolute_residual": 4.440892098500626e-16,
+      "exact_target_vector_decompositions_checked": 0,
+      "layer0_control_native_recoveries_checked": 0
+    }
+  ],
+  "source_script_sha256": "8d809de129c209d5b4219970d04dc24fe9917ff00cbafe15fe1abfc01a75b7db"
+}

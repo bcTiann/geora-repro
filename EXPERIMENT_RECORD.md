@@ -838,3 +838,20 @@ relative_error = norm(actual - reference) / norm(reference)
 本轮解释早期历史 V 的来源；S14 已表明单层目标位置替换无法解释整个最终 19.7%，因此不作唯一端到端根因结论。训练方案和精度不变。详细来龙去脉、六个坐标、源文件哈希与报告见 [CACHED_PROJECTION.md](CACHED_PROJECTION.md)。
 
 本轮一个逻辑 GPU allocation 36 秒，Python 14.819 秒，两分钟硬上限，`COMPLETED, 0:0`。结束后队列为空，临时模型副本已删除，原 checkpoint／初始化／远端 snapshot 保留。现在累计 21 个已记录作业 allocation **55 分 7 秒**，不含 login CPU。上一节二十个作业的 54 分 31 秒保留为 S15 当时累计。
+
+
+## 10. L18：本地 Metal 两个真实 token 的逐层传播
+
+2026-10-11。一个冻结的原始 Qwen2.5-1.5B-Instruct，无 GeoRA／LoRA、无新采样、无训练更新。复用 S12 的八个回答和本地概率比较，检查预测 `This` 与 `<|im_end|>` 的两个位置；预测位置是最后一个前文 token 的状态，不包含待预测 token。
+
+比较有 cache 与固定宽度无 cache 路径的每层输出 1536 维向量。`This` 的相对 L2 差从第 0 层 0.017140% 变为第 1 层 0.323327%、第 27 层 1.672805%；过程有增加和减小，不是单调放大。第 0 层早期 raw Q 微差未留下 attention 输出差；到 MLP 输入时目标向量逐元素相同。保持权重和输入值，只改变 `[8,1,1536]` / `[8,66,1536]` 的计算形状，精确恢复两个例子各自的原生 gate／up／MLP 输出。
+
+对 28 层各做独立对照：在无 cache 方式下将一层收到的整段有效前文输入替换为 cache 的值，形状／布局、其他行、padding／未来位置、参数和 mask 保持不变。将原无 cache 输出、原 cache 输出和对齐后输出分别记为 f、c、a，逐元素验证 `f-c=(f-a)+(a-c)`。第 1 层 `This` 三个差向量的长度分别为 0.050762、0.050978、0.005025；分量部分抵消，长度不能相加。对齐第 27 层输入后，两个目标 token 的最终概率差均为 0；没有据此宣称第 0 层是所有差异的唯一来源。
+
+`This` 的目标 logit 无 cache 比有 cache 高 0.125，整个 vocab 的 logsumexp 高 0.088744，因此 logp 高 0.036256，概率为 13.372805% / 13.866548%，相对差 +3.692137%。结束 token 的两概率为 34.102923% / 38.481564%，相对差 +12.839487%。两组 logits 使用相同 CPU FP64 softmax；词表投影同输入布局对照没有产生差异。
+
+精度：BF16 冻结权重／autocast，保留框架 FP32 RMSNorm 和 attention softmax；中间量精确提升 FP32 保存，CPU FP64 分析。全部 1,543,714,304 个 BF16 参数值逐元素验证后精确提升 FP32，`This` / 结束 token 的相对概率差分别为 -0.000918% / -0.000550%。没有重新加载更精确权重，没有改变训练精度。
+
+最终完整模型检查 40/40，49.18 秒；此前探索性本地运行约 34.46 秒。小模型 CPU 22/22；独立 NumPy 从保存中间量复核四个 snapshot 哈希、八个概率、56 个向量分解和六组 MLP 形状对照。本轮新增 Setonix allocation 为 0，上一节累计 55 分 7 秒不变。底层 Metal kernel 累加顺序未捕获，本地起点不能直接替代 AMD 的完整归因。
+
+完整步骤、图、精度表和脚本入口见 [LOCAL_ERROR_PROPAGATION.md](LOCAL_ERROR_PROPAGATION.md)；最终记录见 [reports/local_error_propagation/20261011.json](reports/local_error_propagation/20261011.json)。正式论文复現 pilot 仍未执行；本轮是数值诊断。
