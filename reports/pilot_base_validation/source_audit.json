@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "source_git_commit": "9159479d00c759dbefd7e77b96d265856d26fe5a",
+  "executed_source_sha256": {
+    "configs/base_model.json": "2f13baa71d39d8d632d619b7b0ad26692010c1542365667be822d22ba21da985",
+    "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+    "lora_layers.py": "66e14b166c5e7aa50f68283d246ad78ca6c2e82a230d27c68648aa85a4aaf287",
+    "scripts/check_grpo_continuation.py": "728d86e41e3adeebad77c05821ebc38dc6af7c73b16633037bac87035244e789",
+    "scripts/evaluate_gsm8k_pilot.py": "7a282d2cabaf912043d2311eafc9c025799914b3d184992d195daa2f7364fd93",
+    "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd",
+    "scripts/grpo_training_state.py": "e3170549f04691c8ef8e33a0ac7f4db72dc38394c5d220783a1569934dccbc5a",
+    "scripts/gsm8k_data.py": "f88beab360c6b7dfd16c337aded28d03e453e1434aca61b2c5167ef72bc79402",
+    "scripts/pilot_runtime.py": "549b0f9e7b72ec30c3c3b47350f46dac28b9fc729eef4c03acfe807259288f30"
+  },
+  "all_source_hashes_match_local_checkout": true,
+  "validation_report_sha256": "d3a9455f63e57b8d76d5146dbf7647f491939f485d17f65b3064099891b9607e",
+  "executed_protocol_sha256": "dbb8a11fb40e9d10321415d36e86fefc28ccada065a086389b0a35c8c6d2978f",
+  "note": "The protocol snapshot preserves execution-time planning metadata. Current progress is recorded in BASE_VALIDATION.md, not by changing the calculation identity."
+}

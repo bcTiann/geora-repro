@@ -129,3 +129,10 @@ tail -f "$MYSCRATCH/geora/runs/logs/pilot-lora-实际JOBID.log"
 ```
 
 不要把预留20分钟上限当成实际GPU用量；实际用量由结束后的Slurm记录汇总。
+
+
+## 6. 已完成的Base基线（2026-10-12）
+
+Setonix job `50674076` 完成固定128题原模型验证：32正确（25%）、26数字错误、28非截断格式失败、42截断；四类互斥。一次单逻辑GPU allocation793秒，COMPLETED 0:0，已释放；CPU独立审计660项通过。完整解释、全部回答及证据见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。
+
+Base是本项目尚未微调的Qwen2.5-1.5B-Instruct，BF16、greedy、batch=1、原生cache、最多256新token。25%是本协议基线，不能直接代替公开benchmark；42道截断和格式遵循会影响分数。下一步仍是LoRA／GeoRA各10步及相同验证；本轮未开始两种训练。

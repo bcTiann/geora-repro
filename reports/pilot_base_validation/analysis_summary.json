@@ -1,0 +1,22 @@
+{
+  "mutually_exclusive_categories": {
+    "截断": 42,
+    "正确": 32,
+    "格式不符合规则": 28,
+    "数字答案错误": 26
+  },
+  "format_failure_reasons_including_truncated_answers": {
+    "没有 ####": 61,
+    "#### 后不只有受支持的数字": 6,
+    "多个 ####": 3
+  },
+  "EOS_format_failure_reasons": {
+    "没有 ####": 20,
+    "#### 后不只有受支持的数字": 6,
+    "多个 ####": 2
+  },
+  "average_new_tokens_including_EOS": 209.15625,
+  "sum_generation_seconds": 757.1246471510967,
+  "minimum_generation_seconds": 1.2203096260200255,
+  "maximum_generation_seconds": 8.256922183034476
+}

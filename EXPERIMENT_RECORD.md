@@ -888,3 +888,14 @@ relative_error = norm(actual - reference) / norm(reference)
 Setonix job 50670799，20 分钟上限，一个逻辑 GPU，实际 allocation 430 秒（7 分 10 秒）、COMPLETED 0:0，结束后队列为空。现在累计 23 作业，62 分 53 秒 allocation，不含 login CPU，也不是八卡用量。完整训练 pilot 尚未启动。
 
 完整解释与执行入口：[PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。80 个完整回答：[HTML](reports/precision_investigation/gsm8k_precision_full_answers.html)；[汇总](reports/precision_investigation/gsm8k_precision_summary.md)。原始字节无损 gzip、实际执行源码、哈希、成本报告与审计保留于 reports/precision_investigation/。
+
+
+## 13. S19：原模型固定128题Base验证
+
+2026-10-12。job `50674076` 在一个MI250X逻辑GPU上用原始Qwen2.5-1.5B-Instruct回答全部128题；没有适配器或optimizer update。BF16主干／autocast，greedy、batch=1、eager、原生KV cache，最多256新token。最长prompt195，低于512，无输入截断。
+
+32/128严格正确，25%；互斥失败分类为26数字错误、28自然结束但格式失败、42无EOS截断。原始parse_failure70包含42截断，不重复相加；0个正确但截断。共26,772新token（含EOS），Python总耗时775.302秒，逐题生成757.125秒，PyTorch张量峰值2.967GiB。独立CPU审计660项通过，检查数据隔离、顺序、全文解码、EOS／上限、严格Decimal评分及汇总；下载哈希及实际源码哈希一致。
+
+一次作业完成，无恢复重跑；20分钟硬上限，实际allocation793秒（13分13秒），COMPLETED 0:0，gres/gpu=1，已释放。累计24个已记录作业allocation76分6秒；不含login CPU，不是八卡用量。没有新增完整模型副本，没有下载模型或重新SVD。
+
+结果是当前小规模协议的原模型基线；42/128截断及格式要求使其不能直接等同于模型数学能力或GeoRA Table8。本轮没有LoRA／GeoRA10步或100步训练。详细解释和原始证据见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。

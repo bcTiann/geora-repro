@@ -401,11 +401,43 @@
       "purpose": "paired GeoRA policy-update precision microbenchmark and 40 full GSM8K original-model answers on AMD",
       "observed_queue_after_completion": "empty",
       "sacct_raw_row": "50670799|COMPLETED|430|20|billing=128,cpu=16,energy=266285,gres/gpu=1,mem=29440M,node=1|0:0"
+    },
+    {
+      "job_id": "50674076",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 793,
+      "time_limit_seconds": 1200,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "purpose": "Original Qwen2.5-1.5B-Instruct baseline: 128 fixed GSM8K validation greedy answers, no optimizer updates",
+      "query_date": "2026-10-12",
+      "observed_queue_after_completion": "own job absent",
+      "sacct_observed_record": {
+        "JobID": "50674076",
+        "JobName": "geora-validation",
+        "Partition": "gpu-dev",
+        "Account": "pawsey0807-gpu",
+        "State": "COMPLETED",
+        "ExitCode": "0:0",
+        "Start": "01:08:55",
+        "End": "01:22:08",
+        "ElapsedRaw": "793",
+        "Timelimit": "00:20:00",
+        "AllocTRES": "billing=128,cpu=16,energy=442760,gres/gpu=1,mem=29440M,node=1",
+        "NodeList": "nid002056"
+      },
+      "resource_record": "reports/pilot_base_validation/resource_record.json"
     }
   ],
-  "sum_allocation_seconds": 3773,
-  "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50670799 --format=JobID,State,ElapsedRaw,TimelimitRaw,AllocTRES%150,ExitCode -P",
+  "sum_allocation_seconds": 4566,
+  "latest_query_date": "2026-10-12",
+  "latest_query": "sacct -X -j 50674076 --parsable2 --noheader --format=JobID,JobName,Partition,Account,State,ExitCode,Start,End,ElapsedRaw,Timelimit,AllocTRES,NodeList",
   "pending_jobs": [],
-  "latest_own_queue_observation": "empty after full ten-question AMD generation completed"
+  "latest_own_queue_observation": "50674076 absent after 128-question Base validation"
 }

@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "job_id": "50674076",
+  "allocation_records": [
+    {
+      "JobID": "50674076",
+      "JobName": "geora-validation",
+      "Partition": "gpu-dev",
+      "Account": "pawsey0807-gpu",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "01:08:55",
+      "End": "01:22:08",
+      "ElapsedRaw": "793",
+      "Timelimit": "00:20:00",
+      "AllocTRES": "billing=128,cpu=16,energy=442760,gres/gpu=1,mem=29440M,node=1",
+      "NodeList": "nid002056"
+    }
+  ],
+  "job_no_longer_in_queue": true,
+  "logical_gpu_count": 1,
+  "actual_allocated_gpu_seconds": 793,
+  "allocated_seconds": 793,
+  "max_requested_seconds": 1200,
+  "model_inference_elapsed_seconds": 775.3024037929717,
+  "peak_pytorch_allocated_memory_gib": 2.9665098190307617,
+  "validation_report_sha256": "d3a9455f63e57b8d76d5146dbf7647f491939f485d17f65b3064099891b9607e",
+  "note": "Slurm allocation elapsed includes job setup and teardown; the 20-minute limit is not actual consumption. One node is placement, not eight GPUs. billing in AllocTRES is an accounting weight."
+}

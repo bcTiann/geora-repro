@@ -1,8 +1,8 @@
 # GeoRA 復現計畫與進度
 
-更新：2026-10-11。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
+更新：2026-10-12。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现，完整模型首段待验收。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
+**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现；原模型128题Base验证已完成（32/128=25%，单逻辑GPU793秒），LoRA／GeoRA各10步首段待验收。详见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
 
 ## 1. 第一個復現目標
 
@@ -19,7 +19,7 @@
 | 1. 來源與初始化 | 模型、mask、SVD 和 A0/B0 是否符合選定設定？ | 固定來源版本；196 個目標層；FP32 因子與有效權重檢查 | 已完成 |
 | 2. 數值與更新 | 裝入 GeoRA 後能否維持初始輸出，且正確更新和重載？ | 完整模型初始化、A/B 單步 CE、保存重載、短生成/cache/padding 通過 | 已完成 |
 | **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **已完成，S9 20/20** |
-| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 兩條路徑五步及完整恢復已完成；pilot入口／評估已實作，完整模型首段待做 |
+| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 两条路径五步及完整恢复已完成；pilot入口／评估已实现；Base128题已完成，LoRA／GeoRA各10步待做 |
 | 5. 正式任務實驗 | 相同訓練預算下，效果與能力保留有何差異？ | 固定協定訓練及評估；記錄 Base/LoRA/GeoRA 分數與用量 | 待做 |
 | 6. 機制與擴展 | 結果是否支持論文提出的幾何解釋？ | 分析實際 GRPO 更新，加入必要消融及其他 baseline | 待做 |
 
@@ -170,7 +170,7 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
 - [GOAL.md](GOAL.md) 是已完成的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
-**下一個可交付結果：完整模型首段的Base validation與LoRA／GeoRA各10步，保存可續跑檢查點及同協定評估；入口的CPU協定檢查不替代MI250X完整模型驗收。**
+**Base validation已完成：32/128=25%，完整回答与GPU用量见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。下一可交付结果是LoRA／GeoRA各10步及同协议评估，保存可恢复检查点；训练入口的CPU检查不替代MI250X完整模型首段验收。**
 
 
 ## 10. 2026-10-11 精度调查后的状态

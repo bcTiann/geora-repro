@@ -6,7 +6,7 @@
 
 LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。凍結權重與 reference 不變，兩種方法第一批採樣的八份回答完全相同。任務分數和正式 benchmark 待做。原 residual BF16 失敗紀錄保留。
 
-2026-10-11 完成 [cache 受控干預及真實訓練驗收](CACHED_TRAINING.md)：LoRA／GeoRA 各 **58/58**，五步＋一次恢復重放共 19,991 有效 completion tokens，生成與可求導 cache 重算的 logp 差均為 0，原門限不變。這使新 cache 路徑成為可用選項；歷史「cache 生成＋無 cache 重算」的約 19.7% 差異仍成立。按本次完整成本，**下一輪 pilot 先沿用已驗收的無 cache 路徑**；100 步 [pilot 配置](configs/grpo_pilot_plan.json) 是計畫，尚未實作通用 runner 或開始長程訓練。
+2026-10-11 完成 [cache 受控干預及真實訓練驗收](CACHED_TRAINING.md)：LoRA／GeoRA 各 **58/58**，五步＋一次恢復重放共 19,991 有效 completion tokens，生成與可求導 cache 重算的 logp 差均為 0，原門限不變。這使新 cache 路徑成為可用選項；歷史「cache 生成＋無 cache 重算」的約 19.7% 差異仍成立。按本次完整成本，**下一輪 pilot 先沿用已驗收的無 cache 路徑**；通用分段runner和固定validation评估已实现。2026-10-12 已完成 [原模型128题基线](BASE_VALIDATION.md)：32/128=25%，单逻辑GPU793秒；LoRA／GeoRA首段及100步训练仍待做。
 
 接續的 [原始 logits 診斷](CACHED_LOGITS.md)（L13/S12）只用一個原始模型，確認差異已出現在 softmax 之前；同一份 logits 重算生成 logp 的誤差為 0。最差 token 的 FP64 softmax 仍重現約 19.7% 的概率比例差異。
 
@@ -101,7 +101,7 @@ Setonix 使用 Pawsey 的 `pytorch/2.7.1-rocm6.3.3` 容器入口，另建容器�
 
 初始化階段 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md) 已完成：`difference` 等價重排通過完整模型的初始化、一次 A/B 更新與模型／optimizer 保存重載。完整結果、數值邊界和 GPU 用量見 [EXPERIMENT_RECORD.md 的 L8/S7](EXPERIMENT_RECORD.md)。原有 residual 保留作對照；小 CE 單步不是 GRPO 或任務分數復現。
 
-整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前來源／初始化、單步更新、真實 GRPO 流程、兩條路徑的五步與完整恢復均已驗收。[本輪 goal](GOAL.md) 新增 GPU allocation 22 分 50 秒，全部作業已釋放、臨時模型副本已清理。下一步是實作有 validation 評估的通用 pilot runner，先以現有固定寬度、無 cache 配置進行較長連續訓練；正式評估與幾何分析仍待做。
+整體計畫見 [REPRODUCTION_PLAN.md](REPRODUCTION_PLAN.md)。目前來源／初始化、單步更新、真實 GRPO 流程、兩條路徑的五步與完整恢復均已驗收。[本輪 goal](GOAL.md) 新增 GPU allocation 22 分 50 秒，全部作業已釋放、臨時模型副本已清理。通用pilot runner和固定validation已实现，Base128题基线已完成；下一步是LoRA／GeoRA各10步及同协议评估，再分段推进100步。正式benchmark与训练更新几何分析仍待做。
 
 ## 重跑已完成的 difference 檢查
 
