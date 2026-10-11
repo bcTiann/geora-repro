@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "source_snapshot": {
+    "path": "/scratch/pawsey0807/btian/geora/runs/cache-goal-50660628/native_bf16_attention.safetensors",
+    "bytes": 6782464,
+    "sha256": "ad61d5ca2be4fbffd223897966c08180f0db8e035bb9e90ce6a81ec4983203bd",
+    "native_dtype": "torch.bfloat16",
+    "tensors": {
+      "cached.P": [
+        8,
+        12,
+        1,
+        59
+      ],
+      "cached.V": [
+        8,
+        12,
+        59,
+        128
+      ],
+      "cached.output": [
+        8,
+        1,
+        12,
+        128
+      ],
+      "cached.logits": [
+        151936
+      ],
+      "fixed_no_cache.P": [
+        8,
+        12,
+        66,
+        66
+      ],
+      "fixed_no_cache.V": [
+        8,
+        12,
+        66,
+        128
+      ],
+      "fixed_no_cache.output": [
+        8,
+        66,
+        12,
+        128
+      ],
+      "fixed_no_cache.logits": [
+        151936
+      ]
+    }
+  },
+  "downloaded_bytes": 6782464,
+  "downloaded_sha256": "ad61d5ca2be4fbffd223897966c08180f0db8e035bb9e90ce6a81ec4983203bd",
+  "byte_count_matches": true,
+  "sha256_matches": true,
+  "tracked_raw_tensor_file": false,
+  "scope": "Downloaded raw attention snapshot verified; only metadata is copied into reports, and raw tensors remain outside tracked reports"
+}

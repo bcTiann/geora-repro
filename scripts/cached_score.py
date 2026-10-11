@@ -34,8 +34,8 @@ def _validate_rollout(model, rollout):
         raise ValueError("Input IDs and mask must be equal-shaped [batch, width]")
     if not isinstance(width, int) or width < 1 or width + capacity != ids.shape[1]:
         raise ValueError("Invalid prompt/completion width")
-    if not 1 <= steps <= capacity <= 64:
-        raise ValueError("Use 1-64 generated tokens for the bounded cached candidate")
+    if not 1 <= steps <= capacity <= 256:
+        raise ValueError("Use 1-256 generated tokens for the bounded cached candidate")
     if completion_mask.dtype != torch.bool or completion_mask.shape != (ids.shape[0], capacity):
         raise ValueError("Invalid completion mask")
     if ids.device != mask.device or ids.device != completion_mask.device:

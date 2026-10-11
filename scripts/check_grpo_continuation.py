@@ -33,6 +33,26 @@ from grpo_training_state import load_boundary_checkpoint, make_constant_schedule
 from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, build_prompt, file_sha256, load_prepared_rows, score_answer
 
 
+def rollout_functions(config):
+    """Select one sampling/likelihood pair without changing the training loop.
+
+    Configurations made before the cache candidate retain the fixed-width
+    path. The cached pair recomputes token probabilities using a new,
+    differentiable history; generated tokens remain fixed data.
+    """
+    backend = config.get("rollout_backend", "fixed_width")
+    if backend == "fixed_width":
+        return sample_completions, score_completion_logps
+    if backend == "native_cached_differentiable":
+        from cached_training_rollout import sample_completions_cached_training
+        from cached_score import score_completion_logps_cached
+        if config.get("checkpoint_attention", False):
+            from cached_attention_checkpoint import score_completion_logps_checkpointed
+            return sample_completions_cached_training, score_completion_logps_checkpointed
+        return sample_completions_cached_training, score_completion_logps_cached
+    raise ValueError(f"Unsupported rollout backend: {backend}")
+
+
 def adapter_digest(state):
     """Hash the actual initialized FP32 factors, including names and shapes."""
     digest = hashlib.sha256()
@@ -87,12 +107,13 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
              rollout_generator, config, report, label, deadline):
     """Sample one prescribed batch, keep every group, and take one AdamW step."""
     device, frozen_dtype = "cuda", torch.bfloat16
+    sample_rollout, compute_logps = rollout_functions(config)
     started = time.perf_counter()
     prompt_ids = prompt_token_ids(tokenizer, questions, config)
     report.data["current_stage"] = label + "_rollout"
     report.write()
     print(label, "questions:", [row["id"] for row in questions], flush=True)
-    rollout = sample_completions(
+    rollout = sample_rollout(
         model, prompt_ids, tokenizer.pad_token_id, [tokenizer.eos_token_id],
         config["max_new_tokens"], device, frozen_dtype,
         temperature=config["temperature"], generator=rollout_generator,
@@ -130,8 +151,33 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
     )[:, width:width + mask.shape[1]]
     report.require(label + "_causal_completion_mask", torch.equal(mask, independent_mask))
     scoring_started = time.perf_counter()
-    old_logp = score_completion_logps(model, rollout, device, frozen_dtype, gradient_enabled=False)
-    reference_logp = score_completion_logps(reference, rollout, device, frozen_dtype, gradient_enabled=False)
+    attention_checkpoint_statistics = {}
+    def recompute_probabilities(scoring_model, stage, gradient_enabled):
+        report.data["current_stage"] = label + "_" + stage
+        report.write()
+        def observe(progress):
+            allocated_gib = torch.cuda.memory_allocated() / 2**30
+            if progress["step"] % 32 == 0:
+                summary = dict(step=progress["step"], allocated_memory_gib=allocated_gib)
+                report.data["last_scoring_progress"] = dict(stage=report.data["current_stage"], **summary)
+                report.write()
+                print(label, stage, summary, flush=True)
+            if allocated_gib > config["scoring_memory_guard_gib"]:
+                report.data["memory_guard_failure"] = dict(
+                    stage=report.data["current_stage"], step=progress["step"],
+                    allocated_memory_gib=allocated_gib,
+                    limit_gib=config["scoring_memory_guard_gib"])
+                report.write()
+                raise RuntimeError("Differentiable cache exceeds the explicit memory guard")
+        kwargs = dict(gradient_enabled=gradient_enabled)
+        if config.get("rollout_backend", "fixed_width") == "native_cached_differentiable":
+            kwargs["trace_callback"] = observe
+            if config.get("checkpoint_attention", False) and gradient_enabled:
+                kwargs["checkpoint_statistics"] = attention_checkpoint_statistics
+        return compute_logps(scoring_model, rollout, device, frozen_dtype, **kwargs)
+
+    old_logp = recompute_probabilities(model, "old_probabilities", False)
+    reference_logp = recompute_probabilities(reference, "reference_probabilities", False)
     sampled_alignment = likelihood_gate(
         report, label + "_sampled_and_old_likelihood", old_logp,
         rollout["behavior_logps"], mask, config,
@@ -139,7 +185,7 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
     if label == "step_1":
         likelihood_gate(report, "initial_policy_matches_original_reference",
                         old_logp, reference_logp, mask, config)
-    current_logp = score_completion_logps(model, rollout, device, frozen_dtype, gradient_enabled=True)
+    current_logp = recompute_probabilities(model, "current_probabilities", True)
     likelihood_gate(report, label + "_current_and_old_likelihood", current_logp, old_logp, mask, config)
     terms = grpo_loss(current_logp, old_logp, reference_logp, advantages, mask,
                       config["clip_epsilon"], config["kl_coefficient"])
@@ -154,11 +200,18 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
     previous = [parameter.detach().clone() for parameter in trainable]
     optimizer.zero_grad(set_to_none=True)
     backward_started = time.perf_counter()
+    report.data["current_stage"] = label + "_backward"
+    report.write()
     terms["loss"].backward()
     report.data["physical_backward_calls"] += 1
     report.require(label + "_finite_FP32_AB_gradients", all(
         parameter.grad is not None and parameter.grad.dtype == torch.float32
         and torch.isfinite(parameter.grad).all().item() for parameter in trainable))
+    if config.get("checkpoint_attention", False):
+        report.require(label + "_pure_attention_recomputed_with_matching_autocast",
+                       attention_checkpoint_statistics.get("recompute_calls", 0) > 0
+                       and attention_checkpoint_statistics.get("autocast_states_match", False),
+                       **attention_checkpoint_statistics)
     gradient_norm = torch.nn.utils.clip_grad_norm_(
         trainable, config["gradient_clip_norm"], error_if_nonfinite=True,
     ).item()
@@ -187,6 +240,10 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
         backward_and_step_seconds=backward_seconds, likelihood_alignment=sampled_alignment,
         behavior_logp=rollout["behavior_logps"].tolist(), old_logp=old_logp.tolist(),
         reference_logp=reference_logp.tolist(), completion_mask=mask.tolist(),
+        rollout_backend=config.get("rollout_backend", "fixed_width"),
+        rollout_path=rollout["path"],
+        recompute_function=compute_logps.__module__ + "." + compute_logps.__name__,
+        attention_checkpoint_statistics=attention_checkpoint_statistics,
     )
     print(label, "rewards:", record["rewards"], "grad:", gradient_norm,
           "seconds:", round(time.perf_counter() - started, 2), flush=True)
@@ -195,8 +252,9 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
 
 def run(arguments, report):
     started = time.perf_counter()
-    config_path = PROJECT_DIRECTORY / "configs/grpo_continuation.json"
+    config_path = arguments.config.resolve()
     config = json.loads(config_path.read_text())
+    sample_rollout, compute_logps = rollout_functions(config)
     if config["prompt_instruction"] != PROMPT_INSTRUCTION:
         raise RuntimeError("Dataset and configuration prompt differ")
     if torch.version.hip is None or not torch.cuda.is_available():
@@ -214,6 +272,7 @@ def run(arguments, report):
         raise RuntimeError("Checkpoint copy has the wrong original source")
     report.data.update(
         stage="gsm8k_five_step_continuation_and_resume", method=arguments.method,
+        config_path=str(config_path), rollout_backend=config.get("rollout_backend", "fixed_width"),
         config=config, answer_rule=ANSWER_RULE, dataset_manifest_sha256=file_sha256(arguments.data_dir / "manifest.json"),
         model_repository=base_config["model_repository"], model_revision=base_config["model_revision"],
         source_git_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
@@ -369,10 +428,10 @@ def run(arguments, report):
     # A final, short sampling check is separate from the training and consumes
     # a private generator, leaving the saved training RNG at its boundary.
     check_generator = torch.Generator(device="cuda").manual_seed(config["seed"] + 1)
-    final_rollout = sample_completions(policy, prompt_token_ids(tokenizer, rows[:2], config),
+    final_rollout = sample_rollout(policy, prompt_token_ids(tokenizer, rows[:2], config),
         tokenizer.pad_token_id, [tokenizer.eos_token_id], 8, "cuda", torch.bfloat16,
         generator=check_generator, deadline=deadline)
-    final_logp = score_completion_logps(policy, final_rollout, "cuda", torch.bfloat16, gradient_enabled=False)
+    final_logp = compute_logps(policy, final_rollout, "cuda", torch.bfloat16, gradient_enabled=False)
     likelihood_gate(report, "final_updated_policy_generation_and_scoring", final_logp,
                     final_rollout["behavior_logps"], final_rollout["completion_mask"], config)
     torch.cuda.synchronize()
@@ -398,6 +457,9 @@ if __name__ == "__main__":
     for name in ("init-dir", "data-dir", "checkpoint-dir", "output-dir"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--resume-dir", type=Path)
+    parser.add_argument("--config", type=Path,
+                        default=PROJECT_DIRECTORY / "configs/grpo_continuation.json",
+                        help="Training configuration; the default keeps the validated fixed-width path.")
     arguments = parser.parse_args()
     report = CheckReport(arguments.output_dir, "continuation_checks.json")
     attempted_start = time.perf_counter()

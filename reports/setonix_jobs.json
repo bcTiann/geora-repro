@@ -284,9 +284,30 @@
       "sacct_raw_row": "50660028|COMPLETED|0:0|36|00:02:00|billing=128,cpu=16,energy=16222,gres/gpu=1,mem=29440M,node=1|15:12:18|15:12:54",
       "start_time_as_displayed": "15:12:18",
       "end_time_as_displayed": "15:12:54"
+    },
+    {
+      "job_id": "50660628",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 62,
+      "time_limit_seconds": 300,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "native attention shape and historical-V interventions; initial and synthetically updated GeoRA differentiable cached likelihood alignment",
+      "query_date": "2026-10-11",
+      "observed_queue_after_completion": "own job queue empty",
+      "sacct_raw_row": "50660628|COMPLETED|0:0|62|00:05:00|billing=128,cpu=16,energy=31371,gres/gpu=1,mem=29440M,node=1|15:59:29|16:00:31",
+      "start_time_as_displayed": "15:59:29",
+      "end_time_as_displayed": "16:00:31",
+      "temporary_copy_cleanup_status": "retained for phase3 at S14 completion observation"
     }
   ],
-  "sum_allocation_seconds": 1901,
+  "sum_allocation_seconds": 1963,
   "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50660028 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -u btian -o %i"
+  "latest_query": "sacct -X -j 50660628 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -u btian -o %i"
 }

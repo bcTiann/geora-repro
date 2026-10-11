@@ -1,0 +1,640 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "torch.float32_frozen_no_dropout_model",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_forced_saved_history",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_actual_input_and_positions_equal",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_actual_allowed_history_matches",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_native_products_recovered",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_unseen_future_probability_zero",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_no_op_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_no_op_exact_logits",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_query_shape_only_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_historical_V_only_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_query_shape_and_V_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_native_cached_target_output_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_parameter_versions_and_gradients_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_all_parameter_values_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.float32_hooks_and_wrapper_restored",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_frozen_no_dropout_model",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_forced_saved_history",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_actual_input_and_positions_equal",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_actual_allowed_history_matches",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_native_products_recovered",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_unseen_future_probability_zero",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_no_op_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_no_op_exact_logits",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_query_shape_only_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_historical_V_only_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_query_shape_and_V_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_native_cached_target_output_only_target_patched",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_parameter_versions_and_gradients_unchanged",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_all_parameter_values_exact",
+      "passed": true
+    },
+    {
+      "name": "torch.bfloat16_hooks_and_wrapper_restored",
+      "passed": true
+    },
+    {
+      "name": "synthetic_P_deltaV_matches_hand_result",
+      "passed": true
+    },
+    {
+      "name": "control_nonzero_V_swap_matches_hand_result",
+      "passed": true
+    },
+    {
+      "name": "control_fp64_linear_identity",
+      "passed": true
+    },
+    {
+      "name": "control_combined_recovers_cached_output",
+      "passed": true
+    },
+    {
+      "name": "control_zero_V_change_zero_effect",
+      "passed": true
+    },
+    {
+      "name": "exception_restores_hooks_and_wrapper",
+      "passed": true
+    }
+  ],
+  "stage": "tiny_attention_intervention_precheck",
+  "cases": [
+    {
+      "label": "torch.float32",
+      "row": 0,
+      "completion_step": 2,
+      "token_id": 9,
+      "controls": {
+        "cached_reconstructed_exact": true,
+        "fixed_reconstructed_exact": true,
+        "future_target_probability_zero": true,
+        "P_target_cached_equals_fixed": true,
+        "value_difference": {
+          "max_absolute": 1.4901161193847656e-08,
+          "relative_l2": 6.151184728415162e-08,
+          "unequal_elements": 22,
+          "element_count": 80,
+          "exact": false
+        },
+        "query_shape_effect": {
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 6.153266572259469e-08,
+          "unequal_elements": 11,
+          "element_count": 16,
+          "exact": false
+        },
+        "historical_V_effect": {
+          "max_absolute": 3.725290298461914e-09,
+          "relative_l2": 6.813011683535328e-08,
+          "unequal_elements": 9,
+          "element_count": 16,
+          "exact": false
+        },
+        "crossed_effect": {
+          "max_absolute": 4.6566128730773926e-09,
+          "relative_l2": 7.904719833987234e-08,
+          "unequal_elements": 10,
+          "element_count": 16,
+          "exact": false
+        },
+        "reduction_width_effect": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "combined_difference_to_native_cached": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "interaction_max_absolute": 3.725290298461914e-09,
+        "fp64_P_deltaV_identity_residual": 0.0,
+        "fp64_predicted_delta_max_absolute": 2.964898992985354e-09,
+        "native_delta_minus_fp64_prediction_max_absolute": 3.35743194357363e-09,
+        "shapes": {
+          "full_P": [
+            8,
+            2,
+            10,
+            10
+          ],
+          "full_V": [
+            8,
+            2,
+            10,
+            8
+          ],
+          "cached_P": [
+            8,
+            2,
+            1,
+            7
+          ],
+          "cached_V": [
+            8,
+            2,
+            7,
+            8
+          ]
+        }
+      },
+      "interventions": [
+        {
+          "label": "no_op",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 9.802845314975325e-08,
+            "unequal_elements": 22,
+            "element_count": 32,
+            "exact": false
+          },
+          "selected_logit": 0.10118686407804489,
+          "selected_logp": -3.3288269320269963,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0000000079205464
+        },
+        {
+          "label": "query_shape_only",
+          "logits_vs_fixed": {
+            "max_absolute": 2.2351741790771484e-08,
+            "relative_l2": 1.2007138642827006e-07,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "logits_vs_cached": {
+            "max_absolute": 4.470348358154297e-08,
+            "relative_l2": 1.5373669677842752e-07,
+            "unequal_elements": 28,
+            "element_count": 32,
+            "exact": false
+          },
+          "selected_logit": 0.1011868566274643,
+          "selected_logp": -3.328826942019779,
+          "probability_ratio_to_fixed": 0.9999999900072174,
+          "probability_ratio_to_cached": 0.9999999979277638
+        },
+        {
+          "label": "historical_V_only",
+          "logits_vs_fixed": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 6.693591398460294e-08,
+            "unequal_elements": 11,
+            "element_count": 32,
+            "exact": false
+          },
+          "logits_vs_cached": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.2256720901231425e-07,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "selected_logit": 0.10118686407804489,
+          "selected_logp": -3.328826932739038,
+          "probability_ratio_to_fixed": 0.9999999992879585,
+          "probability_ratio_to_cached": 1.000000007208505
+        },
+        {
+          "label": "query_shape_and_V",
+          "logits_vs_fixed": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 6.580664227465939e-08,
+            "unequal_elements": 11,
+            "element_count": 32,
+            "exact": false
+          },
+          "logits_vs_cached": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.2195416475386268e-07,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "selected_logit": 0.10118686407804489,
+          "selected_logp": -3.328826932679541,
+          "probability_ratio_to_fixed": 0.9999999993474553,
+          "probability_ratio_to_cached": 1.0000000072680018
+        },
+        {
+          "label": "native_cached_target_output",
+          "logits_vs_fixed": {
+            "max_absolute": 1.4901161193847656e-08,
+            "relative_l2": 6.580664227465939e-08,
+            "unequal_elements": 11,
+            "element_count": 32,
+            "exact": false
+          },
+          "logits_vs_cached": {
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.2195416475386268e-07,
+            "unequal_elements": 24,
+            "element_count": 32,
+            "exact": false
+          },
+          "selected_logit": 0.10118686407804489,
+          "selected_logp": -3.328826932679541,
+          "probability_ratio_to_fixed": 0.9999999993474553,
+          "probability_ratio_to_cached": 1.0000000072680018
+        }
+      ],
+      "raw_snapshot": {
+        "path": "/scratch/pawsey0807/btian/geora/runs/cache-intervention-cpu-20261011/torch.float32_attention.safetensors",
+        "bytes": 22080,
+        "sha256": "58fa146299fe7ed6f323e4e22ab8864af8463dba6aee0888edee0d803bed715e",
+        "native_dtype": "torch.float32",
+        "tensors": {
+          "cached.P": [
+            8,
+            2,
+            1,
+            7
+          ],
+          "cached.V": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "cached.output": [
+            8,
+            1,
+            2,
+            8
+          ],
+          "cached.logits": [
+            32
+          ],
+          "fixed_no_cache.P": [
+            8,
+            2,
+            10,
+            10
+          ],
+          "fixed_no_cache.V": [
+            8,
+            2,
+            10,
+            8
+          ],
+          "fixed_no_cache.output": [
+            8,
+            10,
+            2,
+            8
+          ],
+          "fixed_no_cache.logits": [
+            32
+          ]
+        }
+      },
+      "baseline_probability_ratio_fixed_to_cached": 1.0000000079205464,
+      "scope": "Conditional target-position layer0 interventions; other fixed-path states retained"
+    },
+    {
+      "label": "torch.bfloat16",
+      "row": 0,
+      "completion_step": 2,
+      "token_id": 9,
+      "controls": {
+        "cached_reconstructed_exact": true,
+        "fixed_reconstructed_exact": true,
+        "future_target_probability_zero": true,
+        "P_target_cached_equals_fixed": true,
+        "value_difference": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 80,
+          "exact": true
+        },
+        "query_shape_effect": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "historical_V_effect": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "crossed_effect": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "reduction_width_effect": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "combined_difference_to_native_cached": {
+          "max_absolute": 0.0,
+          "relative_l2": 0.0,
+          "unequal_elements": 0,
+          "element_count": 16,
+          "exact": true
+        },
+        "interaction_max_absolute": 0.0,
+        "fp64_P_deltaV_identity_residual": 0.0,
+        "fp64_predicted_delta_max_absolute": 0.0,
+        "native_delta_minus_fp64_prediction_max_absolute": 0.0,
+        "shapes": {
+          "full_P": [
+            8,
+            2,
+            10,
+            10
+          ],
+          "full_V": [
+            8,
+            2,
+            10,
+            8
+          ],
+          "cached_P": [
+            8,
+            2,
+            1,
+            7
+          ],
+          "cached_V": [
+            8,
+            2,
+            7,
+            8
+          ]
+        }
+      },
+      "interventions": [
+        {
+          "label": "no_op",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "selected_logit": 0.1015625,
+          "selected_logp": -3.3284733693047537,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0
+        },
+        {
+          "label": "query_shape_only",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "selected_logit": 0.1015625,
+          "selected_logp": -3.3284733693047537,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0
+        },
+        {
+          "label": "historical_V_only",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "selected_logit": 0.1015625,
+          "selected_logp": -3.3284733693047537,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0
+        },
+        {
+          "label": "query_shape_and_V",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "selected_logit": 0.1015625,
+          "selected_logp": -3.3284733693047537,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0
+        },
+        {
+          "label": "native_cached_target_output",
+          "logits_vs_fixed": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "logits_vs_cached": {
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "unequal_elements": 0,
+            "element_count": 32,
+            "exact": true
+          },
+          "selected_logit": 0.1015625,
+          "selected_logp": -3.3284733693047537,
+          "probability_ratio_to_fixed": 1.0,
+          "probability_ratio_to_cached": 1.0
+        }
+      ],
+      "raw_snapshot": {
+        "path": "/scratch/pawsey0807/btian/geora/runs/cache-intervention-cpu-20261011/torch.bfloat16_attention.safetensors",
+        "bytes": 11480,
+        "sha256": "213562263229e1283ca6a1d1fced8cc26336f882047c20c161e57b769f1dcad0",
+        "native_dtype": "torch.bfloat16",
+        "tensors": {
+          "cached.P": [
+            8,
+            2,
+            1,
+            7
+          ],
+          "cached.V": [
+            8,
+            2,
+            7,
+            8
+          ],
+          "cached.output": [
+            8,
+            1,
+            2,
+            8
+          ],
+          "cached.logits": [
+            32
+          ],
+          "fixed_no_cache.P": [
+            8,
+            2,
+            10,
+            10
+          ],
+          "fixed_no_cache.V": [
+            8,
+            2,
+            10,
+            8
+          ],
+          "fixed_no_cache.output": [
+            8,
+            10,
+            2,
+            8
+          ],
+          "fixed_no_cache.logits": [
+            32
+          ]
+        }
+      },
+      "baseline_probability_ratio_fixed_to_cached": 1.0,
+      "scope": "Conditional target-position layer0 interventions; other fixed-path states retained"
+    }
+  ],
+  "optimizer_steps": 0,
+  "elapsed_seconds": 0.18169601098634303
+}

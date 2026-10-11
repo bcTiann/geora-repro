@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "observation_date": "2026-10-11",
+  "source": "Direct SSH sacct and own squeue observation supplied by the coordinating agent",
+  "slurm_job_id": "50660628",
+  "sacct_raw_row": "50660628|COMPLETED|0:0|62|00:05:00|billing=128,cpu=16,energy=31371,gres/gpu=1,mem=29440M,node=1|15:59:29|16:00:31",
+  "allocation_seconds": 62,
+  "time_limit_seconds": 300,
+  "logical_gpu_count": 1,
+  "own_job_queue_after_completion": "empty",
+  "temporary_model_copy": "/software/projects/pawsey0807/btian/manual/cache/geora-cache-goal-20261011",
+  "temporary_copy_removed": false,
+  "temporary_copy_retention_reason": "Retained for the next real GSM8K cached-continuation stage; cleanup not yet performed",
+  "scope": "S14 completion observation before phase3; not a claim about later job queue or final cleanup"
+}
