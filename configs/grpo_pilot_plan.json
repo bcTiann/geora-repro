@@ -1,5 +1,5 @@
 {
-  "scope": "Planned 100-step fixed-width pilot; not launched and not accepted as paper-score reproduction",
+  "scope": "100-step fixed-width pilot protocol; no pilot GPU run launched; not paper-score reproduction",
   "seed": 20261010,
   "optimizer_steps": 100,
   "resume_after_step": 2,
@@ -34,7 +34,7 @@
   "max_absolute_sequence_logp_mismatch": 0.001,
   "runtime_limit_seconds": null,
   "data_order": "Fixed persisted train order; no reward-based filtering; same seed/order for LoRA and GeoRA",
-  "checkpoint_boundary": "After completed rollout and optimizer/scheduler step; save every step initially",
+  "checkpoint_boundary": "After completed rollout and optimizer/scheduler step; save every 10 steps and at each segment boundary",
   "choice_sources": {
     "GeoRA Appendix C": [
       "base model",
@@ -58,7 +58,7 @@
   },
   "rollout_backend": "fixed_width",
   "checkpoint_attention": false,
-  "status": "planned_fixed_width_after_both_paths_accepted",
+  "status": "implemented_pending_full_model_pilot_acceptance",
   "train_question_limit": 1024,
   "validation_question_limit": 128,
   "evaluation_plan": {
@@ -69,7 +69,10 @@
     "checkpoint_selection": "highest fixed validation accuracy, ties choose earliest checkpoint",
     "not_executed": true
   },
-  "implementation_status": "Planning artifact; check_grpo_continuation.py is a five-step validator, not a 100-step pilot runner. General pilot runner and fixed validation evaluation are the next stage.",
+  "implementation_status": "Segmented runner and fixed validation evaluator implemented; CPU training16/16 and evaluation73/73 protocol checks passed. First full-Qwen MI250X pilot segment remains pending; existing numerical one_step is reused unchanged.",
   "runtime_estimation": "Historical accepted fixed-width five-step Python time: GeoRA461.654s, LoRA412.549s, including one replay and checks; measure first pilot segment before assigning larger jobs. No allocation submitted by this file.",
-  "selection_status": "Selected fixed_width default from observed full-run costs; cached is accepted as optional, not selected for this pilot; no paired speedup claim"
+  "selection_status": "Selected fixed_width default from observed full-run costs; cached is accepted as optional, not selected for this pilot; no paired speedup claim",
+  "checkpoint_interval": 10,
+  "checkpoint_reserve_seconds": 120,
+  "step_time_budget_seconds": 120
 }

@@ -2,7 +2,7 @@
 
 更新：2026-10-11。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
-**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，pilot 待做。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
+**目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现，完整模型首段待验收。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。
 
 ## 1. 第一個復現目標
 
@@ -19,7 +19,7 @@
 | 1. 來源與初始化 | 模型、mask、SVD 和 A0/B0 是否符合選定設定？ | 固定來源版本；196 個目標層；FP32 因子與有效權重檢查 | 已完成 |
 | 2. 數值與更新 | 裝入 GeoRA 後能否維持初始輸出，且正確更新和重載？ | 完整模型初始化、A/B 單步 CE、保存重載、短生成/cache/padding 通過 | 已完成 |
 | **3. GRPO 流程** | 真實採樣、reward、advantage 和策略損失能否正確產生更新？ | CPU 小例子驗收，再完成 1.5B 的一次真實 GRPO 更新 | **已完成，S9 20/20** |
-| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 兩條路徑的五步與完整恢復已完成；pilot runner／評估及長程執行待做 |
+| 4. 短程對照 | 連續更新與恢復是否可靠？實際訓練要多少資源？ | 共用五步／完整恢復與成本量測 | 兩條路徑五步及完整恢復已完成；pilot入口／評估已實作，完整模型首段待做 |
 | 5. 正式任務實驗 | 相同訓練預算下，效果與能力保留有何差異？ | 固定協定訓練及評估；記錄 Base/LoRA/GeoRA 分數與用量 | 待做 |
 | 6. 機制與擴展 | 結果是否支持論文提出的幾何解釋？ | 分析實際 GRPO 更新，加入必要消融及其他 baseline | 待做 |
 
@@ -133,7 +133,7 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 
 上述無 cache 五步與恢復已通過。後續 S11–S14 釐清混用生成／概率重算路徑的差異；S15 以新 cache 路徑完成兩方法五步、所有token概率核對與完整恢復。受控歸因只建立第0層歷史V的局部貢獻，並未找到整個19.7%差異的唯一根因。[CACHED_TRAINING.md](CACHED_TRAINING.md) 保存完整資料流和成本；新cache可用，但本次整段耗時與顯存較高，pilot兩方法共用已有fixed路徑。
 
-**下一步：實作通用 pilot runner 及固定 validation 評估。** [grpo_pilot_plan.json](configs/grpo_pilot_plan.json) 是明示計畫檔，`check_grpo_continuation.py` 仍只驗收五步，不能直接把它當成100步訓練器。規劃固定1024題train／128題validation；每批2題、每題4回答、最長256token，每種方法最多100個optimizer steps，同seed/order/reward/概率路徑。先保存未訓練Base的同協定validation結果；用validation選checkpoint，不查看test選參數。
+**下一步：驗收通用pilot入口的完整模型首段，再分段推進。** [PILOT_RUN.md](PILOT_RUN.md)說明新訓練／評估入口；[grpo_pilot_plan.json](configs/grpo_pilot_plan.json)保留100步協定。`check_grpo_continuation.py`仍只驗收五步，新入口直接沿用它的單步計算。規劃固定1024題train／128題validation；每批2題、每題4回答、最長256token，每種方法最多100個optimizer steps，同seed/order/reward/概率路徑。先保存未訓練Base的同協定validation結果；用validation選checkpoint，不查看test選參數。
 
 維持已驗收的batch與長度；本輪cache的截斷／解析失敗比例較高，下一階段要繼續記錄。若改為8回答或512+tokens，先核對容量、全部token概率及恢復，不能視為現有驗收自動涵蓋。先在pilot第一個短段量測完整工作量，再訂Slurm時限及按checkpoint分段；本輪沒有提交pilot。
 
@@ -170,9 +170,13 @@ GPU 秒、生成 token 數、optimizer steps、初始化時間、載入時間、
 - 現有 FP32 初始化直接復用；正常進度沿用已通過的檢查，遇到具體變更或風險才重跑相應項目。
 - [GOAL.md](GOAL.md) 是已完成的採樣／概率計算路徑驗收目標；已完成的初始化目標保留於 [GOAL_INITIALIZATION_COMPLETED.md](GOAL_INITIALIZATION_COMPLETED.md)。本文件是整體復現進度入口。階段 3／4 的實際腳本入口與報告見 [GRPO_SMOKE.md](GRPO_SMOKE.md)、[GRPO_CONTINUATION.md](GRPO_CONTINUATION.md)、[CACHED_ROLLOUT.md](CACHED_ROLLOUT.md)、[CACHED_LOGITS.md](CACHED_LOGITS.md) 與 [CACHED_LAYERS.md](CACHED_LAYERS.md)。
 
-**下一個可交付結果：實作通用 fixed_width pilot runner 和固定 validation 評估，核對原五步行為及完整恢復，再按計畫分段完成 LoRA／GeoRA 的較長 pilot。**
+**下一個可交付結果：完整模型首段的Base validation與LoRA／GeoRA各10步，保存可續跑檢查點及同協定評估；入口的CPU協定檢查不替代MI250X完整模型驗收。**
 
 
 ## 10. 2026-10-11 精度调查后的状态
 
 Metal／AMD 各完成同一十题的四条件完整生成，另完成同一 GeoRA 短更新负载的 BF16／FP32 成本对照及相关文献调查，见 [PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。正式 LoRA／GeoRA 对照仍保留已验收的 BF16 混合精度和共同概率计算路径；FP32 独立作为数值／短训练对照。十题输出与单 policy 计时不等于论文成绩，也不代替完整 pilot 容量测量。下一交付仍是第 6 节的通用 pilot runner 和固定 validation；本轮未提交 pilot。
+
+## 11. 2026-10-12 阅读后的精度决定与新入口
+
+暂缓BF16／FP32×LoRA／GeoRA四组100步精度消融；先推进已验收精度和fixed_width概率路径下的两方法试跑。理由、精度表、训练／评估数据流、脚本和资源控制见 [PILOT_RUN.md](PILOT_RUN.md)。新入口支持完整边界恢复，固定validation评估不参与训练loss；尚未启动100步pilot，不作论文分数或长期稳定性结论。

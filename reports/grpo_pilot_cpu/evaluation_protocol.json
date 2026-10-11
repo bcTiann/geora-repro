@@ -1,0 +1,312 @@
+{
+  "status": "passed",
+  "scope": "CPU-only structural gates; no full-model evaluation or GPU execution",
+  "passed_count": 73,
+  "check_count": 73,
+  "checks": [
+    {
+      "name": "validation_selects_ordered_holdout_only",
+      "passed": true
+    },
+    {
+      "name": "invalid_validation_limit_0",
+      "passed": true
+    },
+    {
+      "name": "invalid_validation_limit_False",
+      "passed": true
+    },
+    {
+      "name": "invalid_validation_limit_3",
+      "passed": true
+    },
+    {
+      "name": "training_ID_cannot_enter_validation",
+      "passed": true
+    },
+    {
+      "name": "same_question_under_another_ID_is_leakage",
+      "passed": true
+    },
+    {
+      "name": "test_source_cannot_enter_validation",
+      "passed": true
+    },
+    {
+      "name": "unselected_validation_tail_also_checked",
+      "passed": true
+    },
+    {
+      "name": "duplicate_validation_ID_rejected",
+      "passed": true
+    },
+    {
+      "name": "changed_data_checksum_rejected",
+      "passed": true
+    },
+    {
+      "name": "correct_strict_answer_with_EOS_reward_one",
+      "passed": true
+    },
+    {
+      "name": "parsed_arithmetic_error_is_not_parse_failure",
+      "passed": true
+    },
+    {
+      "name": "numeric_correctness_without_EOS_still_reward_zero",
+      "passed": true
+    },
+    {
+      "name": "strict_format_rejected_42",
+      "passed": true
+    },
+    {
+      "name": "strict_format_rejected_#### 42 dollars",
+      "passed": true
+    },
+    {
+      "name": "strict_format_rejected_#### 42_#### 42",
+      "passed": true
+    },
+    {
+      "name": "strict_format_rejected_#### 6 * 7",
+      "passed": true
+    },
+    {
+      "name": "tokens_after_EOS_rejected",
+      "passed": true
+    },
+    {
+      "name": "empty_completion_token_record_rejected",
+      "passed": true
+    },
+    {
+      "name": "summary_separates_format_arithmetic_and_truncation",
+      "passed": true
+    },
+    {
+      "name": "same_evaluation_identity_can_resume",
+      "passed": true
+    },
+    {
+      "name": "resume_identity_change_training_config_sha256",
+      "passed": true
+    },
+    {
+      "name": "resume_identity_change_question_ids",
+      "passed": true
+    },
+    {
+      "name": "resume_identity_change_decode",
+      "passed": true
+    },
+    {
+      "name": "resume_identity_change_source_sha256",
+      "passed": true
+    },
+    {
+      "name": "resume_identity_change_method",
+      "passed": true
+    },
+    {
+      "name": "completed_evaluation_not_restarted",
+      "passed": true
+    },
+    {
+      "name": "saved_completed_question_prefix_valid",
+      "passed": true
+    },
+    {
+      "name": "saved_prefix_corruption_question_id",
+      "passed": true
+    },
+    {
+      "name": "saved_prefix_corruption_evaluation_reward",
+      "passed": true
+    },
+    {
+      "name": "saved_prefix_corruption_completion",
+      "passed": true
+    },
+    {
+      "name": "saved_prefix_corruption_token_ids",
+      "passed": true
+    },
+    {
+      "name": "segment_controls_do_not_change_training_identity",
+      "passed": true
+    },
+    {
+      "name": "token_cap_changes_training_identity",
+      "passed": true
+    },
+    {
+      "name": "real_runner_pauses_after_completed_question",
+      "passed": true
+    },
+    {
+      "name": "real_runner_resume_generates_only_remaining_questions",
+      "passed": true
+    },
+    {
+      "name": "real_runner_resume_complete_summary_and_segments",
+      "passed": true
+    },
+    {
+      "name": "geora_real_boundary_AB_restored",
+      "passed": true
+    },
+    {
+      "name": "geora_Parameter_objects_preserved",
+      "passed": true
+    },
+    {
+      "name": "geora_frozen_base_and_initial_buffers_unchanged",
+      "passed": true
+    },
+    {
+      "name": "geora_restore_does_not_change_CPU_RNG",
+      "passed": true
+    },
+    {
+      "name": "geora_restored_AB_FP32",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_wrong_tensor_name",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_wrong_tensor_name",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_wrong_shape",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_wrong_shape",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_BF16_factor",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_BF16_factor",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_nonfinite_late_factor",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_nonfinite_late_factor",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_changed_initial_B0",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_changed_initial_B0",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_bad_provenance_hash",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_bad_provenance_hash",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_wrong_method",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_wrong_method",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_in_flight_boundary",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_in_flight_boundary",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_wrong_boundary",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_wrong_boundary",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_bool_checkpoint_format",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_bool_checkpoint_format",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_bad_manifest_shape",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_bad_manifest_shape",
+      "passed": true
+    },
+    {
+      "name": "corrupt_checkpoint_bad_file_hash",
+      "passed": true
+    },
+    {
+      "name": "no_partial_restore_bad_file_hash",
+      "passed": true
+    },
+    {
+      "name": "BF16_destination_factor_rejected",
+      "passed": true
+    },
+    {
+      "name": "unexpected_trainable_base_rejected",
+      "passed": true
+    },
+    {
+      "name": "lora_real_boundary_AB_restored",
+      "passed": true
+    },
+    {
+      "name": "lora_Parameter_objects_preserved",
+      "passed": true
+    },
+    {
+      "name": "lora_frozen_base_and_initial_buffers_unchanged",
+      "passed": true
+    },
+    {
+      "name": "lora_restore_does_not_change_CPU_RNG",
+      "passed": true
+    },
+    {
+      "name": "lora_restored_AB_FP32",
+      "passed": true
+    }
+  ],
+  "date": "2026-10-12",
+  "device": "cpu",
+  "gpu_allocations": 0,
+  "baseline_git_commit": "9a878eea28dac31e01c0064eeae21d4be2eefcd3",
+  "source_sha256": {
+    "scripts/run_grpo_pilot.py": "7e77c3886924efd106e3cbca97d41b5749d47b0e4a7e7f5520954f274ca5aa22",
+    "scripts/pilot_runtime.py": "549b0f9e7b72ec30c3c3b47350f46dac28b9fc729eef4c03acfe807259288f30",
+    "scripts/evaluate_gsm8k_pilot.py": "7a282d2cabaf912043d2311eafc9c025799914b3d184992d195daa2f7364fd93",
+    "scripts/check_pilot_runtime_protocol.py": "b36a6713bf30f08c393cce3cc9a36d2666ea2d4d4a21b5204f70ac241975891b",
+    "tests/check_pilot_evaluation_cpu.py": "7ef950beaacb8b0e391b0ff376dca5bf3c6c48b6724b7825ae66d9946c13765d",
+    "configs/grpo_pilot_plan.json": "dbb8a11fb40e9d10321415d36e86fefc28ccada065a086389b0a35c8c6d2978f"
+  }
+}
