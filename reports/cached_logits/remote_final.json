@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "job_id": "50659217",
+  "sacct_raw_row": "50659217|COMPLETED|0:0|34|00:02:00|billing=128,cpu=16,energy=15527,gres/gpu=1,mem=29440M,node=1|14:19:08|14:19:42",
+  "own_job_queue": "empty",
+  "temporary_copy_removed": true,
+  "temporary_copy_path": "/software/projects/pawsey0807/btian/manual/cache/geora-native-logits-diag-20261011",
+  "original_model_present": true,
+  "original_initialization_present": true
+}

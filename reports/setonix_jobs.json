@@ -244,9 +244,29 @@
       "sacct_raw_row": "50658753|COMPLETED|0:0|38|00:02:00|billing=128,cpu=16,energy=17317,gres/gpu=1,mem=29440M,node=1|13:37:25|13:38:03",
       "start_time_as_displayed": "13:37:25",
       "end_time_as_displayed": "13:38:03"
+    },
+    {
+      "job_id": "50659217",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 34,
+      "time_limit_seconds": 120,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "stage": "one frozen native model paired pre-softmax logits diagnostic; CPU FP64 reproduces probability mismatch",
+      "query_date": "2026-10-11",
+      "observed_queue_after_completion": "empty",
+      "sacct_raw_row": "50659217|COMPLETED|0:0|34|00:02:00|billing=128,cpu=16,energy=15527,gres/gpu=1,mem=29440M,node=1|14:19:08|14:19:42",
+      "start_time_as_displayed": "14:19:08",
+      "end_time_as_displayed": "14:19:42"
     }
   ],
-  "sum_allocation_seconds": 1831,
+  "sum_allocation_seconds": 1865,
   "latest_query_date": "2026-10-11",
-  "latest_query": "sacct -X -j 50658705,50658753 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -j 50658705,50658753"
+  "latest_query": "sacct -X -j 50659217 --noheader --parsable2 --format=JobID,State,ExitCode,ElapsedRaw,Timelimit,AllocTRES%100,Start,End; squeue --noheader -u btian -o %i"
 }

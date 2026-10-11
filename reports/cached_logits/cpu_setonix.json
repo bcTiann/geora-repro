@@ -1,0 +1,567 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "float32_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "float32_one_raw_logits_capture_per_generated_token",
+      "passed": true,
+      "generated_steps": 8,
+      "head_input_shapes": [
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ]
+      ],
+      "raw_output_dtypes": [
+        "torch.float32",
+        "torch.float32",
+        "torch.float32",
+        "torch.float32",
+        "torch.float32",
+        "torch.float32",
+        "torch.float32",
+        "torch.float32"
+      ]
+    },
+    {
+      "name": "float32_captured_raw_logits_reproduce_generation_logps",
+      "passed": true,
+      "max_absolute_logp_difference": 0.0
+    },
+    {
+      "name": "float32_same_logits_same_device_normalization_repeat",
+      "passed": true,
+      "max_absolute_logp_difference": 0.0
+    },
+    {
+      "name": "float32_paired_logits_finite_and_fp64_decomposition",
+      "passed": true,
+      "max_absolute_logit_difference": 8.940696716308594e-08,
+      "max_absolute_fp64_decomposition_residual": 8.881784197001252e-16
+    },
+    {
+      "name": "bfloat16_one_frozen_native_model",
+      "passed": true
+    },
+    {
+      "name": "bfloat16_one_raw_logits_capture_per_generated_token",
+      "passed": true,
+      "generated_steps": 8,
+      "head_input_shapes": [
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ],
+        [
+          8,
+          1,
+          32
+        ]
+      ],
+      "raw_output_dtypes": [
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "torch.bfloat16"
+      ]
+    },
+    {
+      "name": "bfloat16_captured_raw_logits_reproduce_generation_logps",
+      "passed": true,
+      "max_absolute_logp_difference": 0.0
+    },
+    {
+      "name": "bfloat16_same_logits_same_device_normalization_repeat",
+      "passed": true,
+      "max_absolute_logp_difference": 0.0
+    },
+    {
+      "name": "bfloat16_paired_logits_finite_and_fp64_decomposition",
+      "passed": true,
+      "max_absolute_logit_difference": 0.0,
+      "max_absolute_fp64_decomposition_residual": 0.0
+    }
+  ],
+  "stage": "tiny_native_paired_logits",
+  "cases": [
+    {
+      "label": "float32",
+      "forward_dtype": "torch.float32",
+      "probability_dtype": "FP32",
+      "cpu_analysis_dtype": "FP64",
+      "model_count": 1,
+      "optimizer_steps": 0,
+      "prompt_lengths": [
+        3,
+        3,
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "batch_size": 8,
+      "fixed_width": 13,
+      "generated_steps": 8,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "completion_ids": [
+        [
+          13,
+          15,
+          36,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          30,
+          22,
+          13,
+          21,
+          28,
+          11,
+          17,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          31,
+          18,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          19,
+          10,
+          31,
+          33,
+          14,
+          14,
+          8,
+          31
+        ],
+        [
+          28,
+          18,
+          32,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          30,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          13,
+          15,
+          29,
+          31,
+          26,
+          11,
+          17,
+          6
+        ]
+      ],
+      "valid_token_count": 40,
+      "generation_with_hook_seconds": 0.05688198801362887,
+      "fixed_width_recomputation_seconds": 0.003179765015374869,
+      "pre_softmax": {
+        "max_absolute_logit_difference": 8.940696716308594e-08,
+        "mean_absolute_logit_difference": 1.1878234324064357e-08,
+        "max_absolute_centered_logit_difference": 8.360507923203546e-08,
+        "unequal_vocab_elements": 1207,
+        "compared_vocab_elements": 1480,
+        "logits_identical": false
+      },
+      "actual_fp32_probability_comparison": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 2.384185791015625e-07,
+        "mean_absolute_delta_logp": 4.1723251342773435e-08,
+        "max_absolute_ratio_minus_one": 2.3841860752327193e-07,
+        "min_ratio": 0.9999997615814493,
+        "max_ratio": 1.0000002384186075,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -4.76837158203125e-07,
+          -2.384185791015625e-07,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": false
+      },
+      "fp64_probability_comparison": {
+        "max_absolute_delta_logp": 4.861723645888105e-08,
+        "max_absolute_ratio_minus_one": 4.861723527706323e-08,
+        "max_absolute_actual_minus_fp64_delta_logp": 2.5348840670957884e-07
+      },
+      "worst_probability_position": {
+        "row": 3,
+        "completion_step_zero_based": 1,
+        "sampled_token_id": 18,
+        "prediction_column_zero_based": 5,
+        "padded_prefix_token_ids": [
+          0,
+          0,
+          3,
+          4,
+          5,
+          31
+        ],
+        "prefix_attention_mask": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "semantic_prefix_token_ids": [
+          3,
+          4,
+          5,
+          31
+        ],
+        "cached_selected_logit": -0.026993002742528915,
+        "no_cache_selected_logit": -0.026992984116077423,
+        "selected_logit_difference": 1.862645149230957e-08,
+        "cached_logsumexp": 3.598272701196582,
+        "no_cache_logsumexp": 3.5982726969047225,
+        "normalizer_difference": -4.291859312388624e-09,
+        "predicted_delta_logp_from_logits": 2.2918310804698194e-08,
+        "fp64_delta_logp": 2.2918310804698194e-08,
+        "observed_fp32_delta_logp": 2.384185791015625e-07,
+        "observed_probability_ratio": 1.0000002384186075,
+        "fp64_probability_ratio": 1.000000022918311,
+        "snapshot": {
+          "path": "/scratch/pawsey0807/btian/geora/runs/cached-logits-cpu-20261011/float32_worst_logits.safetensors",
+          "stored_dtype": "FP32",
+          "bytes": 448,
+          "sha256": "a899f1cdabe7801311d00f3d087d44594463e05c75d7d5eb5eae55f441bc4026"
+        },
+        "prefix_width_control": {
+          "batch_size": 8,
+          "prefix_width": 6,
+          "fixed_width": 13,
+          "max_absolute_logits_vs_cached": 4.470348358154297e-08,
+          "max_absolute_logits_vs_fixed_width": 8.940696716308594e-08,
+          "selected_delta_logp_vs_cached": -1.020910644911055e-08
+        }
+      }
+    },
+    {
+      "label": "bfloat16",
+      "forward_dtype": "torch.bfloat16",
+      "probability_dtype": "FP32",
+      "cpu_analysis_dtype": "FP64",
+      "model_count": 1,
+      "optimizer_steps": 0,
+      "prompt_lengths": [
+        3,
+        3,
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "batch_size": 8,
+      "fixed_width": 13,
+      "generated_steps": 8,
+      "completion_lengths": [
+        4,
+        8,
+        1,
+        3,
+        8,
+        4,
+        4,
+        8
+      ],
+      "completion_ids": [
+        [
+          13,
+          15,
+          36,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          30,
+          22,
+          13,
+          21,
+          28,
+          11,
+          17,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          31,
+          18,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          19,
+          10,
+          31,
+          33,
+          14,
+          14,
+          8,
+          31
+        ],
+        [
+          28,
+          18,
+          32,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          30,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          13,
+          15,
+          29,
+          31,
+          26,
+          11,
+          17,
+          6
+        ]
+      ],
+      "valid_token_count": 40,
+      "generation_with_hook_seconds": 0.030130321974866092,
+      "fixed_width_recomputation_seconds": 0.0075983059941791,
+      "pre_softmax": {
+        "max_absolute_logit_difference": 0.0,
+        "mean_absolute_logit_difference": 0.0,
+        "max_absolute_centered_logit_difference": 0.0,
+        "unequal_vocab_elements": 0,
+        "compared_vocab_elements": 1480,
+        "logits_identical": true
+      },
+      "actual_fp32_probability_comparison": {
+        "valid_token_count": 40,
+        "max_absolute_delta_logp": 0.0,
+        "mean_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "min_ratio": 1.0,
+        "max_ratio": 1.0,
+        "sequence_delta_logp": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "finite": true,
+        "exact": true
+      },
+      "fp64_probability_comparison": {
+        "max_absolute_delta_logp": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "max_absolute_actual_minus_fp64_delta_logp": 0.0
+      },
+      "worst_probability_position": {
+        "row": 0,
+        "completion_step_zero_based": 0,
+        "sampled_token_id": 13,
+        "prediction_column_zero_based": 4,
+        "padded_prefix_token_ids": [
+          0,
+          0,
+          3,
+          4,
+          5
+        ],
+        "prefix_attention_mask": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "semantic_prefix_token_ids": [
+          3,
+          4,
+          5
+        ],
+        "cached_selected_logit": -0.07421875,
+        "no_cache_selected_logit": -0.07421875,
+        "selected_logit_difference": 0.0,
+        "cached_logsumexp": 3.6019173912317433,
+        "no_cache_logsumexp": 3.6019173912317433,
+        "normalizer_difference": 0.0,
+        "predicted_delta_logp_from_logits": 0.0,
+        "fp64_delta_logp": 0.0,
+        "observed_fp32_delta_logp": 0.0,
+        "observed_probability_ratio": 1.0,
+        "fp64_probability_ratio": 1.0,
+        "snapshot": {
+          "path": "/scratch/pawsey0807/btian/geora/runs/cached-logits-cpu-20261011/bfloat16_worst_logits.safetensors",
+          "stored_dtype": "FP32",
+          "bytes": 448,
+          "sha256": "24c17727bd5ba30c0901df69cf7595c8a55c82d42a8b0d9c20a9f8c0249f9f30"
+        },
+        "prefix_width_control": {
+          "batch_size": 8,
+          "prefix_width": 5,
+          "fixed_width": 13,
+          "max_absolute_logits_vs_cached": 0.0,
+          "max_absolute_logits_vs_fixed_width": 0.0,
+          "selected_delta_logp_vs_cached": 0.0
+        }
+      }
+    }
+  ],
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "scope": "CPU synthetic native models only; no GeoRA or optimizer updates",
+  "elapsed_seconds": 0.1612029789830558
+}

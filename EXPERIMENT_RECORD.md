@@ -1,6 +1,6 @@
 # GeoRA 復現：本機與 Setonix 實驗記錄
 
-更新：2026-10-11；新增 KV-cache sampling／scoring 診斷與用量，遠端報告與 Slurm 狀態核對至 2026-10-11。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
+更新：2026-10-11；新增同一原模型的 cache／無 cache logits 診斷、FP64 復查與用量，遠端報告與 Slurm 狀態核對至 2026-10-11。涵蓋原有 `~/RLVR` 學習專案與目前 `~/geora-repro` 的實際執行結果。
 
 **目前的結論：LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。** 原 residual BF16 失敗紀錄保留；任務效果與正式 benchmark 尚未驗證。
 
@@ -29,6 +29,7 @@
 | L10/S9 | GSM8K 與真實一次 GRPO 更新 | Mac CPU；Setonix CPU／MI250X | 完整 1.5B、2 題×4 回答 | CPU 預檢及完整模型 20/20 通過 | 一次真實 reward GRPO AdamW |
 | L11/S10 | 共用 LoRA／GeoRA 五步與完整恢復 | Mac CPU；Setonix CPU／MI250X | 完整 1.5B、每方法五步＋一次重放 | 連續更新、精確恢復、首批一致通過 | 每方法五個真實 GRPO 有效步 |
 | L12/S11 | cached sampling／固定寬度 scoring 一致性 | Mac CPU；Setonix CPU／MI250X | 小模型＋完整 1.5B、8 回答、16 新 tokens | CPU 通過；GPU 10/10 機械檢查、0/2 likelihood gates | GPU 無更新；CPU 合成更新 |
+| L13/S12 | 同一原模型成對 logits；獨立 FP64 softmax 復查 | Mac CPU；Setonix CPU／MI250X | 小模型＋一個完整原模型、103 有效 tokens | CPU 10/10；GPU 6/6；確認差異在 softmax 前出現 | 無更新 |
 
 本機 L1～L6、L7 的小模型預檢及 L8 使用 **CPU**。L7 另外確認 MPS 的 16×16 BF16 乘法可執行；沒有在 MPS 上執行完整 1.5B 模型或精度對照。
 
@@ -578,6 +579,24 @@ job 50658705 在 tokenizer 介面處失敗，尚未進入數值測量。Transfor
 
 原始報告：[Mac CPU](reports/cached_rollout/cpu_local.json)、[Setonix CPU](reports/cached_rollout/cpu_setonix.json)、[首次失敗](reports/cached_rollout/50658705.json)、[GPU 診斷](reports/cached_rollout/50658753.json)、[副本校驗](reports/cached_rollout/staging_record.json)、[資源與清理](reports/cached_rollout/remote_final.json)。決定保留已驗證的固定寬度訓練 sampler；先用 CPU 對照可求導 cache scoring，再驗收完整更新後策略與 GRPO／恢復。
 
+### L13/S12：同一原模型的原始 logits 與 softmax 分離檢查
+
+目的：判斷 S11 約 19.7% 的概率比例差異，是兩條路徑先算出了不同 logits，還是最後 softmax 本身造成。具體流程、前文、公式與代碼見 [CACHED_LOGITS.md](CACHED_LOGITS.md)。
+
+只載入一個凍結原始 Qwen2.5-1.5B-Instruct；沒有 GeoRA 或 vLLM。先在 cached 生成的 `lm_head` 輸出 hook 捕獲 softmax 前 logits，保存 token IDs，再用同一模型的既有固定寬度無 cache 路徑計算相同前文位置。batch=8，prompt 40／50，最多 16 新 tokens，103 有效 tokens。固定寬度 66 的未來位置由 causal mask 遮住；兩條路徑的執行布局仍不同。
+
+精度：模型權重／forward BF16；捕獲的 BF16 logits 提升 FP32 保存；實際生成與重算 log-softmax 均 GPU FP32；診斷及下載後 NumPy 復查使用 CPU FP64。沒有 FP64 模型 forward，也没有 reward、backward 或 optimizer step。
+
+本機與 Setonix login tiny CPU FP32／BF16 各兩個 cases，兩處 10/10；FP32 最大 logits 差分別約 6.15e-8／8.94e-8，BF16 精確一致。完整 GPU job 50659217 完成 6/6 診斷檢查：捕獲 logits 重算生成 logp 的最大差為 0，相同 logits 的重複正規化差為 0；103 個有效位置的全 vocab 原始 logits 最大差為 0.5。這是診斷完成，不是兩條概率一致。
+
+原有最大概率偏差位置（row=1、completion step=9，零起算）token ID 1986，文字 `This`：cached logit=23.25，無 cache logit=23.50。兩組 logits 用相同 NumPy FP64 softmax 得到概率 0.12628126277745813／0.15115551672434263，比例 1.1969750175108693，仍相差 19.6975%。差異已在 softmax 前出現。全部 103 個有效 token 的 GPU FP32 logp 差與 CPU FP64 分解，最大殘差 3.69e-7，遠小於最差 token 的 0.17979765。
+
+額外的無 cache 前文寬度 59 對照，batch 仍 8，其 logits 對 cached／固定 66 路徑最大差都為 0.34375。尚未唯一定位是哪個 decoder 算子、kernel 或 BF16 捨入造成；不把此比較解讀成僅切換 cache 一個因素的消融，也沒有驗證可用校正。原有 sampler 和 S11 likelihood 門限不變。
+
+實際 allocation **34 秒，一個邏輯 GPU**；兩分鐘硬上限。Python 本體 6.825 秒，峰值 allocated memory 3.040 GiB。完成後本輪 job 不在 queue，临時模型副本已清理，原模型／初始化保留。最差位置兩份完整 vocab logits 共 1,215,656 bytes，SHA256 已核對；保留於 scratch 和本機 Git 忽略的 outputs。
+
+報告：[Mac CPU](reports/cached_logits/cpu_local.json)、[Setonix CPU](reports/cached_logits/cpu_setonix.json)、[GPU](reports/cached_logits/50659217.json)、[獨立 NumPy 復查](reports/cached_logits/cpu_snapshot_verification.json)、[副本校驗](reports/cached_logits/staging_record.json)、[用量與清理](reports/cached_logits/remote_final.json)。
+
 ## 6. 保存、重載與更新精度總表
 
 | 實驗 | 初始化／殘差計算 | 運行參數 | forward | 我們保存的權重檔 | 實際更新 |
@@ -597,6 +616,7 @@ job 50658705 在 tokenizer 介面處失敗，尚未進入數值測量。Transfor
 | L10/S9 | 復用 S2 初始因子，無 SVD | 同 S7 | 固定寬度 BF16 base＋FP32 低秩差；logp/loss FP32 | FP32 A/B/A0/B0、AdamW moments | 一次真實 GRPO |
 | L11/S10 | GeoRA 復用 S2；LoRA Gaussian A／零 B，CPU FP32 | frozen BF16；A/B 和 GeoRA A0/B0 FP32 | 共用固定寬度 BF16 base＋FP32 adapter；logp/loss FP32 | adapter FP32、AdamW FP32 moments、scheduler、RNG、資料位置 | 每方法五個 GRPO 有效步＋一次重放 |
 | L12/S11 | GPU 復用 S2；tiny CPU FP32 | GPU frozen BF16，GeoRA 因子 FP32 | cached generation vs 固定寬度 scoring；logp FP32 | 小型 JSON，沒有新 GPU 權重檔 | GPU 無更新；CPU 合成 AdamW |
+| L13/S12 | 原模型，無初始化／SVD | 原始權重 BF16；tiny CPU FP32／BF16 | cached／無 cache logits BF16；logp GPU FP32；分析 CPU FP64 | 兩個原始 vocab 向量提升 FP32 保存，另存 JSON | 無更新 |
 
 AdamW 單步檢查的設計為 `lr=1e-4`、`weight_decay=0`、gradient norm 裁剪上限 1；loss 對答案 token 做 FP32 cross-entropy，A/B 梯度和 moment tensors 為 FP32。**S3 residual 的 1.5B 前置門檻失敗，當時未執行；S7 difference 的 1.5B 已完成一次並通過重載。** FP32 更新參數不等於每次 forward 的乘法都是 FP32。
 
@@ -617,6 +637,7 @@ relative_error = norm(actual - reference) / norm(reference)
 | attention O 輸出誤差 | 完整第 0 層 attention 的 GeoRA / 原始輸出 | 看 QK、softmax、P×V 如何放大差異 |
 | 全模型 logits 誤差 | 同一固定輸入的 GeoRA / 原始 logits | 模型端到端初始化檢查 |
 | reload 誤差 | 保存後重載 / 保存前，同設定 | checkpoint 恢復一致性 |
+| 同一模型路徑差異 | 同一前文的無 cache / 有 cache logits 或 token 概率 | 原模型兩條執行路徑對照；不是 GeoRA vs 原模型 |
 
 矩陣／tensor 範數指全部元素的 L2/Frobenius 範數；17% 是整體相對量，不是每個元素都差 17%，更不是準確率差 17%。零 reload 誤差只表示恢复同一運算狀態，不表示那個狀態與原始模型足夠接近。
 
@@ -626,7 +647,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 ## 8. Setonix 已用資源與目前停在哪裡
 
-2026-10-09 查詢前六個作業，2026-10-10 新增 S6–S10，2026-10-11 新增並查詢 S11 的兩個作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
+2026-10-09 查詢前六個作業，2026-10-10 新增 S6–S10，2026-10-11 新增並查詢 S11 的兩個作業及 S12 的一個作業；`sacct -X` 的記錄如下。每個作業的 `AllocTRES` 都是 `gres/gpu=1,node=1,cpu=16,mem=29440M`；一個 node 是放置位置，這些作業沒有分配八個邏輯 GPU。`billing=128` 是 Slurm 的計費權重字段，不能直接解讀為 128 秒或八卡計費。
 
 | Job | 工作 | 上限 | 實際 allocation | Slurm 狀態 |
 |---|---|---|---|---|
@@ -645,13 +666,14 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50622756 | lora 五步／完整恢復 | 10 分鐘 | 434 秒 | COMPLETED |
 | 50658705 | cache 診斷 tokenizer 失敗、無更新 | 2 分鐘 | 34 秒 | FAILED |
 | 50658753 | cache likelihood 診斷、門限未通過 | 2 分鐘 | 38 秒 | COMPLETED |
+| 50659217 | 同一原模型成對 logits／softmax 前差異 | 2 分鐘 | 34 秒 | COMPLETED |
 
-這十五個作業的 allocation 時間合計 **30 分 31 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這十六個作業的 allocation 時間合計 **31 分 5 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
 
-等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。L11/S10 的共用五步與完整恢復亦完成；L12/S11 發現完整模型 cached sampling／固定寬度 scoring 未對齊，保留舊 sampler，先處理這項差異再擴大 cached pilot。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
+等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。L11/S10 的共用五步與完整恢復亦完成；L12/S11 發現完整模型 cached sampling／固定寬度 scoring 未對齊，L13/S12 已確認其差異在 softmax 前的 logits 中出現；保留舊 sampler，先處理這項差異再擴大 cached pilot。固定預算的 LoRA／GeoRA 任務對照要在這些流程通過後安排；S7 的短 CE 單步不是完整論文復現。
 
 ### 原始記錄的使用約定
 
-初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成；S10 兩方法各一次五步／恢復作業完成；S11 首次 tokenizer 錯誤已修正、第二次完成數值診斷但 likelihood gate 失敗。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
+初次整理只讀取已有檔案／遠端報告；2026-10-10 後續完成 L7／S6、L8／S7 及 L9／S8；S6／S7 各一次 GPU 作業，S8 一次載入超時、一次完成；S9 一次完整 GRPO smoke 完成；S10 兩方法各一次五步／恢復作業完成；S11 首次 tokenizer 錯誤已修正、第二次完成數值診斷但 likelihood gate 失敗；S12 一次原模型 logits 診斷確認 softmax 前差異，下載後 CPU FP64 復查完成。各階段的運算精度與用量分別記錄在上文。原始 RLVR 專案保留；重要的小型報告複製到本倉庫的 `reports/`，權重與環境不加入 Git。
 
 舊 `extract_weight.ipynb` 的 summary 曾引用 kernel 遺留的角度變數，與當前重合度輸出不一致；本文件使用後續 FP64 腳本的重合奇異值，不沿用那些角度。舊全層 notebook 也殘留一次 NameError 和不同輪次的進度；全層數值以最終獨立 `checks.json`／manifest 為準，不能把 notebook 保存的所有輸出當作一輪乾淨的連續執行。

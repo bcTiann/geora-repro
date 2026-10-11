@@ -90,6 +90,10 @@ uv run python scripts/check_cached_rollout_cpu.py \
 - [首次失敗](reports/cached_rollout/50658705.json)、[完整模型診斷](reports/cached_rollout/50658753.json)。
 - [本轮副本校驗](reports/cached_rollout/staging_record.json)、[資源與清理記錄](reports/cached_rollout/remote_final.json)。
 
+## 2026-10-11：後續原始 logits 診斷已完成
+
+[L13/S12](CACHED_LOGITS.md) 只用一個原模型，直接保存並比較兩條路徑 softmax 前的 logits。job 50659217 確認最大差 0.5；原有最差 token `This` 的 logit 是 23.25／23.50。下載後用相同 NumPy CPU FP64 softmax 得到概率 12.6281263%／15.1155517%，仍重現 19.6975% 的相對比例差異。差異已在 logits 中出現；具體上游算子與可用校正尚未定位。新增 allocation 34 秒，一個邏輯 GPU。S11 未通過的 likelihood 門限及原訓練 sampler 保持原樣。
+
 ## 下一個具體操作
 
 先在 CPU 小模型建立「按 cache 生成的順序逐 token、可求導地重算 logp」的對照，核對 probability、padding/EOS 和 A/B 梯度；計算損失時不能把歷史 KV 一律 detach，否則會截斷參數對過去 token 的影響。這是候選方案，尚未實作或通過。另一條方案是有明確算法依據並經驗證的 rollout importance correction，不能只把兩條路徑的 old logp 改名就當作修正。

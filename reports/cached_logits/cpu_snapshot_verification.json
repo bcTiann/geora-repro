@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "source_snapshot_sha256": "f865de782dd4079f02683335c0a6cb69067cab6daa03dd11d5488d2b917a6f1b",
+  "method": "CPU NumPy FP64 exp(z-max(z))/sum(exp(z-max(z)))",
+  "sampled_token_id": 1986,
+  "sampled_token_text": "This",
+  "probabilities": {
+    "cached_logits": 0.12628126277745813,
+    "no_cache_logits": 0.15115551672434263
+  },
+  "probability_ratio": 1.1969750175108693,
+  "relative_difference_percent": 19.697501751086932,
+  "report_ratio_absolute_error": 8.215650382226158e-14
+}

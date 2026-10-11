@@ -160,3 +160,35 @@ uv run python scripts/check_grpo_continuation_reports.py \
 兩次作業均只申請一個邏輯 GPU、兩分鐘上限。job `50658705` 在 tokenizer API 處失敗，實際 allocation 34 秒；以 `tokenize=False` 取得文字再 `tokenizer.encode` 的修正經本機與登入節點 CPU 檢查後，job `50658753` 完成數值測量，Python 執行 9.741 秒、allocation 38 秒。本階段 allocation 合計 **72 秒**，另於上一階段的 914 秒記錄；失敗成本沒有省略。
 
 **下一步保留已驗證的無 cache 訓練 sampler**，先以 CPU 診斷採樣／打分路徑差異，或驗證有算法依據的 importance correction。候選通過後，還要測完整模型已更新策略，以及 LoRA／GeoRA GRPO 和精確恢復。較長 pilot 前另需節省 scores 記錄的顯存；目前沒有足夠證據宣稱 KV cache 訓練已驗收或有多少加速。
+
+## 9. 成對原始 logits 與 softmax 檢查（L13/S12）
+
+2026-10-11 用一個凍結的原始 Qwen 模型，對同一批前文與已生成 token 比較兩條路徑的 logits：cached 生成時直接捕獲 `lm_head` 輸出，再用既有固定寬度、無 cache 路徑計算相同位置。沒有裝入 GeoRA、reward 或 value 模型，也沒有 optimizer update。方法與完整報告見 [CACHED_LOGITS.md](CACHED_LOGITS.md)。
+
+本機與 Setonix 登入節點的 tiny CPU 檢查均為 10/10，涵蓋 FP32／BF16 兩個原模型 cases。完整 MI250X BF16 job `50659217` 的 6/6 檢查通過：捕獲 logits 經 GPU FP32 `log_softmax` 重算生成 logp 的誤差為 `0`；相同 logits 重複計算的誤差也為 `0`。兩條路徑在 103 個有效 token 上的原始 logits 最大差為 `0.5`。
+
+原有約 19.7% 差異的位置是 `row=1`、`completion step=9`（均從 0 開始），token ID `1986`。診斷程式在 CPU 上用相同的 FP64 計算分析兩份已捕獲的 logits：
+
+| 該位置的值 | cached 路徑 | 固定寬度、無 cache 路徑 |
+|---|---|---|
+| 選中 token 的原始 logit | `23.25` | `23.50` |
+| 全 vocab 的 $\log(\sum_v e^{z_v})$ | `25.31924361552085` | `25.389446060081053` |
+
+所以兩邊對這個 token 的 logp 差可分解為（第二項是 softmax 分母的對數差）：
+
+$$
+\Delta\log p
+=(23.50-23.25)
+ -(25.389446060081053-25.31924361552085)
+\approx 0.17979755544.
+$$
+
+FP64 概率比為 `1.1969750175109515`，實際 GPU FP32 記錄為 `1.196975129959193`，均表示無 cache 重算概率相對 cached 概率高約 19.7%。**這個位置的主要差異已出現在 softmax 的輸入 logits 中；提高最後 softmax 的計算精度仍重現差異。** FP64 分析沒有恢復 BF16 forward 中已失去的精度。
+
+兩份原始 logits 已下載到本機，SHA256 相同；獨立 NumPy FP64 softmax 得到該 token `This` 的概率 12.6281263%／15.1155517%，概率比 `1.1969750175108693`，與診斷報告相差約 8.22e-14。復查不使用 GPU。
+
+另做八行 batch 的 prefix 寬度對照：59 個位置的無 cache 輸入，對 cached 與固定寬度 66 的原始 logits 最大差各為 `0.34375`。這支持繼續檢查計算路徑，但尚不能指定是哪個 decoder 算子、kernel 或 BF16 捨入造成差異，也沒有驗證出可用校正。
+
+最差位置兩份 FP32 logits 保存為 `1,215,656` bytes 的 safetensors；原始檔保留於 scratch 與本機由 Git 忽略的 outputs，JSON 保存前文、token ID、值和 SHA256 `f865de782dd4079f02683335c0a6cb69067cab6daa03dd11d5488d2b917a6f1b`。job 只用一個邏輯 GPU、兩分鐘上限，實際 allocation **34 秒**；所有已記錄作業 allocation 累計由 1831 增至 **1865 秒**。
+
+`grpo_rollout.py` 與已驗證的訓練 sampler 保持原樣。這次交付是概率差異的直接 logits 證據；概率對齊／校正、更新後策略、完整訓練與恢復仍待驗收，沒有任務分數或加速結論。
