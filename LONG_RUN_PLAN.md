@@ -1,17 +1,34 @@
 # 128题判分、4096-token基线与长回答训练计划
 
-2026-10-12。用户已授权连续执行；当前 goal active。历史256-token结果保留。
+2026-10-12。用户已授权连续执行；goal active。当前训练源代码固定，历史256-token结果保留。
 
-## 本轮完成标准
+## 完成标准
 
-1. 使用已有128份回答比较旧规则和固定版本verl strict，交付全部判定变化。
-2. 同一原模型、同一128题、同一prompt与BF16计算，max_prompt=1024、max_new_tokens=4096，完成新基线及CPU独立复核。
-3. 完成长回答训练容量检查，并从未训练初始化开始LoRA与GeoRA各100个GRPO更新；先验收第一步及10步，再继续100步。每步固定一个问题、8个回答；两方法使用相同问题顺序和优化预算，不按奖励筛题。
-4. 对两方法第100步checkpoint分别进行同一128题验证，比较Base/LoRA/GeoRA，交付训练曲线、回答、检查点和实际GPU用量。
+1. 对既有128份回答，用历史规则及固定版本verl strict重判，展示所有判定变化。
+2. 同一原模型、128题、prompt及BF16设置，以1024输入/4096回答token上限完成基线及独立CPU复核。
+3. 最大长度训练容量检查通过后，从未训练初始化开始，LoRA与GeoRA各100次GRPO更新。先验收首步及各10步；固定问题顺序、每步1题/8回答、不按奖励筛题。
+4. 对实际第100步断点分别完成相同128题验证，交付Base/LoRA/GeoRA比较、训练曲线、完整回答、断点来源和实际GPU用量。
 
-本轮100步是独立指定的小规模训练，不等同于论文完整Table8。正式GSM8K训练量、MATH500等数学评估及域外能力评估列为后续阶段。论文未给出完整总步数等细节，不能声称本轮完全复现作者协议。
+100步是我们指定的小规模实验，不等同于论文Table8完整复现。正式GSM8K训练量、MATH500及域外评估属于后续阶段；论文缺失的训练细节由本轮配置明确记录。
 
-## 已固定的协议
+## 当前进度与证据
+
+| 阶段 | 已确认状态 | 证据 |
+|---|---|---|
+| 128份CPU重判 | 旧规则32题正确→verl31题；9份提取变化、1份奖励变化；GPU0 | [判定变化](reports/regrade_128/comparison.html) |
+| 4096-token Base128题 | 42/128=32.8125%，截断1题；1589项独立CPU核对通过，GPU977秒 | [基线报告](reports/base4096/comparison.html) |
+| 长回答容量 | 1024＋4096完整前向及反向通过；峰值40.59GiB，1668.68秒；参数未更新 | [GeoRA容量与首步](reports/long_training/geora_first/summary.md) |
+| LoRA/GeoRA真实首步 | 两边1次AdamW、8次反向、生成/重算概率差0、完整step1断点；冻结状态不变 | [首步对照](reports/long_training/summary.md) |
+| 两边各10步 | 已从step1恢复，作业正在进行；尚待完整验收 | GeoRA50703316，LoRA50703647 |
+| 两边各100步 | 待10步实测速度与用量后分段继续 | 配置optimizer_steps=100 |
+| 第100步128题评估 | 尚未执行 | 见本文终局验证门槛 |
+
+基线四格：256/Decimal32、256/verl31、4096/Decimal43、4096/verl42。固定verl下增加11题来自解除长度截断，没有训练。全部128旧token前缀和86份旧EOS回答保持相同。
+
+首步独立CPU审计：GeoRA204项、LoRA197项通过，均0失败；12项配对检查通过。两边8份回答、逐token采样概率、奖励、优势完全相同。两份大状态文件另在Setonix登录节点按实际字节核对SHA256和大小，不下载权重。19个训练源文件的执行hash均核对一致。
+
+## 固定协议
+
 
 | 部分 | 本轮设置 |
 |---|---|
@@ -35,42 +52,38 @@
 
 ## 执行与资源
 
-- CPU完成判分、源码/模型来源、prompt和报告核对；不申请CPU Slurm。
-- Setonix每个作业只申请一个逻辑GPU，gres/gpu=1；权重、数据和初始化复用已有副本。
-- Base验证按完成的问题保存；需要时继续剩余问题，避免重新生成已完成问题。
-- 训练先量测第一步的实际回答长度、峰值显存及耗时；梯度显存guard55GiB。
-- 普通逐token cache反向传播的历史张量可能随长度平方增长，4096不能只改上限。函数块checkpoint必须先通过CPU概率/梯度对照，再进入GPU。
-- 首段后按测得时间分配后续作业；每个完成更新处可保存和恢复。不得因用量上限临近而丢掉已有训练状态。
-- 本轮先以累计24个单逻辑GPU小时为资源控制上限；预计超出时保留检查点并向用户说明需要的额外用量，不自动扩到多卡。
-- 记录每个job实际ElapsedRaw、AllocTRES、token数、峰值显存、退出码和队列释放状态。申请时限不是实际消耗。
+- 判分、文件/provenance/报告审计在本地或Setonix登录节点CPU进行；不申请CPU Slurm。
+- 每个训练/评估作业只请求1个逻辑MI250X GPU，gres/gpu=1；模型、数据、初始化复用已有副本。
+- 基线按完成问题保存；训练只在完成整组、AdamW及scheduler更新后保存完整断点，每步保留恢复状态。超时前未更新的组清空梯度并恢复随机数状态，计入实际消耗，不算成功更新。
+- 原生cache生成与概率重算均batch1；16-token函数块保留历史K/V梯度。最大1024+4096已实测通过，保留55GiB guard及原概率门限。
+- gpu-dev关联MaxJobs=1，普通gpu关联MaxJobs=64；两分区gres/GPU计费权重均128。两组十步作业各用1个逻辑GPU：GeoRA在gpu-dev，LoRA未启动时从gpu-dev移到gpu后已开始；不打断正在计算的步骤。
+- gpu-dev时限最多4小时，普通gpu最多24小时。后续按实测速度分段；每段结束检查实际latest checkpoint及进度，再接续，避免重复完成步骤。
+- 先前24单逻辑GPU小时是我们自定的保守预警线，不是用户给出的硬上限。第一步已提示100步×2可能超过该线；十步结束后报告更新估算，按用户此前允许的一节点24小时量级安排后续，预计超出授权量级时先说明并等待所需批准。
+- 记录实际ElapsedRaw、AllocTRES、退出码、token数、峰值和队列释放；请求时限不是实际耗时，放置在一个节点不等于请求整个节点。
 
-## 当前进度
+已结束本轮作业：失败基线50675134=27秒、成功基线50697776=977秒；GeoRA容量＋首步50699081=2381秒，LoRA首步50702975=562秒。合计3947单逻辑GPU秒；正在运行的十步作业尚未计入最终合计。
 
-- [x] 128份CPU重判：32→31题正确，9份提取变化、1份最终奖励变化；无GPU。
-- [x] 固定判分源码、许可证及hash，历史规则默认行为保留。
-- [x] 既有评估/恢复CPU检查73/73通过。
-- [x] 4096-token Base验证42/128=32.8125%，截断1/128；1589项CPU独立复核通过，单GPU977秒。
-- [x] 长回答GPU训练容量和两方法第一步：已通过，均保存step1。
-- [ ] 两方法各10步，再各100步。
-- [ ] 两个训练checkpoint的128题验证、结果解释与资源核对。
+[账号及分区实测限制](reports/long_training/resource_policy.json)，[已记录作业账本](reports/setonix_jobs.json)。
 
-判分变化详见[完整报告](reports/regrade_128/comparison.html)。新配置为[grpo_long_pilot.json](configs/grpo_long_pilot.json)。
+## 十步验收后如何继续
 
-## 训练入口验收与下一次GPU作业
+1. 两报告须到逻辑step10，完成10个整组更新；核对每组8份回答、规则/优势、概率门限、梯度、冻结状态、记录和完整最新断点。
+2. 不要求每组都产生非零policy优势。同分组不筛掉，记录其零优势及KL贡献；查看是否存在真实非零参数更新。
+3. 用逐步耗时、回答长度和已消耗GPU时间估算剩余90步及验证成本；保证两方法使用相同总更新数和问题顺序。
+4. 从各自实际latest checkpoint接续至100，源码与语义配置保持相同。源码、模型、数据或初始化不一致时停止该次恢复并调查；不伪造hash通过门槛。
 
-本地与Setonix容器CPU均通过缓存分段21项、梯度累积6项、反向超时7项；分段恢复19项、本地短容量fixture13项通过。首次GeoRA作业复用已加载的policy与reference，先用人工固定序列1024+4096做一次完整前向/反向容量检查（无optimizer更新），再做首个真实GRPO步骤。容量检查保存干净step0，55GiB guard和超时覆盖反向重算；完成后复用模型，不额外重载。LoRA首步随后独立执行。
+## 终局验证门槛与入口
 
-基线四格结果：256/Decimal32、256/verl31、4096/Decimal43、4096/verl42。固定verl下提升11题由长度解除截断造成；没有训练。128旧token前缀与86份已完成旧回答全部不变。新报告见[base4096/comparison.html](reports/base4096/comparison.html)。
+已有评估器可直接载入训练boundary checkpoint，无需merge或转换。评估器允许任意合法步数，提交前必须额外核对实际断点是第100步，不能凭step-00100目录名判断：
 
+- 训练报告logical_optimizer_steps=100，最新manifest.status=complete。
+- manifest.progress.completed_optimizer_steps=100、completed_rollouts=100、next_data_position=100；manifest与报告记录的实际latest路径一致。
+- adapter实际字节hash及大小一致；六项provenance一致；GeoRA A0/B0与未训练初始化逐元素相同。
 
-## 2026-10-12首个GPU结果
+同一语义配置hash：d374c348e61404d5d09e2302d4662d2406eedecc29b774c422ba4f7c5e8424e5。
 
-GeoRA作业50699081完成：合成1024+4096的完整前向反向通过，峰值40.59GiB；随后真实第1步用时646.99秒，8回答/1124token、reward3/8、392个A/B张量改变、生成与重算概率误差0、冻结状态不变，保存step-00001。实际单GPU分配2381秒。CPU独立审计204通过；状态文件实际SHA256另在登录节点核对通过。详见[首步报告](reports/long_training/geora_first/summary.md)。
+数据manifest hash：992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0。
 
-LoRA首步50702975运行中；GeoRA恢复至10步作业50703316已排队，依赖LoRA首步成功。后续尚未完成。首步速度提示两组100步可能超出先前自定的24单GPU小时控制线，待两组10步测量后重新估算并说明资源安排；24不是用户明确给出的单GPU小时上限。
+入口jobs/evaluate_gsm8k_pilot.sbatch的位置参数依次为：method、data目录、原模型目录、评估output、实际adapter checkpoint目录、GeoRA未训练初始化目录（LoRA为空字符串）、128、fresh或resume、configs/grpo_long_pilot.json、runtime秒。请求单逻辑GPU/1小时，程序上限3300秒；需要时从已完成问题恢复。
 
-
-LoRA首步50702975完成：197项独立CPU审计通过、0失败，真实step514.72秒，196个B张量改变，梯度1.069740；全部8份回答及概率与GeoRA首步完全相同，断点实际字节核对通过。首步两个作业实际GPU分配合计2943秒。两组10步续跑各用1逻辑GPU并行：GeoRA50703316、LoRA50703647。两组100步及训练后验证仍待完成。汇总见[首步对照](reports/long_training/summary.md)。
-
-
-资源安排补充：实时查询发现gpu-dev关联MaxJobs=1、普通gpu关联MaxJobs=64；两分区gres/GPU计费权重同为128。已将尚未运行的LoRA50703647移至gpu，gres/gpu=1和4小时时限不变；GeoRA50703316继续gpu-dev。不取消正在计算的步骤，也不增加单作业GPU数。详见[资源限制记录](reports/long_training/resource_policy.json)。
+终局两份validation.json必须status=completed、complete=true、128题、completed_optimizer_steps=100；题目ID与新Base128题逐项同序，模型版本、规则、语义配置、解码、精度及运行环境一致。保留全部回答/token/EOS/截断/提取值/奖励，独立重算总分；最后核对作业已释放、汇总实际用量，再决定goal complete。
