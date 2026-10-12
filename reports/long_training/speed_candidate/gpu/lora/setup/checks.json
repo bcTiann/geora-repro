@@ -1,0 +1,3012 @@
+{
+  "status": "running",
+  "checks": [
+    {
+      "name": "rebuild_from_random_A_zero_B_LoRA_initialization",
+      "passed": true
+    },
+    {
+      "name": "same_196_targets_only_FP32_AB_trainable",
+      "passed": true
+    },
+    {
+      "name": "BF16_frozen_FP32_AB_initial_buffers",
+      "passed": true
+    },
+    {
+      "name": "zero_dropout_no_gradient_checkpointing_original_frozen_reference",
+      "passed": true
+    }
+  ],
+  "identity": {
+    "dataset_manifest_sha256": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0"
+  },
+  "provenance": {
+    "method": "lora",
+    "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "dataset_manifest_sha256": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0",
+    "training_config_sha256": "d374c348e61404d5d09e2302d4662d2406eedecc29b774c422ba4f7c5e8424e5",
+    "initialization_sha256": "42858e390a5c16b359232bf9e986b940132cafeb3ebde1f523240a967e5e0fb4"
+  },
+  "diagnostic_only": true,
+  "adapter_manifest": {
+    "lora_checkpoint_format": 1,
+    "method": "lora",
+    "forward_mode": "lora",
+    "rank": 16,
+    "alpha": 32,
+    "scaling": 2.0,
+    "initialization": {
+      "A_distribution": "normal",
+      "A_mean": 0.0,
+      "A_std": 0.02,
+      "B": "zeros",
+      "seed": 20261010,
+      "generator": "private_cpu_torch_Generator",
+      "choice_status": "our_explicit_baseline_choice_not_author_verified"
+    },
+    "precision_policy": {
+      "initialization_device": "cpu",
+      "initial_factor_dtype": "float32",
+      "local_frozen_model_dtype": "float32",
+      "training_frozen_model_dtype": "bfloat16",
+      "trainable_adapter_dtype": "float32",
+      "optimizer_state_dtype": "float32",
+      "training_forward": "native_bfloat16_base_and_float32_adapter",
+      "adapter_forward": "float32_autocast_disabled",
+      "correction_before_base_addition": "cast_to_base_output_dtype"
+    },
+    "base_model_provenance": {
+      "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+      "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+    },
+    "target_modules": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.0.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.1.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.2.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.3.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.4.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.5.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.6.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.7.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.8.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.9.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.10.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.11.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.12.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.13.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.14.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.15.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.16.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.17.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.18.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.19.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.20.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.21.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.22.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.23.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.24.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.25.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.26.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ],
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ]
+      },
+      {
+        "name": "model.layers.27.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ],
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ]
+      }
+    ],
+    "checkpoint_contents": "FP32 current A/B; load onto unchanged pinned original W_pre"
+  },
+  "checkpoint_staging": {
+    "status": "pinned_original",
+    "source": "/scratch/pawsey0807/btian/geora/checkpoints/geora_base"
+  }
+}

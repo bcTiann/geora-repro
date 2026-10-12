@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "scope": "Stdlib audit tests only: actual legacy artifact and retained tiny migration.\n\nAdapted step payloads exercise gate/source attribution checker branches; they\nare explicitly synthetic metadata fixtures, not additional training results.\nNo model inference, torch/pickle import, GPU or production write occurs.\n",
+  "checks": [
+    {
+      "name": "every_legacy_step1_check_retained_unchanged",
+      "passed": true
+    },
+    {
+      "name": "actual_tiny_CPU_migration_source_checkpoint_evidence_lineage_verified",
+      "passed": true,
+      "checks": 110,
+      "cutoff": 2
+    },
+    {
+      "name": "resigned_wrong_source_bound_evidence_rejected",
+      "passed": true,
+      "failures": [
+        "migration_passed_equivalence_bound_to_exact_both_sources"
+      ]
+    },
+    {
+      "name": "resigned_copied_checkpoint_still_compared_with_actual_original",
+      "passed": true,
+      "failures": [
+        "migration_original_checkpoint_bytes_training_state.pt"
+      ]
+    },
+    {
+      "name": "wrong_cutoff_rejected",
+      "passed": true,
+      "failures": [
+        "migration_historical_report_identity_and_cutoff",
+        "migration_explicit_source_step_and_segment_ranges"
+      ]
+    },
+    {
+      "name": "historical_segment_entry_cannot_be_omitted_from_resigned_manifest",
+      "passed": true,
+      "failures": [
+        "migration_history_manifest_complete_for_segments_and_active_steps",
+        "migration_history_manifest_matches_actual_original_tree"
+      ]
+    },
+    {
+      "name": "recorded_old_branch_requires_independent_gate_and_identifies_current_source",
+      "passed": true
+    },
+    {
+      "name": "old_equals_behavior_assignment_cannot_substitute_independent_gate",
+      "passed": true
+    },
+    {
+      "name": "historical_step_cannot_be_reclassified_as_candidate_code",
+      "passed": true
+    }
+  ]
+}

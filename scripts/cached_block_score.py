@@ -62,6 +62,7 @@ def _validate_rollout(model, rollout):
 def score_completion_logps_block_checkpointed(
     model, rollout, device, frozen_dtype, *, gradient_enabled,
     trace_callback=None, runtime_guard=None, checkpoint_statistics=None, block_size=16,
+    progress_callback=None,
 ):
     """Return selected-token logps using the native one-token cache path.
 
@@ -70,7 +71,10 @@ def score_completion_logps_block_checkpointed(
     those input tensors unchanged. Return both selected logps and the next
     boundary tensors, so gradients from later tokens reach earlier history.
     Inference uses the same blocks without activation checkpointing.
-    trace_callback observes the original forward only. runtime_guard runs
+    trace_callback observes detailed metadata on the original forward only.
+    progress_callback receives a {"step": integer} dictionary on the original forward,
+    avoiding tensor copies when callers need lightweight progress reporting.
+    runtime_guard runs
     before/after token forwards, including backward checkpoint recomputation;
     it may raise to abort before an optimizer update.
     """
@@ -143,6 +147,8 @@ def score_completion_logps_block_checkpointed(
                     statistics["runtime_guard_recompute_checks" if recomputing else
                                "runtime_guard_forward_checks"] += 1
                     runtime_guard(dict(guard_metadata, phase="before_forward"))
+                if progress_callback is not None and not recomputing:
+                    progress_callback(dict(step=step))
                 if trace_callback is not None and not recomputing:
                     trace_callback(dict(
                         step=step, input_shape=list(prepared["input_ids"].shape),

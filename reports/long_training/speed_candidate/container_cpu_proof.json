@@ -1,0 +1,558 @@
+{
+  "status": "passed",
+  "stage": "temporary_speed_candidate_CPU_proof",
+  "scope": "Tiny native Qwen CPU; no production source, config, allocation or GPU changed",
+  "torch_version": "2.7.1a0+gite2d141d",
+  "transformers_version": "5.19.0",
+  "cuda_available": false,
+  "checks": [
+    {
+      "name": "lora_float32_temperature_1.0_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "lora_float32_temperature_1.0_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0019442527518549468,
+      "truncated_answers": 0
+    },
+    {
+      "name": "lora_float32_temperature_1.0_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "lora_float32_temperature_1.0_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_temperature_1.0_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_temperature_1.0_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_temperature_1.0_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0019362775783520192,
+      "truncated_answers": 0
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        1,
+        17,
+        1,
+        15,
+        6,
+        5,
+        1
+      ],
+      "rewards": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "reference_KL": 0.004436638628249057,
+      "truncated_answers": 0
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_temperature_1.0_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "geora_float32_temperature_1.0_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0016049401638156269,
+      "truncated_answers": 0
+    },
+    {
+      "name": "geora_float32_temperature_1.0_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "geora_float32_temperature_1.0_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_temperature_1.0_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_temperature_1.0_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_temperature_1.0_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0016029530088417232,
+      "truncated_answers": 0
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_native_rollouts_old_probabilities_losses_exact",
+      "passed": true,
+      "differing_record_fields": []
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_nontrivial_variable_lengths_rewards_KL",
+      "passed": true,
+      "completion_lengths": [
+        4,
+        1,
+        17,
+        1,
+        5,
+        10,
+        6,
+        5
+      ],
+      "rewards": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "reference_KL": 0.004138007447181735,
+      "truncated_answers": 0
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_gradients_before_and_after_clip_exact",
+      "passed": true,
+      "gradient_max_absolute_difference": 0.0
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_one_AdamW_scheduler_updated_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_global_private_RNG_reference_frozen_state_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_exactly_duplicate_old_policy_pass_removed",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7_independent_recorded_behavior_gate_limits_unchanged",
+      "passed": true
+    },
+    {
+      "name": "default_detailed_trace_legacy_metadata_values_gradients_exact",
+      "passed": true
+    },
+    {
+      "name": "progress_only_and_both_callbacks_preserve_values_gradients_guards",
+      "passed": true
+    },
+    {
+      "name": "lightweight_progress_has_no_tensor_CPU_copy_and_no_backward_notifications",
+      "passed": true,
+      "original_detailed_CPU_copy_calls": 27,
+      "progress_only_CPU_copy_calls": 0
+    },
+    {
+      "name": "no_grad_inference_values_detailed_trace_runtime_guard_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_initial_reference_gate_and_step_one_results_preserved_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_corrupted_recorded_behavior_rejected_by_independent_gate_before_update",
+      "passed": true,
+      "injected_logp_difference": 0.01
+    },
+    {
+      "name": "geora_initial_reference_gate_and_step_one_results_preserved_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_corrupted_recorded_behavior_rejected_by_independent_gate_before_update",
+      "passed": true,
+      "injected_logp_difference": 0.01
+    },
+    {
+      "name": "all_19_production_sources_unchanged_and_original_snapshots_exact",
+      "passed": true,
+      "source_count": 19
+    },
+    {
+      "name": "production_training_configuration_unchanged",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "lora_float32_temperature_1.0",
+      "dtype": "torch.float32",
+      "temperature": 1.0,
+      "lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0019442527518549468,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.535177979967557,
+      "candidate_CPU_seconds": 1.2314143310068175,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_1.0",
+      "dtype": "torch.bfloat16",
+      "temperature": 1.0,
+      "lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0019362775783520192,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.6510073780082166,
+      "candidate_CPU_seconds": 1.278602272970602,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    },
+    {
+      "name": "lora_bfloat16_temperature_0.7",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "lengths": [
+        4,
+        1,
+        17,
+        1,
+        15,
+        6,
+        5,
+        1
+      ],
+      "rewards": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "reference_KL": 0.004436638628249057,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.0955434530042112,
+      "candidate_CPU_seconds": 0.9582460730453022,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    },
+    {
+      "name": "geora_float32_temperature_1.0",
+      "dtype": "torch.float32",
+      "temperature": 1.0,
+      "lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0016049401638156269,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.6317763220285997,
+      "candidate_CPU_seconds": 1.3146923289750703,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_1.0",
+      "dtype": "torch.bfloat16",
+      "temperature": 1.0,
+      "lengths": [
+        4,
+        18,
+        1,
+        15,
+        6,
+        5,
+        17,
+        10
+      ],
+      "rewards": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "reference_KL": 0.0016029530088417232,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.7541881060460582,
+      "candidate_CPU_seconds": 1.4044405639870092,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    },
+    {
+      "name": "geora_bfloat16_temperature_0.7",
+      "dtype": "torch.bfloat16",
+      "temperature": 0.7,
+      "lengths": [
+        4,
+        1,
+        17,
+        1,
+        5,
+        10,
+        6,
+        5
+      ],
+      "rewards": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "reference_KL": 0.004138007447181735,
+      "original_probability_calls": 24,
+      "candidate_probability_calls": 16,
+      "original_CPU_seconds": 1.1774070509709418,
+      "candidate_CPU_seconds": 1.1044008870376274,
+      "CPU_timing_is_not_GPU_speedup_evidence": true
+    }
+  ],
+  "benefits": "Removes one old-policy inference pass per answer and per-token detailed trace copies; GPU gain unmeasured",
+  "limitation": "GPU exact equivalence is not inferred from CPU; if recomputed old vs recorded old differ within production tolerance, substituting the actual recorded old can change numerical loss",
+  "elapsed_seconds": 24.094272917020135
+}

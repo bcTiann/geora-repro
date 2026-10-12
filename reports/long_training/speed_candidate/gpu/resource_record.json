@@ -1,0 +1,13 @@
+{
+  "job_id": "50707343",
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "allocation_seconds": 1122,
+  "time_limit_seconds": 1500,
+  "logical_gpu_count": 1,
+  "observed_queue_after_completion": "empty",
+  "AllocTRES": "billing=128,cpu=16,energy=2250234,gres/gpu=1,mem=29440M,node=1",
+  "raw_sacct_row": "50707343|COMPLETED|0:0|1122|billing=128,cpu=16,energy=2250234,gres/gpu=1,mem=29440M,node=1|12:55:01|13:13:43",
+  "scope": "Temporary in-memory diagnostic;0 formal training updates; input step2 checkpoints unchanged",
+  "query_date": "2026-10-12"
+}

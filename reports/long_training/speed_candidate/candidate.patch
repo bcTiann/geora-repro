@@ -1,0 +1,81 @@
+--- a/scripts/cached_block_score.py
++++ b/scripts/cached_block_score.py
+@@ -62,6 +62,7 @@
+ def score_completion_logps_block_checkpointed(
+     model, rollout, device, frozen_dtype, *, gradient_enabled,
+     trace_callback=None, runtime_guard=None, checkpoint_statistics=None, block_size=16,
++    progress_callback=None,
+ ):
+     """Return selected-token logps using the native one-token cache path.
+ 
+@@ -70,7 +71,10 @@
+     those input tensors unchanged. Return both selected logps and the next
+     boundary tensors, so gradients from later tokens reach earlier history.
+     Inference uses the same blocks without activation checkpointing.
+-    trace_callback observes the original forward only. runtime_guard runs
++    trace_callback observes detailed metadata on the original forward only.
++    progress_callback receives a {"step": integer} dictionary on the original forward,
++    avoiding tensor copies when callers need lightweight progress reporting.
++    runtime_guard runs
+     before/after token forwards, including backward checkpoint recomputation;
+     it may raise to abort before an optimizer update.
+     """
+@@ -143,6 +147,8 @@
+                     statistics["runtime_guard_recompute_checks" if recomputing else
+                                "runtime_guard_forward_checks"] += 1
+                     runtime_guard(dict(guard_metadata, phase="before_forward"))
++                if progress_callback is not None and not recomputing:
++                    progress_callback(dict(step=step))
+                 if trace_callback is not None and not recomputing:
+                     trace_callback(dict(
+                         step=step, input_shape=list(prepared["input_ids"].shape),
+--- a/scripts/long_grpo_step.py
++++ b/scripts/long_grpo_step.py
+@@ -2,7 +2,8 @@
+ 
+ Generate every prescribed answer before computing group advantages. All
+ probability paths use batch one and native prefill/one-token cache forwards.
+-Each answer contributes loss/number_of_answers; gradients accumulate before
++Recorded sampling logps supply the old policy probabilities. Each answer
++contributes loss/number_of_answers; gradients accumulate before
+ one clipping operation and one AdamW/scheduler update. No history is detached.
+ """
+ 
+@@ -159,22 +160,22 @@
+ 
+             return score_completion_logps_block_checkpointed(
+                 scoring_model, rollout, device, frozen_dtype,
+-                gradient_enabled=gradient_enabled, trace_callback=observe, runtime_guard=guard,
++                gradient_enabled=gradient_enabled, progress_callback=observe, runtime_guard=guard,
+                 checkpoint_statistics=statistics if gradient_enabled else None,
+                 block_size=block_size)
+ 
+         scoring_started = time.perf_counter()
+-        old_logp = recompute(model, "old_probabilities", False)
++        # Sampling recorded the actual behavior distribution. Parameters stay
++        # unchanged until the completed group's single optimizer update.
++        old_logp = rollout["behavior_logps"].detach()
+         reference_logp = recompute(reference, "reference_probabilities", False)
+-        sampled_alignment = likelihood_gate(
+-            report, prefix + "_sampled_and_old_likelihood", old_logp,
+-            rollout["behavior_logps"], mask, config)
+         if label == "step_1":
+             likelihood_gate(report, prefix + "_initial_policy_matches_original_reference",
+                             old_logp, reference_logp, mask, config)
+         current_logp = recompute(model, "current_probabilities", True)
+-        likelihood_gate(report, prefix + "_current_and_old_likelihood",
+-                        current_logp, old_logp, mask, config)
++        sampled_alignment = likelihood_gate(
++            report, prefix + "_current_and_recorded_behavior_likelihood",
++            current_logp, rollout["behavior_logps"], mask, config)
+         terms = grpo_loss(current_logp, old_logp, reference_logp,
+                           advantages[index:index + 1], mask,
+                           config["clip_epsilon"], config["kl_coefficient"])
+@@ -258,6 +259,7 @@
+         scoring_seconds=scoring_seconds, backward_and_step_seconds=backward_seconds,
+         likelihood_alignment=alignment, behavior_logp=behavior_rows, old_logp=old_rows,
+         reference_logp=reference_rows, completion_mask=mask_rows,
++        old_logp_source="rollout.behavior_logps.detach()",
+         rollout_backend=config["rollout_backend"],
+         rollout_path=rollouts[0]["path"] + "_sequential_batch1",
+         recompute_function="cached_block_score.score_completion_logps_block_checkpointed",

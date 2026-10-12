@@ -517,14 +517,29 @@
         "billing_weight": 128
       },
       "resource_record": "reports/long_training/summary.md"
+    },
+    {
+      "job_id": "50707343",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 1122,
+      "time_limit_seconds": 1500,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "resource_record": "reports/long_training/speed_candidate/gpu/resource_record.json"
     }
   ],
-  "sum_allocation_seconds": 8513,
+  "sum_allocation_seconds": 9635,
   "latest_query_date": "2026-10-12",
-  "latest_query": "sacct -X -j50699081,50702975 --parsable2 --noheader --format=JobID,JobName,Partition,Account,State,ExitCode,Start,End,ElapsedRaw,Timelimit,AllocTRES,NodeList",
+  "latest_query": "sacct -X -j50707343 --noheader --parsable2 --format=JobIDRaw,State,ExitCode,ElapsedRaw,AllocTRES,Start,End",
   "pending_jobs": [
     "50703316",
     "50703647"
   ],
-  "latest_own_queue_observation": "First-step jobs completed and released; two single-GPU ten-step continuations submitted"
+  "latest_own_queue_observation": "Short speed proof completed and released; existing ten-step training allocations remain running"
 }

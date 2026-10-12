@@ -1,0 +1,20 @@
+{
+  "GPU_allocations": 0,
+  "checks": [
+    "actual_manifest100_passes_with_non_step100_directory_name",
+    "explicit_empty_LoRA_init_argument_and_oneGPU_sbatch_argv",
+    "report99_is_rejected_despite_terminal_directory",
+    "checkpoint_rollouts99_rejected",
+    "opaque_optimizer_payload_corruption_rejected_without_pickleload",
+    "policy_changed_from_baseline_rejected",
+    "changed_evaluation_helper_AST_rejected",
+    "GeoRA_actual_FP32_initialization_digest_and_frozen_A0B0_checked",
+    "modified_GeoRA_initialization_rejected",
+    "explicit_source_migration_preserves_old_sources_and_actual100_checkpoint",
+    "retroactively_rewritten_historical_source_commit_rejected"
+  ],
+  "fixture_scope": "Portable terminal report/manifest/byte/source gates only; no model execution or GPU",
+  "passed": 11,
+  "status": "passed",
+  "tool_sha256": "653105779475ed000d6ab765689ddcbe62571ceb22868a21941e8ae8d70175da"
+}

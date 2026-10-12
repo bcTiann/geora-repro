@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "scope": "Syntax/resolved-path protection/external process watchdog only; no GPU or ML run",
+  "checks": [
+    {
+      "name": "prove_candidates_gpu.py_syntax",
+      "passed": true
+    },
+    {
+      "name": "run_candidates_gpu_bounded.py_syntax",
+      "passed": true
+    },
+    {
+      "name": "explicit_pinned_base_resolve_rejects_output_before_creation",
+      "passed": true
+    },
+    {
+      "name": "inferred_staging_source_resolve_rejects_output_before_creation",
+      "passed": true
+    },
+    {
+      "name": "real_process_ignoring_TERM_killed_and_owned_report_marked_timeout",
+      "passed": true,
+      "configured_total_limit_seconds": 31,
+      "elapsed_seconds": 26.014964458998293,
+      "exit_code": 124
+    }
+  ],
+  "fixture": "/private/tmp/geora-speed-candidates-20261012-k9mhja3c/gpu-driver-validation-cw7h91o_"
+}

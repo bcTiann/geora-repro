@@ -1,0 +1,70 @@
+{
+  "evidence": {
+    "CPU_checks_per_environment": 52,
+    "GPU_checks": 34,
+    "GPU_job": "50707343",
+    "accepted_at_utc": "2026-10-12T05:21:24.154499+00:00",
+    "files": {
+      "container_cpu_proof.json": {
+        "bytes": 13702,
+        "sha256": "d22bfa938f3f0ee874bbaaff28b5c750555063c6e3849863a15cdf91f3bfbc3b"
+      },
+      "gpu/comparison.json": {
+        "bytes": 22508,
+        "sha256": "4188967ef08fdf232e195937c2d53f835202050cba589465a92a2f28f5c821c6"
+      },
+      "local_cpu_proof.json": {
+        "bytes": 13694,
+        "sha256": "d46cd1781a526e90a5678756cd2cb0a01b598f4d67381f5098b6f66d97b1ca5b"
+      }
+    },
+    "limitations": "Measured finite fixtures, not an unconditional bitwise proof for every future GPU input. Production remains max4096 and retains current-versus-recorded-behavior likelihood gates and the55GiB memory guard.",
+    "scope": "LoRA and GeoRA independently restored from actual trained step2. Original/candidate fixed-question, four-answer, max128 diagnostic updates have exact tokens, loss, gradients, parameters, AdamW, scheduler and all production RNG states. Both cases have mixed rewards and nonzero KL.",
+    "training_updates_added": 0
+  },
+  "source_binding": {
+    "new_source_sha256": {
+      "configs/base_model.json": "2f13baa71d39d8d632d619b7b0ad26692010c1542365667be822d22ba21da985",
+      "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+      "lora_layers.py": "66e14b166c5e7aa50f68283d246ad78ca6c2e82a230d27c68648aa85a4aaf287",
+      "scripts/cached_block_score.py": "8aeee10028445e4e623ec21bc81e442bd67dde56aac50a90b213e9eceff42e77",
+      "scripts/cached_rollout.py": "7131534856998add0c1c86c1c17eab8ab640eccdf2d483e86d3caa1aa634e8af",
+      "scripts/cached_training_rollout.py": "9efc402c7077f3ffd73f046f8a0141e011893fcfd0a2ed74aebffa1f70c79b33",
+      "scripts/check_grpo_continuation.py": "1d9c36875f1d8e789ba56d9500951c656f83c531782fa329f3277f258213c066",
+      "scripts/check_grpo_training.py": "1b764375dfcc4165e39531d8ccec0782ad17dbae20d9c8d6b19e8217b226f3de",
+      "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd",
+      "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+      "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+      "scripts/grpo_training_state.py": "e3170549f04691c8ef8e33a0ac7f4db72dc38394c5d220783a1569934dccbc5a",
+      "scripts/gsm8k_data.py": "9170ee03cb9ea22be10e16e829e9819fe80fc8fcc739a4a4b2bc71e5a9191039",
+      "scripts/long_capacity_check.py": "abaf8e5771c2ddbe65e0486fccbba1f1578936b4c57d4bb20934cd7d548a9d80",
+      "scripts/long_grpo_step.py": "4c5c7e145d0a0c7ef7df3e3f0dab5340e50388e23e71d8e2a3aff7879c53c87f",
+      "scripts/pilot_runtime.py": "71619ab44014baf2a64d7447f6ebbaa508418657a85a380af68b814e5a9e7bd0",
+      "scripts/run_grpo_pilot.py": "57ee8f47bc3904c17b0c9dec6ba3d17736befdca55ba1eb0fcc7a6c3d3240316",
+      "third_party/verl/gsm8k.py": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "third_party/verl/provenance.json": "665ecaffbe2ecb11bad0f8f064546e62d8f1c8563b0ba6dca217811225208d8a"
+    },
+    "old_source_sha256": {
+      "configs/base_model.json": "2f13baa71d39d8d632d619b7b0ad26692010c1542365667be822d22ba21da985",
+      "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+      "lora_layers.py": "66e14b166c5e7aa50f68283d246ad78ca6c2e82a230d27c68648aa85a4aaf287",
+      "scripts/cached_block_score.py": "d689ae9a90c04c548a43d75bc71111e3f20a173c94ee7b6ad465462259670708",
+      "scripts/cached_rollout.py": "7131534856998add0c1c86c1c17eab8ab640eccdf2d483e86d3caa1aa634e8af",
+      "scripts/cached_training_rollout.py": "9efc402c7077f3ffd73f046f8a0141e011893fcfd0a2ed74aebffa1f70c79b33",
+      "scripts/check_grpo_continuation.py": "1d9c36875f1d8e789ba56d9500951c656f83c531782fa329f3277f258213c066",
+      "scripts/check_grpo_training.py": "1b764375dfcc4165e39531d8ccec0782ad17dbae20d9c8d6b19e8217b226f3de",
+      "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd",
+      "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+      "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+      "scripts/grpo_training_state.py": "e3170549f04691c8ef8e33a0ac7f4db72dc38394c5d220783a1569934dccbc5a",
+      "scripts/gsm8k_data.py": "9170ee03cb9ea22be10e16e829e9819fe80fc8fcc739a4a4b2bc71e5a9191039",
+      "scripts/long_capacity_check.py": "abaf8e5771c2ddbe65e0486fccbba1f1578936b4c57d4bb20934cd7d548a9d80",
+      "scripts/long_grpo_step.py": "94633471ba0a0bc0887c0481161568d7ad618fb6f6e8cfced1438de8dd8d2b75",
+      "scripts/pilot_runtime.py": "71619ab44014baf2a64d7447f6ebbaa508418657a85a380af68b814e5a9e7bd0",
+      "scripts/run_grpo_pilot.py": "57ee8f47bc3904c17b0c9dec6ba3d17736befdca55ba1eb0fcc7a6c3d3240316",
+      "third_party/verl/gsm8k.py": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "third_party/verl/provenance.json": "665ecaffbe2ecb11bad0f8f064546e62d8f1c8563b0ba6dca217811225208d8a"
+    }
+  },
+  "status": "passed"
+}

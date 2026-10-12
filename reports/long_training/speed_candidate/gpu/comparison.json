@@ -1,0 +1,584 @@
+{
+  "status": "passed",
+  "output_dir": "/scratch/pawsey0807/btian/geora/runs/speed-candidate-gpu-50707343",
+  "checks": [
+    {
+      "name": "isolated_original_and_candidate_sources_match_CPU_proof",
+      "passed": true
+    },
+    {
+      "name": "geora_runtime_and_original_source_match_production",
+      "passed": true
+    },
+    {
+      "name": "geora_reconstructed_original_frozen_reference_matches_pilot",
+      "passed": true
+    },
+    {
+      "name": "geora_tokens_actual_old_reference_loss_exact",
+      "passed": true,
+      "differing_fields": []
+    },
+    {
+      "name": "geora_independent_current_probabilities_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_initial_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_gradients_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_optimizer_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_scheduler_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_rng_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_counters_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_frozen_reference_policy_and_all_buffers_unchanged",
+      "passed": true
+    },
+    {
+      "name": "geora_real_step2_nonzero_B_and_one_memory_only_update",
+      "passed": true
+    },
+    {
+      "name": "geora_only_duplicate_old_policy_scoring_passes_removed",
+      "passed": true
+    },
+    {
+      "name": "geora_global_CPU_CUDA_python_RNG_preserved_private_RNG_advanced",
+      "passed": true
+    },
+    {
+      "name": "geora_input_checkpoint_files_unchanged",
+      "passed": true
+    },
+    {
+      "name": "lora_runtime_and_original_source_match_production",
+      "passed": true
+    },
+    {
+      "name": "lora_reconstructed_original_frozen_reference_matches_pilot",
+      "passed": true
+    },
+    {
+      "name": "lora_tokens_actual_old_reference_loss_exact",
+      "passed": true,
+      "differing_fields": []
+    },
+    {
+      "name": "lora_independent_current_probabilities_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_initial_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_gradients_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_parameters_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_optimizer_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_scheduler_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_rng_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_counters_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_frozen_reference_policy_and_all_buffers_unchanged",
+      "passed": true
+    },
+    {
+      "name": "lora_real_step2_nonzero_B_and_one_memory_only_update",
+      "passed": true
+    },
+    {
+      "name": "lora_only_duplicate_old_policy_scoring_passes_removed",
+      "passed": true
+    },
+    {
+      "name": "lora_global_CPU_CUDA_python_RNG_preserved_private_RNG_advanced",
+      "passed": true
+    },
+    {
+      "name": "lora_input_checkpoint_files_unchanged",
+      "passed": true
+    },
+    {
+      "name": "all_source_config_initialization_files_unchanged",
+      "passed": true
+    }
+  ],
+  "diagnostic_only": true,
+  "watchdog_run_id": "08d180c1-7beb-4e48-86e1-236bfb51a4ff",
+  "real_training_optimizer_steps_added": 0,
+  "production_cursor_advanced": false,
+  "scope": "Original/candidate memory-only update from each real step2 boundary; fixed train:01480,4answers,max128tokens",
+  "wall_clock_limit_seconds": 1185.0,
+  "note": "All exact checks required; rewards are actual, with no resampling or adjustment. All-equal rewards/zero KL or gradients limit test coverage.",
+  "runtime": {
+    "gpu_name": "AMD Instinct MI250X",
+    "torch_version": "2.7.1a0+gite2d141d",
+    "hip_version": "6.3.42134-a9a80e791",
+    "transformers_version": "5.19.0"
+  },
+  "source_sha256": {
+    "configs/base_model.json": "2f13baa71d39d8d632d619b7b0ad26692010c1542365667be822d22ba21da985",
+    "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+    "lora_layers.py": "66e14b166c5e7aa50f68283d246ad78ca6c2e82a230d27c68648aa85a4aaf287",
+    "scripts/check_grpo_continuation.py": "1d9c36875f1d8e789ba56d9500951c656f83c531782fa329f3277f258213c066",
+    "scripts/check_grpo_training.py": "1b764375dfcc4165e39531d8ccec0782ad17dbae20d9c8d6b19e8217b226f3de",
+    "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd",
+    "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+    "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+    "scripts/grpo_training_state.py": "e3170549f04691c8ef8e33a0ac7f4db72dc38394c5d220783a1569934dccbc5a",
+    "scripts/gsm8k_data.py": "9170ee03cb9ea22be10e16e829e9819fe80fc8fcc739a4a4b2bc71e5a9191039",
+    "scripts/cached_training_rollout.py": "9efc402c7077f3ffd73f046f8a0141e011893fcfd0a2ed74aebffa1f70c79b33",
+    "scripts/cached_rollout.py": "7131534856998add0c1c86c1c17eab8ab640eccdf2d483e86d3caa1aa634e8af",
+    "scripts/cached_block_score.py": "d689ae9a90c04c548a43d75bc71111e3f20a173c94ee7b6ad465462259670708",
+    "scripts/long_grpo_step.py": "94633471ba0a0bc0887c0481161568d7ad618fb6f6e8cfced1438de8dd8d2b75",
+    "scripts/long_capacity_check.py": "abaf8e5771c2ddbe65e0486fccbba1f1578936b4c57d4bb20934cd7d548a9d80",
+    "third_party/verl/gsm8k.py": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+    "third_party/verl/provenance.json": "665ecaffbe2ecb11bad0f8f064546e62d8f1c8563b0ba6dca217811225208d8a",
+    "scripts/run_grpo_pilot.py": "57ee8f47bc3904c17b0c9dec6ba3d17736befdca55ba1eb0fcc7a6c3d3240316",
+    "scripts/pilot_runtime.py": "71619ab44014baf2a64d7447f6ebbaa508418657a85a380af68b814e5a9e7bd0"
+  },
+  "candidate_sha256": {
+    "scripts/cached_block_score.py": "8aeee10028445e4e623ec21bc81e442bd67dde56aac50a90b213e9eceff42e77",
+    "scripts/long_grpo_step.py": "4c5c7e145d0a0c7ef7df3e3f0dab5340e50388e23e71d8e2a3aff7879c53c87f"
+  },
+  "driver_sha256": "1792de45e6f6a1e53d90183f98dd7c3a01b9829acd6109ed7bd8e4ddf9d5a295",
+  "production_config": {
+    "scope": "Bounded long-answer LoRA/GeoRA pilot, independently specified; not GeoRA Table8 reproduction",
+    "seed": 20261010,
+    "optimizer_steps": 100,
+    "resume_after_step": 2,
+    "questions_per_batch": 1,
+    "answers_per_question": 8,
+    "max_prompt_tokens": 1024,
+    "max_new_tokens": 4096,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": 0,
+    "prompt_instruction": "Solve the following math problem. Explain your reasoning, then end your answer with a final line in the form #### <number>. Write only the numeric answer after ####, without units.",
+    "truncated_answer_reward": 0,
+    "learning_rate": 1e-06,
+    "clip_epsilon": 0.2,
+    "kl_coefficient": 0.001,
+    "group_std_correction": 0,
+    "advantage_epsilon": 1e-08,
+    "optimizer_betas": [
+      0.9,
+      0.999
+    ],
+    "optimizer_epsilon": 1e-08,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 1.0,
+    "updates_per_rollout": 1,
+    "dropout": 0.0,
+    "scheduler": "constant learning rate via LambdaLR; state is checkpointed",
+    "lora_initial_A_std": 0.02,
+    "likelihood_path": "Native DynamicCache batch-one generation and recomputation; independent functional16-token cache blocks checkpointed for differentiable probabilities; no cache detachment",
+    "max_absolute_logp_mismatch": 2e-05,
+    "max_absolute_ratio_mismatch": 2e-05,
+    "max_absolute_sequence_logp_mismatch": 0.001,
+    "runtime_limit_seconds": null,
+    "data_order": "Fixed persisted train order; no reward-based filtering; same seed/order for LoRA and GeoRA",
+    "checkpoint_boundary": "After completed rollout and optimizer/scheduler step; save every 10 steps and at each segment boundary",
+    "choice_sources": {
+      "GeoRA Appendix C": [
+        "base model",
+        "rank16",
+        "alpha32",
+        "rho0.2",
+        "learning_rate1e-6",
+        "KL0.001",
+        "BF16",
+        "prompt1024",
+        "response4096",
+        "rollout8"
+      ],
+      "pinned verl source": [
+        "GSM8K strict extraction and string equality"
+      ],
+      "our explicit engineering choices": [
+        "all remaining settings",
+        "onequestionbatch",
+        "sequentialanswer1microbatch",
+        "functionalcacheblockcheckpointing",
+        "100optimizerstepspilot",
+        "nonEOSreward0",
+        "fixed128validation",
+        "constantLR",
+        "FP32adapterbranch",
+        "difference forwardmode"
+      ]
+    },
+    "rollout_backend": "native_cached_block_checkpointed",
+    "checkpoint_attention": false,
+    "status": "CPU_accepted_pending_GPU_full_capacity_and_first_step",
+    "train_question_limit": 1024,
+    "validation_question_limit": 128,
+    "evaluation_plan": {
+      "split": "validation",
+      "question_limit": 128,
+      "decode": "Greedy native cache batch1, 4096 newtokens; pinned verl strict + nonEOSreward0",
+      "before_training": true,
+      "checkpoint_selection": "Fixed terminal step100 checkpoint; no validation-based checkpoint selection"
+    },
+    "implementation_status": "Nativebatch1 sampling and functional16-token cacheblocks integrated; CPUvaluegradient, accumulation, deadline and checkpoint recovery passed onlocal andactual container; maximalGPUcapacity remains pending",
+    "runtime_estimation": "Historical accepted fixed-width five-step Python time: GeoRA461.654s, LoRA412.549s, including one replay and checks; measure first pilot segment before assigning larger jobs. No allocation submitted by this file.",
+    "selection_status": "Sequential8 answers perquestion, group-normalizedadvantages, accumulatedgradient before oneAdamWupdate; globalpromptbatch1 vs paper128 explicitly reduced",
+    "checkpoint_interval": 1,
+    "checkpoint_reserve_seconds": 90,
+    "step_time_budget_seconds": 1200,
+    "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+    "answer_rule_source": {
+      "repository": "volcengine/verl",
+      "commit": "1d367a4f459a43768f76312c0d3430a99ec46b8c",
+      "path": "verl/utils/reward_score/gsm8k.py",
+      "source_url": "https://github.com/volcengine/verl/blob/1d367a4f459a43768f76312c0d3430a99ec46b8c/verl/utils/reward_score/gsm8k.py",
+      "sha256": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "license": "Apache-2.0",
+      "rule": "verl_gsm8k_strict_1d367a4f_v1",
+      "options": {
+        "method": "strict",
+        "format_score": 0.0,
+        "score": 1.0
+      },
+      "comparison": "Comma removal then string equality; no Decimal normalization",
+      "scope": "Our independently selected GSM8K grading protocol, not verified author code"
+    },
+    "checkpoint_block_tokens": 16,
+    "scoring_memory_guard_gib": 55,
+    "microbatch_answers": 1
+  },
+  "diagnostic_config": {
+    "scope": "Bounded long-answer LoRA/GeoRA pilot, independently specified; not GeoRA Table8 reproduction",
+    "seed": 20261010,
+    "optimizer_steps": 100,
+    "resume_after_step": 2,
+    "questions_per_batch": 1,
+    "answers_per_question": 4,
+    "max_prompt_tokens": 1024,
+    "max_new_tokens": 128,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": 0,
+    "prompt_instruction": "Solve the following math problem. Explain your reasoning, then end your answer with a final line in the form #### <number>. Write only the numeric answer after ####, without units.",
+    "truncated_answer_reward": 0,
+    "learning_rate": 1e-06,
+    "clip_epsilon": 0.2,
+    "kl_coefficient": 0.001,
+    "group_std_correction": 0,
+    "advantage_epsilon": 1e-08,
+    "optimizer_betas": [
+      0.9,
+      0.999
+    ],
+    "optimizer_epsilon": 1e-08,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 1.0,
+    "updates_per_rollout": 1,
+    "dropout": 0.0,
+    "scheduler": "constant learning rate via LambdaLR; state is checkpointed",
+    "lora_initial_A_std": 0.02,
+    "likelihood_path": "Native DynamicCache batch-one generation and recomputation; independent functional16-token cache blocks checkpointed for differentiable probabilities; no cache detachment",
+    "max_absolute_logp_mismatch": 2e-05,
+    "max_absolute_ratio_mismatch": 2e-05,
+    "max_absolute_sequence_logp_mismatch": 0.001,
+    "runtime_limit_seconds": null,
+    "data_order": "Fixed persisted train order; no reward-based filtering; same seed/order for LoRA and GeoRA",
+    "checkpoint_boundary": "After completed rollout and optimizer/scheduler step; save every 10 steps and at each segment boundary",
+    "choice_sources": {
+      "GeoRA Appendix C": [
+        "base model",
+        "rank16",
+        "alpha32",
+        "rho0.2",
+        "learning_rate1e-6",
+        "KL0.001",
+        "BF16",
+        "prompt1024",
+        "response4096",
+        "rollout8"
+      ],
+      "pinned verl source": [
+        "GSM8K strict extraction and string equality"
+      ],
+      "our explicit engineering choices": [
+        "all remaining settings",
+        "onequestionbatch",
+        "sequentialanswer1microbatch",
+        "functionalcacheblockcheckpointing",
+        "100optimizerstepspilot",
+        "nonEOSreward0",
+        "fixed128validation",
+        "constantLR",
+        "FP32adapterbranch",
+        "difference forwardmode"
+      ]
+    },
+    "rollout_backend": "native_cached_block_checkpointed",
+    "checkpoint_attention": false,
+    "status": "CPU_accepted_pending_GPU_full_capacity_and_first_step",
+    "train_question_limit": 1024,
+    "validation_question_limit": 128,
+    "evaluation_plan": {
+      "split": "validation",
+      "question_limit": 128,
+      "decode": "Greedy native cache batch1, 4096 newtokens; pinned verl strict + nonEOSreward0",
+      "before_training": true,
+      "checkpoint_selection": "Fixed terminal step100 checkpoint; no validation-based checkpoint selection"
+    },
+    "implementation_status": "Nativebatch1 sampling and functional16-token cacheblocks integrated; CPUvaluegradient, accumulation, deadline and checkpoint recovery passed onlocal andactual container; maximalGPUcapacity remains pending",
+    "runtime_estimation": "Historical accepted fixed-width five-step Python time: GeoRA461.654s, LoRA412.549s, including one replay and checks; measure first pilot segment before assigning larger jobs. No allocation submitted by this file.",
+    "selection_status": "Sequential8 answers perquestion, group-normalizedadvantages, accumulatedgradient before oneAdamWupdate; globalpromptbatch1 vs paper128 explicitly reduced",
+    "checkpoint_interval": 1,
+    "checkpoint_reserve_seconds": 90,
+    "step_time_budget_seconds": 1200,
+    "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+    "answer_rule_source": {
+      "repository": "volcengine/verl",
+      "commit": "1d367a4f459a43768f76312c0d3430a99ec46b8c",
+      "path": "verl/utils/reward_score/gsm8k.py",
+      "source_url": "https://github.com/volcengine/verl/blob/1d367a4f459a43768f76312c0d3430a99ec46b8c/verl/utils/reward_score/gsm8k.py",
+      "sha256": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "license": "Apache-2.0",
+      "rule": "verl_gsm8k_strict_1d367a4f_v1",
+      "options": {
+        "method": "strict",
+        "format_score": 0.0,
+        "score": 1.0
+      },
+      "comparison": "Comma removal then string equality; no Decimal normalization",
+      "scope": "Our independently selected GSM8K grading protocol, not verified author code"
+    },
+    "checkpoint_block_tokens": 16,
+    "scoring_memory_guard_gib": 55,
+    "microbatch_answers": 1
+  },
+  "question": {
+    "id": "train:01480",
+    "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+    "source_index": 1480,
+    "source_split": "train",
+    "target": "4"
+  },
+  "methods": {
+    "geora": {
+      "boundary": "/scratch/pawsey0807/btian/geora/runs/long-pilot-geora/checkpoints/step-00002",
+      "checkpoint_hashes_before": {
+        "manifest.json": "6faa6aaea0520a79f411ed18d09c7f048d785eeb63d4f77459a882f272475eea",
+        "adapter.safetensors": "44fb240215023f89b6dba86f5c05b730452040ab4326ac39e0dad650c4fd05bc",
+        "training_state.pt": "29a7345aab6c94e7739f8f672b149cdf3f08920c50b588a92eb94ab7ffd4ade1"
+      },
+      "saved_progress": {
+        "active_step_records": [
+          {
+            "logical_step": 1,
+            "relative_path": "segments/segment-0001/step-00001.json",
+            "sha256": "eeede3988f549b2d727aed5634dbc2ad1d8e5a2040e1c02536f7cd20b8bc2385",
+            "valid_completion_tokens": 1124
+          },
+          {
+            "logical_step": 2,
+            "relative_path": "segments/segment-0002/step-00002.json",
+            "sha256": "e1c893a238d6ce498cb83b2a4a855d9d3de202fc8090a36b914a88aff8c1a95f",
+            "valid_completion_tokens": 3060
+          }
+        ],
+        "boundary": "after_rollout_and_optional_update",
+        "completed_answer_tokens": 4184,
+        "completed_optimizer_steps": 2,
+        "completed_rollouts": 2,
+        "known_physical_counters": {
+          "physical_backward_calls": 16,
+          "physical_completion_tokens": 4184,
+          "physical_optimizer_step_calls": 2,
+          "physical_rollout_attempts": 2,
+          "physical_rollouts": 2
+        },
+        "next_data_position": 2,
+        "pilot_run_id": "1de71919-6dd5-495d-ba49-340e7b3d15fe",
+        "rollout_in_flight": false
+      },
+      "setup_seconds": 18.31595799400384,
+      "fixed_question_differs_from_next_production_question": true,
+      "next_production_question_id": "train:05119",
+      "production_cursor_advanced": false,
+      "result": {
+        "completion_lengths": [
+          128,
+          128,
+          128,
+          54
+        ],
+        "rewards": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "advantages": [
+          1.732050895690918,
+          -0.5773502588272095,
+          -0.5773502588272095,
+          -0.5773502588272095
+        ],
+        "all_equal_rewards": [
+          false
+        ],
+        "reference_KL": 0.000686413113726303,
+        "gradient_norm": 1.9468071460723877,
+        "original_timing": {
+          "rollout_seconds": 40.80384601200058,
+          "scoring_seconds": 109.77573595699505,
+          "backward_and_step_seconds": 132.62550020000344
+        },
+        "candidate_timing": {
+          "rollout_seconds": 37.91030497199972,
+          "scoring_seconds": 75.9224135659897,
+          "backward_and_step_seconds": 130.79647677500907
+        },
+        "original_step_wall_seconds": 284.8491536040019,
+        "candidate_step_wall_seconds": 246.27360162100376,
+        "original_peak": {
+          "allocated_gib": 7.058441162109375,
+          "reserved_gib": 7.583984375
+        },
+        "candidate_peak": {
+          "allocated_gib": 7.058440685272217,
+          "reserved_gib": 7.583984375
+        },
+        "timing_scope": "One fixed question/four<=128-token answers; includes comparison instrumentation; not a 4096-token production runtime estimate"
+      }
+    },
+    "lora": {
+      "boundary": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00002",
+      "checkpoint_hashes_before": {
+        "manifest.json": "4e6fa0e75f56ca1b0394273a852ff33cdee4c88f76b45ccecbc3499dd9974197",
+        "adapter.safetensors": "01c957cb50ff1f14852efb449a93dfb5c3b8a4c43ac9656e6d97a6bf05aa6ed9",
+        "training_state.pt": "4fd28803b1118028567c4bcfed80beee8eb28794d1d6b31a0b595083def475d6"
+      },
+      "saved_progress": {
+        "active_step_records": [
+          {
+            "logical_step": 1,
+            "relative_path": "segments/segment-0001/step-00001.json",
+            "sha256": "3e0fa9a8f8a3f3b20108628df14719caf8ea13e1eafe6421d915c32218749448",
+            "valid_completion_tokens": 1124
+          },
+          {
+            "logical_step": 2,
+            "relative_path": "segments/segment-0002/step-00002.json",
+            "sha256": "2c2351af744076c9e47033843677c65d0fb974e6646b42ae78e93afabd08a32e",
+            "valid_completion_tokens": 3252
+          }
+        ],
+        "boundary": "after_rollout_and_optional_update",
+        "completed_answer_tokens": 4376,
+        "completed_optimizer_steps": 2,
+        "completed_rollouts": 2,
+        "known_physical_counters": {
+          "physical_backward_calls": 16,
+          "physical_completion_tokens": 4376,
+          "physical_optimizer_step_calls": 2,
+          "physical_rollout_attempts": 2,
+          "physical_rollouts": 2
+        },
+        "next_data_position": 2,
+        "pilot_run_id": "8d7af77f-47e3-49eb-9c27-8972e77012da",
+        "rollout_in_flight": false
+      },
+      "setup_seconds": 11.001264304002689,
+      "fixed_question_differs_from_next_production_question": true,
+      "next_production_question_id": "train:05119",
+      "production_cursor_advanced": false,
+      "result": {
+        "completion_lengths": [
+          128,
+          128,
+          121,
+          128
+        ],
+        "rewards": [
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        ],
+        "advantages": [
+          -0.5773502588272095,
+          -0.5773502588272095,
+          1.732050895690918,
+          -0.5773502588272095
+        ],
+        "all_equal_rewards": [
+          false
+        ],
+        "reference_KL": 0.0005698792811017483,
+        "gradient_norm": 1.159256935119629,
+        "original_timing": {
+          "rollout_seconds": 34.69258222800272,
+          "scoring_seconds": 102.61478078398795,
+          "backward_and_step_seconds": 118.89814691099309
+        },
+        "candidate_timing": {
+          "rollout_seconds": 34.31581809799536,
+          "scoring_seconds": 67.70863577399723,
+          "backward_and_step_seconds": 118.62576823000563
+        },
+        "original_step_wall_seconds": 257.6579251899966,
+        "candidate_step_wall_seconds": 222.10508550999657,
+        "original_peak": {
+          "allocated_gib": 6.989654541015625,
+          "reserved_gib": 7.515625
+        },
+        "candidate_peak": {
+          "allocated_gib": 6.989654064178467,
+          "reserved_gib": 7.51953125
+        },
+        "timing_scope": "One fixed question/four<=128-token answers; includes comparison instrumentation; not a 4096-token production runtime estimate"
+      }
+    }
+  },
+  "in_memory_diagnostic_optimizer_updates": 4,
+  "elapsed_seconds": 1109.9199583289956
+}

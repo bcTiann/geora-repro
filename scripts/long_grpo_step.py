@@ -2,7 +2,8 @@
 
 Generate every prescribed answer before computing group advantages. All
 probability paths use batch one and native prefill/one-token cache forwards.
-Each answer contributes loss/number_of_answers; gradients accumulate before
+Recorded sampling logps supply the old policy probabilities. Each answer
+contributes loss/number_of_answers; gradients accumulate before
 one clipping operation and one AdamW/scheduler update. No history is detached.
 """
 
@@ -159,22 +160,22 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
 
             return score_completion_logps_block_checkpointed(
                 scoring_model, rollout, device, frozen_dtype,
-                gradient_enabled=gradient_enabled, trace_callback=observe, runtime_guard=guard,
+                gradient_enabled=gradient_enabled, progress_callback=observe, runtime_guard=guard,
                 checkpoint_statistics=statistics if gradient_enabled else None,
                 block_size=block_size)
 
         scoring_started = time.perf_counter()
-        old_logp = recompute(model, "old_probabilities", False)
+        # Sampling recorded the actual behavior distribution. Parameters stay
+        # unchanged until the completed group's single optimizer update.
+        old_logp = rollout["behavior_logps"].detach()
         reference_logp = recompute(reference, "reference_probabilities", False)
-        sampled_alignment = likelihood_gate(
-            report, prefix + "_sampled_and_old_likelihood", old_logp,
-            rollout["behavior_logps"], mask, config)
         if label == "step_1":
             likelihood_gate(report, prefix + "_initial_policy_matches_original_reference",
                             old_logp, reference_logp, mask, config)
         current_logp = recompute(model, "current_probabilities", True)
-        likelihood_gate(report, prefix + "_current_and_old_likelihood",
-                        current_logp, old_logp, mask, config)
+        sampled_alignment = likelihood_gate(
+            report, prefix + "_current_and_recorded_behavior_likelihood",
+            current_logp, rollout["behavior_logps"], mask, config)
         terms = grpo_loss(current_logp, old_logp, reference_logp,
                           advantages[index:index + 1], mask,
                           config["clip_epsilon"], config["kl_coefficient"])
@@ -258,6 +259,7 @@ def one_step(model, reference, tokenizer, questions, optimizer, scheduler,
         scoring_seconds=scoring_seconds, backward_and_step_seconds=backward_seconds,
         likelihood_alignment=alignment, behavior_logp=behavior_rows, old_logp=old_rows,
         reference_logp=reference_rows, completion_mask=mask_rows,
+        old_logp_source="rollout.behavior_logps.detach()",
         rollout_backend=config["rollout_backend"],
         rollout_path=rollouts[0]["path"] + "_sequential_batch1",
         recompute_function="cached_block_score.score_completion_logps_block_checkpointed",
