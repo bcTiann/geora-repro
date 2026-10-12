@@ -1,5 +1,8 @@
 # GeoRA 復現計畫與進度
 
+2026-10-12当前连续执行计划以[LONG_RUN_PLAN.md](LONG_RUN_PLAN.md)为准：4096-token Base128题完成，长回答容量及LoRA/GeoRA首步通过，两组正在续到10步；各100步与训练后验证尚待完成。本文保留此前阶段与历史选择，当前结果见[首步对照](reports/long_training/summary.md)。
+
+
 更新：2026-10-12。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
 
 **目前位置：階段 1–3 完成；階段 4 的 LoRA／GeoRA 五步、完整恢復及 cache 候選均已驗收，分段pilot入口和validation评估已实现；原模型256-token诊断已完成（32/128=25%，单逻辑GPU793秒），但42/128截断，不能继续作为效果实验基线。下一步先对齐1024／4096长度与最终数值提取规则，建立新基线并验证长回答容量，再开始LoRA／GeoRA训练。详见下文“长度与正式目标修正”及 [BASE_VALIDATION.md](BASE_VALIDATION.md)。** L12/S11 的混合計算路徑 likelihood 曾失敗；L13–S14 完成 logits、逐層及 P/V 受控干預。L16/S15 改為生成和梯度皆使用相同 native cache 順序，兩方法各58/58、共19,991實際有效 completion tokens 精確對齊，原門限不變。新 cache 完整成本較高，下一輪 pilot 預設沿用已驗收的 `fixed_width`。方法與成本見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，本輪完成標準見 [GOAL.md](GOAL.md)。尚未比較論文任務分數。

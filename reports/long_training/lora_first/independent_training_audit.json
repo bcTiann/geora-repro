@@ -1,0 +1,938 @@
+{
+  "checks": [
+    {
+      "name": "long_pilot_schema",
+      "status": "PASS"
+    },
+    {
+      "name": "reported_training_config_hash",
+      "status": "PASS"
+    },
+    {
+      "name": "executed_config_training_hash",
+      "status": "PASS"
+    },
+    {
+      "name": "executed_config_bytes",
+      "reason": "Runner records semantic training hash, not a separate config-file-byte hash",
+      "sha256": "ab0f6c475f87df0bd739d9fe80332416ce26506b2b9749c2c99735e3ad3692dd",
+      "status": "INFO"
+    },
+    {
+      "name": "configured_pinned_answer_rule",
+      "status": "PASS"
+    },
+    {
+      "name": "report_provenance_identity",
+      "status": "PASS"
+    },
+    {
+      "name": "reported_precision_protocol",
+      "status": "PASS"
+    },
+    {
+      "name": "source_digest_manifest",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_configs/base_model.json",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_geora_layers.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_lora_layers.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/cached_block_score.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/cached_rollout.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/cached_training_rollout.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/check_grpo_continuation.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/check_grpo_training.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/geora_check_utils.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/grpo_math.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/grpo_rollout.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/grpo_training_state.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/gsm8k_data.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/long_capacity_check.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/long_grpo_step.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/pilot_runtime.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_scripts/run_grpo_pilot.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_third_party/verl/gsm8k.py",
+      "status": "PASS"
+    },
+    {
+      "name": "source_bytes_third_party/verl/provenance.json",
+      "status": "PASS"
+    },
+    {
+      "name": "capacity_absent",
+      "reason": "LoRA or resumed run may not execute this GeoRA-only gate",
+      "status": "INFO"
+    },
+    {
+      "name": "no_recorded_failed_gates",
+      "recorded_count": 63,
+      "status": "PASS"
+    },
+    {
+      "name": "logical_steps_and_active_records",
+      "status": "PASS"
+    },
+    {
+      "name": "requested_minimum_steps",
+      "observed": 1,
+      "required": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "data_cursor",
+      "status": "PASS"
+    },
+    {
+      "name": "optimizer_logical_accounting",
+      "status": "PASS"
+    },
+    {
+      "name": "training_backward_excludes_capacity",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary_optimizer_count_exact",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary_backward_count_exact",
+      "status": "PASS"
+    },
+    {
+      "name": "record_bytes_1",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_record_identity",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_complete_eight_answer_group",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_reward_advantage_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_binary_finite_rewards",
+      "status": "PASS"
+    },
+    {
+      "max_error": 2.1714536613259838e-08,
+      "name": "step_1_independent_population_advantages",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_1_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_1_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_1_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_1_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_1_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_2_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_2_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_2_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_2_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_2_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_3_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_3_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_3_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_3_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_3_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_4_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_4_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_4_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_4_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_4_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_5_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_5_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_5_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_5_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_5_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_6_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_6_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_6_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_6_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_6_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_7_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_7_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_7_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_7_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_7_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_length_eos",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_independent_verl_reward",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_question_membership",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_causal_completion_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_8_gate_metrics_sampled_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_8_gate_metrics_current_and_old_likelihood",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_finite_loss",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_functional_cache_blocks_recomputed_with_matching_autocast",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_recorded_gate_accumulated_FP32_AB_gradients_finite",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_initial_reference_gate",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_8_initial_reference_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_stored_probability_layout",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_stored_contiguous_mask",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_answer_8_stored_probabilities_finite",
+      "status": "PASS"
+    },
+    {
+      "max_probability_ratio_error": 0.0,
+      "max_sequence_logp_error": 0.0,
+      "max_token_logp_error": 0.0,
+      "name": "step_1_answer_8_independent_sampled_old_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_token_accounting",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_all_answers_checkpoint_stats",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_1",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_2",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_3",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_4",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_5",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_6",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_7",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_replay_answer_8",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_single_update_geometry",
+      "status": "PASS"
+    },
+    {
+      "name": "step_1_finite_loss_update_metrics",
+      "status": "PASS"
+    },
+    {
+      "name": "completed_answer_tokens",
+      "status": "PASS"
+    },
+    {
+      "name": "physical_rollout_token_counts_monotonic",
+      "status": "PASS"
+    },
+    {
+      "name": "finished_segment_has_freeze_audit",
+      "status": "PASS"
+    },
+    {
+      "name": "immutable_segment_1",
+      "status": "PASS"
+    },
+    {
+      "name": "final_process_peak_within_55GiB",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_manifest_boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_training_identity",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_step_cursor_records",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_declared_FP32_adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_file_adapter.safetensors",
+      "reason": "Manifest captured; tensor/state bytes were not supplied",
+      "status": "UNVERIFIED"
+    },
+    {
+      "name": "checkpoint_file_training_state.pt",
+      "reason": "Manifest captured; tensor/state bytes were not supplied",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "counts": {
+    "FAIL": 0,
+    "INFO": 2,
+    "PASS": 197,
+    "UNVERIFIED": 2
+  },
+  "logical_optimizer_steps": 1,
+  "method": "lora",
+  "report_file": "/Users/tianbaochen/geora-repro/reports/long_training/lora_first/pilot_report.json",
+  "report_sha256": "34f1e00467b0f9051d4338464bf6bf59e559c850c95bcde9eb39fa072d3d535b",
+  "run_status": "paused_at_boundary",
+  "scope": "Independent stdlib CPU report/record audit; no model or task evaluation",
+  "script_sha256": "88ed9b10c4a5eadf89352555e995636f8fae3d9250f29e43c9c8cebeb05179e0",
+  "status": "incomplete_evidence",
+  "step_summaries": [
+    {
+      "changed_parameter_tensors": 196,
+      "elapsed_seconds": 514.7202961940202,
+      "equal_reward_group": false,
+      "gradient_norm": 1.0697401762008667,
+      "reward": 0.375,
+      "step": 1,
+      "tokens": 1124
+    }
+  ]
+}

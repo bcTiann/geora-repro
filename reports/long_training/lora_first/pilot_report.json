@@ -1,0 +1,6080 @@
+{
+  "active_step_records": [
+    {
+      "logical_step": 1,
+      "relative_path": "segments/segment-0001/step-00001.json",
+      "sha256": "3e0fa9a8f8a3f3b20108628df14719caf8ea13e1eafe6421d915c32218749448",
+      "valid_completion_tokens": 1124
+    }
+  ],
+  "adapter_manifest": {
+    "alpha": 32,
+    "base_model_provenance": {
+      "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+      "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+    },
+    "checkpoint_contents": "FP32 current A/B; load onto unchanged pinned original W_pre",
+    "forward_mode": "lora",
+    "initialization": {
+      "A_distribution": "normal",
+      "A_mean": 0.0,
+      "A_std": 0.02,
+      "B": "zeros",
+      "choice_status": "our_explicit_baseline_choice_not_author_verified",
+      "generator": "private_cpu_torch_Generator",
+      "seed": 20261010
+    },
+    "lora_checkpoint_format": 1,
+    "method": "lora",
+    "precision_policy": {
+      "adapter_forward": "float32_autocast_disabled",
+      "correction_before_base_addition": "cast_to_base_output_dtype",
+      "initial_factor_dtype": "float32",
+      "initialization_device": "cpu",
+      "local_frozen_model_dtype": "float32",
+      "optimizer_state_dtype": "float32",
+      "trainable_adapter_dtype": "float32",
+      "training_forward": "native_bfloat16_base_and_float32_adapter",
+      "training_frozen_model_dtype": "bfloat16"
+    },
+    "rank": 16,
+    "scaling": 2.0,
+    "target_modules": [
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.0.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.0.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.0.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.0.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.0.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.0.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.0.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.1.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.1.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.1.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.1.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.1.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.1.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.1.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.2.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.2.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.2.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.2.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.2.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.2.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.2.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.3.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.3.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.3.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.3.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.3.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.3.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.3.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.4.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.4.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.4.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.4.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.4.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.4.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.4.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.5.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.5.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.5.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.5.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.5.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.5.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.5.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.6.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.6.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.6.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.6.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.6.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.6.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.6.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.7.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.7.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.7.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.7.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.7.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.7.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.7.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.8.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.8.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.8.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.8.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.8.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.8.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.8.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.9.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.9.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.9.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.9.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.9.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.9.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.9.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.10.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.10.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.10.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.10.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.10.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.10.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.10.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.11.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.11.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.11.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.11.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.11.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.11.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.11.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.12.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.12.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.12.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.12.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.12.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.12.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.12.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.13.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.13.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.13.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.13.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.13.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.13.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.13.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.14.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.14.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.14.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.14.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.14.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.14.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.14.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.15.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.15.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.15.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.15.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.15.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.15.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.15.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.16.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.16.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.16.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.16.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.16.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.16.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.16.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.17.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.17.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.17.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.17.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.17.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.17.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.17.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.18.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.18.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.18.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.18.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.18.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.18.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.18.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.19.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.19.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.19.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.19.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.19.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.19.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.19.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.20.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.20.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.20.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.20.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.20.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.20.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.20.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.21.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.21.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.21.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.21.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.21.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.21.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.21.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.22.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.22.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.22.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.22.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.22.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.22.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.22.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.23.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.23.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.23.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.23.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.23.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.23.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.23.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.24.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.24.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.24.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.24.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.24.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.24.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.24.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.25.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.25.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.25.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.25.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.25.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.25.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.25.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.26.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.26.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.26.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.26.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.26.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.26.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.26.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.27.self_attn.q_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.27.self_attn.k_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          256,
+          16
+        ],
+        "name": "model.layers.27.self_attn.v_proj",
+        "weight_shape": [
+          256,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.27.self_attn.o_proj",
+        "weight_shape": [
+          1536,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.27.mlp.gate_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          1536
+        ],
+        "B_shape": [
+          8960,
+          16
+        ],
+        "name": "model.layers.27.mlp.up_proj",
+        "weight_shape": [
+          8960,
+          1536
+        ]
+      },
+      {
+        "A_shape": [
+          16,
+          8960
+        ],
+        "B_shape": [
+          1536,
+          16
+        ],
+        "name": "model.layers.27.mlp.down_proj",
+        "weight_shape": [
+          1536,
+          8960
+        ]
+      }
+    ]
+  },
+  "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+  "checkpoint_staging": {
+    "source": "/scratch/pawsey0807/btian/geora/checkpoints/geora_base",
+    "status": "pinned_original"
+  },
+  "checks": [
+    {
+      "name": "rebuild_from_random_A_zero_B_LoRA_initialization",
+      "passed": true
+    },
+    {
+      "name": "same_196_targets_only_FP32_AB_trainable",
+      "passed": true
+    },
+    {
+      "name": "BF16_frozen_FP32_AB_initial_buffers",
+      "passed": true
+    },
+    {
+      "name": "zero_dropout_no_gradient_checkpointing_original_frozen_reference",
+      "passed": true
+    },
+    {
+      "name": "frozen_policy_is_exact_original_BF16_reference",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_1_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_1_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_1_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_1_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": 0.774596631526947,
+      "name": "step_1_answer_1_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 32356352,
+      "checkpoint_blocks": 11,
+      "forward_cache_forwards": 167,
+      "generated_steps": 167,
+      "max_boundary_cache_tensor_elements": 3971072,
+      "name": "step_1_answer_1_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 11,
+      "recompute_cache_forwards": 167,
+      "runtime_guard_forward_checks": 334,
+      "runtime_guard_recompute_checks": 334
+    },
+    {
+      "name": "step_1_answer_1_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_2_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_2_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_2_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_2_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": 0.774596631526947,
+      "name": "step_1_answer_2_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 36642816,
+      "checkpoint_blocks": 12,
+      "forward_cache_forwards": 180,
+      "generated_steps": 180,
+      "max_boundary_cache_tensor_elements": 4157440,
+      "name": "step_1_answer_2_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 12,
+      "recompute_cache_forwards": 180,
+      "runtime_guard_forward_checks": 360,
+      "runtime_guard_recompute_checks": 360
+    },
+    {
+      "name": "step_1_answer_2_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_3_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_3_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_3_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_3_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": -1.29099440574646,
+      "name": "step_1_answer_3_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 28213248,
+      "checkpoint_blocks": 10,
+      "forward_cache_forwards": 148,
+      "generated_steps": 148,
+      "max_boundary_cache_tensor_elements": 3698688,
+      "name": "step_1_answer_3_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 10,
+      "recompute_cache_forwards": 148,
+      "runtime_guard_forward_checks": 296,
+      "runtime_guard_recompute_checks": 296
+    },
+    {
+      "name": "step_1_answer_3_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_4_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_4_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_4_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_4_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": 0.774596631526947,
+      "name": "step_1_answer_4_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 5992448,
+      "checkpoint_blocks": 3,
+      "forward_cache_forwards": 40,
+      "generated_steps": 40,
+      "max_boundary_cache_tensor_elements": 2150400,
+      "name": "step_1_answer_4_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 3,
+      "recompute_cache_forwards": 40,
+      "runtime_guard_forward_checks": 80,
+      "runtime_guard_recompute_checks": 80
+    },
+    {
+      "name": "step_1_answer_4_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_5_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_5_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_5_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_5_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": 0.7745966911315918,
+      "name": "step_1_answer_5_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 6078464,
+      "checkpoint_blocks": 3,
+      "forward_cache_forwards": 46,
+      "generated_steps": 46,
+      "max_boundary_cache_tensor_elements": 2236416,
+      "name": "step_1_answer_5_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 3,
+      "recompute_cache_forwards": 46,
+      "runtime_guard_forward_checks": 92,
+      "runtime_guard_recompute_checks": 92
+    },
+    {
+      "name": "step_1_answer_5_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_6_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_6_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_6_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_6_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": 0.774596631526947,
+      "name": "step_1_answer_6_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 36642816,
+      "checkpoint_blocks": 12,
+      "forward_cache_forwards": 180,
+      "generated_steps": 180,
+      "max_boundary_cache_tensor_elements": 4157440,
+      "name": "step_1_answer_6_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 12,
+      "recompute_cache_forwards": 180,
+      "runtime_guard_forward_checks": 360,
+      "runtime_guard_recompute_checks": 360
+    },
+    {
+      "name": "step_1_answer_6_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_7_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_7_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_7_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_7_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": -1.2909945249557495,
+      "name": "step_1_answer_7_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 41373696,
+      "checkpoint_blocks": 13,
+      "forward_cache_forwards": 208,
+      "generated_steps": 208,
+      "max_boundary_cache_tensor_elements": 4558848,
+      "name": "step_1_answer_7_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 13,
+      "recompute_cache_forwards": 208,
+      "runtime_guard_forward_checks": 416,
+      "runtime_guard_recompute_checks": 416
+    },
+    {
+      "name": "step_1_answer_7_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "step_1_answer_8_causal_completion_mask",
+      "passed": true
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_8_sampled_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_8_initial_policy_matches_original_reference",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "max_absolute_logp_difference": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "mean_absolute_logp_difference": 0.0,
+      "name": "step_1_answer_8_current_and_old_likelihood",
+      "passed": true,
+      "sequence_logp_differences": [
+        0.0
+      ]
+    },
+    {
+      "loss": -1.29099440574646,
+      "name": "step_1_answer_8_finite_loss",
+      "passed": true,
+      "sampled_old_token_k3": 0.0
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 28313600,
+      "checkpoint_blocks": 10,
+      "forward_cache_forwards": 155,
+      "generated_steps": 155,
+      "max_boundary_cache_tensor_elements": 3799040,
+      "name": "step_1_answer_8_functional_cache_blocks_recomputed_with_matching_autocast",
+      "passed": true,
+      "recompute_blocks": 10,
+      "recompute_cache_forwards": 155,
+      "runtime_guard_forward_checks": 310,
+      "runtime_guard_recompute_checks": 310
+    },
+    {
+      "name": "step_1_answer_8_accumulated_FP32_AB_gradients_finite",
+      "passed": true
+    },
+    {
+      "changed_parameter_tensors": 196,
+      "gradient_norm_before_clipping": 1.0697401762008667,
+      "name": "step_1_finite_AB_parameters",
+      "passed": true
+    },
+    {
+      "name": "frozen_policy_initial_buffers_reference_unchanged",
+      "passed": true
+    }
+  ],
+  "completed_answer_tokens": 1124,
+  "config": {
+    "advantage_epsilon": 1e-08,
+    "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+    "answer_rule_source": {
+      "commit": "1d367a4f459a43768f76312c0d3430a99ec46b8c",
+      "comparison": "Comma removal then string equality; no Decimal normalization",
+      "license": "Apache-2.0",
+      "options": {
+        "format_score": 0.0,
+        "method": "strict",
+        "score": 1.0
+      },
+      "path": "verl/utils/reward_score/gsm8k.py",
+      "repository": "volcengine/verl",
+      "rule": "verl_gsm8k_strict_1d367a4f_v1",
+      "scope": "Our independently selected GSM8K grading protocol, not verified author code",
+      "sha256": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "source_url": "https://github.com/volcengine/verl/blob/1d367a4f459a43768f76312c0d3430a99ec46b8c/verl/utils/reward_score/gsm8k.py"
+    },
+    "answers_per_question": 8,
+    "checkpoint_attention": false,
+    "checkpoint_block_tokens": 16,
+    "checkpoint_boundary": "After completed rollout and optimizer/scheduler step; save every 10 steps and at each segment boundary",
+    "checkpoint_interval": 1,
+    "checkpoint_reserve_seconds": 90,
+    "choice_sources": {
+      "GeoRA Appendix C": [
+        "base model",
+        "rank16",
+        "alpha32",
+        "rho0.2",
+        "learning_rate1e-6",
+        "KL0.001",
+        "BF16",
+        "prompt1024",
+        "response4096",
+        "rollout8"
+      ],
+      "our explicit engineering choices": [
+        "all remaining settings",
+        "onequestionbatch",
+        "sequentialanswer1microbatch",
+        "functionalcacheblockcheckpointing",
+        "100optimizerstepspilot",
+        "nonEOSreward0",
+        "fixed128validation",
+        "constantLR",
+        "FP32adapterbranch",
+        "difference forwardmode"
+      ],
+      "pinned verl source": [
+        "GSM8K strict extraction and string equality"
+      ]
+    },
+    "clip_epsilon": 0.2,
+    "data_order": "Fixed persisted train order; no reward-based filtering; same seed/order for LoRA and GeoRA",
+    "dropout": 0.0,
+    "evaluation_plan": {
+      "before_training": true,
+      "checkpoint_selection": "Fixed terminal step100 checkpoint; no validation-based checkpoint selection",
+      "decode": "Greedy native cache batch1, 4096 newtokens; pinned verl strict + nonEOSreward0",
+      "question_limit": 128,
+      "split": "validation"
+    },
+    "gradient_clip_norm": 1.0,
+    "group_std_correction": 0,
+    "implementation_status": "Nativebatch1 sampling and functional16-token cacheblocks integrated; CPUvaluegradient, accumulation, deadline and checkpoint recovery passed onlocal andactual container; maximalGPUcapacity remains pending",
+    "kl_coefficient": 0.001,
+    "learning_rate": 1e-06,
+    "likelihood_path": "Native DynamicCache batch-one generation and recomputation; independent functional16-token cache blocks checkpointed for differentiable probabilities; no cache detachment",
+    "lora_initial_A_std": 0.02,
+    "max_absolute_logp_mismatch": 2e-05,
+    "max_absolute_ratio_mismatch": 2e-05,
+    "max_absolute_sequence_logp_mismatch": 0.001,
+    "max_new_tokens": 4096,
+    "max_prompt_tokens": 1024,
+    "microbatch_answers": 1,
+    "optimizer_betas": [
+      0.9,
+      0.999
+    ],
+    "optimizer_epsilon": 1e-08,
+    "optimizer_steps": 100,
+    "prompt_instruction": "Solve the following math problem. Explain your reasoning, then end your answer with a final line in the form #### <number>. Write only the numeric answer after ####, without units.",
+    "questions_per_batch": 1,
+    "resume_after_step": 2,
+    "rollout_backend": "native_cached_block_checkpointed",
+    "runtime_estimation": "Historical accepted fixed-width five-step Python time: GeoRA461.654s, LoRA412.549s, including one replay and checks; measure first pilot segment before assigning larger jobs. No allocation submitted by this file.",
+    "runtime_limit_seconds": null,
+    "scheduler": "constant learning rate via LambdaLR; state is checkpointed",
+    "scope": "Bounded long-answer LoRA/GeoRA pilot, independently specified; not GeoRA Table8 reproduction",
+    "scoring_memory_guard_gib": 55,
+    "seed": 20261010,
+    "selection_status": "Sequential8 answers perquestion, group-normalizedadvantages, accumulatedgradient before oneAdamWupdate; globalpromptbatch1 vs paper128 explicitly reduced",
+    "status": "CPU_accepted_pending_GPU_full_capacity_and_first_step",
+    "step_time_budget_seconds": 1200,
+    "temperature": 1.0,
+    "top_k": 0,
+    "top_p": 1.0,
+    "train_question_limit": 1024,
+    "truncated_answer_reward": 0,
+    "updates_per_rollout": 1,
+    "validation_question_limit": 128,
+    "weight_decay": 0.0
+  },
+  "created_at_utc": "2026-10-12T03:28:30.897963+00:00",
+  "cumulative_process_seconds": 542.8143800619873,
+  "current_completed_rollout": {
+    "answers": [
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "First, let's establish the number of scoops of ice cream Olivier has, which which is given as 4 scoops.\n\nNext, Victoria has twice as many scoops as Olivier, meaning:\nV=2O\nWhere V represents the number of scoops for Victoria, and O represents the number of scoops for Olivier.\n\nSubstituting the known value, for Olivier's scoops:\nV = 2*4.\nCalculating the above equation:\nV = 8\n\nSo, Victoria has 8 scoops of ice cream.\n\nTo find out how many more scoops of ice cream Victoria has than Olivier:\ndifference = V - O\ndifference = 8 - 4\nFinally:\ndifference = 4\n\nFinal line in the form #### <number> = <answer> ####\n4 = 4",
+        "ended_with_eos": true,
+        "predicted_answer": null,
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 0.0,
+        "target_answer": "4",
+        "token_count": 167,
+        "token_ids": [
+          5338,
+          11,
+          1077,
+          594,
+          5695,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          77018,
+          702,
+          11,
+          892,
+          892,
+          374,
+          2661,
+          438,
+          220,
+          19,
+          24637,
+          3721,
+          382,
+          5847,
+          11,
+          22417,
+          702,
+          10917,
+          438,
+          1657,
+          24637,
+          3721,
+          438,
+          77018,
+          11,
+          7290,
+          510,
+          53,
+          28,
+          17,
+          46,
+          198,
+          9064,
+          647,
+          10868,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          369,
+          22417,
+          11,
+          323,
+          506,
+          10868,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          369,
+          77018,
+          382,
+          3136,
+          3696,
+          10607,
+          279,
+          3881,
+          897,
+          11,
+          369,
+          77018,
+          594,
+          24637,
+          3721,
+          510,
+          53,
+          284,
+          220,
+          17,
+          9,
+          19,
+          624,
+          57908,
+          1095,
+          279,
+          3403,
+          23606,
+          510,
+          53,
+          284,
+          220,
+          23,
+          271,
+          4416,
+          11,
+          22417,
+          702,
+          220,
+          23,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          382,
+          1249,
+          1477,
+          700,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          22417,
+          702,
+          1091,
+          77018,
+          510,
+          59251,
+          284,
+          647,
+          481,
+          506,
+          198,
+          59251,
+          284,
+          220,
+          23,
+          481,
+          220,
+          19,
+          198,
+          23949,
+          510,
+          59251,
+          284,
+          220,
+          19,
+          271,
+          19357,
+          1555,
+          304,
+          279,
+          1352,
+          26274,
+          366,
+          4082,
+          29,
+          284,
+          366,
+          9217,
+          29,
+          26274,
+          198,
+          19,
+          284,
+          220,
+          19,
+          151645
+        ],
+        "training_reward": 0.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "To find out how many more scoops Victoria has compared to Olver, we'll first determine how many scoops she has based on the given information.\n\n1. Olver's scoops = 4  \n2. Victoria has twice more scoops than Olver, so we calculate Victoria's scoops as follows: ()\n\nTo calculate it:\n\n\\( Victory\\ = \\ Olver\\ \\ \\times\\ 2\\ )\n\n\\( Victory = 4 \\times 2 \\ )\n\n\\( Victory = 8 \\ )\n\nNow, to find the difference between Victoria and Olver's scoops:\n\n1. Victoria's scoops = 4\n2. Olver's scoops = 4\n\n\\( Difference\\ = Victoria\\ - Olver\\ )\n\n\\( Difference = 4 \\ - \\ 4 \\ )\n\n\\( Difference = 0 \\ )\n\n### Final answer: 0\n\n#### 0",
+        "ended_with_eos": true,
+        "predicted_answer": "0",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 0.0,
+        "target_answer": "4",
+        "token_count": 180,
+        "token_ids": [
+          1249,
+          1477,
+          700,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          22417,
+          702,
+          7707,
+          311,
+          11959,
+          423,
+          11,
+          582,
+          3278,
+          1156,
+          8253,
+          1246,
+          1657,
+          24637,
+          3721,
+          1340,
+          702,
+          3118,
+          389,
+          279,
+          2661,
+          1995,
+          382,
+          16,
+          13,
+          11959,
+          423,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          19,
+          2303,
+          17,
+          13,
+          22417,
+          702,
+          10917,
+          803,
+          24637,
+          3721,
+          1091,
+          11959,
+          423,
+          11,
+          773,
+          582,
+          11047,
+          22417,
+          594,
+          24637,
+          3721,
+          438,
+          11017,
+          25,
+          32805,
+          1249,
+          11047,
+          432,
+          1447,
+          44292,
+          48327,
+          59,
+          284,
+          1124,
+          11959,
+          423,
+          59,
+          1124,
+          1124,
+          15136,
+          59,
+          220,
+          17,
+          59,
+          5125,
+          44292,
+          48327,
+          284,
+          220,
+          19,
+          1124,
+          15136,
+          220,
+          17,
+          1124,
+          5125,
+          44292,
+          48327,
+          284,
+          220,
+          23,
+          1124,
+          5125,
+          7039,
+          11,
+          311,
+          1477,
+          279,
+          6672,
+          1948,
+          22417,
+          323,
+          11959,
+          423,
+          594,
+          24637,
+          3721,
+          1447,
+          16,
+          13,
+          22417,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          19,
+          198,
+          17,
+          13,
+          11959,
+          423,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          19,
+          271,
+          44292,
+          55080,
+          59,
+          284,
+          22417,
+          59,
+          481,
+          11959,
+          423,
+          59,
+          5125,
+          44292,
+          55080,
+          284,
+          220,
+          19,
+          1124,
+          481,
+          1124,
+          220,
+          19,
+          1124,
+          5125,
+          44292,
+          55080,
+          284,
+          220,
+          15,
+          1124,
+          5125,
+          14374,
+          13023,
+          4226,
+          25,
+          220,
+          15,
+          271,
+          820,
+          220,
+          15,
+          151645
+        ],
+        "training_reward": 0.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "To determine how many more scoops of ice cream Victoria has than Oli, we start by identifying the number of scoops each person has.\n\nOli has 4 scoops of ice cream.\n\nVictoria has twice as many scoops as Oli, so we calculate:\nVictoria's scoops = 2 * Ol's scoops\nVictoria's scoops = 2 * 4\nVictoria's scoops = 8\n\nTo find out how many more scoops Victoria has than Oli, we subtract Ol's scoops from Victoria's scoops:\nAdditional scoops = Victoria's scoops - Ol's scoops\nAdditional scoops = 8 - 4\nAdditional scoops = 4\n\n#### 4",
+        "ended_with_eos": true,
+        "predicted_answer": "4",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 1.0,
+        "target_answer": "4",
+        "token_count": 148,
+        "token_ids": [
+          1249,
+          8253,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          22417,
+          702,
+          1091,
+          506,
+          742,
+          11,
+          582,
+          1191,
+          553,
+          24588,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          1817,
+          1697,
+          702,
+          382,
+          46,
+          742,
+          702,
+          220,
+          19,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          382,
+          80956,
+          702,
+          10917,
+          438,
+          1657,
+          24637,
+          3721,
+          438,
+          506,
+          742,
+          11,
+          773,
+          582,
+          11047,
+          510,
+          80956,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          17,
+          353,
+          11959,
+          594,
+          24637,
+          3721,
+          198,
+          80956,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          17,
+          353,
+          220,
+          19,
+          198,
+          80956,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          23,
+          271,
+          1249,
+          1477,
+          700,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          22417,
+          702,
+          1091,
+          506,
+          742,
+          11,
+          582,
+          32256,
+          11959,
+          594,
+          24637,
+          3721,
+          504,
+          22417,
+          594,
+          24637,
+          3721,
+          510,
+          29019,
+          24637,
+          3721,
+          284,
+          22417,
+          594,
+          24637,
+          3721,
+          481,
+          11959,
+          594,
+          24637,
+          3721,
+          198,
+          29019,
+          24637,
+          3721,
+          284,
+          220,
+          23,
+          481,
+          220,
+          19,
+          198,
+          29019,
+          24637,
+          3721,
+          284,
+          220,
+          19,
+          271,
+          820,
+          220,
+          19,
+          151645
+        ],
+        "training_reward": 1.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "Victoria has 2 * 4 = 8 more scoops of ice cream than Ol\u00e9. So, Victoria has 8 more scoops of ice cream than Ol\u00e9. #### 8",
+        "ended_with_eos": true,
+        "predicted_answer": "8",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 0.0,
+        "target_answer": "4",
+        "token_count": 40,
+        "token_ids": [
+          80956,
+          702,
+          220,
+          17,
+          353,
+          220,
+          19,
+          284,
+          220,
+          23,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          1091,
+          11959,
+          963,
+          13,
+          2055,
+          11,
+          22417,
+          702,
+          220,
+          23,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          1091,
+          11959,
+          963,
+          13,
+          26274,
+          220,
+          23,
+          151645
+        ],
+        "training_reward": 0.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "The calculation is done as follows: Victoria has twice more scoops than Oli, meaning twice 4 scoops is 8 scoops. Therefore, Victoria has 8 more scoops than Oli.\n\n#### 8",
+        "ended_with_eos": true,
+        "predicted_answer": "8",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 0.0,
+        "target_answer": "4",
+        "token_count": 46,
+        "token_ids": [
+          785,
+          21937,
+          374,
+          2814,
+          438,
+          11017,
+          25,
+          22417,
+          702,
+          10917,
+          803,
+          24637,
+          3721,
+          1091,
+          506,
+          742,
+          11,
+          7290,
+          10917,
+          220,
+          19,
+          24637,
+          3721,
+          374,
+          220,
+          23,
+          24637,
+          3721,
+          13,
+          15277,
+          11,
+          22417,
+          702,
+          220,
+          23,
+          803,
+          24637,
+          3721,
+          1091,
+          506,
+          742,
+          382,
+          820,
+          220,
+          23,
+          151645
+        ],
+        "training_reward": 0.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "To determine how many more scoops of ice cream Victoria has than Ol\u00e9, we follow these steps:\n\n1. **Determine the number of scoops Ol\u00e9 has:**\n   - Ol\u00e9 has 4 scoops of ice cream.\n\n2. **Calculate the number of scoops Victoria has:**\n   - Victoria has twice as much as Ol\u00e9.\n   - Therefore, the number of scoops Victoria has is \\( 2 \\times 4 = 8 \\) scoops.\n\n3. **Find the difference in the number of scoops between Victoria and Ol\u00e9:**\n   - Victoria has 8 scoops, while Ol\u00e9 has 4 scoops.\n   - Therefore, the difference is \\( 8 - 4 = 4 \\) scoops.\n\nSo, Victoria has 4 more scoops of ice cream than Ol\u00e9. \n\n#### 4.",
+        "ended_with_eos": true,
+        "predicted_answer": "4.",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 0.0,
+        "target_answer": "4",
+        "token_count": 180,
+        "token_ids": [
+          1249,
+          8253,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          22417,
+          702,
+          1091,
+          11959,
+          963,
+          11,
+          582,
+          1795,
+          1493,
+          7354,
+          1447,
+          16,
+          13,
+          3070,
+          35,
+          24308,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          11959,
+          963,
+          702,
+          25,
+          1019,
+          256,
+          481,
+          11959,
+          963,
+          702,
+          220,
+          19,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          382,
+          17,
+          13,
+          3070,
+          47866,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          22417,
+          702,
+          25,
+          1019,
+          256,
+          481,
+          22417,
+          702,
+          10917,
+          438,
+          1753,
+          438,
+          11959,
+          963,
+          624,
+          256,
+          481,
+          15277,
+          11,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          22417,
+          702,
+          374,
+          17767,
+          220,
+          17,
+          1124,
+          15136,
+          220,
+          19,
+          284,
+          220,
+          23,
+          1124,
+          8,
+          24637,
+          3721,
+          382,
+          18,
+          13,
+          3070,
+          9885,
+          279,
+          6672,
+          304,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          1948,
+          22417,
+          323,
+          11959,
+          963,
+          25,
+          1019,
+          256,
+          481,
+          22417,
+          702,
+          220,
+          23,
+          24637,
+          3721,
+          11,
+          1393,
+          11959,
+          963,
+          702,
+          220,
+          19,
+          24637,
+          3721,
+          624,
+          256,
+          481,
+          15277,
+          11,
+          279,
+          6672,
+          374,
+          17767,
+          220,
+          23,
+          481,
+          220,
+          19,
+          284,
+          220,
+          19,
+          1124,
+          8,
+          24637,
+          3721,
+          382,
+          4416,
+          11,
+          22417,
+          702,
+          220,
+          19,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          1091,
+          11959,
+          963,
+          13,
+          4710,
+          820,
+          220,
+          19,
+          13,
+          151645
+        ],
+        "training_reward": 0.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "To find out how many more scoops of ice cream Victoria has than Olou, we\u2019ll start with the given information:\n\n1. **Oli's scoops of ice cream:** 4 scoops\n2. **Victoria's scoops of ice cream:** Twice as many as Olou's.\n\n Since Victoria has twice as many scoops, we multiply Olou's scoops by 2:\n\n   Total Victoria's scoops = Olou's scoops \u00d7 2\n   Total Victoria's scoops = 4 \u00d7 2\n   Total Victoria's scoops = 8 scoops\n\nNow that we know:\n- Olou has 4 scoops\n- Victoria has 8 scoops\n\nWe can calculate the difference in the number of scoops between Victoria and Olou:\n\nDifference = Victoria's scoops - Olou's scoops\nDifference = 8 - 4\nDifference = 4\n\n#### 4\n\nTherefore, Victoria has 4 more scoops of ice cream than Olou.",
+        "ended_with_eos": true,
+        "predicted_answer": "4",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 1.0,
+        "target_answer": "4",
+        "token_count": 208,
+        "token_ids": [
+          1249,
+          1477,
+          700,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          22417,
+          702,
+          1091,
+          11959,
+          283,
+          11,
+          582,
+          4700,
+          1191,
+          448,
+          279,
+          2661,
+          1995,
+          1447,
+          16,
+          13,
+          3070,
+          46,
+          742,
+          594,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          66963,
+          220,
+          19,
+          24637,
+          3721,
+          198,
+          17,
+          13,
+          3070,
+          80956,
+          594,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          66963,
+          93566,
+          438,
+          1657,
+          438,
+          11959,
+          283,
+          594,
+          382,
+          8704,
+          22417,
+          702,
+          10917,
+          438,
+          1657,
+          24637,
+          3721,
+          11,
+          582,
+          30270,
+          11959,
+          283,
+          594,
+          24637,
+          3721,
+          553,
+          220,
+          17,
+          1447,
+          256,
+          10657,
+          22417,
+          594,
+          24637,
+          3721,
+          284,
+          11959,
+          283,
+          594,
+          24637,
+          3721,
+          24768,
+          220,
+          17,
+          198,
+          256,
+          10657,
+          22417,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          19,
+          24768,
+          220,
+          17,
+          198,
+          256,
+          10657,
+          22417,
+          594,
+          24637,
+          3721,
+          284,
+          220,
+          23,
+          24637,
+          3721,
+          271,
+          7039,
+          429,
+          582,
+          1414,
+          510,
+          12,
+          11959,
+          283,
+          702,
+          220,
+          19,
+          24637,
+          3721,
+          198,
+          12,
+          22417,
+          702,
+          220,
+          23,
+          24637,
+          3721,
+          271,
+          1654,
+          646,
+          11047,
+          279,
+          6672,
+          304,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          1948,
+          22417,
+          323,
+          11959,
+          283,
+          1447,
+          62707,
+          284,
+          22417,
+          594,
+          24637,
+          3721,
+          481,
+          11959,
+          283,
+          594,
+          24637,
+          3721,
+          198,
+          62707,
+          284,
+          220,
+          23,
+          481,
+          220,
+          19,
+          198,
+          62707,
+          284,
+          220,
+          19,
+          271,
+          820,
+          220,
+          19,
+          271,
+          54815,
+          11,
+          22417,
+          702,
+          220,
+          19,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          1091,
+          11959,
+          283,
+          13,
+          151645
+        ],
+        "training_reward": 1.0,
+        "truncated": false
+      },
+      {
+        "answer_rule": "verl_gsm8k_strict_1d367a4f_v1",
+        "completion": "To determine how many more scoops of ice cream Victoria has than Oli, we start by identifying the number of scoops each person has.\n\n1. Oli has 4 scoops of ice cream.\n\n2. Victoria has \"twice more\" than Oli, meaning we calculate twice Oli's quantity:\n   2 \u00d7 4 = 8 scoops\n\n3. To find how many more scoops Victoria has than Oli, we subtract the number of Oli's scoops from Victoria's total:\n   8 scoops (Victoria) - 4 scoops (Oli) = 4 scoops\n\nThe number calculated in step 3 is 4, which which yields our answer, which this number is:\n#### 4",
+        "ended_with_eos": true,
+        "predicted_answer": "4",
+        "question": "Oli's banana split has 4 scoops of ice cream while Victoria has twice more scoops of ice cream than Oli's. How many more scoops of ice cream does Victoria have than Oli?",
+        "question_id": "train:01480",
+        "reward": 1.0,
+        "target_answer": "4",
+        "token_count": 155,
+        "token_ids": [
+          1249,
+          8253,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          22417,
+          702,
+          1091,
+          506,
+          742,
+          11,
+          582,
+          1191,
+          553,
+          24588,
+          279,
+          1372,
+          315,
+          24637,
+          3721,
+          1817,
+          1697,
+          702,
+          382,
+          16,
+          13,
+          506,
+          742,
+          702,
+          220,
+          19,
+          24637,
+          3721,
+          315,
+          9853,
+          12644,
+          382,
+          17,
+          13,
+          22417,
+          702,
+          330,
+          15560,
+          558,
+          803,
+          1,
+          1091,
+          506,
+          742,
+          11,
+          7290,
+          582,
+          11047,
+          10917,
+          506,
+          742,
+          594,
+          12194,
+          510,
+          256,
+          220,
+          17,
+          24768,
+          220,
+          19,
+          284,
+          220,
+          23,
+          24637,
+          3721,
+          271,
+          18,
+          13,
+          2014,
+          1477,
+          1246,
+          1657,
+          803,
+          24637,
+          3721,
+          22417,
+          702,
+          1091,
+          506,
+          742,
+          11,
+          582,
+          32256,
+          279,
+          1372,
+          315,
+          506,
+          742,
+          594,
+          24637,
+          3721,
+          504,
+          22417,
+          594,
+          2790,
+          510,
+          256,
+          220,
+          23,
+          24637,
+          3721,
+          320,
+          80956,
+          8,
+          481,
+          220,
+          19,
+          24637,
+          3721,
+          320,
+          46,
+          742,
+          8,
+          284,
+          220,
+          19,
+          24637,
+          3721,
+          271,
+          785,
+          1372,
+          16588,
+          304,
+          3019,
+          220,
+          18,
+          374,
+          220,
+          19,
+          11,
+          892,
+          892,
+          35408,
+          1039,
+          4226,
+          11,
+          892,
+          419,
+          1372,
+          374,
+          510,
+          820,
+          220,
+          19,
+          151645
+        ],
+        "training_reward": 1.0,
+        "truncated": false
+      }
+    ],
+    "label": "step_1",
+    "question_ids": [
+      "train:01480"
+    ],
+    "rewards": [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "rollout_seconds": 69.33353833801812
+  },
+  "current_segment_id": "segment-0001",
+  "current_stage": "segment_finished",
+  "identity": {
+    "dataset_manifest_sha256": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0",
+    "method": "lora",
+    "output_directory": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora",
+    "source_sha256": {
+      "configs/base_model.json": "2f13baa71d39d8d632d619b7b0ad26692010c1542365667be822d22ba21da985",
+      "geora_layers.py": "d375d5f3737848765fcfb8569ef9527d7559eb0af28f1cd108789306e5468c60",
+      "lora_layers.py": "66e14b166c5e7aa50f68283d246ad78ca6c2e82a230d27c68648aa85a4aaf287",
+      "scripts/cached_block_score.py": "d689ae9a90c04c548a43d75bc71111e3f20a173c94ee7b6ad465462259670708",
+      "scripts/cached_rollout.py": "7131534856998add0c1c86c1c17eab8ab640eccdf2d483e86d3caa1aa634e8af",
+      "scripts/cached_training_rollout.py": "9efc402c7077f3ffd73f046f8a0141e011893fcfd0a2ed74aebffa1f70c79b33",
+      "scripts/check_grpo_continuation.py": "1d9c36875f1d8e789ba56d9500951c656f83c531782fa329f3277f258213c066",
+      "scripts/check_grpo_training.py": "1b764375dfcc4165e39531d8ccec0782ad17dbae20d9c8d6b19e8217b226f3de",
+      "scripts/geora_check_utils.py": "96197903711dbf4fd42af4aea146598028c1d212a6946c5ae81d5144c8995abd",
+      "scripts/grpo_math.py": "3c336a7e274b0a713ebaef7a5cb1e66fce2789f51550e17f56e4d1283cf6d4b1",
+      "scripts/grpo_rollout.py": "216d3bd99c51f7e504a3f6d023c146023fc39159b1e74433848b4e1506c7f9dd",
+      "scripts/grpo_training_state.py": "e3170549f04691c8ef8e33a0ac7f4db72dc38394c5d220783a1569934dccbc5a",
+      "scripts/gsm8k_data.py": "9170ee03cb9ea22be10e16e829e9819fe80fc8fcc739a4a4b2bc71e5a9191039",
+      "scripts/long_capacity_check.py": "abaf8e5771c2ddbe65e0486fccbba1f1578936b4c57d4bb20934cd7d548a9d80",
+      "scripts/long_grpo_step.py": "94633471ba0a0bc0887c0481161568d7ad618fb6f6e8cfced1438de8dd8d2b75",
+      "scripts/pilot_runtime.py": "71619ab44014baf2a64d7447f6ebbaa508418657a85a380af68b814e5a9e7bd0",
+      "scripts/run_grpo_pilot.py": "57ee8f47bc3904c17b0c9dec6ba3d17736befdca55ba1eb0fcc7a6c3d3240316",
+      "third_party/verl/gsm8k.py": "497c6e32b708d0bc8803b5a048ca5983de7756eb9c146abdc56e6f5d28767189",
+      "third_party/verl/provenance.json": "665ecaffbe2ecb11bad0f8f064546e62d8f1c8563b0ba6dca217811225208d8a"
+    },
+    "train_question_ids": [
+      "train:01480",
+      "train:06951",
+      "train:05119",
+      "train:05950",
+      "train:03273",
+      "train:05258",
+      "train:06996",
+      "train:02607",
+      "train:02268",
+      "train:00061",
+      "train:01505",
+      "train:03665",
+      "train:04017",
+      "train:05312",
+      "train:03777",
+      "train:00238",
+      "train:07044",
+      "train:03264",
+      "train:03308",
+      "train:00988",
+      "train:02450",
+      "train:01435",
+      "train:01701",
+      "train:00029",
+      "train:05553",
+      "train:07203",
+      "train:06456",
+      "train:04694",
+      "train:04103",
+      "train:00777",
+      "train:04523",
+      "train:05178",
+      "train:02172",
+      "train:05652",
+      "train:05058",
+      "train:01753",
+      "train:02353",
+      "train:06956",
+      "train:01265",
+      "train:03826",
+      "train:02504",
+      "train:06275",
+      "train:02966",
+      "train:04284",
+      "train:00792",
+      "train:04025",
+      "train:04402",
+      "train:02635",
+      "train:05642",
+      "train:01176",
+      "train:05196",
+      "train:05620",
+      "train:02175",
+      "train:01839",
+      "train:04965",
+      "train:03303",
+      "train:00273",
+      "train:06988",
+      "train:04493",
+      "train:07048",
+      "train:01279",
+      "train:05304",
+      "train:00517",
+      "train:06045",
+      "train:02836",
+      "train:04835",
+      "train:03925",
+      "train:04740",
+      "train:02676",
+      "train:04333",
+      "train:04443",
+      "train:01169",
+      "train:00432",
+      "train:02802",
+      "train:03891",
+      "train:06910",
+      "train:03923",
+      "train:01395",
+      "train:03769",
+      "train:02902",
+      "train:05299",
+      "train:02137",
+      "train:00613",
+      "train:01974",
+      "train:06191",
+      "train:00288",
+      "train:06388",
+      "train:06050",
+      "train:04395",
+      "train:03977",
+      "train:04902",
+      "train:07266",
+      "train:06086",
+      "train:00317",
+      "train:05462",
+      "train:01276",
+      "train:04159",
+      "train:02813",
+      "train:01553",
+      "train:07034",
+      "train:05436",
+      "train:01116",
+      "train:00860",
+      "train:06392",
+      "train:00834",
+      "train:06717",
+      "train:02334",
+      "train:01685",
+      "train:00864",
+      "train:01021",
+      "train:00843",
+      "train:06167",
+      "train:05460",
+      "train:04230",
+      "train:04076",
+      "train:01180",
+      "train:06919",
+      "train:03223",
+      "train:03328",
+      "train:02913",
+      "train:06706",
+      "train:01041",
+      "train:04208",
+      "train:01983",
+      "train:00877",
+      "train:01765",
+      "train:05640",
+      "train:06688",
+      "train:05648",
+      "train:03926",
+      "train:00385",
+      "train:05366",
+      "train:03094",
+      "train:02338",
+      "train:00729",
+      "train:06618",
+      "train:03718",
+      "train:00022",
+      "train:05319",
+      "train:03404",
+      "train:00548",
+      "train:02256",
+      "train:00776",
+      "train:01039",
+      "train:00499",
+      "train:03537",
+      "train:06250",
+      "train:07077",
+      "train:03528",
+      "train:06312",
+      "train:06461",
+      "train:00152",
+      "train:07272",
+      "train:01566",
+      "train:05912",
+      "train:05579",
+      "train:05355",
+      "train:05062",
+      "train:03642",
+      "train:03834",
+      "train:00331",
+      "train:03482",
+      "train:00848",
+      "train:03561",
+      "train:06421",
+      "train:03574",
+      "train:04861",
+      "train:03689",
+      "train:06348",
+      "train:03459",
+      "train:02931",
+      "train:07210",
+      "train:01155",
+      "train:04488",
+      "train:01578",
+      "train:05536",
+      "train:05423",
+      "train:05276",
+      "train:01049",
+      "train:03813",
+      "train:01151",
+      "train:03771",
+      "train:07079",
+      "train:07069",
+      "train:02551",
+      "train:07104",
+      "train:02480",
+      "train:06615",
+      "train:01752",
+      "train:06152",
+      "train:07166",
+      "train:06295",
+      "train:01209",
+      "train:05302",
+      "train:06437",
+      "train:04257",
+      "train:01313",
+      "train:00734",
+      "train:06465",
+      "train:06692",
+      "train:06935",
+      "train:03161",
+      "train:01308",
+      "train:03620",
+      "train:00129",
+      "train:03078",
+      "train:00171",
+      "train:05732",
+      "train:00083",
+      "train:01726",
+      "train:04819",
+      "train:01924",
+      "train:06292",
+      "train:04000",
+      "train:06826",
+      "train:03617",
+      "train:01782",
+      "train:06556",
+      "train:06721",
+      "train:05954",
+      "train:04922",
+      "train:05450",
+      "train:02474",
+      "train:03793",
+      "train:05184",
+      "train:05839",
+      "train:03044",
+      "train:03387",
+      "train:04296",
+      "train:01663",
+      "train:01361",
+      "train:00922",
+      "train:02135",
+      "train:04687",
+      "train:01889",
+      "train:02062",
+      "train:03520",
+      "train:00041",
+      "train:00650",
+      "train:06372",
+      "train:02929",
+      "train:02041",
+      "train:00143",
+      "train:00186",
+      "train:00639",
+      "train:05739",
+      "train:04259",
+      "train:01854",
+      "train:00973",
+      "train:01549",
+      "train:01322",
+      "train:00712",
+      "train:00299",
+      "train:05708",
+      "train:01419",
+      "train:00039",
+      "train:02274",
+      "train:03024",
+      "train:05609",
+      "train:01556",
+      "train:02059",
+      "train:00593",
+      "train:02444",
+      "train:02959",
+      "train:02575",
+      "train:05525",
+      "train:05108",
+      "train:07399",
+      "train:03339",
+      "train:02628",
+      "train:05777",
+      "train:06984",
+      "train:02858",
+      "train:05605",
+      "train:07294",
+      "train:04320",
+      "train:05833",
+      "train:03170",
+      "train:07174",
+      "train:03842",
+      "train:04140",
+      "train:00503",
+      "train:02919",
+      "train:01266",
+      "train:06820",
+      "train:01267",
+      "train:01852",
+      "train:03667",
+      "train:02773",
+      "train:01463",
+      "train:02192",
+      "train:00956",
+      "train:05913",
+      "train:04547",
+      "train:01257",
+      "train:01038",
+      "train:03430",
+      "train:02251",
+      "train:05986",
+      "train:01336",
+      "train:00106",
+      "train:02944",
+      "train:05984",
+      "train:01762",
+      "train:06009",
+      "train:03481",
+      "train:06598",
+      "train:00370",
+      "train:04470",
+      "train:06303",
+      "train:05499",
+      "train:05510",
+      "train:06879",
+      "train:01903",
+      "train:03385",
+      "train:04036",
+      "train:01398",
+      "train:01022",
+      "train:01123",
+      "train:02153",
+      "train:06422",
+      "train:02217",
+      "train:01900",
+      "train:00485",
+      "train:00435",
+      "train:00465",
+      "train:02336",
+      "train:01260",
+      "train:04801",
+      "train:06339",
+      "train:07444",
+      "train:01846",
+      "train:03783",
+      "train:04330",
+      "train:00390",
+      "train:04709",
+      "train:00671",
+      "train:04961",
+      "train:02621",
+      "train:00504",
+      "train:01055",
+      "train:05464",
+      "train:01643",
+      "train:07392",
+      "train:07301",
+      "train:02308",
+      "train:02653",
+      "train:05445",
+      "train:06446",
+      "train:02510",
+      "train:00879",
+      "train:04757",
+      "train:03669",
+      "train:01242",
+      "train:00150",
+      "train:06795",
+      "train:02242",
+      "train:06411",
+      "train:04530",
+      "train:06052",
+      "train:05106",
+      "train:07432",
+      "train:06322",
+      "train:03551",
+      "train:06192",
+      "train:00305",
+      "train:00899",
+      "train:05563",
+      "train:07243",
+      "train:00052",
+      "train:05832",
+      "train:06249",
+      "train:07138",
+      "train:04181",
+      "train:05186",
+      "train:01217",
+      "train:00344",
+      "train:00240",
+      "train:01911",
+      "train:00087",
+      "train:01705",
+      "train:07037",
+      "train:00793",
+      "train:06735",
+      "train:03612",
+      "train:00654",
+      "train:04682",
+      "train:01703",
+      "train:05932",
+      "train:03788",
+      "train:03905",
+      "train:03508",
+      "train:07424",
+      "train:01243",
+      "train:01119",
+      "train:07324",
+      "train:06588",
+      "train:02651",
+      "train:01831",
+      "train:04370",
+      "train:01952",
+      "train:03819",
+      "train:02978",
+      "train:03849",
+      "train:00667",
+      "train:00699",
+      "train:04155",
+      "train:02574",
+      "train:06720",
+      "train:06174",
+      "train:06758",
+      "train:05411",
+      "train:07468",
+      "train:02212",
+      "train:07025",
+      "train:00857",
+      "train:03370",
+      "train:03615",
+      "train:02085",
+      "train:03780",
+      "train:01769",
+      "train:02476",
+      "train:05970",
+      "train:02668",
+      "train:00166",
+      "train:03652",
+      "train:00010",
+      "train:02645",
+      "train:04451",
+      "train:06341",
+      "train:04221",
+      "train:07009",
+      "train:00271",
+      "train:06819",
+      "train:06291",
+      "train:01711",
+      "train:04744",
+      "train:05176",
+      "train:02145",
+      "train:00546",
+      "train:06985",
+      "train:06148",
+      "train:03254",
+      "train:07439",
+      "train:05947",
+      "train:04573",
+      "train:00364",
+      "train:01796",
+      "train:03357",
+      "train:06975",
+      "train:03751",
+      "train:05019",
+      "train:02994",
+      "train:00501",
+      "train:03959",
+      "train:02352",
+      "train:03827",
+      "train:06239",
+      "train:02221",
+      "train:02188",
+      "train:00202",
+      "train:03927",
+      "train:06257",
+      "train:02596",
+      "train:04024",
+      "train:02997",
+      "train:04847",
+      "train:06653",
+      "train:03373",
+      "train:03442",
+      "train:04424",
+      "train:04578",
+      "train:01396",
+      "train:01764",
+      "train:03469",
+      "train:07117",
+      "train:00257",
+      "train:06301",
+      "train:06759",
+      "train:01875",
+      "train:00946",
+      "train:03991",
+      "train:01296",
+      "train:00767",
+      "train:01850",
+      "train:06442",
+      "train:07180",
+      "train:05603",
+      "train:06355",
+      "train:05083",
+      "train:02955",
+      "train:06836",
+      "train:00019",
+      "train:07248",
+      "train:04677",
+      "train:00876",
+      "train:00544",
+      "train:05990",
+      "train:04097",
+      "train:01062",
+      "train:06697",
+      "train:05426",
+      "train:03020",
+      "train:05488",
+      "train:00253",
+      "train:04590",
+      "train:00929",
+      "train:00333",
+      "train:01748",
+      "train:00462",
+      "train:03581",
+      "train:06520",
+      "train:00884",
+      "train:06850",
+      "train:04335",
+      "train:02584",
+      "train:02595",
+      "train:06948",
+      "train:00736",
+      "train:01285",
+      "train:01708",
+      "train:01797",
+      "train:01737",
+      "train:00908",
+      "train:01009",
+      "train:05401",
+      "train:06605",
+      "train:00560",
+      "train:00522",
+      "train:03149",
+      "train:02160",
+      "train:01843",
+      "train:03463",
+      "train:04172",
+      "train:02159",
+      "train:01637",
+      "train:02602",
+      "train:04156",
+      "train:00094",
+      "train:07428",
+      "train:02634",
+      "train:06507",
+      "train:01506",
+      "train:02157",
+      "train:06690",
+      "train:01923",
+      "train:01653",
+      "train:03725",
+      "train:02742",
+      "train:05580",
+      "train:05255",
+      "train:06101",
+      "train:05616",
+      "train:07091",
+      "train:01231",
+      "train:04064",
+      "train:04380",
+      "train:05921",
+      "train:02798",
+      "train:01528",
+      "train:03585",
+      "train:03200",
+      "train:00655",
+      "train:07026",
+      "train:06869",
+      "train:06024",
+      "train:00261",
+      "train:05664",
+      "train:02013",
+      "train:06939",
+      "train:02614",
+      "train:05087",
+      "train:02414",
+      "train:05358",
+      "train:06122",
+      "train:02239",
+      "train:01677",
+      "train:06544",
+      "train:07396",
+      "train:07297",
+      "train:02354",
+      "train:00621",
+      "train:03542",
+      "train:01410",
+      "train:04104",
+      "train:07148",
+      "train:07006",
+      "train:00058",
+      "train:04521",
+      "train:03934",
+      "train:04060",
+      "train:06034",
+      "train:03042",
+      "train:04432",
+      "train:03448",
+      "train:03280",
+      "train:04300",
+      "train:01264",
+      "train:04974",
+      "train:00476",
+      "train:04970",
+      "train:03526",
+      "train:06098",
+      "train:02982",
+      "train:04022",
+      "train:05745",
+      "train:01655",
+      "train:03171",
+      "train:04093",
+      "train:03763",
+      "train:06359",
+      "train:00757",
+      "train:06449",
+      "train:02622",
+      "train:06072",
+      "train:04431",
+      "train:05610",
+      "train:03914",
+      "train:02926",
+      "train:07261",
+      "train:01458",
+      "train:03987",
+      "train:04160",
+      "train:06201",
+      "train:07312",
+      "train:03006",
+      "train:02760",
+      "train:01326",
+      "train:00091",
+      "train:00270",
+      "train:02259",
+      "train:06661",
+      "train:00008",
+      "train:03241",
+      "train:02730",
+      "train:01059",
+      "train:03467",
+      "train:01344",
+      "train:05354",
+      "train:05149",
+      "train:03298",
+      "train:00529",
+      "train:05784",
+      "train:02244",
+      "train:04664",
+      "train:01857",
+      "train:01007",
+      "train:04582",
+      "train:02532",
+      "train:04701",
+      "train:04627",
+      "train:03557",
+      "train:05993",
+      "train:06435",
+      "train:01700",
+      "train:00481",
+      "train:02557",
+      "train:00609",
+      "train:04272",
+      "train:05253",
+      "train:01776",
+      "train:06901",
+      "train:04153",
+      "train:00858",
+      "train:05027",
+      "train:02237",
+      "train:05048",
+      "train:04231",
+      "train:04392",
+      "train:00167",
+      "train:03071",
+      "train:03047",
+      "train:01229",
+      "train:01760",
+      "train:04236",
+      "train:03739",
+      "train:01485",
+      "train:01548",
+      "train:06854",
+      "train:05583",
+      "train:07131",
+      "train:04462",
+      "train:02063",
+      "train:02271",
+      "train:00164",
+      "train:01648",
+      "train:04449",
+      "train:01092",
+      "train:03844",
+      "train:00386",
+      "train:04817",
+      "train:04534",
+      "train:02056",
+      "train:05285",
+      "train:02788",
+      "train:01585",
+      "train:04825",
+      "train:00079",
+      "train:03215",
+      "train:06591",
+      "train:01736",
+      "train:06611",
+      "train:00619",
+      "train:05057",
+      "train:06694",
+      "train:04305",
+      "train:03610",
+      "train:00026",
+      "train:01440",
+      "train:07014",
+      "train:03316",
+      "train:00189",
+      "train:07004",
+      "train:01406",
+      "train:00077",
+      "train:02688",
+      "train:02967",
+      "train:07149",
+      "train:02453",
+      "train:05991",
+      "train:02775",
+      "train:01644",
+      "train:02410",
+      "train:01207",
+      "train:02972",
+      "train:02791",
+      "train:05103",
+      "train:07086",
+      "train:06993",
+      "train:02231",
+      "train:04309",
+      "train:03523",
+      "train:01696",
+      "train:03743",
+      "train:06876",
+      "train:02991",
+      "train:03132",
+      "train:02070",
+      "train:01241",
+      "train:07031",
+      "train:07005",
+      "train:03082",
+      "train:04703",
+      "train:00418",
+      "train:04245",
+      "train:06864",
+      "train:07225",
+      "train:05305",
+      "train:07092",
+      "train:03472",
+      "train:00043",
+      "train:02024",
+      "train:06940",
+      "train:02702",
+      "train:02311",
+      "train:02419",
+      "train:06890",
+      "train:05026",
+      "train:01630",
+      "train:02852",
+      "train:04178",
+      "train:00818",
+      "train:02235",
+      "train:02236",
+      "train:06132",
+      "train:00374",
+      "train:05717",
+      "train:03896",
+      "train:07252",
+      "train:05477",
+      "train:02393",
+      "train:04355",
+      "train:00914",
+      "train:03536",
+      "train:02204",
+      "train:00259",
+      "train:03937",
+      "train:01837",
+      "train:00889",
+      "train:04030",
+      "train:00803",
+      "train:06432",
+      "train:05515",
+      "train:01720",
+      "train:01565",
+      "train:04769",
+      "train:02084",
+      "train:01538",
+      "train:01318",
+      "train:01808",
+      "train:05631",
+      "train:04913",
+      "train:01683",
+      "train:05101",
+      "train:02382",
+      "train:00119",
+      "train:01152",
+      "train:02816",
+      "train:01731",
+      "train:02262",
+      "train:06015",
+      "train:05700",
+      "train:00340",
+      "train:00017",
+      "train:03511",
+      "train:06824",
+      "train:06526",
+      "train:02743",
+      "train:01162",
+      "train:06178",
+      "train:06862",
+      "train:04721",
+      "train:05153",
+      "train:04602",
+      "train:03226",
+      "train:07433",
+      "train:05309",
+      "train:05566",
+      "train:04414",
+      "train:04049",
+      "train:02823",
+      "train:02284",
+      "train:02915",
+      "train:03662",
+      "train:00372",
+      "train:01274",
+      "train:05357",
+      "train:00561",
+      "train:05128",
+      "train:05158",
+      "train:00214",
+      "train:06434",
+      "train:00578",
+      "train:06039",
+      "train:03939",
+      "train:01526",
+      "train:02010",
+      "train:04029",
+      "train:00949",
+      "train:03426",
+      "train:00015",
+      "train:05468",
+      "train:03633",
+      "train:06566",
+      "train:03814",
+      "train:02106",
+      "train:03065",
+      "train:00262",
+      "train:05395",
+      "train:02992",
+      "train:04697",
+      "train:03274",
+      "train:05752",
+      "train:06469",
+      "train:02254",
+      "train:00971",
+      "train:03753",
+      "train:05885",
+      "train:05812",
+      "train:00846",
+      "train:02342",
+      "train:06041",
+      "train:07231",
+      "train:02415",
+      "train:04323",
+      "train:02171",
+      "train:03702",
+      "train:05036",
+      "train:07156",
+      "train:01249",
+      "train:04732",
+      "train:00565",
+      "train:04882",
+      "train:03029",
+      "train:01486",
+      "train:00361",
+      "train:04723",
+      "train:03714",
+      "train:03233",
+      "train:06005",
+      "train:00275",
+      "train:02266",
+      "train:02479",
+      "train:01005",
+      "train:00706",
+      "train:05731",
+      "train:01269",
+      "train:02026",
+      "train:02057",
+      "train:07021",
+      "train:02340",
+      "train:06070",
+      "train:05022",
+      "train:00528",
+      "train:00692",
+      "train:07400",
+      "train:06505",
+      "train:04269",
+      "train:00324",
+      "train:01312",
+      "train:06587",
+      "train:06616",
+      "train:03146",
+      "train:00367",
+      "train:04776",
+      "train:06979",
+      "train:03269",
+      "train:07238",
+      "train:04482",
+      "train:03731",
+      "train:06402",
+      "train:00254",
+      "train:05675",
+      "train:05480",
+      "train:00710",
+      "train:04413",
+      "train:04699",
+      "train:00549",
+      "train:03544",
+      "train:03742",
+      "train:04099",
+      "train:06479",
+      "train:03462",
+      "train:06900",
+      "train:06288",
+      "train:05824",
+      "train:06757",
+      "train:00749",
+      "train:02545",
+      "train:04729",
+      "train:07040",
+      "train:02887",
+      "train:07284",
+      "train:02432",
+      "train:06285",
+      "train:02797",
+      "train:01802",
+      "train:01448",
+      "train:01767",
+      "train:04609",
+      "train:04662",
+      "train:07095",
+      "train:04668",
+      "train:04858",
+      "train:03231",
+      "train:04289",
+      "train:02833",
+      "train:01109",
+      "train:05782",
+      "train:07389",
+      "train:04146",
+      "train:06625",
+      "train:05687",
+      "train:03645",
+      "train:07417",
+      "train:06453",
+      "train:05433",
+      "train:03227",
+      "train:04081",
+      "train:06369",
+      "train:03760",
+      "train:04416",
+      "train:01530",
+      "train:03690",
+      "train:06738",
+      "train:04932",
+      "train:00502",
+      "train:06499",
+      "train:05090",
+      "train:00235",
+      "train:02544",
+      "train:02606",
+      "train:05404",
+      "train:01484",
+      "train:06158",
+      "train:02298",
+      "train:04282",
+      "train:00778",
+      "train:05306",
+      "train:00700",
+      "train:05447",
+      "train:01316",
+      "train:04544",
+      "train:04439",
+      "train:02968",
+      "train:02005",
+      "train:01586",
+      "train:01547",
+      "train:00020",
+      "train:01133",
+      "train:03647",
+      "train:01616",
+      "train:06228",
+      "train:04980",
+      "train:03100",
+      "train:02875",
+      "train:00433",
+      "train:02962",
+      "train:01156",
+      "train:00158",
+      "train:04071",
+      "train:05653",
+      "train:00941",
+      "train:06961",
+      "train:01103",
+      "train:01830",
+      "train:05170",
+      "train:01206",
+      "train:02152",
+      "train:06462",
+      "train:06753",
+      "train:04969",
+      "train:04966",
+      "train:02898",
+      "train:04820",
+      "train:01758",
+      "train:05689",
+      "train:04601",
+      "train:03732",
+      "train:01812",
+      "train:06043",
+      "train:03744",
+      "train:06495",
+      "train:05323"
+    ],
+    "train_rows_sha256": "3766ba13d4686c7c5c693e4330abb52f31189c7c89da2de7d744a332ef7507bb",
+    "training_config_sha256": "d374c348e61404d5d09e2302d4662d2406eedecc29b774c422ba4f7c5e8424e5"
+  },
+  "immutability_audits": [
+    {
+      "after": {
+        "frozen_policy": {
+          "parameter_elements": 1543714304,
+          "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+        },
+        "frozen_reference": {
+          "parameter_elements": 1543714304,
+          "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+        },
+        "initial_buffers": {
+          "parameter_elements": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "before": {
+        "frozen_policy": {
+          "parameter_elements": 1543714304,
+          "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+        },
+        "frozen_reference": {
+          "parameter_elements": 1543714304,
+          "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+        },
+        "initial_buffers": {
+          "parameter_elements": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "frozen_gradients_absent": true,
+      "reference_gradients_absent": true,
+      "segment_id": "segment-0001",
+      "unchanged": true
+    }
+  ],
+  "initial_immutable_digests": {
+    "frozen_policy": {
+      "parameter_elements": 1543714304,
+      "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+    },
+    "frozen_reference": {
+      "parameter_elements": 1543714304,
+      "sha256": "d017ed1d21f4d6d88804b62ef66ce3911e86bdb9de51076c10c492aa41fbbdc1"
+    },
+    "initial_buffers": {
+      "parameter_elements": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "last_process_seconds": 542.8143800619873,
+  "last_scoring_progress": {
+    "allocated_memory_gib": 5.936254024505615,
+    "answer": 8,
+    "stage": "step_1_answer_8_current_probabilities",
+    "step": 128
+  },
+  "latest_checkpoint": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00001",
+  "latest_checkpoint_logical_step": 1,
+  "load_and_setup_seconds": 16.63052967900876,
+  "logical_optimizer_steps": 1,
+  "next_data_position": 1,
+  "peak_allocated_memory_gib": 6.9455060958862305,
+  "physical_backward_calls": 8,
+  "physical_completion_tokens": 1124,
+  "physical_completion_tokens_lower_bound": 1124,
+  "physical_optimizer_step_calls": 1,
+  "physical_rollout_attempts": 1,
+  "physical_rollouts": 1,
+  "physical_tokens_accounted_rollout_count": 1,
+  "pilot_run_id": "8d7af77f-47e3-49eb-9c27-8972e77012da",
+  "precision": {
+    "adapter_branch": "FP32",
+    "checkpoint_adapter_storage": "FP32",
+    "correction_added_to_base": "BF16",
+    "factors": "FP32",
+    "frozen_weights": "BF16",
+    "initial_GeoRA_buffers": "FP32",
+    "log_softmax_and_loss": "FP32",
+    "optimizer_moments": "FP32"
+  },
+  "provenance": {
+    "dataset_manifest_sha256": "992aa5f708daf169900d30ac15d44f574cec5b25afc9f5842387fb7bb3109cc0",
+    "initialization_sha256": "42858e390a5c16b359232bf9e986b940132cafeb3ebde1f523240a967e5e0fb4",
+    "method": "lora",
+    "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "training_config_sha256": "d374c348e61404d5d09e2302d4662d2406eedecc29b774c422ba4f7c5e8424e5"
+  },
+  "runtime": {
+    "absolute_stop_after_step": 1,
+    "checkpoint_every": 1,
+    "gpu_name": "AMD Instinct MI250X",
+    "hip_version": "6.3.42134-a9a80e791",
+    "runtime_limit_seconds": 2400.0,
+    "slurm_job_id": "50702975",
+    "source_git_commit": "c8b26d975e5e9d90ecdd64d5141ef91b48614497",
+    "torch_version": "2.7.1a0+gite2d141d",
+    "transformers_version": "5.19.0"
+  },
+  "segments": [
+    {
+      "absolute_stop_after_step": 1,
+      "cumulative_committed_answer_tokens": 1124,
+      "cumulative_physical_counters": {
+        "physical_backward_calls": 8,
+        "physical_completion_tokens": 1124,
+        "physical_optimizer_step_calls": 1,
+        "physical_rollout_attempts": 1,
+        "physical_rollouts": 1
+      },
+      "end_data_position": 1,
+      "end_logical_step": 1,
+      "ended_at_utc": "2026-10-12T03:37:28.753597+00:00",
+      "id": "segment-0001",
+      "latest_checkpoint": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00001",
+      "peak_allocated_memory_gib": 6.9455060958862305,
+      "physical_counters": {
+        "physical_backward_calls": 8,
+        "physical_completion_tokens": 1124,
+        "physical_optimizer_step_calls": 1,
+        "physical_rollout_attempts": 1,
+        "physical_rollouts": 1
+      },
+      "process_seconds": 542.8143800619873,
+      "runtime": {
+        "absolute_stop_after_step": 1,
+        "checkpoint_every": 1,
+        "gpu_name": "AMD Instinct MI250X",
+        "hip_version": "6.3.42134-a9a80e791",
+        "runtime_limit_seconds": 2400.0,
+        "slurm_job_id": "50702975",
+        "source_git_commit": "c8b26d975e5e9d90ecdd64d5141ef91b48614497",
+        "torch_version": "2.7.1a0+gite2d141d",
+        "transformers_version": "5.19.0"
+      },
+      "runtime_only_controls_not_in_provenance": true,
+      "segment_committed_answer_tokens": 1124,
+      "segment_logical_optimizer_steps": 1,
+      "start_data_position": 0,
+      "start_logical_step": 0,
+      "started_at_utc": "2026-10-12T03:28:52.588758+00:00",
+      "status": "paused_at_boundary",
+      "stop_reason": "absolute_segment_target",
+      "training_segment_seconds": 516.1575757300016
+    }
+  ],
+  "stage": "gsm8k_bounded_grpo_pilot",
+  "status": "paused_at_boundary",
+  "svd_calls": 0,
+  "updated_at_utc": "2026-10-12T03:37:33.671201+00:00"
+}

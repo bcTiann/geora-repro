@@ -1,0 +1,146 @@
+{
+  "capacity_check": {
+    "CPU_rng_restored": true,
+    "CUDA_rng_restored": true,
+    "GPU_memory_measurements_available": true,
+    "adapter_gradient_l2_norm": 1032.6040882605053,
+    "adapter_parameter_count": 18464768,
+    "adapter_snapshot_bytes_CPU": 73859072,
+    "all_selected_logps_finite": true,
+    "allocated_memory_gib": 5.890106201171875,
+    "backward_calls": 1,
+    "backward_seconds": 1135.35746036598,
+    "batch_size": 1,
+    "checkpoint_block_tokens": 16,
+    "checkpoint_statistics": {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 11299979264,
+      "checkpoint_blocks": 256,
+      "forward_cache_forwards": 4096,
+      "generated_steps": 4096,
+      "max_boundary_cache_tensor_elements": 73385984,
+      "recompute_blocks": 256,
+      "recompute_cache_forwards": 4096,
+      "runtime_guard_forward_checks": 8192,
+      "runtime_guard_recompute_checks": 8192
+    },
+    "contains_EOS": false,
+    "cpu_fixture_only": false,
+    "device": "cuda",
+    "elapsed_seconds": 1668.6775020729983,
+    "expected_adapter_tensor_count": 392,
+    "expected_final_cache_length": 5119,
+    "finite_FP32_adapter_gradient_tensors": 392,
+    "fixed_input_width": 5120,
+    "frozen_dtype": "torch.bfloat16",
+    "frozen_reference_forward_calls": 0,
+    "full_1024_prompt_4096_completion_gate": true,
+    "generated_steps": 4096,
+    "gradients_cleared": true,
+    "input_ids_sha256": "6c6f10bc3047b3c677451db9a9015ddaf67dc879af26fbbbab0c92dc654b7dd0",
+    "last_progress": {
+      "block_start": 0,
+      "block_stop": 16,
+      "phase": "after_forward",
+      "recomputing": true,
+      "stage": "capacity_backward_cache_recompute_after_forward_token_0",
+      "step": 0
+    },
+    "max_absolute_selected_logp": 12.82984733581543,
+    "memory_guard_gib": 55,
+    "model_training_mode_unchanged": true,
+    "optimizer_steps": 0,
+    "parameters_unchanged": true,
+    "passed": true,
+    "pattern_token_ids": [
+      40676
+    ],
+    "peak_allocated_memory_gib": 40.588703632354736,
+    "peak_reserved_memory_gib": 41.732421875,
+    "reference_residency_requirement": "Caller retains its already-loaded frozen reference on the same device",
+    "reserved_memory_gib": 41.732421875,
+    "scope": "Artificial teacher-forced native-cache capacity only; no task accuracy or GRPO update",
+    "scoring_seconds": 516.9367410159903,
+    "selected_logp_dtype": "torch.float32",
+    "selected_logp_max": -12.541268348693848,
+    "selected_logp_min": -12.82984733581543,
+    "starting_memory": {
+      "allocated_memory_gib": 5.890068054199219,
+      "peak_allocated_memory_gib": 5.890068054199219,
+      "peak_reserved_memory_gib": 6.23828125,
+      "reserved_memory_gib": 6.23828125
+    },
+    "status": "passed",
+    "synthetic_completion_tokens": 4096,
+    "synthetic_mean_negative_logp_loss": 12.689739227294922,
+    "synthetic_prompt_tokens": 1024,
+    "synthetic_token_text": " apples"
+  },
+  "runtime": {
+    "absolute_stop_after_step": 1,
+    "checkpoint_every": 1,
+    "gpu_name": "AMD Instinct MI250X",
+    "hip_version": "6.3.42134-a9a80e791",
+    "runtime_limit_seconds": 3300.0,
+    "slurm_job_id": "50699081",
+    "source_git_commit": "c8b26d975e5e9d90ecdd64d5141ef91b48614497",
+    "torch_version": "2.7.1a0+gite2d141d",
+    "transformers_version": "5.19.0"
+  },
+  "provenance": {
+    "method": "geora",
+    "model_repository": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "training_config_sha256": "d374c348e61404d5d09e2302d4662d2406eedecc29b774c422ba4f7c5e8424e5",
+    "source_files_sha256": null
+  },
+  "checks": [
+    {
+      "completion_tokens": 4096,
+      "name": "capacity_all_selected_logps_finite",
+      "passed": true
+    },
+    {
+      "name": "capacity_synthetic_mean_loss_finite",
+      "passed": true
+    },
+    {
+      "expected_adapter_tensor_count": 392,
+      "finite_gradient_tensors": 392,
+      "name": "capacity_every_AB_gradient_finite_FP32",
+      "passed": true
+    },
+    {
+      "name": "capacity_nonzero_finite_adapter_gradient_norm",
+      "passed": true
+    },
+    {
+      "autocast_states_match": true,
+      "block_size": 16,
+      "boundary_cache_inputs_are_explicit": true,
+      "boundary_cache_tensor_elements": 11299979264,
+      "checkpoint_blocks": 256,
+      "expected_blocks": 256,
+      "forward_cache_forwards": 4096,
+      "generated_steps": 4096,
+      "max_boundary_cache_tensor_elements": 73385984,
+      "name": "capacity_every_cache_block_replayed_with_guards",
+      "passed": true,
+      "recompute_blocks": 256,
+      "recompute_cache_forwards": 4096,
+      "runtime_guard_forward_checks": 8192,
+      "runtime_guard_recompute_checks": 8192
+    },
+    {
+      "name": "capacity_AB_parameters_identical_without_optimizer",
+      "optimizer_steps": 0,
+      "passed": true
+    },
+    {
+      "name": "capacity_temporary_gradients_cleared_and_rng_preserved",
+      "passed": true
+    }
+  ]
+}

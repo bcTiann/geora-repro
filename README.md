@@ -1,5 +1,8 @@
 # GeoRA 獨立復現
 
+**当前执行入口（2026-10-12）：** [128题、4096-token与训练计划](LONG_RUN_PLAN.md)。固定verl规则下原模型4096-token基线42/128、截断1题；最大长度前向反向通过，LoRA/GeoRA各完成首步并保存完整断点，正在各续到10步。当前采用batch1原生cache＋16-token函数块梯度重算；各100步及训练后128题验证待完成。见[首步对照与用量](reports/long_training/summary.md)。下面按日期保留此前的路径选择和诊断记录。
+
+
 已完成的目標：[選定並驗收 GRPO 的採樣與概率計算路徑](GOAL.md)。
 
 這個倉庫分階段實作與驗證 [GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR](https://arxiv.org/abs/2601.09361)。先讀 [復現計畫與目前進度](REPRODUCTION_PLAN.md)，再查 [本機與 Setonix 實驗記錄](EXPERIMENT_RECORD.md)：前者安排後續工作，後者集中說明已執行的流程、精度與結果。

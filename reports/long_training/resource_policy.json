@@ -1,0 +1,41 @@
+{
+  "observation_date": "2026-10-12",
+  "source": "Live read-only scontrol partition and sacctmgr own-account queries on Setonix",
+  "account": "pawsey0807-gpu",
+  "association_max_running_jobs": {
+    "gpu-dev": 1,
+    "gpu": 64,
+    "gpu-highmem": 8
+  },
+  "association_max_submitted_jobs": {
+    "gpu-dev": 4,
+    "gpu": 1024,
+    "gpu-highmem": 256
+  },
+  "partitions": {
+    "gpu-dev": {
+      "maximum_time": "04:00:00",
+      "gpu_billing_weight": 128,
+      "DefMemPerGPU": "29440"
+    },
+    "gpu": {
+      "maximum_time": "1-00:00:00",
+      "gpu_billing_weight": 128,
+      "DefMemPerGPU": "29440"
+    }
+  },
+  "ten_step_jobs": {
+    "geora": {
+      "job_id": "50703316",
+      "partition": "gpu-dev",
+      "requested_logical_gpus": 1
+    },
+    "lora": {
+      "job_id": "50703647",
+      "partition": "gpu",
+      "requested_logical_gpus": 1,
+      "partition_updated_while_pending": true
+    }
+  },
+  "scope": "Partition eligibility and requests only; actual allocations are verified separately. Node placement is not a full-node resource request."
+}

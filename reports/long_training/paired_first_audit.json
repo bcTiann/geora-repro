@@ -1,0 +1,104 @@
+{
+  "status": "passed",
+  "scope": "Paired first-step protocol and archived report comparison only; no post-training accuracy claim",
+  "checks": [
+    {
+      "name": "same_model_repository_and_revision",
+      "passed": true
+    },
+    {
+      "name": "same_training_semantic_config",
+      "passed": true
+    },
+    {
+      "name": "same_train_order_and_data",
+      "passed": true
+    },
+    {
+      "name": "same19_executed_source_files",
+      "passed": true
+    },
+    {
+      "name": "same_initial_question",
+      "passed": true
+    },
+    {
+      "name": "same8_generated_token_sequences",
+      "passed": true
+    },
+    {
+      "name": "same_sampled_token_log_probabilities",
+      "passed": true
+    },
+    {
+      "name": "same_rewards_and_advantages",
+      "passed": true
+    },
+    {
+      "name": "one_saved_optimizer_step_each",
+      "passed": true
+    },
+    {
+      "name": "eight_real_backwards_each",
+      "passed": true
+    },
+    {
+      "name": "all_internal_checks_passed",
+      "passed": true
+    },
+    {
+      "name": "both_initial_frozen_state_audits_passed",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "geora": {
+      "step_elapsed_seconds": 646.9926153100096,
+      "valid_completion_tokens": 1124,
+      "gradient_norm_before_clipping": 1.8556228876113892,
+      "changed_parameter_tensors": 392,
+      "rollout_seconds": 88.26654724299442,
+      "scoring_seconds": 253.54042279307032,
+      "backward_and_step_seconds": 299.59165008802665,
+      "likelihood_alignment": {
+        "max_absolute_logp_difference": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "mean_absolute_logp_difference": 0.0,
+        "sequence_logp_differences": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "lora": {
+      "step_elapsed_seconds": 514.7202961940202,
+      "valid_completion_tokens": 1124,
+      "gradient_norm_before_clipping": 1.0697401762008667,
+      "changed_parameter_tensors": 196,
+      "rollout_seconds": 69.33353833801812,
+      "scoring_seconds": 204.29051449109102,
+      "backward_and_step_seconds": 237.932983618055,
+      "likelihood_alignment": {
+        "max_absolute_logp_difference": 0.0,
+        "max_absolute_ratio_minus_one": 0.0,
+        "mean_absolute_logp_difference": 0.0,
+        "sequence_logp_differences": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}

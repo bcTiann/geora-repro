@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "checkpoint_directory": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00001",
+  "source": "Actual saved checkpoint bytes hashed on Setonix via SSH; files remain on scratch",
+  "checks": [
+    {
+      "file": "adapter.safetensors",
+      "observed_sha256": "20d67e91f4b43186473cf3ddeecc61ef3ec68483b8e450d2a8a5074c0fb940b5",
+      "observed_bytes": 73899712,
+      "expected": {
+        "bytes": 73899712,
+        "sha256": "20d67e91f4b43186473cf3ddeecc61ef3ec68483b8e450d2a8a5074c0fb940b5"
+      },
+      "passed": true
+    },
+    {
+      "file": "training_state.pt",
+      "observed_sha256": "c7ce40258913b0cd3e0de050be05cdbfa91d96eef604654b01ad75fc0ff574d3",
+      "observed_bytes": 148053155,
+      "expected": {
+        "bytes": 148053155,
+        "sha256": "c7ce40258913b0cd3e0de050be05cdbfa91d96eef604654b01ad75fc0ff574d3"
+      },
+      "passed": true
+    }
+  ]
+}

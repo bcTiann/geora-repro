@@ -487,11 +487,44 @@
         "NodeList": "nid002056"
       },
       "resource_record": "reports/base4096/resource_record.json"
+    },
+    {
+      "job_id": "50699081",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 2381,
+      "time_limit_seconds": 3600,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "resource_record": "reports/long_training/summary.md"
+    },
+    {
+      "job_id": "50702975",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 562,
+      "time_limit_seconds": 2700,
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "resource_record": "reports/long_training/summary.md"
     }
   ],
-  "sum_allocation_seconds": 5570,
+  "sum_allocation_seconds": 8513,
   "latest_query_date": "2026-10-12",
-  "latest_query": "sacct -X -j50675134,50697776 --parsable2 --noheader --format=JobID,JobName,Partition,Account,State,ExitCode,Start,End,ElapsedRaw,Timelimit,AllocTRES,NodeList",
-  "pending_jobs": [],
-  "latest_own_queue_observation": "Both baselinejobs released; successful50697776 completed0:0"
+  "latest_query": "sacct -X -j50699081,50702975 --parsable2 --noheader --format=JobID,JobName,Partition,Account,State,ExitCode,Start,End,ElapsedRaw,Timelimit,AllocTRES,NodeList",
+  "pending_jobs": [
+    "50703316",
+    "50703647"
+  ],
+  "latest_own_queue_observation": "First-step jobs completed and released; two single-GPU ten-step continuations submitted"
 }
