@@ -1,0 +1,77 @@
+{
+  "scope": "JSON evidence only; actual adapter and optimizer payloads remain on Setonix and were byte-verified by the independent remote CPU audit",
+  "compressed_step_records": [
+    {
+      "path": "segments/segment-0002/step-00002.json",
+      "archived_path": "segments/segment-0002/step-00002.json.gz",
+      "original_sha256": "2c2351af744076c9e47033843677c65d0fb974e6646b42ae78e93afabd08a32e",
+      "archive_sha256": "f6de4467de832f358c285ccbb2afdddb4a551e175767b6a2598f3e24cbf7527e",
+      "original_bytes": 1742667
+    },
+    {
+      "path": "segments/segment-0002/step-00003.json",
+      "archived_path": "segments/segment-0002/step-00003.json.gz",
+      "original_sha256": "4b0561bd9b6e5e64a6291cdfa13659a785d7fdb4954ddda7f2c9881aa2943b5c",
+      "archive_sha256": "bd95ac4753a69bf2e3f077d779d10bbe1f448d82122f891739fba07e883714b1",
+      "original_bytes": 1553992
+    },
+    {
+      "path": "segments/segment-0002/step-00004.json",
+      "archived_path": "segments/segment-0002/step-00004.json.gz",
+      "original_sha256": "175c21027fd158a9b5f409edbef1c35611f15893d8d97c47a10b4b6715220ea6",
+      "archive_sha256": "badd2a66a87891db4f83e9f65157e420f00b351297f75581a1b0c6538e929102",
+      "original_bytes": 1649072
+    },
+    {
+      "path": "segments/segment-0002/step-00008.json",
+      "archived_path": "segments/segment-0002/step-00008.json.gz",
+      "original_sha256": "7e5111795780728c3e267474418a399c01a401ba683579b62f72499311641814",
+      "archive_sha256": "b04dec68294446468c44e596d0231d7dd277c36c5264fc592afe84fc973d5bdc",
+      "original_bytes": 1670180
+    },
+    {
+      "path": "segments/segment-0002/step-00009.json",
+      "archived_path": "segments/segment-0002/step-00009.json.gz",
+      "original_sha256": "bbecd020f67f43d7be52d052bfd6b8953178d9cf22b70b026501bba5c4ee3ff4",
+      "archive_sha256": "4ffde420307b2f1e9ef8268cf4c05baa6b7475f7407eafe9e946b95ba2ad09cf",
+      "original_bytes": 1601675
+    },
+    {
+      "path": "segments/segment-0002/step-00005.json",
+      "archived_path": "segments/segment-0002/step-00005.json.gz",
+      "original_sha256": "96147872d4aa12972d2f9b7253a559db4dcdbc9371870eaa5fdeac6e9475869f",
+      "archive_sha256": "f782b14252a1c356c5d6c8b576b274d2d27651e305f1f5becb4f5ade3ffcb24e",
+      "original_bytes": 1671112
+    },
+    {
+      "path": "segments/segment-0002/step-00006.json",
+      "archived_path": "segments/segment-0002/step-00006.json.gz",
+      "original_sha256": "beb315d34fba4d365c0378b030b8795aa32fea29b0e6b3e275062a246408fafc",
+      "archive_sha256": "1657d048251ac65e499e82df32e4b733a55ffa9635c0343fbf293e8dac02a21a",
+      "original_bytes": 1613164
+    },
+    {
+      "path": "segments/segment-0002/step-00010.json",
+      "archived_path": "segments/segment-0002/step-00010.json.gz",
+      "original_sha256": "3ef87d52fca7aab25ec5b1c6446f0d9ea028cda770ff2facea4b8042f0c3dbe5",
+      "archive_sha256": "6cae9b3ba7ed4fbc57a228733c09eed132d4247c90fffb200f0eef06854bf002",
+      "original_bytes": 1684977
+    },
+    {
+      "path": "segments/segment-0002/step-00007.json",
+      "archived_path": "segments/segment-0002/step-00007.json.gz",
+      "original_sha256": "8cc84be21aa72add547d656d4cd8befce618421ec31fd305f5a2ee6002aa10d1",
+      "archive_sha256": "bf2e6ee354346871114b2575f1e6db6c86c45470d3d6afae7a7b6ee1dc8b6c5c",
+      "original_bytes": 1679720
+    },
+    {
+      "path": "segments/segment-0001/step-00001.json",
+      "archived_path": "segments/segment-0001/step-00001.json.gz",
+      "original_sha256": "3e0fa9a8f8a3f3b20108628df14719caf8ea13e1eafe6421d915c32218749448",
+      "archive_sha256": "1f1edb81a53bb83ef03cc2bab1a3c6493cf1c77ff106d0ac7c24f8995b4475b1",
+      "original_bytes": 1594979
+    }
+  ],
+  "compression_changes_uncompressed_bytes": false,
+  "transfer_envelope_omitted": "Expanded evidence and original transfer SHA index retained"
+}

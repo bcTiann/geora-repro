@@ -1,0 +1,8 @@
+50702975|geora-pilot|COMPLETED|0:0|562|billing=128,cpu=16,energy=305368,gres/gpu=1,mem=29440M,node=1
+50702975.batch|batch|COMPLETED|0:0|562|cpu=16,gres/gpu=1,mem=29440M,node=1
+50702975.extern|extern|COMPLETED|0:0|562|billing=128,cpu=16,gres/gpu=1,mem=29440M,node=1
+50702975.0|pytorch-exec|COMPLETED|0:0|554|cpu=16,gres/gpu=1,mem=29440M,node=1
+50703647|geora-pilot|COMPLETED|0:0|9158|billing=128,cpu=16,energy=9210562,gres/gpu=1,mem=29440M,node=1
+50703647.batch|batch|COMPLETED|0:0|9158|cpu=16,gres/gpu=1,mem=29440M,node=1
+50703647.extern|extern|COMPLETED|0:0|9158|billing=128,cpu=16,gres/gpu=1,mem=29440M,node=1
+50703647.0|pytorch-exec|COMPLETED|0:0|9150|cpu=16,gres/gpu=1,mem=29440M,node=1

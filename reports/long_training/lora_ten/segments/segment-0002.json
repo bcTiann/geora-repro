@@ -1,0 +1,45 @@
+{
+  "absolute_stop_after_step": 10,
+  "cumulative_committed_answer_tokens": 18802,
+  "cumulative_physical_counters": {
+    "physical_backward_calls": 80,
+    "physical_completion_tokens": 18802,
+    "physical_optimizer_step_calls": 10,
+    "physical_rollout_attempts": 10,
+    "physical_rollouts": 10
+  },
+  "end_data_position": 10,
+  "end_logical_step": 10,
+  "ended_at_utc": "2026-10-12T06:22:01.724320+00:00",
+  "id": "segment-0002",
+  "latest_checkpoint": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00010",
+  "peak_allocated_memory_gib": 8.381174564361572,
+  "physical_counters": {
+    "physical_backward_calls": 72,
+    "physical_completion_tokens": 17678,
+    "physical_optimizer_step_calls": 9,
+    "physical_rollout_attempts": 9,
+    "physical_rollouts": 9
+  },
+  "process_seconds": 9140.003436947998,
+  "runtime": {
+    "absolute_stop_after_step": 10,
+    "checkpoint_every": 1,
+    "gpu_name": "AMD Instinct MI250X",
+    "hip_version": "6.3.42134-a9a80e791",
+    "runtime_limit_seconds": 13400.0,
+    "slurm_job_id": "50703647",
+    "source_git_commit": "c8b26d975e5e9d90ecdd64d5141ef91b48614497",
+    "torch_version": "2.7.1a0+gite2d141d",
+    "transformers_version": "5.19.0"
+  },
+  "runtime_only_controls_not_in_provenance": true,
+  "segment_committed_answer_tokens": 17678,
+  "segment_logical_optimizer_steps": 9,
+  "start_data_position": 1,
+  "start_logical_step": 1,
+  "started_at_utc": "2026-10-12T03:50:04.887270+00:00",
+  "status": "paused_at_boundary",
+  "stop_reason": "absolute_segment_target",
+  "training_segment_seconds": 9116.82774234499
+}

@@ -532,6 +532,24 @@
         "billing_weight": 128
       },
       "resource_record": "reports/long_training/speed_candidate/gpu/resource_record.json"
+    },
+    {
+      "job_id": "50703647",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "allocation_seconds": 9158,
+      "time_limit_seconds": 14400,
+      "query_date": "2026-10-12",
+      "scope": "LoRA resume from real step1 through real step10; user requested stop after ten",
+      "allocated_resources": {
+        "logical_gpu_count": 1,
+        "node_count": 1,
+        "cpu_count": 16,
+        "memory": "29440M",
+        "billing_weight": 128
+      },
+      "observed_queue_after_completion": "absent for this job",
+      "sacct_raw_row": "50703647|COMPLETED|0:0|9158|billing=128,cpu=16,energy=9210562,gres/gpu=1,mem=29440M,node=1"
     }
   ],
   "sum_allocation_seconds": 9635,

@@ -1,0 +1,167 @@
+{
+  "status": "transferred_all_bytes_verified",
+  "files": [
+    {
+      "relative_path": "pilot_report.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/pilot_report.json",
+      "bytes": 271520,
+      "sha256": "6f4c21327b9dc4904cf04f2c134df8c19a2b4fc519e6fed7308c71b2b9b3a0d5"
+    },
+    {
+      "relative_path": "step_journal.jsonl",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/step_journal.jsonl",
+      "bytes": 2460,
+      "sha256": "0361d5d120bc9e5ee8927ab849d0b0b09fbc1844a424adeaf90d4275d3cd1e61"
+    },
+    {
+      "relative_path": "independent_training_audit.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/tmp/ten-step-lora-audit-20261012.json",
+      "bytes": 178032,
+      "sha256": "10d802add09b82964b7f4788060aa084e67ecdb865166f855eeffe2224aaf305"
+    },
+    {
+      "relative_path": "executed_config.json",
+      "remote_path": "/software/projects/pawsey0807/btian/geora/code/configs/grpo_long_pilot.json",
+      "bytes": 4451,
+      "sha256": "ab0f6c475f87df0bd739d9fe80332416ce26506b2b9749c2c99735e3ad3692dd"
+    },
+    {
+      "relative_path": "segments/segment-0001/step-00001.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0001/step-00001.json",
+      "bytes": 1594979,
+      "sha256": "3e0fa9a8f8a3f3b20108628df14719caf8ea13e1eafe6421d915c32218749448"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00002.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00002.json",
+      "bytes": 1742667,
+      "sha256": "2c2351af744076c9e47033843677c65d0fb974e6646b42ae78e93afabd08a32e"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00003.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00003.json",
+      "bytes": 1553992,
+      "sha256": "4b0561bd9b6e5e64a6291cdfa13659a785d7fdb4954ddda7f2c9881aa2943b5c"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00004.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00004.json",
+      "bytes": 1649072,
+      "sha256": "175c21027fd158a9b5f409edbef1c35611f15893d8d97c47a10b4b6715220ea6"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00005.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00005.json",
+      "bytes": 1671112,
+      "sha256": "96147872d4aa12972d2f9b7253a559db4dcdbc9371870eaa5fdeac6e9475869f"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00006.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00006.json",
+      "bytes": 1613164,
+      "sha256": "beb315d34fba4d365c0378b030b8795aa32fea29b0e6b3e275062a246408fafc"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00007.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00007.json",
+      "bytes": 1679720,
+      "sha256": "8cc84be21aa72add547d656d4cd8befce618421ec31fd305f5a2ee6002aa10d1"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00008.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00008.json",
+      "bytes": 1670180,
+      "sha256": "7e5111795780728c3e267474418a399c01a401ba683579b62f72499311641814"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00009.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00009.json",
+      "bytes": 1601675,
+      "sha256": "bbecd020f67f43d7be52d052bfd6b8953178d9cf22b70b026501bba5c4ee3ff4"
+    },
+    {
+      "relative_path": "segments/segment-0002/step-00010.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002/step-00010.json",
+      "bytes": 1684977,
+      "sha256": "3ef87d52fca7aab25ec5b1c6446f0d9ea028cda770ff2facea4b8042f0c3dbe5"
+    },
+    {
+      "relative_path": "segments/segment-0001.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0001.json",
+      "bytes": 1582,
+      "sha256": "ed79ea027182b0724535d3bed8f36be94259f5ed89f5d6d1396ff4a53a23d047"
+    },
+    {
+      "relative_path": "segments/segment-0002.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/segments/segment-0002.json",
+      "bytes": 1594,
+      "sha256": "34dcc0f2c0a0b77021911951a3af7b590718f966cd2b33d7e3aa57d323f40f17"
+    },
+    {
+      "relative_path": "checkpoints/step-00000/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00000/manifest.json",
+      "bytes": 69626,
+      "sha256": "39fc2b4310dad9e95b6a14ee9214b704722eb3dc2acb59701e8701505bed333c"
+    },
+    {
+      "relative_path": "checkpoints/step-00001/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00001/manifest.json",
+      "bytes": 69876,
+      "sha256": "af387ffd006673be67d56e23dc615c9e627a6f95d487cfe66e48ce501b68df9b"
+    },
+    {
+      "relative_path": "checkpoints/step-00002/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00002/manifest.json",
+      "bytes": 70113,
+      "sha256": "4e6fa0e75f56ca1b0394273a852ff33cdee4c88f76b45ccecbc3499dd9974197"
+    },
+    {
+      "relative_path": "checkpoints/step-00003/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00003/manifest.json",
+      "bytes": 70348,
+      "sha256": "cbff93d8d7de8e4dd359cd48ee6751b5322b5079a45e75416ec2426d772940ab"
+    },
+    {
+      "relative_path": "checkpoints/step-00004/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00004/manifest.json",
+      "bytes": 70584,
+      "sha256": "8f681685fcbd899071a7e0244b641d070a2f2414ca5ee0bb255df0e0fe8668f6"
+    },
+    {
+      "relative_path": "checkpoints/step-00005/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00005/manifest.json",
+      "bytes": 70820,
+      "sha256": "612e808c600d916f6fc0cc3796c30ae3112efb93913581543a59063557c80c19"
+    },
+    {
+      "relative_path": "checkpoints/step-00006/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00006/manifest.json",
+      "bytes": 71058,
+      "sha256": "7ca71410ad40398427c96e51abd1a2f920af6301136854b873b951ed8ad0675a"
+    },
+    {
+      "relative_path": "checkpoints/step-00007/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00007/manifest.json",
+      "bytes": 71294,
+      "sha256": "a4c4c1e747d580c1ed1ef01f27c390c8c6a3a783c75e54b0c238efb2e7333b11"
+    },
+    {
+      "relative_path": "checkpoints/step-00008/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00008/manifest.json",
+      "bytes": 71530,
+      "sha256": "d1bd4eb5a3ffbcf20cd0b3fda5d96fd20f7aac669130b32b5a7719b7e8ddb648"
+    },
+    {
+      "relative_path": "checkpoints/step-00009/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00009/manifest.json",
+      "bytes": 71766,
+      "sha256": "231a3f39588439e154433d1458d39d21a9b4e02d71bb2dca94a9c53969fcf439"
+    },
+    {
+      "relative_path": "checkpoints/step-00010/manifest.json",
+      "remote_path": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00010/manifest.json",
+      "bytes": 72009,
+      "sha256": "1debc5788e6a0afaccecdd58005c3058afa0872a421678b801facf09e57c44ac"
+    }
+  ]
+}

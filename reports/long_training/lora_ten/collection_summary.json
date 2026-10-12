@@ -1,0 +1,441 @@
+{
+  "status": "passed",
+  "method": "lora",
+  "logical_steps": 10,
+  "training_questions": 10,
+  "answers": 80,
+  "tokens": 18802,
+  "reward_count": 14,
+  "reward_mean": 0.175,
+  "truncated": 0,
+  "all_ended_with_eos": true,
+  "parse_failures": 19,
+  "all_zero_reward_steps": [
+    4,
+    5,
+    7,
+    9
+  ],
+  "optimizer_steps": 10,
+  "backward_calls": 80,
+  "mean_step_seconds": 962.0543242605054,
+  "sum_step_seconds": 9620.543242605054,
+  "sum_segment_process_seconds": 9682.817817009985,
+  "allocation_seconds": 9720,
+  "allocation_jobs": [
+    {
+      "job": "50702975",
+      "seconds": 562,
+      "logical_GPUs": 1,
+      "state": "COMPLETED",
+      "exit": "0:0"
+    },
+    {
+      "job": "50703647",
+      "seconds": 9158,
+      "logical_GPUs": 1,
+      "state": "COMPLETED",
+      "exit": "0:0"
+    }
+  ],
+  "independent_audit_counts": {
+    "FAIL": 0,
+    "INFO": 2,
+    "PASS": 1452,
+    "UNVERIFIED": 0
+  },
+  "source_files": 19,
+  "source_commit": "c8b26d975e5e9d90ecdd64d5141ef91b48614497",
+  "source_unchanged": true,
+  "latest_checkpoint": "/scratch/pawsey0807/btian/geora/runs/long-pilot-lora/checkpoints/step-00010",
+  "precision": {
+    "adapter_branch": "FP32",
+    "checkpoint_adapter_storage": "FP32",
+    "correction_added_to_base": "BF16",
+    "factors": "FP32",
+    "frozen_weights": "BF16",
+    "initial_GeoRA_buffers": "FP32",
+    "log_softmax_and_loss": "FP32",
+    "optimizer_moments": "FP32"
+  },
+  "step_records": [
+    {
+      "step": 1,
+      "question_id": "train:01480",
+      "tokens": 1124,
+      "reward_count": 3,
+      "truncated": 0,
+      "step_seconds": 514.7202961940202,
+      "rollout_seconds": 69.33353833801812,
+      "recompute_seconds": 204.29051449109102,
+      "backward_update_seconds": 237.932983618055,
+      "gradient_norm": 1.0697401762008667,
+      "changed_AB_tensors": 196
+    },
+    {
+      "step": 2,
+      "question_id": "train:06951",
+      "tokens": 3252,
+      "reward_count": 2,
+      "truncated": 0,
+      "step_seconds": 1672.8499513600254,
+      "rollout_seconds": 210.76901074801572,
+      "recompute_seconds": 668.9857426501112,
+      "backward_update_seconds": 783.9757567510824,
+      "gradient_norm": 0.3867720365524292,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 3,
+      "question_id": "train:05119",
+      "tokens": 541,
+      "reward_count": 1,
+      "truncated": 0,
+      "step_seconds": 282.1311915690312,
+      "rollout_seconds": 38.21073677303502,
+      "recompute_seconds": 111.10335065599065,
+      "backward_update_seconds": 130.7106424428639,
+      "gradient_norm": 2.7861788272857666,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 4,
+      "question_id": "train:05950",
+      "tokens": 1927,
+      "reward_count": 0,
+      "truncated": 0,
+      "step_seconds": 993.4660338679678,
+      "rollout_seconds": 133.22877975401934,
+      "recompute_seconds": 394.2186551990453,
+      "backward_update_seconds": 460.4362050749478,
+      "gradient_norm": 0.00037300889380276203,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 5,
+      "question_id": "train:03273",
+      "tokens": 2309,
+      "reward_count": 0,
+      "truncated": 0,
+      "step_seconds": 1190.5609573289985,
+      "rollout_seconds": 158.96362815401517,
+      "recompute_seconds": 472.691860120045,
+      "backward_update_seconds": 552.3577115079388,
+      "gradient_norm": 0.00013731078070122749,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 6,
+      "question_id": "train:05258",
+      "tokens": 1372,
+      "reward_count": 3,
+      "truncated": 0,
+      "step_seconds": 707.6016568499617,
+      "rollout_seconds": 94.70991621899884,
+      "recompute_seconds": 281.65268755704165,
+      "backward_update_seconds": 327.0713532739319,
+      "gradient_norm": 2.93265438079834,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 7,
+      "question_id": "train:06996",
+      "tokens": 2357,
+      "reward_count": 0,
+      "truncated": 0,
+      "step_seconds": 1205.0907275039935,
+      "rollout_seconds": 161.28827290597837,
+      "recompute_seconds": 484.3005963899195,
+      "backward_update_seconds": 552.8154962550034,
+      "gradient_norm": 4.891008939011954e-05,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 8,
+      "question_id": "train:02607",
+      "tokens": 2227,
+      "reward_count": 3,
+      "truncated": 0,
+      "step_seconds": 1162.1407049110276,
+      "rollout_seconds": 152.64245939301327,
+      "recompute_seconds": 478.6053669019602,
+      "backward_update_seconds": 524.6056956409011,
+      "gradient_norm": 0.6039117574691772,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 9,
+      "question_id": "train:02268",
+      "tokens": 1233,
+      "reward_count": 0,
+      "truncated": 0,
+      "step_seconds": 630.8312237990322,
+      "rollout_seconds": 84.82585168496007,
+      "recompute_seconds": 253.03928496694425,
+      "backward_update_seconds": 289.1948680760106,
+      "gradient_norm": 0.00016954384045675397,
+      "changed_AB_tensors": 392
+    },
+    {
+      "step": 10,
+      "question_id": "train:00061",
+      "tokens": 2460,
+      "reward_count": 2,
+      "truncated": 0,
+      "step_seconds": 1261.1504992209957,
+      "rollout_seconds": 168.23028379201423,
+      "recompute_seconds": 507.14264669205295,
+      "backward_update_seconds": 578.735900669999,
+      "gradient_norm": 0.545332133769989,
+      "changed_AB_tensors": 392
+    }
+  ],
+  "checks": [
+    {
+      "name": "closed_actual_step10",
+      "passed": true
+    },
+    {
+      "name": "independent_audit_binds_actual_report",
+      "passed": true
+    },
+    {
+      "name": "independent_audit_all_verified",
+      "passed": true
+    },
+    {
+      "name": "all_reported_runtime_gates_passed",
+      "passed": true,
+      "count": 511
+    },
+    {
+      "name": "actual_19_sources_match_executed_identity",
+      "passed": true
+    },
+    {
+      "name": "all_19_source_snapshot_contents_match_hashes",
+      "passed": true
+    },
+    {
+      "name": "source_commit_preserved",
+      "passed": true
+    },
+    {
+      "name": "step_1_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_1_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_1_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_1_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_1_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_2_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_2_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_2_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_2_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_2_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_3_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_3_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_3_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_3_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_3_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_4_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_4_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_4_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_4_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_4_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_5_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_5_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_5_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_5_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_5_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_6_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_6_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_6_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_6_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_6_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_7_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_7_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_7_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_7_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_7_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_8_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_8_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_8_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_8_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_8_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_9_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_9_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_9_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_9_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_9_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "step_10_record_hash_and_number",
+      "passed": true
+    },
+    {
+      "name": "step_10_8_answers_and_token_count",
+      "passed": true
+    },
+    {
+      "name": "step_10_fixed_next_train_question",
+      "passed": true
+    },
+    {
+      "name": "step_10_exact_probability_alignment",
+      "passed": true
+    },
+    {
+      "name": "step_10_manifest_closed_boundary",
+      "passed": true
+    },
+    {
+      "name": "80_real_backwards_10_adamw",
+      "passed": true
+    },
+    {
+      "name": "record_tokens_match_report",
+      "passed": true
+    },
+    {
+      "name": "both_immutable_frozen_audits_passed",
+      "passed": true
+    },
+    {
+      "name": "two_completed_boundary_segments",
+      "passed": true
+    }
+  ],
+  "scope": "Closed first10 training steps and report provenance; not task validation or LoRA versus GeoRA performance comparison"
+}
