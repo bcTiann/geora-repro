@@ -1,0 +1,194 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "capacity_all_selected_logps_finite",
+      "passed": true,
+      "completion_tokens": 17
+    },
+    {
+      "name": "capacity_synthetic_mean_loss_finite",
+      "passed": true
+    },
+    {
+      "name": "capacity_every_AB_gradient_finite_FP32",
+      "passed": true,
+      "expected_adapter_tensor_count": 28,
+      "finite_gradient_tensors": 28
+    },
+    {
+      "name": "capacity_nonzero_finite_adapter_gradient_norm",
+      "passed": true
+    },
+    {
+      "name": "capacity_every_cache_block_replayed_with_guards",
+      "passed": true,
+      "expected_blocks": 2,
+      "checkpoint_blocks": 2,
+      "recompute_blocks": 2,
+      "autocast_states_match": true,
+      "boundary_cache_tensor_elements": 3008,
+      "max_boundary_cache_tensor_elements": 1536,
+      "forward_cache_forwards": 17,
+      "recompute_cache_forwards": 17,
+      "runtime_guard_forward_checks": 34,
+      "runtime_guard_recompute_checks": 34,
+      "block_size": 16,
+      "generated_steps": 17,
+      "boundary_cache_inputs_are_explicit": true
+    },
+    {
+      "name": "capacity_AB_parameters_identical_without_optimizer",
+      "passed": true,
+      "optimizer_steps": 0
+    },
+    {
+      "name": "capacity_temporary_gradients_cleared_and_rng_preserved",
+      "passed": true
+    },
+    {
+      "name": "short_CPU_fixture_passed_without_GPU_capacity_claim",
+      "passed": true
+    },
+    {
+      "name": "capacity_all_selected_logps_finite",
+      "passed": true,
+      "completion_tokens": 17
+    },
+    {
+      "name": "capacity_synthetic_mean_loss_finite",
+      "passed": true
+    },
+    {
+      "name": "deadline_cannot_mark_capacity_completed",
+      "passed": true
+    },
+    {
+      "name": "aborted_capacity_clears_gradients_and_preserves_AB_RNG_no_optimizer",
+      "passed": true
+    },
+    {
+      "name": "rejected_entry_preserves_existing_gradient",
+      "passed": true
+    }
+  ],
+  "physical_optimizer_step_calls": 0,
+  "capacity_check": {
+    "status": "failed",
+    "passed": false,
+    "scope": "Artificial teacher-forced native-cache capacity only; no task accuracy or GRPO update",
+    "device": "cpu",
+    "frozen_dtype": "torch.bfloat16",
+    "synthetic_prompt_tokens": 8,
+    "synthetic_completion_tokens": 17,
+    "fixed_input_width": 25,
+    "expected_final_cache_length": 24,
+    "checkpoint_block_tokens": 16,
+    "checkpoint_statistics": {},
+    "synthetic_token_text": " apples",
+    "batch_size": 1,
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "gradients_cleared": false,
+    "parameters_unchanged": false,
+    "frozen_reference_forward_calls": 0,
+    "reference_residency_requirement": "Caller retains its already-loaded frozen reference on the same device",
+    "full_1024_prompt_4096_completion_gate": false,
+    "cpu_fixture_only": true,
+    "memory_guard_gib": 55,
+    "GPU_memory_measurements_available": false,
+    "error": "Capacity checking requires empty gradients at entry",
+    "error_type": "ValueError",
+    "model_training_mode_unchanged": true,
+    "CPU_rng_restored": true,
+    "CUDA_rng_restored": true,
+    "allocated_memory_gib": null,
+    "reserved_memory_gib": null,
+    "peak_allocated_memory_gib": null,
+    "peak_reserved_memory_gib": null,
+    "elapsed_seconds": 0.00021279101201798767
+  },
+  "current_stage": "capacity_check_prepare",
+  "successful_CPU_fixture": {
+    "status": "passed",
+    "passed": true,
+    "scope": "Artificial teacher-forced native-cache capacity only; no task accuracy or GRPO update",
+    "device": "cpu",
+    "frozen_dtype": "torch.bfloat16",
+    "synthetic_prompt_tokens": 8,
+    "synthetic_completion_tokens": 17,
+    "fixed_input_width": 25,
+    "expected_final_cache_length": 24,
+    "checkpoint_block_tokens": 16,
+    "checkpoint_statistics": {
+      "checkpoint_blocks": 2,
+      "recompute_blocks": 2,
+      "autocast_states_match": true,
+      "boundary_cache_tensor_elements": 3008,
+      "max_boundary_cache_tensor_elements": 1536,
+      "forward_cache_forwards": 17,
+      "recompute_cache_forwards": 17,
+      "runtime_guard_forward_checks": 34,
+      "runtime_guard_recompute_checks": 34,
+      "block_size": 16,
+      "generated_steps": 17,
+      "boundary_cache_inputs_are_explicit": true
+    },
+    "synthetic_token_text": " apples",
+    "batch_size": 1,
+    "optimizer_steps": 0,
+    "backward_calls": 1,
+    "gradients_cleared": true,
+    "parameters_unchanged": true,
+    "frozen_reference_forward_calls": 0,
+    "reference_residency_requirement": "Caller retains its already-loaded frozen reference on the same device",
+    "full_1024_prompt_4096_completion_gate": false,
+    "cpu_fixture_only": true,
+    "memory_guard_gib": 55,
+    "GPU_memory_measurements_available": false,
+    "allocated_memory_gib": null,
+    "reserved_memory_gib": null,
+    "peak_allocated_memory_gib": null,
+    "peak_reserved_memory_gib": null,
+    "starting_memory": {
+      "allocated_memory_gib": null,
+      "reserved_memory_gib": null,
+      "peak_allocated_memory_gib": null,
+      "peak_reserved_memory_gib": null
+    },
+    "expected_adapter_tensor_count": 28,
+    "adapter_parameter_count": 1856,
+    "adapter_snapshot_bytes_CPU": 7424,
+    "pattern_token_ids": [
+      7,
+      8
+    ],
+    "input_ids_sha256": "8447d0e853c8394bd609674cca4c0447244b007192d4e457e68ea9b3e43f8ff0",
+    "contains_EOS": false,
+    "generated_steps": 17,
+    "last_progress": {
+      "stage": "capacity_backward_cache_recompute_after_forward_token_0",
+      "step": 0,
+      "recomputing": true,
+      "block_start": 0,
+      "block_stop": 16,
+      "phase": "after_forward"
+    },
+    "scoring_seconds": 0.01988691699807532,
+    "all_selected_logps_finite": true,
+    "selected_logp_dtype": "torch.float32",
+    "selected_logp_min": -3.6567022800445557,
+    "selected_logp_max": -3.4665451049804688,
+    "max_absolute_selected_logp": 3.6567022800445557,
+    "synthetic_mean_negative_logp_loss": 3.555009365081787,
+    "backward_seconds": 0.03232641700014938,
+    "finite_FP32_adapter_gradient_tensors": 28,
+    "adapter_gradient_l2_norm": 0.20719778765411714,
+    "model_training_mode_unchanged": true,
+    "CPU_rng_restored": true,
+    "CUDA_rng_restored": true,
+    "elapsed_seconds": 0.05468562500027474
+  },
+  "deadline_stage": "capacity_before_backward",
+  "scope": "Short 8+17 BF16 standard Qwen2 CPU fixture; not a full-model GPU capacity result"
+}

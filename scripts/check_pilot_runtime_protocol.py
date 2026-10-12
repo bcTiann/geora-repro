@@ -191,6 +191,41 @@ def main():
         require("retry_equals_continuous_and_discarded_work_retained", equal(snapshot(paused_state), expected)
                 and paused_report.data["physical_rollouts"] == 5 and paused_report.data["physical_completion_tokens"] == 18
                 and paused_report.data["completed_answer_tokens"] == 16)
+        partial_state, partial_report = setup(), report_at(root / "partial_sampling_timeout")
+        partial_before = snapshot(partial_state)
+
+        def timeout_mid_group(*args):
+            model, _, _, _, _, _, generator, _, report, _, _ = args
+            torch.randn(2)
+            random.random()
+            torch.randint(0, 50, (2,), generator=generator)
+            report.data["current_partial_rollout"] = dict(
+                completed_answers=[dict(token_count=3)],
+                incomplete_answer_valid_tokens_lower_bound=2,
+                partial_answer_token_count_exact=False)
+            model(torch.ones(1, 3)).sum().backward()
+            report.data["physical_backward_calls"] += 1
+            report.data["current_partial_gradient_accumulation"] = dict(
+                completed_backward_answers=1, optimizer_update_performed=False)
+            raise TimeoutError("fixture partial microbatch backward expired before update")
+
+        require("partial_group_deadline_preserves_original_completed_boundary",
+                segment(partial_state, partial_report, 4, timeout_mid_group) == "paused_at_boundary"
+                and equal(snapshot(partial_state), partial_before)
+                and all(p.grad is None for p in partial_state[0].parameters()))
+        require("partial_group_tokens_and_gradient_attempt_are_not_lost",
+                partial_report.data["discarded_partial_completion_tokens"] == 3
+                and partial_report.data["discarded_incomplete_tokens_lower_bound"] == 2
+                and partial_report.data["physical_completion_tokens_lower_bound"] == 5
+                and partial_report.data["physical_backward_calls"] == 1
+                and partial_report.data["physical_optimizer_step_calls"] == 0
+                and partial_report.data["discarded_rollouts"][0]["partial_gradient_accumulation"]["completed_backward_answers"] == 1)
+        segment(partial_state, partial_report, 4)
+        require("retry_after_partial_backward_reproduces_continuous_update",
+                equal(snapshot(partial_state), expected)
+                and partial_report.data["physical_completion_tokens"] == 16
+                and partial_report.data["physical_completion_tokens_lower_bound"] == 21)
+
         foreign = dict(PROVENANCE, initialization_sha256="d" * 64)
         try:
             model, optimizer, scheduler, generator = setup()

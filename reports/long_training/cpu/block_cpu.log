@@ -1,0 +1,21 @@
+PASS: real_sampled_BF16_native_logps_exact {'valid_token_count': 21, 'max_absolute_delta_logp': 0.0, 'mean_absolute_delta_logp': 0.0, 'max_absolute_ratio_minus_one': 0.0, 'min_ratio': 1.0, 'max_ratio': 1.0, 'sequence_delta_logp': [0.0, 0.0, 0.0, 0.0], 'finite': True, 'exact': True}
+PASS: real_sampled_variable_EOS_lengths_present {'lengths': [7, 8, 1, 5]}
+PASS: real_sampled_gradients_finite {}
+PASS: lora_float32_512_b64_native_forward_logps_exact {}
+PASS: lora_float32_512_b64_native_inputs_positions_masks_cache_lengths_exact {}
+PASS: lora_float32_512_b64_adapter_gradients_match_without_detached_history {'max_absolute_gradient_difference': 0.0, 'last_token_only': True}
+PASS: lora_float32_512_b64_every_checkpoint_recomputed_with_matching_autocast {'checkpoint_blocks': 8, 'recompute_blocks': 8, 'autocast_states_match': True, 'boundary_cache_tensor_elements': 149504, 'max_boundary_cache_tensor_elements': 33024, 'forward_cache_forwards': 512, 'recompute_cache_forwards': 512, 'runtime_guard_forward_checks': 0, 'runtime_guard_recompute_checks': 0, 'block_size': 64, 'generated_steps': 512, 'boundary_cache_inputs_are_explicit': True}
+PASS: lora_float32_512_b64_trace_observer_not_replayed_during_backward {}
+PASS: lora_float32_512_b64_inference_values_exact_no_graph {}
+PASS: geora_bfloat16_300_b64_native_forward_logps_exact {}
+PASS: geora_bfloat16_300_b64_native_inputs_positions_masks_cache_lengths_exact {}
+PASS: geora_bfloat16_300_b64_adapter_gradients_match_without_detached_history {'max_absolute_gradient_difference': 0.0, 'last_token_only': False}
+PASS: geora_bfloat16_300_b64_every_checkpoint_recomputed_with_matching_autocast {'checkpoint_blocks': 5, 'recompute_blocks': 5, 'autocast_states_match': True, 'boundary_cache_tensor_elements': 122880, 'max_boundary_cache_tensor_elements': 38912, 'forward_cache_forwards': 300, 'recompute_cache_forwards': 300, 'runtime_guard_forward_checks': 0, 'runtime_guard_recompute_checks': 0, 'block_size': 64, 'generated_steps': 300, 'boundary_cache_inputs_are_explicit': True}
+PASS: geora_bfloat16_300_b64_trace_observer_not_replayed_during_backward {}
+PASS: geora_bfloat16_300_b64_inference_values_exact_no_graph {}
+PASS: geora_float32_65_b16_native_forward_logps_exact {}
+PASS: geora_float32_65_b16_native_inputs_positions_masks_cache_lengths_exact {}
+PASS: geora_float32_65_b16_adapter_gradients_match_without_detached_history {'max_absolute_gradient_difference': 0.0, 'last_token_only': True}
+PASS: geora_float32_65_b16_every_checkpoint_recomputed_with_matching_autocast {'checkpoint_blocks': 5, 'recompute_blocks': 5, 'autocast_states_match': True, 'boundary_cache_tensor_elements': 31360, 'max_boundary_cache_tensor_elements': 8832, 'forward_cache_forwards': 65, 'recompute_cache_forwards': 65, 'runtime_guard_forward_checks': 0, 'runtime_guard_recompute_checks': 0, 'block_size': 16, 'generated_steps': 65, 'boundary_cache_inputs_are_explicit': True}
+PASS: geora_float32_65_b16_trace_observer_not_replayed_during_backward {}
+PASS: geora_float32_65_b16_inference_values_exact_no_graph {}

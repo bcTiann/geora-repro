@@ -49,9 +49,15 @@
 - [x] 128份CPU重判：32→31题正确，9份提取变化、1份最终奖励变化；无GPU。
 - [x] 固定判分源码、许可证及hash，历史规则默认行为保留。
 - [x] 既有评估/恢复CPU检查73/73通过。
-- [ ] 4096-token Base验证与独立复核。
+- [x] 4096-token Base验证42/128=32.8125%，截断1/128；1589项CPU独立复核通过，单GPU977秒。
 - [ ] 长回答GPU训练容量和两方法第一步。
 - [ ] 两方法各10步，再各100步。
 - [ ] 两个训练checkpoint的128题验证、结果解释与资源核对。
 
 判分变化详见[完整报告](reports/regrade_128/comparison.html)。新配置为[grpo_long_pilot.json](configs/grpo_long_pilot.json)。
+
+## 训练入口验收与下一次GPU作业
+
+本地与Setonix容器CPU均通过缓存分段21项、梯度累积6项、反向超时7项；分段恢复19项、本地短容量fixture13项通过。首次GeoRA作业复用已加载的policy与reference，先用人工固定序列1024+4096做一次完整前向/反向容量检查（无optimizer更新），再做首个真实GRPO步骤。容量检查保存干净step0，55GiB guard和超时覆盖反向重算；完成后复用模型，不额外重载。LoRA首步随后独立执行。
+
+基线四格结果：256/Decimal32、256/verl31、4096/Decimal43、4096/verl42。固定verl下提升11题由长度解除截断造成；没有训练。128旧token前缀与86份已完成旧回答全部不变。新报告见[base4096/comparison.html](reports/base4096/comparison.html)。

@@ -66,7 +66,7 @@
   },
   "rollout_backend": "native_cached_block_checkpointed",
   "checkpoint_attention": false,
-  "status": "new_protocol_pending_long_answer_training_acceptance",
+  "status": "CPU_accepted_pending_GPU_full_capacity_and_first_step",
   "train_question_limit": 1024,
   "validation_question_limit": 128,
   "evaluation_plan": {
@@ -76,7 +76,7 @@
     "before_training": true,
     "checkpoint_selection": "Fixed terminal step100 checkpoint; no validation-based checkpoint selection"
   },
-  "implementation_status": "Segmented runner and fixed validation evaluator implemented; CPU training16/16 and evaluation73/73 protocol checks passed. First full-Qwen MI250X pilot segment remains pending; existing numerical one_step is reused unchanged.",
+  "implementation_status": "Nativebatch1 sampling and functional16-token cacheblocks integrated; CPUvaluegradient, accumulation, deadline and checkpoint recovery passed onlocal andactual container; maximalGPUcapacity remains pending",
   "runtime_estimation": "Historical accepted fixed-width five-step Python time: GeoRA461.654s, LoRA412.549s, including one replay and checks; measure first pilot segment before assigning larger jobs. No allocation submitted by this file.",
   "selection_status": "Sequential8 answers perquestion, group-normalizedadvantages, accumulatedgradient before oneAdamWupdate; globalpromptbatch1 vs paper128 explicitly reduced",
   "checkpoint_interval": 1,

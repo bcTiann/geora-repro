@@ -1,0 +1,11 @@
+PASS: guard_precedes_every_actual_forward_and_backward_replay {'forward_token_calls': 9, 'replay_token_calls': 9, 'actual_model_forward_calls': 18, 'checkpoint_blocks': 3, 'recompute_blocks': 3, 'autocast_states_match': True, 'boundary_cache_tensor_elements': 2112, 'max_boundary_cache_tensor_elements': 832, 'forward_cache_forwards': 9, 'recompute_cache_forwards': 9, 'runtime_guard_forward_checks': 18, 'runtime_guard_recompute_checks': 18, 'block_size': 4, 'generated_steps': 9, 'boundary_cache_inputs_are_explicit': True}
+PASS: trace_remains_original_forward_observer_only {}
+PASS: guarded_backward_gradients_remain_finite {}
+PASS: active_runtime_guard_preserves_native_logps_and_gradients_exactly {}
+step_1 questions: ['cpu:0']
+step_1 old_probabilities {'answer': 1, 'step': 0, 'allocated_memory_gib': 0.0}
+step_1 reference_probabilities {'answer': 1, 'step': 0, 'allocated_memory_gib': 0.0}
+step_1 current_probabilities {'answer': 1, 'step': 0, 'allocated_memory_gib': 0.0}
+PASS: actual_long_step_deadline_aborts_inside_backward_replay {'deadline_stage': 'step_1_answer_1_backward_cache_recompute_before_forward_token_8', 'error': 'Long-answer deadline before optimizer update at step_1_answer_1_backward_cache_recompute_before_forward_token_8', 'checkpoint_statistics': {'checkpoint_blocks': 3, 'recompute_blocks': 1, 'autocast_states_match': True, 'boundary_cache_tensor_elements': 1728, 'max_boundary_cache_tensor_elements': 704, 'forward_cache_forwards': 9, 'recompute_cache_forwards': 0, 'runtime_guard_forward_checks': 18, 'runtime_guard_recompute_checks': 1, 'block_size': 4, 'generated_steps': 9, 'boundary_cache_inputs_are_explicit': True}}
+PASS: backward_timeout_leaves_parameters_optimizer_scheduler_unchanged {'optimizer_steps': 0, 'completed_backward_answers': 0}
+PASS: long_step_uses_named_checkpoint_block_token_configuration {}

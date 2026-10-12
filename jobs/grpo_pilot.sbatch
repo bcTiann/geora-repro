@@ -13,6 +13,10 @@ geora_checkpoint="${4:?Supply the CPU-validated checkpoint copy.}"
 geora_output="${5:?Supply a persistent pilot output directory.}"
 geora_stop_step="${6:-10}"
 geora_resume="${7:-}"
+geora_config="${8:-configs/grpo_pilot_plan.json}"
+geora_runtime="${9:-1000}"
+geora_checkpoint_every="${10:-10}"
+geora_capacity_check="${11:-skip}"
 
 module load pytorch/2.7.1-rocm6.3.3
 export SLURM_EXPORT_ENV=ALL
@@ -32,11 +36,17 @@ geora_arguments=(
   --data-dir "$geora_data"
   --checkpoint-dir "$geora_checkpoint"
   --output-dir "$geora_output"
-  --config configs/grpo_pilot_plan.json
+  --config "$geora_config"
   --stop-after-step "$geora_stop_step"
-  --runtime-limit-seconds 1000
-  --checkpoint-every 10
+  --runtime-limit-seconds "$geora_runtime"
+  --checkpoint-every "$geora_checkpoint_every"
 )
+if [[ "$geora_capacity_check" == "check" ]]; then
+  geora_arguments+=(--capacity-check)
+elif [[ "$geora_capacity_check" != "skip" ]]; then
+  echo "Capacity option must be check or skip." >&2
+  exit 2
+fi
 if [[ -n "$geora_resume" ]]; then
   geora_arguments+=(--resume "$geora_resume")
 fi

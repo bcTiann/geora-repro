@@ -1,0 +1,157 @@
+{
+  "stage": "functional_cached_block_checkpoint_cpu",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "real_sampled_BF16_native_logps_exact",
+      "passed": true,
+      "valid_token_count": 21,
+      "max_absolute_delta_logp": 0.0,
+      "mean_absolute_delta_logp": 0.0,
+      "max_absolute_ratio_minus_one": 0.0,
+      "min_ratio": 1.0,
+      "max_ratio": 1.0,
+      "sequence_delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "finite": true,
+      "exact": true
+    },
+    {
+      "name": "real_sampled_variable_EOS_lengths_present",
+      "passed": true,
+      "lengths": [
+        7,
+        8,
+        1,
+        5
+      ]
+    },
+    {
+      "name": "real_sampled_gradients_finite",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_512_b64_native_forward_logps_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_512_b64_native_inputs_positions_masks_cache_lengths_exact",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_512_b64_adapter_gradients_match_without_detached_history",
+      "passed": true,
+      "max_absolute_gradient_difference": 0.0,
+      "last_token_only": true
+    },
+    {
+      "name": "lora_float32_512_b64_every_checkpoint_recomputed_with_matching_autocast",
+      "passed": true,
+      "checkpoint_blocks": 8,
+      "recompute_blocks": 8,
+      "autocast_states_match": true,
+      "boundary_cache_tensor_elements": 149504,
+      "max_boundary_cache_tensor_elements": 33024,
+      "forward_cache_forwards": 512,
+      "recompute_cache_forwards": 512,
+      "runtime_guard_forward_checks": 0,
+      "runtime_guard_recompute_checks": 0,
+      "block_size": 64,
+      "generated_steps": 512,
+      "boundary_cache_inputs_are_explicit": true
+    },
+    {
+      "name": "lora_float32_512_b64_trace_observer_not_replayed_during_backward",
+      "passed": true
+    },
+    {
+      "name": "lora_float32_512_b64_inference_values_exact_no_graph",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_300_b64_native_forward_logps_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_300_b64_native_inputs_positions_masks_cache_lengths_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_300_b64_adapter_gradients_match_without_detached_history",
+      "passed": true,
+      "max_absolute_gradient_difference": 0.0,
+      "last_token_only": false
+    },
+    {
+      "name": "geora_bfloat16_300_b64_every_checkpoint_recomputed_with_matching_autocast",
+      "passed": true,
+      "checkpoint_blocks": 5,
+      "recompute_blocks": 5,
+      "autocast_states_match": true,
+      "boundary_cache_tensor_elements": 122880,
+      "max_boundary_cache_tensor_elements": 38912,
+      "forward_cache_forwards": 300,
+      "recompute_cache_forwards": 300,
+      "runtime_guard_forward_checks": 0,
+      "runtime_guard_recompute_checks": 0,
+      "block_size": 64,
+      "generated_steps": 300,
+      "boundary_cache_inputs_are_explicit": true
+    },
+    {
+      "name": "geora_bfloat16_300_b64_trace_observer_not_replayed_during_backward",
+      "passed": true
+    },
+    {
+      "name": "geora_bfloat16_300_b64_inference_values_exact_no_graph",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_65_b16_native_forward_logps_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_65_b16_native_inputs_positions_masks_cache_lengths_exact",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_65_b16_adapter_gradients_match_without_detached_history",
+      "passed": true,
+      "max_absolute_gradient_difference": 0.0,
+      "last_token_only": true
+    },
+    {
+      "name": "geora_float32_65_b16_every_checkpoint_recomputed_with_matching_autocast",
+      "passed": true,
+      "checkpoint_blocks": 5,
+      "recompute_blocks": 5,
+      "autocast_states_match": true,
+      "boundary_cache_tensor_elements": 31360,
+      "max_boundary_cache_tensor_elements": 8832,
+      "forward_cache_forwards": 65,
+      "recompute_cache_forwards": 65,
+      "runtime_guard_forward_checks": 0,
+      "runtime_guard_recompute_checks": 0,
+      "block_size": 16,
+      "generated_steps": 65,
+      "boundary_cache_inputs_are_explicit": true
+    },
+    {
+      "name": "geora_float32_65_b16_trace_observer_not_replayed_during_backward",
+      "passed": true
+    },
+    {
+      "name": "geora_float32_65_b16_inference_values_exact_no_graph",
+      "passed": true
+    }
+  ],
+  "accepted_oracle_source": "/software/projects/pawsey0807/btian/geora/code/scripts/cached_score.py",
+  "accepted_oracle_sha256": "8200e327d2a856f4fb42ac70cc7ff9b1114356ea926b14a42bb701e70fd69f0f",
+  "oracle_change": "Only validation capacity cap256 raised4096; forward/backward arithmetic unchanged",
+  "scope": "Tiny CPU native Qwen models; not full-model GPU capacity or runtime",
+  "elapsed_seconds": 19.565022937953472
+}

@@ -1,0 +1,37 @@
+{
+  "integrated_protocol_cpu.json": {
+    "status": "passed",
+    "check_count": 19,
+    "scope": "CPU segmentation/checkpoint protocol only"
+  },
+  "accumulation_cpu_setonix.json": {
+    "status": "passed",
+    "check_count": 6,
+    "scope": "Loss weighting, gradients, clipping and optimizer semantics; not full-Qwen GPU acceptance"
+  },
+  "block_cpu_setonix.json": {
+    "status": "passed",
+    "check_count": 21,
+    "scope": "Tiny CPU native Qwen models; not full-model GPU capacity or runtime"
+  },
+  "guard_cpu_setonix.json": {
+    "status": "passed",
+    "check_count": 7,
+    "scope": "Tiny standard Qwen2 on CPU; guard wiring and aborted update, no GPU run"
+  },
+  "integrated_guard_cpu.json": {
+    "status": "passed",
+    "check_count": 7,
+    "scope": "Tiny standard Qwen2 on CPU; guard wiring and aborted update, no GPU run"
+  },
+  "integrated_block_cpu.json": {
+    "status": "passed",
+    "check_count": 21,
+    "scope": "Tiny CPU native Qwen models; not full-model GPU capacity or runtime"
+  },
+  "integrated_accumulation_cpu.json": {
+    "status": "passed",
+    "check_count": 6,
+    "scope": "Loss weighting, gradients, clipping and optimizer semantics; not full-Qwen GPU acceptance"
+  }
+}

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timezone
+import copy
 import fcntl
 import hashlib
 import json
@@ -108,6 +109,10 @@ class PilotReport:
             count = sum(answer["token_count"] for answer in rollout["answers"])
             self.data["physical_completion_tokens"] = self.data.get("physical_completion_tokens", 0) + count
             self.data["physical_tokens_accounted_rollout_count"] = observed
+        self.data["physical_completion_tokens_lower_bound"] = (
+            self.data.get("physical_completion_tokens", 0)
+            + self.data.get("discarded_partial_completion_tokens", 0)
+            + self.data.get("discarded_incomplete_tokens_lower_bound", 0))
         self.data["updated_at_utc"] = utc_now()
         atomic_json(self.path, self.data)
 
@@ -314,16 +319,29 @@ def run_training_segment(*, torch, policy, reference, tokenizer, optimizer, sche
                 batch = step_function(policy, reference, tokenizer, questions, optimizer, scheduler,
                                       generator, config, report, f"step_{step}", work_deadline)
             except TimeoutError as error:
-                # Original one_step raises deadline failures before backward or
-                # any optimizer update. Only then is restoring RNG sufficient.
+                # A long microbatch may abort during backward. No optimizer
+                # update has occurred; clear partial gradients and restore RNG.
                 if report.data["physical_optimizer_step_calls"] != before_optimizer_calls:
                     raise RuntimeError("Deadline failure occurred after an optimizer update") from error
                 restore_rng(torch, generator, device, rng)
                 optimizer.zero_grad(set_to_none=True)
+                partial = copy.deepcopy(report.data.get("current_partial_rollout"))
+                known_partial_tokens = 0 if partial is None else sum(
+                    answer["token_count"] for answer in partial.get("completed_answers", []))
+                incomplete_lower_bound = 0 if partial is None else partial.get(
+                    "incomplete_answer_valid_tokens_lower_bound", 0)
+                report.data["discarded_partial_completion_tokens"] = report.data.get(
+                    "discarded_partial_completion_tokens", 0) + known_partial_tokens
+                report.data["discarded_incomplete_tokens_lower_bound"] = report.data.get(
+                    "discarded_incomplete_tokens_lower_bound", 0) + incomplete_lower_bound
                 report.data.setdefault("discarded_rollouts", []).append(dict(
                     segment_id=segment_id, logical_step=step, reason=str(error),
-                    completed_rollout=report.data.get("current_completed_rollout"),
-                    partial_rollout_token_count_unknown=report.data.get("current_completed_rollout") is None))
+                    completed_rollout=copy.deepcopy(report.data.get("current_completed_rollout")),
+                    partial_rollout=partial,
+                    partial_gradient_accumulation=copy.deepcopy(report.data.get("current_partial_gradient_accumulation")),
+                    known_partial_completion_tokens=known_partial_tokens,
+                    incomplete_answer_tokens_lower_bound=incomplete_lower_bound,
+                    partial_rollout_token_count_unknown=partial is None and report.data.get("current_completed_rollout") is None))
                 stop_reason = "deadline_before_update_RNG_restored"
                 break
             batch["step_elapsed_seconds"] = time.perf_counter() - step_started

@@ -83,7 +83,7 @@ def sample_completions_cached_training(
     model, prompt_ids, pad_token_id, eos_token_id, max_new_tokens, device,
     frozen_dtype, *, temperature=1.0, generator, progress_callback=None, deadline=None,
 ):
-    """Native DynamicCache rollout, 1-256 tokens, no saved vocabulary scores.
+    """Native DynamicCache rollout, 1-4096 tokens, no saved vocabulary scores.
 
     The returned layout/RNG/EOS conventions match sample_completions_cached.
     First EOS is scored; later pad slots are excluded. No differentiable graph
@@ -93,8 +93,8 @@ def sample_completions_cached_training(
     require_zero_dropout(model)
     if not prompt_ids or any(not tokens for tokens in prompt_ids):
         raise ValueError("Every prompt must contain at least one token")
-    if not isinstance(max_new_tokens, int) or not 1 <= max_new_tokens <= 256:
-        raise ValueError("Use 1-256 new tokens for this bounded training candidate")
+    if not isinstance(max_new_tokens, int) or not 1 <= max_new_tokens <= 4096:
+        raise ValueError("Use 1-4096 new tokens for this bounded training sampler")
     if not math.isfinite(temperature) or temperature <= 0:
         raise ValueError("Temperature must be finite and positive")
     eos_ids = [eos_token_id] if isinstance(eos_token_id, int) else list(eos_token_id)

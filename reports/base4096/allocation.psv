@@ -1,0 +1,2 @@
+50675134|geora-validation|gpu-dev|pawsey0807-gpu|FAILED|1:0|02:07:07|02:07:34|27|00:35:00|billing=128,cpu=16,energy=11245,gres/gpu=1,mem=29440M,node=1|nid002056
+50697776|geora-validation|gpu-dev|pawsey0807-gpu|COMPLETED|0:0|10:05:32|10:21:49|977|00:35:00|billing=128,cpu=16,energy=549777,gres/gpu=1,mem=29440M,node=1|nid002056

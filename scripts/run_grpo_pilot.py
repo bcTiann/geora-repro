@@ -36,17 +36,23 @@ from gsm8k_data import ANSWER_RULE, PROMPT_INSTRUCTION, configured_answer_rule, 
 from lora_layers import LoRALinear, export_lora_state, install_lora
 from pilot_runtime import (
     COUNTERS, PilotReport, atomic_json, canonical_hash, exclusive_run, file_hash,
-    initialization_hash, restore_record_history, run_training_segment, training_config_hash, utc_now,
+    initialization_hash, restore_record_history, run_training_segment, save_current_boundary, training_config_hash, utc_now,
 )
 
 
-def source_hashes():
+def source_hashes(config=None):
     relative_paths = (
         "configs/base_model.json", "geora_layers.py", "lora_layers.py", "scripts/check_grpo_continuation.py",
         "scripts/check_grpo_training.py", "scripts/geora_check_utils.py",
         "scripts/grpo_math.py", "scripts/grpo_rollout.py", "scripts/grpo_training_state.py",
         "scripts/gsm8k_data.py",
     )
+    if config and config.get("rollout_backend") == "native_cached_block_checkpointed":
+        relative_paths += (
+            "scripts/cached_training_rollout.py", "scripts/cached_rollout.py",
+            "scripts/cached_block_score.py", "scripts/long_grpo_step.py", "scripts/long_capacity_check.py",
+            "third_party/verl/gsm8k.py", "third_party/verl/provenance.json",
+        )
     sources = {name: file_hash(PROJECT_DIRECTORY / name) for name in relative_paths}
     sources["scripts/run_grpo_pilot.py"] = file_hash(Path(__file__))
     sources["scripts/pilot_runtime.py"] = file_hash(Path(__file__).with_name("pilot_runtime.py"))
@@ -88,8 +94,23 @@ def validate_config(config):
     for name in ("optimizer_steps", "questions_per_batch", "answers_per_question", "train_question_limit"):
         if isinstance(config[name], bool) or not isinstance(config[name], int) or config[name] < 1:
             raise ValueError(f"{name} must be a positive integer")
-    if config.get("rollout_backend", "fixed_width") != "fixed_width":
-        raise ValueError("This pilot preserves the accepted fixed_width probability path")
+    configured_answer_rule(config)
+    backend = config.get("rollout_backend", "fixed_width")
+    if backend not in ("fixed_width", "native_cached_block_checkpointed"):
+        raise ValueError("Unsupported bounded pilot probability path")
+    if backend == "native_cached_block_checkpointed":
+        if config.get("microbatch_answers") != 1:
+            raise ValueError("The long pilot requires matched batch-one generation and gradients")
+        size = config.get("checkpoint_block_tokens")
+        if isinstance(size, bool) or not isinstance(size, int) or not 1 <= size <= 32:
+            raise ValueError("Long cached checkpoint blocks must have 1-32 token steps")
+        guard = config.get("scoring_memory_guard_gib")
+        if not isinstance(guard, (int, float)) or isinstance(guard, bool) or not 0 < guard <= 55:
+            raise ValueError("A positive scoring memory guard of at most55GiB is required")
+        for field, limit in (("max_prompt_tokens", 1024), ("max_new_tokens", 4096)):
+            value = config[field]
+            if isinstance(value, bool) or not isinstance(value, int) or not 1 <= value <= limit:
+                raise ValueError(f"Invalid long pilot {field}")
     if config.get("checkpoint_attention", False):
         raise ValueError("Attention checkpointing is not selected for this fixed_width pilot")
     if config["updates_per_rollout"] != 1 or config["group_std_correction"] != 0 or config["dropout"] != 0:
@@ -233,7 +254,11 @@ def run(arguments):
         raise ValueError("Prepared train does not contain the complete requested unique subset")
     if any(row["source_split"] != "train" for row in rows):
         raise ValueError("Pilot data must come from the prepared train split")
-    report = open_report(arguments, config, rows, source_hashes())
+    report = open_report(arguments, config, rows, source_hashes(config))
+    step_function = one_step
+    if config.get("rollout_backend") == "native_cached_block_checkpointed":
+        from long_grpo_step import one_step as long_one_step
+        step_function = long_one_step
     prior_segment_count = len(report.data["segments"])
     try:
         if arguments.resume is not None:
@@ -285,12 +310,21 @@ def run(arguments):
         if not math.isfinite(reserve) or reserve < 0:
             raise ValueError("checkpoint_reserve_seconds must be finite and nonnegative")
         try:
+            if getattr(arguments, "capacity_check", False):
+                if arguments.method != "geora" or report.data["logical_optimizer_steps"] != 0:
+                    raise ValueError("The maximal capacity check requires an untrained GeoRA policy")
+                from long_capacity_check import check_long_capacity
+                # A clean step0 is recoverable even if the capacity check is interrupted.
+                save_current_boundary(report, policy, optimizer, scheduler, generator,
+                                      provenance, report.data["next_data_position"], "cuda", save_boundary_checkpoint)
+                check_long_capacity(policy, tokenizer, config, report, process_deadline - reserve)
+                report.data["capacity_memory_peak_included_in_process_peak"] = True
             status = run_training_segment(
                 torch=torch, policy=policy, reference=reference, tokenizer=tokenizer,
                 optimizer=optimizer, scheduler=scheduler, generator=generator,
                 rows=rows, config=config, report=report, provenance=provenance,
                 stop_after_step=arguments.stop_after_step, work_deadline=process_deadline - reserve,
-                device="cuda", step_function=one_step, save_checkpoint=save_boundary_checkpoint,
+                device="cuda", step_function=step_function, save_checkpoint=save_boundary_checkpoint,
             )
         finally:
             # Copy one frozen tensor at a time to CPU after the segment. The
@@ -350,6 +384,7 @@ def parse_arguments():
     parser.add_argument("--runtime-limit-seconds", type=float, default=1000,
                         help="Elapsed process budget; reserve time for a completed-boundary checkpoint.")
     parser.add_argument("--checkpoint-every", type=int, default=10)
+    parser.add_argument("--capacity-check", action="store_true", help="Check1024+4096 native-cache forward/backward before first GeoRA update.")
     arguments = parser.parse_args()
     if arguments.stop_after_step < 0 or arguments.checkpoint_every < 1:
         parser.error("Step target must be nonnegative and checkpoint interval positive")

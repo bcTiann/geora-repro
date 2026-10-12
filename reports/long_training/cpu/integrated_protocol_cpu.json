@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "scope": "CPU segmentation/checkpoint protocol only",
+  "check_count": 19,
+  "checks": [
+    "runtime_segment_controls_do_not_change_training_hash",
+    "learning_rate_changes_training_hash",
+    "same_factor_values_with_different_alpha_have_different_identity",
+    "absolute_cursor_cycles_without_filtering",
+    "BF16_CPU_digest_uses_real_storage",
+    "early_segment_pauses_without_claiming_completion",
+    "initial_and_segment_boundaries_are_written",
+    "segmented_AB_AdamW_scheduler_and_all_RNG_equal_continuous",
+    "all_four_question_groups_and_tokens_equal_continuous",
+    "logical_and_physical_steps_and_tokens_are_accounted",
+    "old_records_preserved_when_replaying_older_boundary",
+    "replay_boundary_immutable_and_physical_work_visible",
+    "deadline_pauses_at_last_completed_boundary",
+    "deadline_rolls_back_every_RNG_before_retry",
+    "retry_equals_continuous_and_discarded_work_retained",
+    "partial_group_deadline_preserves_original_completed_boundary",
+    "partial_group_tokens_and_gradient_attempt_are_not_lost",
+    "retry_after_partial_backward_reproduces_continuous_update",
+    "different_initialization_is_rejected"
+  ]
+}

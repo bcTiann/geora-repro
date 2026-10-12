@@ -899,3 +899,7 @@ Setonix job 50670799，20 分钟上限，一个逻辑 GPU，实际 allocation 43
 一次作业完成，无恢复重跑；20分钟硬上限，实际allocation793秒（13分13秒），COMPLETED 0:0，gres/gpu=1，已释放。累计24个已记录作业allocation76分6秒；不含login CPU，不是八卡用量。没有新增完整模型副本，没有下载模型或重新SVD。
 
 结果是当前小规模协议的原模型基线；42/128截断及格式要求使其不能直接等同于模型数学能力或GeoRA Table8。本轮没有LoRA／GeoRA10步或100步训练。详细解释和原始证据见 [BASE_VALIDATION.md](BASE_VALIDATION.md)。
+
+## 2026-10-12：固定判分和4096-token Base基线
+
+旧128回答CPU重判Decimal32→verl31；9份提取改变，1份最终奖励1→0（9.00与9字符串不相等）。独立固定verl下256→4096为31→42/128，截断42→1；128旧前缀及86份旧EOS全序列相同。GPU作业50675134因旧临时模型路径缺失退出27秒；修正到持久scratch后50697776完成0:0，977秒、33422tokens、峰值3.088GiB；合计1004单逻辑GPU秒。完整报告与1589项独立复核见[reports/base4096](reports/base4096/comparison.html)。没有优化器更新。长回答训练CPU验收通过，GPU容量和两方法训练尚待执行。
