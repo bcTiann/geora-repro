@@ -1,0 +1,48 @@
+[project]
+name = "geora-vllm-modern"
+version = "0.1.0"
+description = "Independent current ROCm inference and training stack for GeoRA"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "vllm==0.32.0+rocm723",
+    "torch==2.13.0+git733fca1",
+    # Declare the compiled dependencies directly so uv applies each source mapping.
+    "triton==3.8.0+git669b31ac",
+    "amd-aiter==0.1.24.post1",
+    "flash-attn==2.8.3",
+    "torchvision==0.28.0+8fb8771",
+    "torchaudio==2.11.0+34c52a6",
+    "amdsmi==26.2.2+c2d9476115",
+]
+
+[dependency-groups]
+train = [
+    # Stable TRL 1.16 rejects vLLM 0.32; this immutable upstream revision supports it.
+    "trl[vllm,peft,math_verify]",
+]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+# Plain `uv sync` and `uv run` include the training stack as well as inference.
+default-groups = ["train"]
+# Permit TRL's pure-Python source build; never compile GPU packages on a login node.
+no-build-package = [
+    "vllm", "torch", "triton", "amd-aiter", "flash-attn",
+    "torchvision", "torchaudio", "amdsmi",
+]
+
+[[tool.uv.index]]
+name = "vllm-rocm"
+url = "https://wheels.vllm.ai/rocm/0.32.0/rocm723/"
+explicit = true
+
+[tool.uv.sources]
+vllm = { index = "vllm-rocm" }
+torch = { index = "vllm-rocm" }
+triton = { index = "vllm-rocm" }
+amd-aiter = { index = "vllm-rocm" }
+flash-attn = { index = "vllm-rocm" }
+torchvision = { index = "vllm-rocm" }
+torchaudio = { index = "vllm-rocm" }
+amdsmi = { index = "vllm-rocm" }
+trl = { url = "https://github.com/huggingface/trl/archive/c6eac19f63be27498f2a7c8108d1e8a4dffde23f.tar.gz" }

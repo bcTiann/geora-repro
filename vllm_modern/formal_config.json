@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "client_date": "2026-10-27",
+  "status": "selected_after_controlled_batch_matrix_and_selected_schedule_save_restore",
+  "objective": "Complete an independent Qwen2.5-1.5B-Instruct GSM8K GRPO to MATH500 endpoint comparison anchored to GeoRA v4 Table 8",
+  "paper": {
+    "url": "https://arxiv.org/html/2601.09361v4#A3",
+    "table": 8,
+    "reported_math500_percent": {
+      "lora": 52.6,
+      "geora": 54.6,
+      "pissa": 53.4,
+      "milora": 54.8
+    },
+    "author_official_training_repository": "not located in this audit; no claim of nonexistence"
+  },
+  "code": {
+    "intended_repository": "https://github.com/bcTiann/geora-repro",
+    "observed_default_branch": "codex/bootstrap",
+    "observed_head": "f13fe6cd50e4d3aac52a950646c6908c2520143a",
+    "new_formal_commit": null,
+    "source_snapshot_registry": "../reports/native_acceptance_20261027/execution_plan.json",
+    "new_runtime_candidate": "vLLM0.32.0+rocm723; Torch2.13.0+git733fca1; TRL1.17.0.dev0@c6eac19f63be27498f2a7c8108d1e8a4dffde23f",
+    "runtime_accepted": true,
+    "accepted_gpu_training_source_commit": "b08d0eb6f3a18520b683a7a526a3112993c3d340",
+    "initial_gpu_acceptance_source_commit": "3afb96628fd18d93560d7e0ab00ad30c6b474cfb",
+    "batch_benchmark_source_commit": "de52dcfce2f4195fb806a63015a9905be7194335",
+    "general_runner_implemented": true
+  },
+  "model": {
+    "repo_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "expected_base_files_sha256": {
+      "config.json": "98d2ff8cc47488d08a2b0b3acf4eb99ef210779b42bd48605f6b8e36acdbf670",
+      "generation_config.json": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+      "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+      "model.safetensors": "dd924a11b4c220f385b51ffa522daea7c9f3d850e31b162bb5661df483c6d3ee",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "initialization": "Fresh from the same base; no old checkpoint/optimizer continuation"
+  },
+  "data": {
+    "task": "GSM8K",
+    "training_rows": 7345,
+    "holdout_rows": 128,
+    "train_file_sha256": "2f836d81dd1cb035f0b4b5f058ecb77098730a4579b3cb5ca40cc2d85e14a13d",
+    "holdout_role": "Development observations only; preserve existing split; do not append holdout to training",
+    "ordered_training_ids_hash": "4a1fea4c966fe97832e4cf8d495be0201dbb498fa14230a97c47520377cb6f2c",
+    "test_rows": 1319,
+    "test_manifest_frozen": false,
+    "math500_repo_id": "HuggingFaceH4/MATH-500",
+    "math500_revision": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be",
+    "math500_rows": 500,
+    "source_repository": "openai/grade-school-math",
+    "source_commit": "3101c7d5072418e28b9008a6636bde82a006892c",
+    "source_license": "MIT",
+    "split_seed": 20261010,
+    "split_rule": "sort source train IDs by SHA256(seed:ID); first validation_count are validation; remainder are train",
+    "validation_file_sha256": "e6421670d476ee5fc98cd178803caf81f25e96963fe80709095e31e0fd9a1315",
+    "test_file_sha256": "bce83dad8c81c88546969ddb2adac80f260bb42b71a6e8a026813dace2a3d85f"
+  },
+  "required_methods": [
+    "base",
+    "untrained_geora",
+    "lora",
+    "geora"
+  ],
+  "second_stage_strong_baselines": [
+    "pissa",
+    "milora"
+  ],
+  "training": {
+    "rank": 16,
+    "alpha": 32.0,
+    "rho": 0.2,
+    "target_modules": "all-linear-excluding-output-head",
+    "fixed_dtype": "bfloat16",
+    "adapter_dtype": "float32",
+    "autocast": false,
+    "svd": "exact_cpu_fp32",
+    "reward": "final_boxed_exact_rational_v2",
+    "numeric_comparison": "exact_fraction_decimal_no_tolerance",
+    "answer_extraction": "last_boxed_no_rescue_after_malformed_command",
+    "prompt": "step_by_step_numeric_boxed_v1",
+    "learning_rate": 1e-06,
+    "optimizer": "adamw_torch",
+    "weight_decay": 0.0,
+    "scheduler": "constant",
+    "max_grad_norm": 1.0,
+    "num_generations": 8,
+    "answers_per_update": 128,
+    "batch_128_unit_assumption": "responses_not_prompts",
+    "micro_batch_size": 8,
+    "generation_batch_size": 128,
+    "max_prompt_length": 1024,
+    "max_completion_length": 4096,
+    "temperature": 1.0,
+    "top_k": 0,
+    "top_p": 1.0,
+    "repetition_penalty": 1.0,
+    "beta": 0.0,
+    "num_iterations": 1,
+    "loss_type": "grpo",
+    "scale_rewards": "group",
+    "epsilon": 0.2,
+    "mask_truncated_completions": false,
+    "gradient_checkpointing": true,
+    "use_reentrant": false,
+    "seed": 42,
+    "data_seed": 42,
+    "max_steps": 400,
+    "precision_contract": {
+      "required_for_both_methods": true,
+      "frozen_branch": "Input and frozen weight/bias tensors BF16; keep branch result separately",
+      "adapter_branch": "Cast input to FP32; A and B storage and both low-rank matrix operations FP32; dropout0; multiply alpha/r in FP32",
+      "addition": "Promote frozen result to FP32 for addition to the scaled adapter result, then cast to original input dtype",
+      "autocast": false,
+      "export_to_inference": "Form residual/base + alpha/r * (B@A) in FP32, cast complete dense weight to BF16; include every frozen policy buffer",
+      "equivalence_claim": "No exact equality claimed between dual-branch and merged BF16 operations",
+      "acceptance": "Check actual PEFT and GeoRA arithmetic in the selected pinned runtime; record any mismatch before comparing methods",
+      "verification_scope": "A/B FP32 storage and finite gradients checked; AMP disabled by configuration. No per-kernel arithmetic precision profile."
+    },
+    "expected_decoder_linear_targets": 196,
+    "expected_trainable_adapter_tensors": 392,
+    "gradient_accumulation_steps": 16,
+    "steps_per_generation": 16,
+    "rollouts_per_update": 1
+  },
+  "budget": {
+    "optimizer_updates_per_method": 400,
+    "questions_per_update": 16,
+    "responses_per_question": 8,
+    "responses_per_update": 128,
+    "question_exposures_per_method": 6400,
+    "responses_per_method": 51200,
+    "main_training_seed": 42,
+    "robustness_extension_seeds_prelisted": [
+      43,
+      44
+    ],
+    "seed_robust_claim_allowed_after_single_seed": false,
+    "selection": "Fixed final update400; no best-on-MATH500 checkpoint selection",
+    "author_total_steps_known": false,
+    "is_one_full_epoch": false
+  },
+  "inference": {
+    "proposed_architecture": "Synchronous TRL learner plus native vLLM server on separate GCDs",
+    "formal_backend": "Synchronous native TRL + vLLM server",
+    "selection_rule": "Select one accepted backend for both methods using correctness and full GCD-hour measurements before formal training",
+    "importance_sampling_if_vllm": {
+      "enabled": true,
+      "mode": "token_truncate",
+      "clip_max": 2.0,
+      "clip_min": null,
+      "level": "token",
+      "is_authors_disclosed_setting": false
+    },
+    "must_log": [
+      "policy version before/after generation",
+      "completion IDs and token IDs",
+      "behavior log probabilities including EOS",
+      "learner log probabilities",
+      "raw and corrected ratios",
+      "truncated fraction",
+      "zero-variance reward groups",
+      "finite gradient and parameter updates",
+      "export/transfer/rollout/scoring/backward/save time",
+      "full allocation GCD-hours"
+    ],
+    "execution_mode": {
+      "learner_gcds": 1,
+      "inference_gcds": 1,
+      "same_node": true,
+      "vllm_dtype": "bfloat16",
+      "max_model_len": 5121,
+      "max_num_seqs": 128,
+      "gpu_memory_utilization": 0.5,
+      "enforce_eager": true,
+      "batch_invariant_mode_enabled": false,
+      "native_weight_transport": "NCCL/RCCL; complete canonical dense BF16 policy including all frozen buffers"
+    },
+    "gpu_binding": {
+      "srun_gres": "gpu:2",
+      "srun_gpus_per_task": null,
+      "srun_gpu_bind": null,
+      "srun_cpu_bind": "cores",
+      "per_task_rocr_visible_devices": "SLURM_LOCALID",
+      "physical_bdf_distinct_required": true,
+      "p2p_disabled": false,
+      "legacy_ipc_override": null
+    },
+    "request_sampling_seed": "training_seed + num_generations * (global_optimizer_step * rollouts_per_update + rollout_index); selected G8 and one rollout/update",
+    "reproducibility": "Bitwise model/optimizer/scheduler/learner RNG restoration passed at micro8/GAS16/gen128; stock skip16 and actual next16 questions verified for both methods. HF learner/merged v1 replay exact; vLLM v1 replay has measured deltas. No bitwise stochastic-trajectory guarantee.",
+    "diagnostic_probability_concurrency": {
+      "selected": 4,
+      "control_order": [
+        1,
+        1,
+        4,
+        4,
+        1,
+        4
+      ],
+      "within_lifetime_serial_max_deltas": [
+        0.24946308135986328,
+        0.16341781616210938
+      ],
+      "cross_lifetime_serial_max_delta": 0.31197643280029297,
+      "parallel4_repeats_exact_under_this_control_order": true,
+      "general_batch_invariance_established": false,
+      "diagnostic_policy": "Keep configured4, retain cold/warm repetitions and all tail measurements; never treat measured repetition as universal bitwise reproducibility"
+    },
+    "batch_efficiency_selection": {
+      "micro_batch_size": 8,
+      "generation_batch_size": 128,
+      "gradient_accumulation_steps": 16,
+      "answers_per_update": 128,
+      "num_generations": 8,
+      "same48_questions_and_same16_per_update": true,
+      "warm_update_observations_per_case": 2,
+      "stable_speedup_claim": false,
+      "benchmark": "../reports/batch_optimization_20261027/batch_summary.json",
+      "selected_schedule_acceptance": "../reports/batch_optimization_20261027/schedule_acceptance_summary.json",
+      "clip_count_in_selected_pilot": {
+        "lora": 1,
+        "geora_mixed": 0
+      }
+    }
+  },
+  "evaluation": {
+    "primary": "Complete MATH500 500 questions; Math-Verify0.8.0 mathematical equivalence, frozen pilot extraction contract",
+    "secondary": [
+      "GSM8K official test1319 using final_boxed_exact_rational_v2",
+      "strict-boxed secondary metric",
+      "format failures and length limits"
+    ],
+    "decode": {
+      "do_sample": false,
+      "max_new_tokens": 4096,
+      "same_prompt_tokenizer_and_backend_for_all_methods": true
+    },
+    "evaluation_contract_source": "validation/math500_20261024/protocol.json",
+    "evaluation_environment": "Separate pinned scoring environment; no silent parser upgrade",
+    "new_evaluator_source_sha256": null,
+    "new_dataset_manifest_sha256": null,
+    "new_prompt_sha256": null,
+    "test_data_previously_accessed": true,
+    "tune_on_math500_allowed": false,
+    "statistics": "Per-question paired exact test and descriptive interval; separately report training seeds; never substitute boxed secondary result for main result",
+    "primary_generation_backend": "HF learner dual-branch model under the same locked training runtime for every method",
+    "scoring_backend": "Separate frozen Math-Verify0.8.0 CPU scoring contract"
+  },
+  "independent_choices_not_fully_disclosed_by_authors": [
+    "400 updates",
+    "batch128 means completions rather than questions",
+    "train7345/holdout128 split",
+    "beta0",
+    "seed42 and listed extensions",
+    "BF16 fixed tensors plus FP32 adapters and low-rank arithmetic",
+    "prompt and extraction semantics",
+    "greedy evaluation",
+    "constant LR and weight_decay0",
+    "single learner GCD versus reported8x80GB hardware",
+    "vLLM behavior importance sampling correction"
+  ],
+  "gates": [
+    {
+      "id": "canonical_source",
+      "status": "passed_for_two_update_diagnostic",
+      "requirement": "Reviewed code in a new branch/commit with source hashes, preserved historical artifacts and lockfile; modern README status corrected in working copy"
+    },
+    {
+      "id": "resident_policy_mapping",
+      "status": "passed_for_two_update_diagnostic",
+      "requirement": "Account for every canonical dense tensor including frozen buffers; independently map to packed resident weights and compare expected values at versions0/1/2, not merely changed checksums"
+    },
+    {
+      "id": "three_way_logprob",
+      "status": "measurements_complete_no_numerical_equivalence_claim",
+      "requirement": "Learner dual-branch vs HF merged BF16 vs vLLM merged BF16 on fixed short/long/low-probability/EOS sequences; raw token alignment and all deltas; control-based acceptance policy frozen before formal evaluation"
+    },
+    {
+      "id": "modern_two_updates_both_methods",
+      "status": "passed_at_selected_micro8_gas16_gen128_two_real_updates_each",
+      "requirement": "Both methods two real updates,128 responses/update; version0/1/2 publications;256 responses each; no nonfinite active logprobs/gradients, proper correction and unchanged frozen tensors"
+    },
+    {
+      "id": "checkpoint_and_resume",
+      "status": "passed_at_selected_schedule_with_stock_skip16_and_actual_new_question_checks",
+      "requirement": "Formal runner supports all policy/optimizer/scheduler/RNG/data state and complete update-boundary resume; verify saved/reloaded policy and continuation, declaring any non-exact sampling replay"
+    },
+    {
+      "id": "scoring_replay",
+      "status": "gsm8k_9_contract_tests_passed_in_new_runtime_math500_scoring_remains_separately_frozen",
+      "requirement": "Replay frozen scoring contract in isolated evaluator environment before accepting upgraded dependencies"
+    },
+    {
+      "id": "4096_full_update_cost",
+      "status": "full_length_micro8_forward_backward_entropy_return_and_adam_moment_reserve_passed; end_to_end_timings_are_variable_length_pilot_only",
+      "requirement": "Same accepted new environment; full4096 cap; controlled work and both methods; exclude heavy diagnostics from timed loop; startup/final save/allocation and real tokens disclosed"
+    },
+    {
+      "id": "formal_manifest_and_budget",
+      "status": "general_runner_implemented; final_fresh_base_evaluator_manifest_walltime_entry_and_budget_binding_pending",
+      "requirement": "Freeze actual code/init/data/prompt/evaluator hashes, backend, step schedule and budget before launch; check current remote artifacts, queue and allocation budget to avoid duplicate work"
+    }
+  ],
+  "launchable": false,
+  "new_gpu_jobs_submitted_by_this_audit": true,
+  "history_policy": "Never append old LoRA30/GeoRA46 or checkpoint25 fresh-optimizer diagnostics to claim the new400-step run; preserve all previous observations",
+  "runtime_lock_sha256": "d5587ef9cd16fcbd2f91a1a5a2b84b461abe31895af318225f8d5433ac071df9",
+  "runtime_versions": {
+    "trl": "1.17.0.dev0",
+    "vllm": "0.32.0+rocm723",
+    "torch": "2.13.0+git733fca1",
+    "transformers": "5.19.0",
+    "peft": "0.21.2"
+  },
+  "checkpointing": {
+    "save_every_optimizer_updates": 25,
+    "keep_last": 2,
+    "save_final": true,
+    "resume_only_at_complete_update_boundary": true,
+    "required_state": [
+      "adapter and frozen GeoRA residual/bias",
+      "optimizer",
+      "scheduler",
+      "learner RNG",
+      "global optimizer step and data position",
+      "explicit per-rollout sampling seed"
+    ],
+    "regular_engine_restart": false,
+    "restart_note": "No planned periodic restart; full state may resume after interruption, without a bitwise sampling replay claim"
+  },
+  "scheduling": {
+    "partition": "gpu",
+    "account": null,
+    "nodes": 1,
+    "ntasks": 2,
+    "gcds": 2,
+    "cpus_per_task_in_srun": 8,
+    "wall_limit_hours": 24,
+    "stop_and_save_at_next_complete_update_before_wall_limit": true,
+    "formal_job_submission_performed": false,
+    "timing_note": "Two-update compatibility timings include heavy diagnostics and two startups; no stable throughput or cost advantage inferred"
+  },
+  "audit_policy": {
+    "initial_and_resume_full_resident_hash": true,
+    "complete_canonical_buffer_coverage_every_publication": true,
+    "version_and_behavior_token_identity_every_rollout": true,
+    "full_probability_records_include_eos": true,
+    "retain_observed_two_step_source_and_all_failures": true,
+    "future_steady_state_performance_claim_requires_separate_timed_benchmark": true,
+    "full_resident_hash_every_publication": true,
+    "three_way_probability_repetitions": 2,
+    "record_actual_behavior_and_learner_logprobs_before_correction": true
+  },
+  "launchable_note": "Selected runtime/batch and actual checkpoint restore are qualified. The general runner exists but its final fresh-Base initialization/input/prompt/evaluator manifest and formal walltime submission entry still need binding before400-step launch.",
+  "formal_training_started": false,
+  "implementation_basis": {
+    "paper_equations": "GeoRA v4 Eq1-8, AppendixB.1/B.2",
+    "rho_semantics": "Union of bottom-rho |W| and bottom-rho |rank_r(W)| masks; union is not fixed20percent",
+    "svd": "SVD of originalW for spectral mask, then SVD of maskedW for initialA/B",
+    "residual": "W_res = W - (alpha/rank)*B0@A0",
+    "arithmetic_limit": "BF16 residual rounding does not preserve exact function equality; actual per-kernel computation precision was not profiled by this acceptance"
+  },
+  "method_implementation_names": {
+    "lora": "lora",
+    "geora": "geora_mixed"
+  },
+  "before_formal_launch": [
+    "Bind final fresh-Base initialization, source, prompt and evaluator manifest and formal walltime submission entry",
+    "Confirm the approved formal allocation budget; do not infer400-step cost solely from this short variable-length pilot",
+    "Keep primary HF learner evaluation and isolated Math-Verify0.8 scoring contract common to all methods; match the declared fixed-probability audit schedule"
+  ]
+}

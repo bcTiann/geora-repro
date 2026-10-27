@@ -1,0 +1,75 @@
+{
+  "client_date": "2026-10-27",
+  "purpose": "Batch efficiency optimization without changing reward or statistical update batch",
+  "max_gcds": 2,
+  "max_allocation_seconds": 3600,
+  "max_new_optimizer_updates": 24,
+  "formal400_training": false,
+  "runtime_and_reward": "Same locked native TRL/vLLM stack and final_boxed_exact_rational_v2",
+  "capacity": {
+    "micro_candidates": [
+      4,
+      8
+    ],
+    "fallback_if_micro4_fails": 2,
+    "prompt_tokens": 1024,
+    "completion_tokens": 4096,
+    "optimizer_updates": 0,
+    "adam_moment_bytes_reserved": true
+  },
+  "benchmark": {
+    "methods": [
+      "lora",
+      "geora_mixed"
+    ],
+    "initialization": "Frozen checkpoint25, independent fresh optimizer in every case",
+    "cases": [
+      {
+        "micro": 4,
+        "generation": 32
+      },
+      {
+        "micro": 4,
+        "generation": 64
+      },
+      {
+        "micro": 4,
+        "generation": 128
+      },
+      {
+        "micro": 8,
+        "generation": 128
+      }
+    ],
+    "micro8_case_requires_capacity_pass_for_both_methods": true,
+    "answers_per_update": 128,
+    "num_generations": 8,
+    "max_steps_per_case": 3,
+    "first_update": "cold, reported separately",
+    "later_updates": "two observations, not a convergence or robust speedup result",
+    "questions": "Same first48 questions from the frozen train split",
+    "sampling_note": "Grouping/request seeds and generated token counts can change with schedule; no exact token identity claim"
+  },
+  "measurements": [
+    "full resident byte hashes every publication",
+    "three-way probabilities at start/end",
+    "real sampled token identities and logprobs including EOS",
+    "raw learner and behavior logprobs before correction",
+    "reward statuses and zero-std groups",
+    "nested stage wall timings",
+    "padding fraction",
+    "peak allocated/reserved learner memory",
+    "per-role BDF-bound AMD-SMI samples",
+    "full Slurm allocation hours"
+  ],
+  "selection": "Use a common capacity-passing schedule for LoRA and GeoRA based on real wall time, tokens, padding and GCD hours; retain all baseline/failure cases",
+  "not_changed": [
+    "reward",
+    "G8",
+    "128responses/update",
+    "4096completion cap",
+    "optimizer/loss/precision",
+    "default eager kernels"
+  ],
+  "public_upload_authorized": false
+}
