@@ -15,12 +15,12 @@
 
 | 阶段 | 已确认状态 | 证据 |
 |---|---|---|
-| 128份CPU重判 | 旧规则32题正确→verl31题；9份提取变化、1份奖励变化；GPU0 | [判定变化](reports/regrade_128/comparison.html) |
-| 4096-token Base128题 | 42/128=32.8125%，截断1题；1589项独立CPU核对通过，GPU977秒 | [基线报告](reports/base4096/comparison.html) |
-| 长回答容量 | 1024＋4096完整前向及反向通过；峰值40.59GiB，1668.68秒；参数未更新 | [GeoRA容量与首步](reports/long_training/geora_first/summary.md) |
-| LoRA/GeoRA真实首步 | 两边1次AdamW、8次反向、生成/重算概率差0、完整step1断点；冻结状态不变 | [首步对照](reports/long_training/summary.md) |
-| 两边各10步 | LoRA已完成10步、1452项独立CPU审计通过；GeoRA第10步仍在运行 | [LoRA十步证据](reports/long_training/lora_ten/collection_summary.json)；GeoRA50703316 |
-| 提速对照 | 两CPU环境各52项、实际AMD34项通过；正式训练增加0步 | [对照与接续](reports/long_training/speed_candidate/summary.md) |
+| 128份CPU重判 | 旧规则32题正确→verl31题；9份提取变化、1份奖励变化；GPU0 | [判定变化](../../reports/regrade_128/comparison.html) |
+| 4096-token Base128题 | 42/128=32.8125%，截断1题；1589项独立CPU核对通过，GPU977秒 | [基线报告](../../reports/base4096/comparison.html) |
+| 长回答容量 | 1024＋4096完整前向及反向通过；峰值40.59GiB，1668.68秒；参数未更新 | [GeoRA容量与首步](../../reports/long_training/geora_first/summary.md) |
+| LoRA/GeoRA真实首步 | 两边1次AdamW、8次反向、生成/重算概率差0、完整step1断点；冻结状态不变 | [首步对照](../../reports/long_training/summary.md) |
+| 两边各10步 | LoRA已完成10步、1452项独立CPU审计通过；GeoRA第10步仍在运行 | [LoRA十步证据](../../reports/long_training/lora_ten/collection_summary.json)；GeoRA50703316 |
+| 提速对照 | 两CPU环境各52项、实际AMD34项通过；正式训练增加0步 | [对照与接续](../../reports/long_training/speed_candidate/summary.md) |
 | 两边各100步 | 用户要求10步后暂停；等待明确继续 | 原计划配置optimizer_steps=100 |
 | 第100步128题评估 | 尚未执行 | 见本文终局验证门槛 |
 
@@ -64,7 +64,7 @@
 
 已结束本轮作业：失败基线50675134=27秒、成功基线50697776=977秒；GeoRA容量＋首步50699081=2381秒，LoRA首步50702975=562秒。另有短GPU提速对照50707343=1122秒、已完成并释放。以上本轮合计5069单逻辑GPU秒；正在运行的十步作业尚未计入最终合计。
 
-[账号及分区实测限制](reports/long_training/resource_policy.json)，[已记录作业账本](reports/setonix_jobs.json)。
+[账号及分区实测限制](../../reports/long_training/resource_policy.json)，[已记录作业账本](../../reports/setonix_jobs.json)。
 
 ## 十步后的当前边界
 

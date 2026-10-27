@@ -1,6 +1,6 @@
 # GeoRA 復現計畫與進度
 
-2026-10-12当前连续执行计划以[LONG_RUN_PLAN.md](LONG_RUN_PLAN.md)为准：4096-token Base128题完成，长回答容量及LoRA/GeoRA首步通过，两组正在续到10步；各100步与训练后验证尚待完成。本文保留此前阶段与历史选择，当前结果见[首步对照](reports/long_training/summary.md)。
+2026-10-12当前连续执行计划以[LONG_RUN_PLAN.md](LONG_RUN_PLAN.md)为准：4096-token Base128题完成，长回答容量及LoRA/GeoRA首步通过，两组正在续到10步；各100步与训练后验证尚待完成。本文保留此前阶段与历史选择，当前结果见[首步对照](../../reports/long_training/summary.md)。
 
 
 更新：2026-10-12。已執行的結果以 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md) 和 `reports/` 為準；本文件安排尚待執行的工作。
@@ -124,7 +124,7 @@ old log probabilities 必須在該批次更新前保存並 detach，固定到該
 - [x] 更新後可生成；完整 padding batch 的 backward 通過。
 - [x] 報告保存題目、回答、reward、advantage、token 數、ratio/KL、clip fraction、梯度、精度和用量。
 
-本次 CPU 預檢／載入計時先完成；job 50601905 實際 allocation 124 秒，1479 有效 token 的 likelihood 差異 0，20/20 通過。格式和截斷也影響 reward，限制見 [GRPO_SMOKE.md](GRPO_SMOKE.md) 與 [報告](reports/grpo/50601905.json)；教學見 [notebook](notebooks/gsm8k_grpo_tutorial.ipynb)。
+本次 CPU 預檢／載入計時先完成；job 50601905 實際 allocation 124 秒，1479 有效 token 的 likelihood 差異 0，20/20 通過。格式和截斷也影響 reward，限制見 [GRPO_SMOKE.md](GRPO_SMOKE.md) 與 [報告](../../reports/grpo/50601905.json)；教學見 [notebook](../../notebooks/gsm8k_grpo_tutorial.ipynb)。
 
 ## 6. 階段 4：短程連續更新與 LoRA 對照
 
@@ -136,7 +136,7 @@ LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重�
 
 上述無 cache 五步與恢復已通過。後續 S11–S14 釐清混用生成／概率重算路徑的差異；S15 以新 cache 路徑完成兩方法五步、所有token概率核對與完整恢復。受控歸因只建立第0層歷史V的局部貢獻，並未找到整個19.7%差異的唯一根因。[CACHED_TRAINING.md](CACHED_TRAINING.md) 保存完整資料流和成本；新cache可用，但本次整段耗時與顯存較高，pilot兩方法共用已有fixed路徑。
 
-**下一步：驗收通用pilot入口的完整模型首段，再分段推進。** [PILOT_RUN.md](PILOT_RUN.md)說明新訓練／評估入口；[grpo_pilot_plan.json](configs/grpo_pilot_plan.json)保留100步協定。`check_grpo_continuation.py`仍只驗收五步，新入口直接沿用它的單步計算。規劃固定1024題train／128題validation；每批2題、每題4回答、最長256token，每種方法最多100個optimizer steps，同seed/order/reward/概率路徑。先保存未訓練Base的同協定validation結果；用validation選checkpoint，不查看test選參數。
+**下一步：驗收通用pilot入口的完整模型首段，再分段推進。** [PILOT_RUN.md](PILOT_RUN.md)說明新訓練／評估入口；[grpo_pilot_plan.json](../../configs/grpo_pilot_plan.json)保留100步協定。`check_grpo_continuation.py`仍只驗收五步，新入口直接沿用它的單步計算。規劃固定1024題train／128題validation；每批2題、每題4回答、最長256token，每種方法最多100個optimizer steps，同seed/order/reward/概率路徑。先保存未訓練Base的同協定validation結果；用validation選checkpoint，不查看test選參數。
 
 維持已驗收的batch與長度；本輪cache的截斷／解析失敗比例較高，下一階段要繼續記錄。若改為8回答或512+tokens，先核對容量、全部token概率及恢復，不能視為現有驗收自動涵蓋。先在pilot第一個短段量測完整工作量，再訂Slurm時限及按checkpoint分段；本輪沒有提交pilot。
 

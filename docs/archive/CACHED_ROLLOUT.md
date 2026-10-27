@@ -86,9 +86,9 @@ uv run python scripts/check_cached_rollout_cpu.py \
 
 原始報告：
 
-- [本機 CPU](reports/cached_rollout/cpu_local.json)、[Setonix CPU](reports/cached_rollout/cpu_setonix.json)。
-- [首次失敗](reports/cached_rollout/50658705.json)、[完整模型診斷](reports/cached_rollout/50658753.json)。
-- [本轮副本校驗](reports/cached_rollout/staging_record.json)、[資源與清理記錄](reports/cached_rollout/remote_final.json)。
+- [本機 CPU](../../reports/cached_rollout/cpu_local.json)、[Setonix CPU](../../reports/cached_rollout/cpu_setonix.json)。
+- [首次失敗](../../reports/cached_rollout/50658705.json)、[完整模型診斷](../../reports/cached_rollout/50658753.json)。
+- [本轮副本校驗](../../reports/cached_rollout/staging_record.json)、[資源與清理記錄](../../reports/cached_rollout/remote_final.json)。
 
 ## 2026-10-11：後續原始 logits 診斷已完成
 

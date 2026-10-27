@@ -49,4 +49,4 @@ LoRA初始化B=0，因此首步A的梯度为0，只有B的196个张量改变；G
 - [LoRA独立审计](lora_first/independent_training_audit.json)、[断点实际字节核对](lora_first/checkpoint_bytes_verified.json)。
 - [4096-token训练前128题基线](../base4096/comparison.md)：42/128，只有1题截断。
 
-这是工程和首步更新验收；还不能宣称GeoRA优于LoRA，也不是论文完整复现。当前安排以[LONG_RUN_PLAN](../../LONG_RUN_PLAN.md)为准。
+这是工程和首步更新验收；还不能宣称GeoRA优于LoRA，也不是论文完整复现。当前安排以[LONG_RUN_PLAN](../../docs/archive/LONG_RUN_PLAN.md)为准。

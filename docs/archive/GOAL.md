@@ -10,7 +10,7 @@
 
 **下一輪 pilot 預設使用既有 `fixed_width` 無 cache 路徑；新 cache 路徑保留為已驗收的選項。** 新 cache 生成較快，但本次整段訓練耗時和峰值顯存較高。兩輪實際回答長度不同，這是運行成本觀察，沒有正式同軌跡加速倍數結論。方法、命令、成本表見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，原始報告與統一記錄見 [EXPERIMENT_RECORD.md](EXPERIMENT_RECORD.md)。
 
-本 goal 新增三個單邏輯 GPU 作業，allocation **1370 秒（22 分 50 秒）**；均 `COMPLETED, 0:0`，臨時模型副本已清理。100 步 pilot 配置已整理為[計畫](configs/grpo_pilot_plan.json)，尚未實作通用 pilot runner 或啟動長程訓練。
+本 goal 新增三個單邏輯 GPU 作業，allocation **1370 秒（22 分 50 秒）**；均 `COMPLETED, 0:0`，臨時模型副本已清理。100 步 pilot 配置已整理為[計畫](../../configs/grpo_pilot_plan.json)，尚未實作通用 pilot runner 或啟動長程訓練。
 
 ## 要達成什麼
 

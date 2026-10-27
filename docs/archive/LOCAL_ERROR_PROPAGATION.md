@@ -6,7 +6,7 @@
 
 使用冻结的原始 **Qwen2.5-1.5B-Instruct**，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`。没有插入 GeoRA 或 LoRA；KV cache 是 Transformers 原生 `DynamicCache`。
 
-复用 [此前报告](reports/cached_logits/50659217.json) 中已经生成的八段回答，本轮不重新随机生成。两种方式都沿同一串 token 计算：
+复用 [此前报告](../../reports/cached_logits/50659217.json) 中已经生成的八段回答，本轮不重新随机生成。两种方式都沿同一串 token 计算：
 
 | 比较项 | 有 KV cache | 无 KV cache |
 |---|---|---|
@@ -212,7 +212,7 @@ $$
 
 ## 8. 一张图怎样读
 
-![本地逐层传播与输入对齐对照](figures/local_error_propagation/layer_propagation.png)
+![本地逐层传播与输入对齐对照](../../figures/local_error_propagation/layer_propagation.png)
 
 - **左上**：BF16 两个目标位置，每层输出 1536 维向量的相对差。总体变大，中途有下降。
 - **右上**：相同权重值的 FP32 对照。纵轴仍是百分比，轴旁的 `1e−3` 表示刻度还要乘 $10^{-3}$；与左上不共用纵轴范围。
@@ -249,12 +249,12 @@ $$
 | 向量比较／概率分析 | CPU FP64，不在 MPS 上运行 FP64 模型 |
 | 额外复核 | 两层小模型 CPU 22/22 检查；独立 NumPy 从保存值复算概率与向量等式，不执行完整模型 forward |
 
-- [完整模型入口](scripts/check_local_error_propagation.py)：安排 BF16 两个位置、全部层输入对齐、相同权重值 FP32 对照。
-- [逐层记录与输入替换](scripts/local_error_propagation.py)：定义每一种比较与保存的中间量。
-- [最终 40 项检查和全部逐层数值](reports/local_error_propagation/20261011.json)。
-- [小模型 CPU 22 项检查](reports/local_error_propagation/cpu_structural_check.json)。
-- [独立 NumPy 复核](reports/local_error_propagation/numpy_verification.json)：检查四份 snapshot 哈希、八个全 vocab 概率、56 个目标向量分解及六组 MLP 形状对照。
-- [作图脚本](scripts/plot_local_error_propagation.py)只读取持久化报告，不重新运行模型。
+- [完整模型入口](../../scripts/check_local_error_propagation.py)：安排 BF16 两个位置、全部层输入对齐、相同权重值 FP32 对照。
+- [逐层记录与输入替换](../../scripts/local_error_propagation.py)：定义每一种比较与保存的中间量。
+- [最终 40 项检查和全部逐层数值](../../reports/local_error_propagation/20261011.json)。
+- [小模型 CPU 22 项检查](../../reports/local_error_propagation/cpu_structural_check.json)。
+- [独立 NumPy 复核](../../reports/local_error_propagation/numpy_verification.json)：检查四份 snapshot 哈希、八个全 vocab 概率、56 个目标向量分解及六组 MLP 形状对照。
+- [作图脚本](../../scripts/plot_local_error_propagation.py)只读取持久化报告，不重新运行模型。
 
 完整中间量位于 Git 忽略的 `outputs/local_error_propagation/20261011-verified/`；报告中保留各 snapshot 的路径、大小和 SHA256。仓库没有加入模型权重或二进制中间量。
 

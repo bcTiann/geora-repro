@@ -62,7 +62,7 @@
 
 模型在256 token处结束为 `Therefore, it will take Darrel 1 hour to`，没有EOS或完整最终答案，得0分。中间还把30−15误算成25；不能因结尾出现1就当作完整且正确的回答。
 
-所有128题的原文与完整模型回答：[可筛选的完整报告](reports/pilot_base_validation/full_answers.html)。
+所有128题的原文与完整模型回答：[可筛选的完整报告](../../reports/pilot_base_validation/full_answers.html)。
 
 ## 4. 固定了哪些设置
 
@@ -110,9 +110,9 @@
 
 ## 7. 原始证据
 
-- [完整逐题JSON](reports/pilot_base_validation/validation.json)
-- [完整回答HTML](reports/pilot_base_validation/full_answers.html)
-- [独立审计](reports/pilot_base_validation/independent_audit.json)及[审计源码](reports/pilot_base_validation/independent_audit.py)
-- [资源记录](reports/pilot_base_validation/resource_record.json)、[作业日志](reports/pilot_base_validation/pilot-base-50674076.log)
-- [分类／长度汇总](reports/pilot_base_validation/analysis_summary.json)、[源码核对](reports/pilot_base_validation/source_audit.json)
-- [执行时配置快照](reports/pilot_base_validation/executed_protocol.json)：保留当时规划状态；实际进度以本文件为准
+- [完整逐题JSON](../../reports/pilot_base_validation/validation.json)
+- [完整回答HTML](../../reports/pilot_base_validation/full_answers.html)
+- [独立审计](../../reports/pilot_base_validation/independent_audit.json)及[审计源码](../../reports/pilot_base_validation/independent_audit.py)
+- [资源记录](../../reports/pilot_base_validation/resource_record.json)、[作业日志](../../reports/pilot_base_validation/pilot-base-50674076.log)
+- [分类／长度汇总](../../reports/pilot_base_validation/analysis_summary.json)、[源码核对](../../reports/pilot_base_validation/source_audit.json)
+- [执行时配置快照](../../reports/pilot_base_validation/executed_protocol.json)：保留当时规划状态；实际进度以本文件为准

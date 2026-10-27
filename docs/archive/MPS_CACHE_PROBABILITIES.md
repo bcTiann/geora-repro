@@ -6,7 +6,7 @@
 
 一个冻结的原始 Qwen2.5-1.5B-Instruct，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`。没有安装 GeoRA 或 LoRA。
 
-使用 [Setonix 原报告](reports/cached_logits/50659217.json) 中实际采样出的八个回答：两种问题，各四个回答。**本轮没有在 Metal 重新采样。** 同一回答的前文、下一 token 和有效长度直接复用原报告。
+使用 [Setonix 原报告](../../reports/cached_logits/50659217.json) 中实际采样出的八个回答：两种问题，各四个回答。**本轮没有在 Metal 重新采样。** 同一回答的前文、下一 token 和有效长度直接复用原报告。
 
 - 有 cache：通过 Transformers 原生 `DynamicCache`，prompt 宽度 50，随后逐 token 计算。用原生 LogitsProcessor 强制沿已有 token 序列前进。`lm_head` hook 在强制选择之前保存真实 logits，因此保存的模型概率不是强制选择后的 1。
 - 无 cache：同一批 token IDs 和有效 mask，固定宽度 66，一次计算 decoder；每个位置分别用相同形状的 `lm_head` 计算整个 vocab 的 logits。因果 mask 排除未来 token。
@@ -62,8 +62,8 @@
 
 ## 5. 复查
 
-- [可运行脚本](scripts/check_cached_probabilities_mps.py)
-- [全部 103 个实际 token 的前文与概率](reports/cache_probabilities_mps/20261011.json)
+- [可运行脚本](../../scripts/check_cached_probabilities_mps.py)
+- [全部 103 个实际 token 的前文与概率](../../reports/cache_probabilities_mps/20261011.json)
 - 原最差位置的完整 vocab logits 在 Git 忽略的 `outputs/cache_probabilities_mps/20261011/original_AMD_worst_position_Metal_logits.safetensors`。
 
 ```bash

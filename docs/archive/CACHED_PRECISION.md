@@ -24,7 +24,7 @@ $$
 5. 关闭 BF16 autocast，以 FP32 重复有 cache 和无 cache 两种计算。
 6. 两精度、两种执行方式的真实 logits，统一移到 CPU 用 FP64 full-vocab log-softmax 计算概率。
 
-固定 [旧 AMD 报告](reports/cached_logits/50659217.json) 的八段回答，两个问题、各四段。没有重新随机生成；强制沿旧 token 序列前进的操作在捕获真实 logits 之后执行。
+固定 [旧 AMD 报告](../../reports/cached_logits/50659217.json) 的八段回答，两个问题、各四段。没有重新随机生成；强制沿旧 token 序列前进的操作在捕获真实 logits 之后执行。
 
 103 个位置包含回答的第一个 EOS，排除 EOS 后的 padding。核查所有有效预测前文的 token IDs、position IDs 和传入模型的二维 attention mask 一致；本轮没有逐层捕获全部 materialized attention masks。
 
@@ -98,11 +98,11 @@ $$
 
 代码执行 commit：`f4ac79c`。报告还记录实际源文件的 SHA256，不只依赖 commit 名称。
 
-- [GPU 完整结果](reports/cached_precision/50668984.json)：全部 103 个 token 的前文、真实概率和 softmax 分解。
-- [独立 NumPy 复核](reports/cached_precision/numpy_verification.json)。
-- [本地 CPU](reports/cached_precision/cpu_local.json)、[Setonix CPU](reports/cached_precision/cpu_setonix.json)。
-- [用量和清理记录](reports/cached_precision/remote_final.json)。
-- [GPU 入口](scripts/check_cached_precision_gpu.py)、[同 token 两路径比较](scripts/cached_precision_comparison.py)、[独立复核脚本](scripts/verify_cached_precision.py)、[两分钟单 GPU 作业](jobs/cached_precision.sbatch)。
+- [GPU 完整结果](../../reports/cached_precision/50668984.json)：全部 103 个 token 的前文、真实概率和 softmax 分解。
+- [独立 NumPy 复核](../../reports/cached_precision/numpy_verification.json)。
+- [本地 CPU](../../reports/cached_precision/cpu_local.json)、[Setonix CPU](../../reports/cached_precision/cpu_setonix.json)。
+- [用量和清理记录](../../reports/cached_precision/remote_final.json)。
+- [GPU 入口](../../scripts/check_cached_precision_gpu.py)、[同 token 两路径比较](../../scripts/cached_precision_comparison.py)、[独立复核脚本](../../scripts/verify_cached_precision.py)、[两分钟单 GPU 作业](../../jobs/cached_precision.sbatch)。
 
 两份完整 logits snapshots 保存在：
 

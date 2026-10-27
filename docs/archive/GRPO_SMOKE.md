@@ -2,7 +2,7 @@
 
 這一步要把已驗證的 GeoRA 模型接到真實題目、模型自行生成的回答、答案檢查器和 GRPO loss，做 **一次** A/B 更新。它是訓練流程的驗收，尚不是論文表格的效果復現。
 
-教學 notebook：[從題目到一次更新](notebooks/gsm8k_grpo_tutorial.ipynb)。資料與評分詳見 [GSM8K_DATA.md](GSM8K_DATA.md)。
+教學 notebook：[從題目到一次更新](../../notebooks/gsm8k_grpo_tutorial.ipynb)。資料與評分詳見 [GSM8K_DATA.md](GSM8K_DATA.md)。
 
 ## 心智模型：輸入、計算、輸出
 
@@ -154,9 +154,9 @@ job 申請 `nodes=1, gres=gpu:1`，是一個 logical GPU，不是八個；Slurm 
 ## 本次已執行結果（2026-10-10）
 
 
-目的：驗證「問題 → 採樣回答 → 數值 reward → 同題 advantage → clipped token loss＋reference k3 → A/B 更新」整條資料流。[操作與檔案分工](GRPO_SMOKE.md)、[逐步教學 notebook](notebooks/gsm8k_grpo_tutorial.ipynb)。
+目的：驗證「問題 → 採樣回答 → 數值 reward → 同題 advantage → clipped token loss＋reference k3 → A/B 更新」整條資料流。[操作與檔案分工](GRPO_SMOKE.md)、[逐步教學 notebook](../../notebooks/gsm8k_grpo_tutorial.ipynb)。
 
-GSM8K 固定官方 commit `3101c7d5072418e28b9008a6636bde82a006892c`，7473 train／1319 test；從 train 分出 128 validation，剩餘 7345 train，16 題 smoke 只來自 train。SHA256、題目 ID 與來源見 [manifest](reports/grpo/data_manifest.json)。模型只讀問題和格式提示，不讀標準解答。唯一 `####` 後只有數值才能解析，Decimal 精確比較；截斷 training reward=0。
+GSM8K 固定官方 commit `3101c7d5072418e28b9008a6636bde82a006892c`，7473 train／1319 test；從 train 分出 128 validation，剩餘 7345 train，16 題 smoke 只來自 train。SHA256、題目 ID 與來源見 [manifest](../../reports/grpo/data_manifest.json)。模型只讀問題和格式提示，不讀標準解答。唯一 `####` 後只有數值才能解析，Decimal 精確比較；截斷 training reward=0。
 
 Mac／Setonix login CPU：資料／reward 11 項及 8792 參考答案、手算 GRPO 14 項、小模型 FP32/BF16 更新、固定寬度 rollout/scoring 22 項通過。小模型用人工 token／reward，與真實模型報告分開。Notebook 15 個 code cell 在本機 CPU 執行，沒有載入 1.5B。
 
@@ -166,7 +166,7 @@ GPU 不做 SVD。讀原始 BF16 checkpoint 的 FP32 值並載入未訓練 FP32 A
 
 Job **50601905**，程式 commit `294577e1d9d4bc651ca7d277edbf666ab3cdb063`，**20/20 通過**。第一批 2×4 回答共 1479 有效 token，reward `[[0,0,0,1],[0,0,0,0]]`，advantage `[-0.57735,-0.57735,-0.57735,1.73205,0,0,0,0]`。behavior/old/gradient-enabled current/reference 的有效 token 初始 logp 差異全為 0。train mode、dropout=0；完整左 padding batch backward 產生有限非零 FP32 梯度，AdamW lr=1e-6 更新 A/B。原權重、A0/B0/reference 不變；更新後 scoring 和短 stochastic sampling 通過。
 
-**reward=0 不一定是算錯。** 第一題兩段雖寫出數字 4，一段缺 `####`，另一段寫 `#### 4 Scoops`；第三段數值錯且無標記。第二題 3/4 在 256 token 上限截斷，另一段給出 30000。真實文字見 [報告](reports/grpo/50601905.json) 和 notebook。不能把這組 reward 當作數學準確率；後續單獨報格式失敗、數值錯誤與截斷。
+**reward=0 不一定是算錯。** 第一題兩段雖寫出數字 4，一段缺 `####`，另一段寫 `#### 4 Scoops`；第三段數值錯且無標記。第二題 3/4 在 256 token 上限截斷，另一段給出 30000。真實文字見 [報告](../../reports/grpo/50601905.json) 和 notebook。不能把這組 reward 當作數學準確率；後續單獨報格式失敗、數值錯誤與截斷。
 
 更新前 scalar loss 約 -1.49e-8（FP32 加總近零）、k3=0；更新後舊樣本 surrogate loss=0.0006171、k3=0.0009681，未證明單步改善。裁剪前梯度 norm=1.30023，有效 ΔW 合併 Frobenius norm=0.01092795。k3 對固定 token 直接求導，採用 GRPO surrogate 約定；更新後舊樣本均值不是精確 current-policy KL。
 

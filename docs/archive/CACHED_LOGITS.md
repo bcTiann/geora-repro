@@ -110,9 +110,9 @@ GPU job 硬上限兩分鐘，Python 本體 6.825 秒，峰值 allocated memory 3
 
 小型報告隨 Git 保存：
 
-- [本機 CPU](reports/cached_logits/cpu_local.json)、[Setonix CPU](reports/cached_logits/cpu_setonix.json)。
-- [完整 GPU 診斷](reports/cached_logits/50659217.json)、[下載後的 NumPy FP64 復查](reports/cached_logits/cpu_snapshot_verification.json)。
-- [模型副本校驗](reports/cached_logits/staging_record.json)、[作業狀態與清理](reports/cached_logits/remote_final.json)、[總用量](reports/setonix_jobs.json)。
+- [本機 CPU](../../reports/cached_logits/cpu_local.json)、[Setonix CPU](../../reports/cached_logits/cpu_setonix.json)。
+- [完整 GPU 診斷](../../reports/cached_logits/50659217.json)、[下載後的 NumPy FP64 復查](../../reports/cached_logits/cpu_snapshot_verification.json)。
+- [模型副本校驗](../../reports/cached_logits/staging_record.json)、[作業狀態與清理](../../reports/cached_logits/remote_final.json)、[總用量](../../reports/setonix_jobs.json)。
 
 最差位置的兩個完整 vocab 向量保存在 scratch：
 

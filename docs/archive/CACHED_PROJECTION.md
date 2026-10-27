@@ -99,11 +99,11 @@ S14 已经证明：固定 attention 概率，仅替换历史 V，可以精确恢
 
 Slurm 为 `COMPLETED, 0:0`，结束后的用户队列为空。临时模型副本已删除；原 checkpoint、初始化和远端原始诊断 snapshot 保留。累计已记录 21 个作业 allocation 为 3307 秒，即 55 分 7 秒；不含 login CPU，也不等于 utilization 或最终计费金额。
 
-- [GPU 原始 JSON](reports/cache_projection_origin/50665075.json)
-- [本地 CPU](reports/cache_projection_origin/cpu_local.json)、[Setonix CPU](reports/cache_projection_origin/cpu_setonix.json)
-- [下载后独立复查](reports/cache_projection_origin/snapshot_verification.json)
-- [模型副本校验](reports/cache_projection_origin/staging_record.json)、[脚本来源与清理](reports/cache_projection_origin/source_provenance.json)
-- [捕获和形状对照代码](scripts/cache_projection_origin.py)、[入口](scripts/check_cache_projection_origin.py)、[Slurm 作业](jobs/cache_projection_origin.sbatch)
+- [GPU 原始 JSON](../../reports/cache_projection_origin/50665075.json)
+- [本地 CPU](../../reports/cache_projection_origin/cpu_local.json)、[Setonix CPU](../../reports/cache_projection_origin/cpu_setonix.json)
+- [下载后独立复查](../../reports/cache_projection_origin/snapshot_verification.json)
+- [模型副本校验](../../reports/cache_projection_origin/staging_record.json)、[脚本来源与清理](../../reports/cache_projection_origin/source_provenance.json)
+- [捕获和形状对照代码](../../scripts/cache_projection_origin.py)、[入口](../../scripts/check_cache_projection_origin.py)、[Slurm 作业](../../jobs/cache_projection_origin.sbatch)
 
 原始快照 SHA256：`6ab0d5a062230dff6ba9086f1a3c28ca4bbaf1f57909afddcf25f34a14d7fc77`。远端路径：`/scratch/pawsey0807/btian/geora/runs/projection-origin-50665075/projection_origin.safetensors`。本地保存在忽略 Git 的 `outputs/cache_projection_origin/50665075/`，不把模型权重片段加入 Git。
 

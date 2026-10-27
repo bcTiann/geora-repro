@@ -56,7 +56,7 @@ FP64、FP32、BF16 分別是 64、32、16 bit 浮點格式。BF16 保留較大�
 
 ### 2.1 使用的模型與來源精度
 
-來源精度直接讀取 safetensors 檔案標頭核對，沒有僅依靠 config 的 `dtype` 字段推斷。完整記錄見 [checkpoint_headers.json](reports/checkpoint_headers.json)。
+來源精度直接讀取 safetensors 檔案標頭核對，沒有僅依靠 config 的 `dtype` 字段推斷。完整記錄見 [checkpoint_headers.json](../../reports/checkpoint_headers.json)。
 
 | 用途／名稱 | 模型 | 固定 revision | 檔案內 tensor 精度 |
 |---|---|---|---|
@@ -135,7 +135,7 @@ K/V 的 compact SVD 只提供 256 個輸入方向，不能當作完整的 1536 �
 
 這些結果來自不同公開 checkpoint，訓練資料、步數與優化器未受控制；它們支持個別權重結構的觀察，不能單獨驗證 GeoRA 機制或證明 SFT/RLVR 的普遍差異。把兩邊都轉 BF16 後元素相同，也不代表訓練時那些位置的梯度為零。
 
-來源：[FP64 執行記錄](reports/background_geometry/run.json)、[84 矩陣 CSV](reports/background_geometry/metrics.csv)、[分析報告](reports/background_geometry/report.md)、[第 0 層 Q](reports/background_geometry/layer_00_q.json)。原程式為 `~/RLVR/analyze_attention_weights.py`。
+來源：[FP64 執行記錄](../../reports/background_geometry/run.json)、[84 矩陣 CSV](../../reports/background_geometry/metrics.csv)、[分析報告](../../reports/background_geometry/report.md)、[第 0 層 Q](../../reports/background_geometry/layer_00_q.json)。原程式為 `~/RLVR/analyze_attention_weights.py`。
 
 ### L2：單矩陣 FP64 參照與一次 SGD
 
@@ -154,7 +154,7 @@ K/V 的 compact SVD 只提供 256 個輸入方向，不能當作完整的 1536 �
 
 沒有保存權重 checkpoint，只保存 notebook 的程式與執行輸出。`W_geo` 的最佳 rank-r 近似不保證保留大量能量，這個單矩陣結果就是例子。
 
-保留的[原始 notebook 程式與文字輸出](reports/local_notebook_outputs.json)來自 `~/RLVR/geora_initialization.ipynb`；倉庫中的同名 notebook 是清空輸出的教程副本。
+保留的[原始 notebook 程式與文字輸出](../../reports/local_notebook_outputs.json)來自 `~/RLVR/geora_initialization.ipynb`；倉庫中的同名 notebook 是清空輸出的教程副本。
 
 ### L3：一個 Q 替換進完整模型
 
@@ -164,7 +164,7 @@ K/V 的 compact SVD 只提供 256 個輸入方向，不能當作完整的 1536 �
 
 早期 `q_module.safetensors` 保存 **A、B、F、bias 四個 FP32 tensors**，共 9,640,248 bytes。此格式包含 F；不要與後來全層的緊湊 adapter 格式混為一談。
 
-來源：[單 Q metadata](reports/local_single_q/metadata.json)，原始執行輸出與權重位於 `~/RLVR/geora_model_check.ipynb`、`~/RLVR/outputs/geora_single_q_check/`。
+來源：[單 Q metadata](../../reports/local_single_q/metadata.json)，原始執行輸出與權重位於 `~/RLVR/geora_model_check.ipynb`、`~/RLVR/outputs/geora_single_q_check/`。
 
 ### L4：全 196 層 CPU FP32 初始化與重載
 
@@ -181,7 +181,7 @@ K/V 的 compact SVD 只提供 256 個輸入方向，不能當作完整的 1536 �
 
 `adapter.safetensors` 保存 **784 個 FP32 tensors：每層 A0/B0/A/B**，共 147,800,440 bytes（約 141 MiB）。**不保存 F、完整原始模型或 optimizer。** 重載時讀入固定原始模型，再用 A0/B0 在 CPU FP32 重建 F，載入當前 A/B；不重新 SVD。
 
-來源：[checks.json](reports/cpu_initialization/checks.json)、[manifest.json](reports/cpu_initialization/manifest.json)。本機產物在 `~/geora-repro/outputs/geora_full_model_check/`，是從原有 RLVR 專案保留的已執行產物；建立新倉庫時沒有再跑一次完整模型。
+來源：[checks.json](../../reports/cpu_initialization/checks.json)、[manifest.json](../../reports/cpu_initialization/manifest.json)。本機產物在 `~/geora-repro/outputs/geora_full_model_check/`，是從原有 RLVR 專案保留的已執行產物；建立新倉庫時沒有再跑一次完整模型。
 
 ### L5：小模型驗證檢查程式，不代表 1.5B 已更新成功
 
@@ -217,7 +217,7 @@ Job `50574180` 確認容器可見一個 AMD Instinct MI250X 邏輯 GPU，63.98 G
 
 Job `50574324` 執行 `scripts/check_gpu_base_model.py`：原始模型直接以 BF16 載入 GPU，在 inference mode 做 eager forward，沒有安裝 GeoRA、生成答案或更新參數。logits 為 BF16，形狀 `[1,40,151936]`，全部有限。BF16 路徑內部的 RMSNorm／softmax 仍有 FP32 計算，不能稱所有運算都為 BF16。
 
-腳本時間 13.296 秒，PyTorch peak allocated memory 2.962 GiB，Slurm 整個 allocation 40 秒。來源：[50574324.json](reports/setonix_base_forward/50574324.json)。這項只確認模型能載入與產生有限 logits，不判定回答能力。
+腳本時間 13.296 秒，PyTorch peak allocated memory 2.962 GiB，Slurm 整個 allocation 40 秒。來源：[50574324.json](../../reports/setonix_base_forward/50574324.json)。這項只確認模型能載入與產生有限 logits，不判定回答能力。
 
 ### S2：登入節點上的全 196 層 FP32 初始化
 
@@ -236,7 +236,7 @@ $MYSCRATCH/geora/initializations/login-20261009T115357Z-2781659/
   initialization_checks.json
 ```
 
-來源：[初始化檢查](reports/setonix_initialization/initialization_checks.json)。Setonix 因子是在該機 CPU 重新初始化得到，沒有把 Mac 因子直接當作 Setonix 初始化。跨平台 SVD 不要求因子逐元素完全相同。
+來源：[初始化檢查](../../reports/setonix_initialization/initialization_checks.json)。Setonix 因子是在該機 CPU 重新初始化得到，沒有把 Mac 因子直接當作 Setonix 初始化。跨平台 SVD 不要求因子逐元素完全相同。
 
 ### S3：全模型混合精度檢查在更新之前停止
 
@@ -260,7 +260,7 @@ Job `50578622` 執行 `scripts/check_geora_training.py`，採用以下精度：
 | 最大 logits 絕對差 | 7.7265625 |
 | 舊檢查的最後位置 KL | 6.1946e-8 nats |
 
-來源：[50578622.json](reports/setonix_bf16_gate/50578622.json)。**作業失敗後沒有 backward、AdamW step、更新後 adapter 或 optimizer checkpoint。** 程式寫好了這些檢查，不代表它們已在 1.5B 模型上執行。
+來源：[50578622.json](../../reports/setonix_bf16_gate/50578622.json)。**作業失敗後沒有 backward、AdamW step、更新後 adapter 或 optimizer checkpoint。** 程式寫好了這些檢查，不代表它們已在 1.5B 模型上執行。
 
 最後位置在 EOS 之後，不是預測 `5` 的位置；很小的最後位置 KL 不能代表其他位置分布接近。因此保持原有門檻，另做逐位置診斷。
 
@@ -282,7 +282,7 @@ logit position 39 預測答案 token `5`（token ID 20）：原始 BF16 模型�
 
 診斷也單獨比較原始模型的 BF16 與 FP32 路徑：此固定輸入的 logits 相對差為 30.8695%，平均 KL 0.409115。這是另一個比較基準，不能與「同精度原始模型 vs GeoRA」混在一起，也不代表任務分數下降 30.9%。
 
-來源：[逐層／逐位置診斷](reports/setonix_precision_diagnostic/50579441.json)、[診斷作業記錄](reports/setonix_precision_diagnostic/50579441_checks.json)。Slurm `COMPLETED` 和診斷的 `completed` 表示測量成功完成；**不表示 S3 的初始化門檻通過**。
+來源：[逐層／逐位置診斷](../../reports/setonix_precision_diagnostic/50579441.json)、[診斷作業記錄](../../reports/setonix_precision_diagnostic/50579441_checks.json)。Slurm `COMPLETED` 和診斷的 `completed` 表示測量成功完成；**不表示 S3 的初始化門檻通過**。
 
 ## 5. 本機與 Setonix：精度定位、生成與 GRPO 驗收
 
@@ -322,7 +322,7 @@ Setonix native 的 QK 分數絕對值最大 22528。使用完全相同的量化 
 
 **相對 S3 的預設完整模型路徑，`fp32_projections` 既保留 FP32 F，又採用 FP32 投影計算，尚未單獨拆分兩者效果。** 在本節探針內，native 和其他模式本來都保留 FP32 F，模式差異主要是運算路徑。 截至 S5，這個局部低誤差尚未驗證能延伸到完整模型；後續 S6 測量了完整模型，候選均未達到門檻。預設精度設定沒有被自動取代。
 
-來源：[Mac CPU](reports/attention_probe/local_cpu.json)、[Setonix CPU preflight](reports/attention_probe/setonix_cpu_preflight.json)、[Setonix GPU 50579802](reports/attention_probe/50579802.json)。GPU 核心計算 1.298 秒，腳本 7.202 秒，allocation 22 秒；PyTorch peak allocated memory 0.130 GiB。
+來源：[Mac CPU](../../reports/attention_probe/local_cpu.json)、[Setonix CPU preflight](../../reports/attention_probe/setonix_cpu_preflight.json)、[Setonix GPU 50579802](../../reports/attention_probe/50579802.json)。GPU 核心計算 1.298 秒，腳本 7.202 秒，allocation 22 秒；PyTorch peak allocated memory 0.130 GiB。
 
 ### L7：先在本機及 Setonix CPU 驗證候選 helper
 
@@ -332,7 +332,7 @@ Setonix native 的 QK 分數絕對值最大 22528。使用完全相同的量化 
 
 浮點格式相同不代表算子、autocast、加總順序或舍入結果相同。[PyTorch 數值精度說明](https://docs.pytorch.org/docs/2.7/notes/numerical_accuracy.html) 明確指出跨 CPU／GPU／版本不保證 bitwise 一致；[MPS 文件](https://docs.pytorch.org/docs/2.14/notes/mps.html) 說明其使用 Metal 的執行路徑。現有 CPU 與 AMD 局部探針都出現誤差放大，支持問題並非只在 AMD 上發生；因兩邊因子並不完全相同，還不能量化硬體的獨立影響。完整驗收應在之後實際訓練的 Setonix AMD 路徑完成。
 
-來源：[預檢執行摘要](reports/forward_precision_preflight.json)、[可重跑的小模型檢查](tests/check_forward_precision.py)。
+來源：[預檢執行摘要](../../reports/forward_precision_preflight.json)、[可重跑的小模型檢查](../../tests/check_forward_precision.py)。
 
 ### S6：完整 1.5B 模型的三種 forward 路徑
 
@@ -380,7 +380,7 @@ position 39 預測答案 token `5`，各模式的 reference 也隨精度改變�
 
 申請一個邏輯 GPU、時限 3 分鐘，實際 allocation **87 秒**；Slurm `COMPLETED`、退出碼 `0:0`，完成後 queue 不再有此作業。診斷成功完成並不表示初始化 gate 通過。
 
-來源：[完整原始報告 50584822.json](reports/full_forward/50584822.json)、[三分鐘作業腳本](jobs/full_forward_precision.sbatch)。程式 commit 為 `340b403891ec588c491dc76517437bc5beea5e19`。本次沒有改變預設訓練精度。
+來源：[完整原始報告 50584822.json](../../reports/full_forward/50584822.json)、[三分鐘作業腳本](../../jobs/full_forward_precision.sbatch)。程式 commit 為 `340b403891ec588c491dc76517437bc5beea5e19`。本次沒有改變預設訓練精度。
 
 ### L8/S7：等價重排保留原始 BF16 分支，完成機械更新與重載
 
@@ -450,7 +450,7 @@ $MYSCRATCH/geora/runs/difference-check-50585414/
 
 一個邏輯 GPU、3 分鐘上限；Slurm `COMPLETED`、退出碼 `0:0`，實際 allocation **42 秒**，完成後 queue 為空。Python 腳本 22.744 秒，PyTorch peak allocated memory **12.3458 GiB**，包含 reference、快照和重載副本。`optimizer_steps=1`、`backward_calls=1`、`svd_calls=0`。完成的 optimizer step 立即寫入報告，避免後續重載失敗掩蓋已更新的事實。
 
-來源：[Mac CPU](reports/difference/local_cpu.json)、[Setonix CPU](reports/difference/setonix_cpu.json)、[完整模型 50585414](reports/difference/50585414.json)、[初始 manifest](reports/difference/initial_manifest.json)、[單步後 manifest](reports/difference/trained_manifest.json)。執行程式 commit 為 `75037a65833bdd1cb1fb11e0b0453d92f45bc4e1`。
+來源：[Mac CPU](../../reports/difference/local_cpu.json)、[Setonix CPU](../../reports/difference/setonix_cpu.json)、[完整模型 50585414](../../reports/difference/50585414.json)、[初始 manifest](../../reports/difference/initial_manifest.json)、[單步後 manifest](../../reports/difference/trained_manifest.json)。執行程式 commit 為 `75037a65833bdd1cb1fb11e0b0453d92f45bc4e1`。
 
 這輪目標的初始化／單步更新／序列化驗收已完成。後續 L9/S8 已補上獨立步長比較、短生成／KV cache 及 padding forward；多步策略變化、padding 訓練與 GRPO／外部 trainer 的整合仍需檢查。merge 必須用 `W_pre+c(BA-B0A0)`；不能按普通 LoRA 把 `cBA` 直接加回 W_pre。
 
@@ -501,15 +501,15 @@ CPU faulthandler 定位到 safetensors mmap 的材料化／dtype 轉換；關閉
 
 成功作業 `50596774` 一個邏輯 GPU、三分鐘上限，allocation **46 秒**，Python **26.969 秒**，peak allocated memory **9.4275 GiB**；Slurm `COMPLETED`、退出碼 `0:0`，完成後 queue 為空。本輪兩次 GPU allocation 合計 **243 秒（4 分 03 秒）**，包括超時，CPU 診斷／複製不佔 GPU allocation。
 
-來源：[本機 CPU](reports/continuation/local_cpu.json)、[Setonix CPU](reports/continuation/setonix_cpu.json)、[載入診斷](reports/continuation/loading_diagnostic.json)、[超時原始報告](reports/continuation/50596505.json)、[完整模型 50596774](reports/continuation/50596774.json)。成功執行程式 commit 為 `ce3de48e7881a57fd4833f396876d0e231f355db`；運行時載入選項和完整副本校驗資訊在報告中。
+來源：[本機 CPU](../../reports/continuation/local_cpu.json)、[Setonix CPU](../../reports/continuation/setonix_cpu.json)、[載入診斷](../../reports/continuation/loading_diagnostic.json)、[超時原始報告](../../reports/continuation/50596505.json)、[完整模型 50596774](../../reports/continuation/50596774.json)。成功執行程式 commit 為 `ce3de48e7881a57fd4833f396876d0e231f355db`；運行時載入選項和完整副本校驗資訊在報告中。
 
 本階段的短生成／cache／padding forward 及獨立首步測量完成。下一階段是 GRPO 的 reward、advantage、ratio、KL、reference 與多步更新整合；尚未證明多步穩定性、長序列生成或 GeoRA 任務效果。
 
 ### L10/S9：GSM8K 接入一次真實 GRPO 更新
 
-目的：驗證「問題 → 採樣回答 → 數值 reward → 同題 advantage → clipped token loss＋reference k3 → A/B 更新」整條資料流。[操作與檔案分工](GRPO_SMOKE.md)、[逐步教學 notebook](notebooks/gsm8k_grpo_tutorial.ipynb)。
+目的：驗證「問題 → 採樣回答 → 數值 reward → 同題 advantage → clipped token loss＋reference k3 → A/B 更新」整條資料流。[操作與檔案分工](GRPO_SMOKE.md)、[逐步教學 notebook](../../notebooks/gsm8k_grpo_tutorial.ipynb)。
 
-GSM8K 固定官方 commit `3101c7d5072418e28b9008a6636bde82a006892c`，7473 train／1319 test；從 train 分出 128 validation，剩餘 7345 train，16 題 smoke 只來自 train。SHA256、題目 ID 與來源見 [manifest](reports/grpo/data_manifest.json)。模型只讀問題和格式提示，不讀標準解答。唯一 `####` 後只有數值才能解析，Decimal 精確比較；截斷 training reward=0。
+GSM8K 固定官方 commit `3101c7d5072418e28b9008a6636bde82a006892c`，7473 train／1319 test；從 train 分出 128 validation，剩餘 7345 train，16 題 smoke 只來自 train。SHA256、題目 ID 與來源見 [manifest](../../reports/grpo/data_manifest.json)。模型只讀問題和格式提示，不讀標準解答。唯一 `####` 後只有數值才能解析，Decimal 精確比較；截斷 training reward=0。
 
 Mac／Setonix login CPU：資料／reward 11 項及 8792 參考答案、手算 GRPO 14 項、小模型 FP32/BF16 更新、固定寬度 rollout/scoring 22 項通過。小模型用人工 token／reward，與真實模型報告分開。Notebook 15 個 code cell 在本機 CPU 執行，沒有載入 1.5B。
 
@@ -519,7 +519,7 @@ GPU 不做 SVD。讀原始 BF16 checkpoint 的 FP32 值並載入未訓練 FP32 A
 
 Job **50601905**，程式 commit `294577e1d9d4bc651ca7d277edbf666ab3cdb063`，**20/20 通過**。第一批 2×4 回答共 1479 有效 token，reward `[[0,0,0,1],[0,0,0,0]]`，advantage `[-0.57735,-0.57735,-0.57735,1.73205,0,0,0,0]`。behavior/old/gradient-enabled current/reference 的有效 token 初始 logp 差異全為 0。train mode、dropout=0；完整左 padding batch backward 產生有限非零 FP32 梯度，AdamW lr=1e-6 更新 A/B。原權重、A0/B0/reference 不變；更新後 scoring 和短 stochastic sampling 通過。
 
-**reward=0 不一定是算錯。** 第一題兩段雖寫出數字 4，一段缺 `####`，另一段寫 `#### 4 Scoops`；第三段數值錯且無標記。第二題 3/4 在 256 token 上限截斷，另一段給出 30000。真實文字見 [報告](reports/grpo/50601905.json) 和 notebook。不能把這組 reward 當作數學準確率；後續單獨報格式失敗、數值錯誤與截斷。
+**reward=0 不一定是算錯。** 第一題兩段雖寫出數字 4，一段缺 `####`，另一段寫 `#### 4 Scoops`；第三段數值錯且無標記。第二題 3/4 在 256 token 上限截斷，另一段給出 30000。真實文字見 [報告](../../reports/grpo/50601905.json) 和 notebook。不能把這組 reward 當作數學準確率；後續單獨報格式失敗、數值錯誤與截斷。
 
 更新前 scalar loss 約 -1.49e-8（FP32 加總近零）、k3=0；更新後舊樣本 surrogate loss=0.0006171、k3=0.0009681，未證明單步改善。裁剪前梯度 norm=1.30023，有效 ΔW 合併 Frobenius norm=0.01092795。k3 對固定 token 直接求導，採用 GRPO surrogate 約定；更新後舊樣本均值不是精確 current-policy KL。
 
@@ -562,7 +562,7 @@ GeoRA：10 組中 6 組同分，40 回答中 21 次解析失敗、14 次截斷�
 
 GeoRA 的 34 個 reward=0 回答按互斥原因分為：14 個截斷、8 個已 EOS 但不能按格式解析、12 個已 EOS 且解析出的數值錯誤。21 個解析失敗與 14 個截斷有 13 個重疊，不能相加。實際回答中也有數值正確但格式不合的案例。reward 只查最終數值與格式，不驗證推理過程的每一句。
 
-原始報告：[GeoRA](reports/grpo_continuation/50622579.json)、[LoRA](reports/grpo_continuation/50622756.json)、[共用設定與首批比較](reports/grpo_continuation/comparison.json)、[LoRA 本機 CPU](reports/grpo_continuation/lora_local_cpu.json)、[恢復本機 CPU](reports/grpo_continuation/resume_local_cpu.json)、[LoRA Setonix CPU](reports/grpo_continuation/lora_setonix_cpu.json)、[恢復 Setonix CPU](reports/grpo_continuation/resume_setonix_cpu.json)、[本輪副本校驗](reports/grpo_continuation/staging_record.json)。完整 answers/logp/precision/timing 與每步 checkpoint 路徑在原始 JSON 中。
+原始報告：[GeoRA](../../reports/grpo_continuation/50622579.json)、[LoRA](../../reports/grpo_continuation/50622756.json)、[共用設定與首批比較](../../reports/grpo_continuation/comparison.json)、[LoRA 本機 CPU](../../reports/grpo_continuation/lora_local_cpu.json)、[恢復本機 CPU](../../reports/grpo_continuation/resume_local_cpu.json)、[LoRA Setonix CPU](../../reports/grpo_continuation/lora_setonix_cpu.json)、[恢復 Setonix CPU](../../reports/grpo_continuation/resume_setonix_cpu.json)、[本輪副本校驗](../../reports/grpo_continuation/staging_record.json)。完整 answers/logp/precision/timing 與每步 checkpoint 路徑在原始 JSON 中。
 
 下一步：接入較高吞吐的 rollout 路徑前，重新測量它和 scoring 的 likelihood 差異；再固定 pilot 的 reward/長度協定並做較長訓練及 validation。尚未做任務分數對照、長 response 或論文 Table 8 的 benchmark。
 
@@ -582,7 +582,7 @@ job 50658705 在 tokenizer 介面處失敗，尚未進入數值測量。Transfor
 
 本輪實際 allocation 是 34＋38＝72 秒，均一個邏輯 GPU；兩分鐘是每次硬上限。成功診斷 Python 9.741 秒、峰值 allocated memory 3.178 GiB。作業完成後 queue 為空；本輪臨時 model copy 已刪除，原始模型／初始化保留。這輪未做舊 sampler 同條件計時，不能宣稱加速倍數。
 
-原始報告：[Mac CPU](reports/cached_rollout/cpu_local.json)、[Setonix CPU](reports/cached_rollout/cpu_setonix.json)、[首次失敗](reports/cached_rollout/50658705.json)、[GPU 診斷](reports/cached_rollout/50658753.json)、[副本校驗](reports/cached_rollout/staging_record.json)、[資源與清理](reports/cached_rollout/remote_final.json)。決定保留已驗證的固定寬度訓練 sampler；先用 CPU 對照可求導 cache scoring，再驗收完整更新後策略與 GRPO／恢復。
+原始報告：[Mac CPU](../../reports/cached_rollout/cpu_local.json)、[Setonix CPU](../../reports/cached_rollout/cpu_setonix.json)、[首次失敗](../../reports/cached_rollout/50658705.json)、[GPU 診斷](../../reports/cached_rollout/50658753.json)、[副本校驗](../../reports/cached_rollout/staging_record.json)、[資源與清理](../../reports/cached_rollout/remote_final.json)。決定保留已驗證的固定寬度訓練 sampler；先用 CPU 對照可求導 cache scoring，再驗收完整更新後策略與 GRPO／恢復。
 
 ### L13/S12：同一原模型的原始 logits 與 softmax 分離檢查
 
@@ -600,7 +600,7 @@ job 50658705 在 tokenizer 介面處失敗，尚未進入數值測量。Transfor
 
 實際 allocation **34 秒，一個邏輯 GPU**；兩分鐘硬上限。Python 本體 6.825 秒，峰值 allocated memory 3.040 GiB。完成後本輪 job 不在 queue，临時模型副本已清理，原模型／初始化保留。最差位置兩份完整 vocab logits 共 1,215,656 bytes，SHA256 已核對；保留於 scratch 和本機 Git 忽略的 outputs。
 
-報告：[Mac CPU](reports/cached_logits/cpu_local.json)、[Setonix CPU](reports/cached_logits/cpu_setonix.json)、[GPU](reports/cached_logits/50659217.json)、[獨立 NumPy 復查](reports/cached_logits/cpu_snapshot_verification.json)、[副本校驗](reports/cached_logits/staging_record.json)、[用量與清理](reports/cached_logits/remote_final.json)。
+報告：[Mac CPU](../../reports/cached_logits/cpu_local.json)、[Setonix CPU](../../reports/cached_logits/cpu_setonix.json)、[GPU](../../reports/cached_logits/50659217.json)、[獨立 NumPy 復查](../../reports/cached_logits/cpu_snapshot_verification.json)、[副本校驗](../../reports/cached_logits/staging_record.json)、[用量與清理](../../reports/cached_logits/remote_final.json)。
 
 ### L14/S13：逐層定位與相同權重數值的 FP32 對照
 
@@ -616,11 +616,11 @@ BF16 native 路徑：embedding／第 0 層 input norm 逐元素相同；目標�
 
 已取回 JSON、清理臨時模型副本，作業 queue 已空，原 checkpoint／初始化保留。S13 結束時，下一個可分離原因的實驗是固定相同 P/V 改乘法形狀，再固定形狀只替換歷史 V；當時尚未執行，後續結果記錄於 L15/S14。訓練 sampler、精度政策和 likelihood 門限不變。
 
-報告：[Mac CPU](reports/cache_layers/cpu_local.json)、[Setonix CPU](reports/cache_layers/cpu_setonix.json)、[GPU](reports/cache_layers/50660028.json)、[用量／清理](reports/cache_layers/remote_final.json)。GPU 代碼 commit `d4ca571`。
+報告：[Mac CPU](../../reports/cache_layers/cpu_local.json)、[Setonix CPU](../../reports/cache_layers/cpu_setonix.json)、[GPU](../../reports/cache_layers/50660028.json)、[用量／清理](../../reports/cache_layers/remote_final.json)。GPU 代碼 commit `d4ca571`。
 
 ### L15/S14：固定 attention 輸入的干預與可求導 cache 路徑初驗
 
-本輪合併兩個問題到一次 GPU 載入：先分離 S13 的局部 attention 差異，再檢查採樣和可求導概率計算能否走相同 cache 路徑。沒有重新 SVD、下載模型或計算 GSM8K reward。GPU source commit 為 `d47599bef7ab8d9c9cc26dd934fc25365765c9bf`；原始 GPU 報告 [50660628.json](reports/cache_intervention/50660628.json) 共 **26/26** 通過。
+本輪合併兩個問題到一次 GPU 載入：先分離 S13 的局部 attention 差異，再檢查採樣和可求導概率計算能否走相同 cache 路徑。沒有重新 SVD、下載模型或計算 GSM8K reward。GPU source commit 為 `d47599bef7ab8d9c9cc26dd934fc25365765c9bf`；原始 GPU 報告 [50660628.json](../../reports/cache_intervention/50660628.json) 共 **26/26** 通過。
 
 #### A. 局部干預：歷史 V 解釋此位置的第 0 層差異，尚未單獨解釋全部 19.7%
 
@@ -642,7 +642,7 @@ FP64 對保存值驗證 `P(V_cached−V_fixed)`：線性恆等式殘差 3.91e-32
 
 替換前 fixed/cache 概率比為 **1.1969750175**，替換後為 **1.1927040976**。這證明局部 V 差異能傳到末端，但只替換一個位置並未消除完整路徑的 19.7% 偏差；歷史其他位置及後續層仍有各自的路徑差異。因此本輪是條件干預，不宣稱已得到全部偏差的唯一原因。
 
-原始 P/V/output 是 BF16，兩份原始 logits 提升 FP32 保存；attention snapshot 為 6,782,464 bytes，下載 SHA256 已核對 [snapshot_verification.json](reports/cache_intervention/snapshot_verification.json)。大 tensor 保留在 scratch 與 Git 忽略的本機輸出，僅 JSON 進 reports。
+原始 P/V/output 是 BF16，兩份原始 logits 提升 FP32 保存；attention snapshot 為 6,782,464 bytes，下載 SHA256 已核對 [snapshot_verification.json](../../reports/cache_intervention/snapshot_verification.json)。大 tensor 保留在 scratch 與 Git 忽略的本機輸出，僅 JSON 進 reports。
 
 #### B. 候選路徑：相同 cache 執行順序，可求導地重算每個 token 的概率
 
@@ -667,17 +667,17 @@ GPU job **50660628**：一個邏輯 GPU，五分鐘硬上限，實際 allocation
 
 S14 完成後 own job queue 為空。CPU 校驗的模型副本 `/software/projects/pawsey0807/btian/manual/cache/geora-cache-goal-20261011` **仍保留供下一階段使用，尚未清理**；338 個 tensor 與原來源精確一致，原始 checkpoint／初始化未刪除。後續最終清理須另記，不能沿用 S13 已清理的敘述。
 
-來源：[干預 Mac CPU](reports/cache_intervention/cpu_local.json)、[干預 Setonix CPU](reports/cache_intervention/cpu_setonix.json)、[cache Mac CPU](reports/cached_score/cpu_local.json)、[cache Setonix CPU](reports/cached_score/cpu_setonix.json)、[cache GPU 摘要](reports/cached_score/50660628_summary.json)、[本輪副本校驗](reports/cache_intervention/staging_record.json)、[S14 用量／副本保留觀測](reports/cache_intervention/resource_observation.json)。
+來源：[干預 Mac CPU](../../reports/cache_intervention/cpu_local.json)、[干預 Setonix CPU](../../reports/cache_intervention/cpu_setonix.json)、[cache Mac CPU](../../reports/cached_score/cpu_local.json)、[cache Setonix CPU](../../reports/cached_score/cpu_setonix.json)、[cache GPU 摘要](../../reports/cached_score/50660628_summary.json)、[本輪副本校驗](../../reports/cache_intervention/staging_record.json)、[S14 用量／副本保留觀測](../../reports/cache_intervention/resource_observation.json)。
 
 ### L16/S15：LoRA／GeoRA 的真實 cache 五步、精確恢復與路徑選擇
 
 本階段把 S14 通過的概率路徑接入共用五步 trainer。native generate 使用 `cached_training_rollout.py`，只保存抽到的 token 的 logp；重新計算概率使用新的 DynamicCache，先 prefill、再逐 token 送入已保存回答，歷史 K/V 不 detach。可求導 current forward 使用 `cached_attention_checkpoint.py`，在 cache.update 完成後只 checkpoint 純 eager attention；backward 重算純計算，不再次追加 cache。來龍去脈與執行命令見 [CACHED_TRAINING.md](CACHED_TRAINING.md)。原固定寬度路徑保留。
 
-CPU streaming sampler 在 Mac／Setonix 都為 **76/76**，包含 256 token、temperature、EOS／padding、native scores／RNG 對照與可求導重算。純 attention checkpoint 兩處均為 **45/45**，包含 forward logp、A/B 梯度、較早 prompt 的歷史梯度、RNG／autocast、異常恢復及保存張量儲存量。Setonix CPU 本體分別為 3.549463／1.750287 秒，不含 Python import；均使用 2 threads，沒有另申請 GPU。來源：[streaming Mac](reports/cached_score/streamed_cpu_local.json)、[streaming Setonix](reports/cached_score/streamed_cpu_setonix.json)、[checkpoint Mac](reports/cached_score/attention_checkpoint_cpu_local.json)、[checkpoint Setonix](reports/cached_score/attention_checkpoint_cpu_setonix.json)。
+CPU streaming sampler 在 Mac／Setonix 都為 **76/76**，包含 256 token、temperature、EOS／padding、native scores／RNG 對照與可求導重算。純 attention checkpoint 兩處均為 **45/45**，包含 forward logp、A/B 梯度、較早 prompt 的歷史梯度、RNG／autocast、異常恢復及保存張量儲存量。Setonix CPU 本體分別為 3.549463／1.750287 秒，不含 Python import；均使用 2 threads，沒有另申請 GPU。來源：[streaming Mac](../../reports/cached_score/streamed_cpu_local.json)、[streaming Setonix](../../reports/cached_score/streamed_cpu_setonix.json)、[checkpoint Mac](../../reports/cached_score/attention_checkpoint_cpu_local.json)、[checkpoint Setonix](../../reports/cached_score/attention_checkpoint_cpu_setonix.json)。
 
 #### 完整 GeoRA 結果
 
-GPU job **50660901**，source commit `b5bee41569a6adbeaa63651bff39800edc659fb9`，原始報告 [50660901.json](reports/grpo_cached_continuation/50660901.json) 為 **58/58 通過**。模型／資料／初始化與 S10 一致；沿用 2 題×4 回答、rank=16、alpha=32、lr=1e-6、KL 係數 0.001。frozen BF16；A/B、A0/B0、adapter 分支、logp／loss／梯度／AdamW 動量為 FP32。本輪不重新 SVD。
+GPU job **50660901**，source commit `b5bee41569a6adbeaa63651bff39800edc659fb9`，原始報告 [50660901.json](../../reports/grpo_cached_continuation/50660901.json) 為 **58/58 通過**。模型／資料／初始化與 S10 一致；沿用 2 題×4 回答、rank=16、alpha=32、lr=1e-6、KL 係數 0.001。frozen BF16；A/B、A0/B0、adapter 分支、logp／loss／梯度／AdamW 動量為 FP32。本輪不重新 SVD。
 
 | 邏輯步 | 有效回答 tokens | gradient norm（裁剪前） | 改變的 A/B 張量 | 生成 | 概率／loss | backward／更新 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -697,7 +697,7 @@ GPU job **50660901**，source commit `b5bee41569a6adbeaa63651bff39800edc659fb9`�
 
 #### 完整 LoRA 結果與兩方法複核
 
-GPU job **50661193** 在 GeoRA 結束後依次執行，使用同一 source commit、模型／資料／配置，原始報告 [50661193.json](reports/grpo_cached_continuation/50661193.json) 為 **58/58 通過**。從隨機 A、零 B 開始；首批與 GeoRA 的題目、回答 IDs、reward、mask 和抽樣 logp 精確相同。
+GPU job **50661193** 在 GeoRA 結束後依次執行，使用同一 source commit、模型／資料／配置，原始報告 [50661193.json](../../reports/grpo_cached_continuation/50661193.json) 為 **58/58 通過**。從隨機 A、零 B 開始；首批與 GeoRA 的題目、回答 IDs、reward、mask 和抽樣 logp 精確相同。
 
 | 邏輯步 | 有效回答 tokens | gradient norm（裁剪前） | 改變的 A/B 張量 |
 |---|---:|---:|---:|
@@ -709,7 +709,7 @@ GPU job **50661193** 在 GeoRA 結束後依次執行，使用同一 source commi
 
 首步只改變 196 個 B 張量符合 B=0 的 LoRA 初始化：此時 A 梯度為零，但所有 392 個 A/B 的梯度均為有限 FP32。五個有效步共 **8,129 tokens**，精確重放第 3 步 2,028 tokens，實際六次呼叫共 **10,157 tokens**。六次 batch 同樣走到 256 decode 步，14 個 likelihood gates 的所有誤差指標也精確為 0；每次純 attention 前向／backward 重算各 7,168 次，autocast 一致。凍結原始權重、reference 和完整 RNG／optimizer／下一步更新恢復檢查全部通過。
 
-兩方法共 **16,132 個有效邏輯 tokens**；含重放的 **19,991 個有效訓練 tokens** 的 sampled／old logp 由保存值直接核對，精確相等。獨立複核兩份報告、同源配置與初始化、首批一致性、全部有效 token、12 次 checkpoint 統計、歷史成本與 Slurm 記錄，**82/82** 通過，見 [comparison.json](reports/grpo_cached_continuation/comparison.json)。這是已記錄結果的解析複核，不是又一次 GPU 訓練。
+兩方法共 **16,132 個有效邏輯 tokens**；含重放的 **19,991 個有效訓練 tokens** 的 sampled／old logp 由保存值直接核對，精確相等。獨立複核兩份報告、同源配置與初始化、首批一致性、全部有效 token、12 次 checkpoint 統計、歷史成本與 Slurm 記錄，**82/82** 通過，見 [comparison.json](../../reports/grpo_cached_continuation/comparison.json)。這是已記錄結果的解析複核，不是又一次 GPU 訓練。
 
 LoRA 十組中六組同分，40 個回答中 27 個解析失敗、17 個截斷；這些同样保留，不能從兩個五步 reward 推斷方法的任務效果。
 
@@ -733,7 +733,7 @@ LoRA 十組中六組同分，40 個回答中 27 個解析失敗、17 個截斷�
 
 **下一輪 pilot 選擇：兩方法都使用既有 `fixed_width`，保留 `native_cached_differentiable` 作為驗證通過的可選後端。** 這個選擇以已記錄的完整作業成本與較低顯存為依據；cache 候選已完成 correctness goal，沒有降低門檻或丟棄失敗歷史。它驗收的範圍是當前 MI250X／ROCm／Transformers、batch=8、最長 256 個新 token；更長回答、更大 batch、其他 attention 後端、多 GPU 或 vLLM 尚未驗收。
 
-兩個 S15 作業均上限 20 分鐘，`COMPLETED 0:0`、`gres/gpu=1`：GeoRA Python **695.426138 秒**、allocation **715 秒**；LoRA Python **574.732782 秒**、allocation **593 秒**。兩個作業依次執行，合計 allocation **1,308 秒（21 分 48 秒）**。本 goal 的 S14／S15 三個新增作業合計 **1,370 秒（22 分 50 秒）**。最終 accounting 前即時 `squeue` 的 own job queue 已空；臨時副本已清理，scratch 原始 checkpoint、初始化、資料及訓練 checkpoint 保留，見[精確路徑清理與終態核對](reports/cache_intervention/remote_final.json)；S14「當時保留」是該階段的歷史狀態。
+兩個 S15 作業均上限 20 分鐘，`COMPLETED 0:0`、`gres/gpu=1`：GeoRA Python **695.426138 秒**、allocation **715 秒**；LoRA Python **574.732782 秒**、allocation **593 秒**。兩個作業依次執行，合計 allocation **1,308 秒（21 分 48 秒）**。本 goal 的 S14／S15 三個新增作業合計 **1,370 秒（22 分 50 秒）**。最終 accounting 前即時 `squeue` 的 own job queue 已空；臨時副本已清理，scratch 原始 checkpoint、初始化、資料及訓練 checkpoint 保留，見[精確路徑清理與終態核對](../../reports/cache_intervention/remote_final.json)；S14「當時保留」是該階段的歷史狀態。
 
 ## 6. 保存、重載與更新精度總表
 
@@ -814,7 +814,7 @@ relative_error = norm(actual - reference) / norm(reference)
 | 50661193 | LoRA cache 真實五步／純 attention checkpoint／精確恢復 | 20 分鐘 | 593 秒 | COMPLETED |
 | 50665075 | 历史 V 投影来源／同输入形状对照／cache 存取保持 | 2 分钟 | 36 秒 | COMPLETED |
 
-這二十個已取得終態的作業，allocation 時間合計 **54 分 31 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。本 goal 的三個新增作業為 50660628／50660901／50661193，共 **22 分 50 秒**。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](reports/setonix_jobs.json)。
+這二十個已取得終態的作業，allocation 時間合計 **54 分 31 秒，均為一個邏輯 GPU**；不包含登入節點 CPU 初始化。本 goal 的三個新增作業為 50660628／50660901／50661193，共 **22 分 50 秒**。allocation 時間包含啟動和清理，與 Python 的核心計算時間不同，也不是 GPU utilization 或最終計費金額。來源：[Slurm 查詢記錄](../../reports/setonix_jobs.json)。
 
 等價重排、L9/S8 生成與步長比較、L10/S9 一次真實 GRPO 流程均完成。L11/S10 的共用五步與完整恢復亦完成；L12/S11 發現完整模型 cached sampling／固定寬度 scoring 未對齊，L13/S12 已確認其差異在 softmax 前的 logits 中出現；L14/S13 已定位第 0 層歷史 V／attention 輸出差異，相同權重數值的 FP32 對照顯著縮小原最差 token 偏差。L15/S14 在原最差位置的受控干預分離了歷史 V 的局部影響，並讓完整 GeoRA 初始化／合成更新後的全部有效 token cache 概率精確對齊；L16/S15 又完成兩方法的真實 cache 五步、256-token 容量與精確恢復。下一輪 pilot 兩方法統一用較低實測完整成本的舊 `fixed_width`，cache 後端保存為已驗收選項，正式 pilot 尚未執行。固定預算的 LoRA／GeoRA 任務對照要另安排；S7 的短 CE 單步不是完整論文復現。
 
@@ -854,7 +854,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 最终完整模型检查 40/40，49.18 秒；此前探索性本地运行约 34.46 秒。小模型 CPU 22/22；独立 NumPy 从保存中间量复核四个 snapshot 哈希、八个概率、56 个向量分解和六组 MLP 形状对照。本轮新增 Setonix allocation 为 0，上一节累计 55 分 7 秒不变。底层 Metal kernel 累加顺序未捕获，本地起点不能直接替代 AMD 的完整归因。
 
-完整步骤、图、精度表和脚本入口见 [LOCAL_ERROR_PROPAGATION.md](LOCAL_ERROR_PROPAGATION.md)；最终记录见 [reports/local_error_propagation/20261011.json](reports/local_error_propagation/20261011.json)。正式论文复現 pilot 仍未执行；本轮是数值诊断。
+完整步骤、图、精度表和脚本入口见 [LOCAL_ERROR_PROPAGATION.md](LOCAL_ERROR_PROPAGATION.md)；最终记录见 [reports/local_error_propagation/20261011.json](../../reports/local_error_propagation/20261011.json)。正式论文复現 pilot 仍未执行；本轮是数值诊断。
 
 
 ## 11. L19/S17：AMD 全部 103 个有效 token 的同权重 FP32 对照
@@ -869,7 +869,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 两分钟硬上限、一个逻辑 GPU，实际 allocation 36 秒，COMPLETED，0:0；结束后队列为空。临时模型副本已删除，原模型／初始化／完整原始 logits 保留。现在累计 22 个已记录作业 allocation **55 分 43 秒**，不含 login CPU。
 
-详细步骤与全部有效 token 见 [CACHED_PRECISION.md](CACHED_PRECISION.md)、[GPU 报告](reports/cached_precision/50668984.json)、[NumPy 复核](reports/cached_precision/numpy_verification.json)。
+详细步骤与全部有效 token 见 [CACHED_PRECISION.md](CACHED_PRECISION.md)、[GPU 报告](../../reports/cached_precision/50668984.json)、[NumPy 复核](../../reports/cached_precision/numpy_verification.json)。
 
 ## 12. L20/S18：两平台十题完整输出、GeoRA 精度成本及文献调查
 
@@ -887,7 +887,7 @@ relative_error = norm(actual - reference) / norm(reference)
 
 Setonix job 50670799，20 分钟上限，一个逻辑 GPU，实际 allocation 430 秒（7 分 10 秒）、COMPLETED 0:0，结束后队列为空。现在累计 23 作业，62 分 53 秒 allocation，不含 login CPU，也不是八卡用量。完整训练 pilot 尚未启动。
 
-完整解释与执行入口：[PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。80 个完整回答：[HTML](reports/precision_investigation/gsm8k_precision_full_answers.html)；[汇总](reports/precision_investigation/gsm8k_precision_summary.md)。原始字节无损 gzip、实际执行源码、哈希、成本报告与审计保留于 reports/precision_investigation/。
+完整解释与执行入口：[PRECISION_INVESTIGATION.md](PRECISION_INVESTIGATION.md)。80 个完整回答：[HTML](../../reports/precision_investigation/gsm8k_precision_full_answers.html)；[汇总](../../reports/precision_investigation/gsm8k_precision_summary.md)。原始字节无损 gzip、实际执行源码、哈希、成本报告与审计保留于 reports/precision_investigation/。
 
 
 ## 13. S19：原模型固定128题Base验证
@@ -902,4 +902,4 @@ Setonix job 50670799，20 分钟上限，一个逻辑 GPU，实际 allocation 43
 
 ## 2026-10-12：固定判分和4096-token Base基线
 
-旧128回答CPU重判Decimal32→verl31；9份提取改变，1份最终奖励1→0（9.00与9字符串不相等）。独立固定verl下256→4096为31→42/128，截断42→1；128旧前缀及86份旧EOS全序列相同。GPU作业50675134因旧临时模型路径缺失退出27秒；修正到持久scratch后50697776完成0:0，977秒、33422tokens、峰值3.088GiB；合计1004单逻辑GPU秒。完整报告与1589项独立复核见[reports/base4096](reports/base4096/comparison.html)。没有优化器更新。长回答训练CPU验收通过，GPU容量和两方法训练尚待执行。
+旧128回答CPU重判Decimal32→verl31；9份提取改变，1份最终奖励1→0（9.00与9字符串不相等）。独立固定verl下256→4096为31→42/128，截断42→1；128旧前缀及86份旧EOS全序列相同。GPU作业50675134因旧临时模型路径缺失退出27秒；修正到持久scratch后50697776完成0:0，977秒、33422tokens、峰值3.088GiB；合计1004单逻辑GPU秒。完整报告与1589项独立复核见[reports/base4096](../../reports/base4096/comparison.html)。没有优化器更新。长回答训练CPU验收通过，GPU容量和两方法训练尚待执行。

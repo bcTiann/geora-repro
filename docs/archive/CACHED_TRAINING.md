@@ -1,6 +1,6 @@
 # 使用 KV cache 的 GRPO：模型、資料流與驗收
 
-本階段驗證 **LoRA／GeoRA 各五步真實 GSM8K 訓練，以及存檔後下一步的精確恢復**。每批 2 題、每題 4 個回答，因此 batch=8；每個回答最多 256 個新 token。兩方法使用 Qwen2.5-1.5B-Instruct、rank=16、alpha=32；GeoRA 復用 rho=0.2 的初始化。模型 revision 見 [base_model.json](configs/base_model.json)，訓練配置為 [grpo_cached_continuation.json](configs/grpo_cached_continuation.json)。兩方法的 cache 五步與恢復均已通過；下一輪 pilot 預設沿用已驗收的無 cache 路徑，成本與選擇見第 7 節。
+本階段驗證 **LoRA／GeoRA 各五步真實 GSM8K 訓練，以及存檔後下一步的精確恢復**。每批 2 題、每題 4 個回答，因此 batch=8；每個回答最多 256 個新 token。兩方法使用 Qwen2.5-1.5B-Instruct、rank=16、alpha=32；GeoRA 復用 rho=0.2 的初始化。模型 revision 見 [base_model.json](../../configs/base_model.json)，訓練配置為 [grpo_cached_continuation.json](../../configs/grpo_cached_continuation.json)。兩方法的 cache 五步與恢復均已通過；下一輪 pilot 預設沿用已驗收的無 cache 路徑，成本與選擇見第 7 節。
 
 ## 1. 到底有幾個模型？
 
@@ -111,7 +111,7 @@ backward：必要時重算純 attention；不再次執行 cache.update
 
 兩方法初始 batch 的八份回答完全一致。後續更新後軌跡不同。每步仍保留同分組；GeoRA 10 組中 8 組同分、26/40 解析失敗、19/40 截斷；LoRA 分別為 6/10、27/40、17/40。這些是流程診斷，不是兩方法的效果排序。當前 256-token 上限影響 reward，擴長前須另測容量與概率一致性。
 
-原始報告：[GeoRA](reports/grpo_cached_continuation/50660901.json)、[LoRA](reports/grpo_cached_continuation/50661193.json)；統一比較：[comparison.json](reports/grpo_cached_continuation/comparison.json)。GPU 中沒有保存完整梯度張量供事後逐元素比較；原始執行檢查了梯度有限及更新後 A/B／optimizer 的精確恢復。獨立 JSON 復查還核對了 reference logp、loss 與 gradient norm；CPU checkpoint 對照另驗證梯度逐元素相同。
+原始報告：[GeoRA](../../reports/grpo_cached_continuation/50660901.json)、[LoRA](../../reports/grpo_cached_continuation/50661193.json)；統一比較：[comparison.json](../../reports/grpo_cached_continuation/comparison.json)。GPU 中沒有保存完整梯度張量供事後逐元素比較；原始執行檢查了梯度有限及更新後 A/B／optimizer 的精確恢復。獨立 JSON 復查還核對了 reference logp、loss 與 gradient norm；CPU checkpoint 對照另驗證梯度逐元素相同。
 
 S14 的人工 reward 更新不算 GSM8K 訓練步。詳細歷史證據見 [EXPERIMENT_RECORD.md 的 L15/S14](EXPERIMENT_RECORD.md)；兩方法曾完成的五步無 cache 訓練是另一條已驗收路徑，不能替代本輪 cache 五步。
 
@@ -185,6 +185,6 @@ cache 生成省去歷史的重複計算，但梯度路徑需要逐 token 建立�
 
 表中是兩次實際運行的成本：答案長度、decode 步數、數值軌跡、額外檢查及載入時間不同，沒有配對速度基準或硬體普遍結論。根據目前成本，先讓兩方法共用已通過的 fixed 路徑進行 pilot；更高效的 attention／訓練框架需另行驗收。
 
-[grpo_pilot_plan.json](configs/grpo_pilot_plan.json) 規劃 100 步、1024 題 train／128 題 validation，維持已驗收的每批 2 題×4 回答、最多256 tokens。它是計畫檔；`check_grpo_continuation.py` 仍為五步驗收器。下一階段先實作通用 pilot runner 及固定 validation 評估、核對現有五步行為與恢復，再按實測成本分段提交。這輪未啟動 pilot 或論文分數對照。
+[grpo_pilot_plan.json](../../configs/grpo_pilot_plan.json) 規劃 100 步、1024 題 train／128 題 validation，維持已驗收的每批 2 題×4 回答、最多256 tokens。它是計畫檔；`check_grpo_continuation.py` 仍為五步驗收器。下一階段先實作通用 pilot runner 及固定 validation 評估、核對現有五步行為與恢復，再按實測成本分段提交。這輪未啟動 pilot 或論文分數對照。
 
-本 goal 三個單邏輯 GPU 作業的 allocation 共 1370 秒（22 分 50 秒）。所有作業終態與副本清理見 [remote_final.json](reports/cache_intervention/remote_final.json)，含歷史失敗的全部成本見 [setonix_jobs.json](reports/setonix_jobs.json)。
+本 goal 三個單邏輯 GPU 作業的 allocation 共 1370 秒（22 分 50 秒）。所有作業終態與副本清理見 [remote_final.json](../../reports/cache_intervention/remote_final.json)，含歷史失敗的全部成本見 [setonix_jobs.json](../../reports/setonix_jobs.json)。

@@ -1,6 +1,6 @@
 # GeoRA：精度调查与两平台实验
 
-日期：2026-10-11。本文集中解释本轮比较对象、实际计算、结果和训练建议。完整回答另见 [十题输出对照](reports/precision_investigation/gsm8k_precision_full_answers.html)；引用与源码细节见文末。
+日期：2026-10-11。本文集中解释本轮比较对象、实际计算、结果和训练建议。完整回答另见 [十题输出对照](../../reports/precision_investigation/gsm8k_precision_full_answers.html)；引用与源码细节见文末。
 
 ## 1. 这次有两个实验，模型身份不同
 
@@ -62,7 +62,7 @@ CPU 小 Qwen 协议 75/75 通过；对实际 AMD 两份报告独立核对 59 项
 
 ## 3. 十题完整输出
 
-完整文字、数字结果、格式失败和 token 一致性统一呈现在 [HTML 对照](reports/precision_investigation/gsm8k_precision_full_answers.html) 和 [逐题概览](reports/precision_investigation/gsm8k_precision_summary.md)。全部 **80 个回答自然生成到 EOS，没有截断**。逐 token 比较包含 EOS；四条 FP32 路径在十题上的完整 token 序列全部相同。
+完整文字、数字结果、格式失败和 token 一致性统一呈现在 [HTML 对照](../../reports/precision_investigation/gsm8k_precision_full_answers.html) 和 [逐题概览](../../reports/precision_investigation/gsm8k_precision_summary.md)。全部 **80 个回答自然生成到 EOS，没有截断**。逐 token 比较包含 EOS；四条 FP32 路径在十题上的完整 token 序列全部相同。
 
 | 比较 | 完整 token 序列相同的题数 |
 |---|---:|
@@ -142,6 +142,6 @@ uv run python scripts/compare_gsm8k_precision.py --device mps \
   --output-dir outputs/gsm8k_precision_comparison/new-run
 ```
 
-AMD 作业入口：[jobs/gsm8k_precision_comparison.sbatch](jobs/gsm8k_precision_comparison.sbatch)。它顺序运行两种 GeoRA 训练成本测量和原模型十题推理，结束自动释放。
+AMD 作业入口：[jobs/gsm8k_precision_comparison.sbatch](../../jobs/gsm8k_precision_comparison.sbatch)。它顺序运行两种 GeoRA 训练成本测量和原模型十题推理，结束自动释放。
 
 证据：原始双精度训练报告、独立汇总、CPU 协议在 `reports/precision_investigation/`；未训练初始化和原 checkpoint 保留，真实长训练未启动。完整来源调查：[GeoRA/初始化基线](GEORA_PRECISION_SOURCES.md)、[RLVR/机制及工程](RLVR_PRECISION_SOURCES.md)。

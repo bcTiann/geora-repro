@@ -125,7 +125,7 @@ LoRA 使用同一個 job，只把方法參數 `geora` 改成 `lora`；本輪等 
 
 ## 7. 本輪實際結果
 
-LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。一個邏輯 GPU 依次執行，allocation 合計 914 秒。CPU LoRA 41/41、完整恢復 4/4，兩處 runtime 均通過；完整結果見 [EXPERIMENT_RECORD.md L11/S10](EXPERIMENT_RECORD.md) 和 [comparison.json](reports/grpo_continuation/comparison.json)。兩個原始 report、每步回答與 checkpoint 路徑均保留。
+LoRA／GeoRA 各完成 5 步真實 GSM8K GRPO，並通過第 2 步存檔後重做第 3 步的精確恢復（GeoRA 52/52，LoRA 52/52）。一個邏輯 GPU 依次執行，allocation 合計 914 秒。CPU LoRA 41/41、完整恢復 4/4，兩處 runtime 均通過；完整結果見 [EXPERIMENT_RECORD.md L11/S10](EXPERIMENT_RECORD.md) 和 [comparison.json](../../reports/grpo_continuation/comparison.json)。兩個原始 report、每步回答與 checkpoint 路徑均保留。
 
 不用載入模型，也能重新核對兩份報告的來源、資料順序、mask、likelihood、恢復記錄和首批一致性：
 
@@ -208,6 +208,6 @@ job `50660028` 的診斷檢查為 23/23，實際 allocation **36 秒**，一個�
 
 本文件前述52/52屬於 `fixed_width` 路徑。新增可選 `native_cached_differentiable` backend：生成與可求導重算使用相同 native DynamicCache 順序，逐token取logp；backward只重算純attention，cache.update保持在checkpoint外。沒有detach歷史K/V，也沒有使用vLLM。原預設config／fixed路徑保留。
 
-GeoRA `50660901`、LoRA `50661193` 均58/58：各五步真實GSM8K＋一次第3步恢復重放，所有有效tokens採樣/old和current/old概率精確一致；完整A/B、AdamW、scheduler、RNG及資料位置恢復通過。方法、精度、實際成本和cache重跑命令見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，[原始報告及比較](reports/grpo_cached_continuation/comparison.json)。完整GPU梯度張量沒有保存供事後比較；runtime檢查梯度有限、更新後參數和optimizer精確恢復，CPU另驗證checkpoint梯度一致。
+GeoRA `50660901`、LoRA `50661193` 均58/58：各五步真實GSM8K＋一次第3步恢復重放，所有有效tokens採樣/old和current/old概率精確一致；完整A/B、AdamW、scheduler、RNG及資料位置恢復通過。方法、精度、實際成本和cache重跑命令見 [CACHED_TRAINING.md](CACHED_TRAINING.md)，[原始報告及比較](../../reports/grpo_cached_continuation/comparison.json)。完整GPU梯度張量沒有保存供事後比較；runtime檢查梯度有限、更新後參數和optimizer精確恢復，CPU另驗證checkpoint梯度一致。
 
-cache生成較快，但本次整段訓練耗時與顯存較高；實際token長度與兩次數值軌跡不同，不能當作配對速度測試。下一輪pilot預設共用fixed路徑；[pilot plan](configs/grpo_pilot_plan.json) 是規劃檔，通用訓練runner及validation評估仍待實作。
+cache生成較快，但本次整段訓練耗時與顯存較高；實際token長度與兩次數值軌跡不同，不能當作配對速度測試。下一輪pilot預設共用fixed路徑；[pilot plan](../../configs/grpo_pilot_plan.json) 是規劃檔，通用訓練runner及validation評估仍待實作。
